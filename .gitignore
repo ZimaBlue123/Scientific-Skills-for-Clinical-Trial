@@ -1,0 +1,10 @@
+﻿# Python environments
+.venv/
+env/
+__pycache__/
+
+# Datasets and secrets
+*.csv
+*.xlsx
+*.env
+.secret
