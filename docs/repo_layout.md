@@ -5,7 +5,7 @@
 ## 目录约定
 
 ```
-K-Dense-AI-for-Clinical_Trial/
+Scientific-Skills-for-Clinical_Trial/
 ├── skills/                    # 每个 skill 一个目录（核心内容）
 ├── docs/                      # 长文档（面向使用者/维护者）
 ├── scripts/                   # 仓库级可执行脚本入口（不属于某个 skill）

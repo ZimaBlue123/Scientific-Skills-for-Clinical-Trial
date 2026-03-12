@@ -1,4 +1,6 @@
-# Treatment Plans Skill
+# Treatment Plans — References Index
+
+本文件是 `treatment-plans` 这个 skill 的参考资料索引。使用方式与入口说明请先看上一级目录的 `../SKILL.md`。
 
 ## Overview
 
@@ -48,7 +50,7 @@ Skill for generating **concise, clinician-focused** medical treatment plans acro
 ### Generate a Treatment Plan Template
 
 ```bash
-cd .claude/skills/treatment-plans/scripts
+cd skills/treatment-plans/scripts
 python generate_template.py
 
 # Or specify type directly

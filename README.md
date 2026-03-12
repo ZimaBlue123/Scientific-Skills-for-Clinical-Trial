@@ -1,4 +1,4 @@
-# K-Dense-AI-for-Clinical_Trial
+# Scientific-Skills-for-Clinical_Trial
 
 临床试验 / 临床研究 AI 辅助系统（仓库核心内容：`skills/`）。
 
@@ -41,9 +41,9 @@ cp -r ./skills/* ~/.cursor/skills/
 ## 仓库结构（长期维护版）
 
 ```
-K-Dense-AI-for-Clinical_Trial/
+Scientific-Skills-for-Clinical_Trial/
 ├── skills/                # 每个 skill 一个目录（核心内容）
-├── docs/                  # 长文档（索引见 docs/README.md）
+├── docs/                  # 长文档（索引见 README.md 的“文档索引”）
 ├── scripts/               # 仓库级可执行脚本入口
 ├── reports/               # 生成产物（默认不入库；见 .gitignore）
 ├── tests/                 # 测试
@@ -59,6 +59,17 @@ K-Dense-AI-for-Clinical_Trial/
 - **Skills 导览（推荐工作流）**：`docs/skills_guide.md`
 - **Skills 清单与 prompt 模板**：`docs/skills_catalog.md`
 - **贡献指南**：`CONTRIBUTING.md`
+
+## 文档索引（docs/）
+
+- `docs/skills_guide.md`：Skills 导览与推荐工作流（给使用者）
+- `docs/skills_catalog.md`：Skills 清单与常用 prompt 模板（给使用者）
+- `docs/repo_layout.md`：仓库目录规范与维护约定（给维护者）
+
+## 每个 skill 的说明入口
+
+- **使用说明**：优先看对应目录的 `SKILL.md`
+- **参考资料**：统一放在 `references/INDEX.md`（如存在）
 
 ## 示例：生成一份 docx 报告（本地产物）
 

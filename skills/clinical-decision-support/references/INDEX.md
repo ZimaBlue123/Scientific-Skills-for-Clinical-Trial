@@ -1,6 +1,6 @@
-# Clinical Decision Support Skill
+# Clinical Decision Support — References Index
 
-Professional clinical decision support documents for medical professionals in pharmaceutical and clinical research settings.
+本文件是 `clinical-decision-support` 这个 skill 的参考资料索引。使用方式与入口说明请先看上一级目录的 `../SKILL.md`。
 
 ## Quick Start
 
@@ -12,37 +12,23 @@ This skill enables generation of three types of clinical documents:
 
 All documents are generated as compact, professional LaTeX/PDF files.
 
-## Directory Structure
+## References Included
 
-```
-clinical-decision-support/
-├── SKILL.md                     # Main skill definition
-├── README.md                    # This file
-│
-├── references/                  # Clinical guidance documents
-│   ├── patient_cohort_analysis.md
-│   ├── treatment_recommendations.md
-│   ├── clinical_decision_algorithms.md
-│   ├── biomarker_classification.md
-│   ├── outcome_analysis.md
-│   └── evidence_synthesis.md
-│
-├── assets/                      # Templates and examples
-│   ├── cohort_analysis_template.tex
-│   ├── treatment_recommendation_template.tex
-│   ├── clinical_pathway_template.tex
-│   ├── biomarker_report_template.tex
-│   ├── example_gbm_cohort.md
-│   ├── recommendation_strength_guide.md
-│   └── color_schemes.tex
-│
-└── scripts/                     # Analysis and generation tools
-    ├── generate_survival_analysis.py
-    ├── create_cohort_tables.py
-    ├── build_decision_tree.py
-    ├── biomarker_classifier.py
-    └── validate_cds_document.py
-```
+- `patient_cohort_analysis.md`
+- `treatment_recommendations.md`
+- `clinical_decision_algorithms.md`
+- `biomarker_classification.md`
+- `outcome_analysis.md`
+- `evidence_synthesis.md`
+
+对应主题：
+
+1. **Patient Cohort Analysis**：Stratification methods, biomarker correlations, statistical comparisons
+2. **Treatment Recommendations**：Evidence grading, treatment sequencing, special populations
+3. **Clinical Decision Algorithms**：Risk scores, decision trees, TikZ flowcharts
+4. **Biomarker Classification**：Genomic alterations, molecular subtypes, companion diagnostics
+5. **Outcome Analysis**：Survival methods, response criteria (RECIST), effect sizes
+6. **Evidence Synthesis**：Guideline integration, systematic reviews, meta-analysis
 
 ## Example Use Cases
 
@@ -73,9 +59,9 @@ clinical-decision-support/
 - **Guideline Concordance**: NCCN, ASCO, ESMO, AHA/ACC integration
 - **Professional Output**: 0.5in margins, color-coded boxes, publication-ready
 
-## Dependencies
+## Dependencies（运行脚本时）
 
-Python scripts require:
+Python scripts may require:
 - `pandas`, `numpy`, `scipy`: Data analysis and statistics
 - `lifelines`: Survival analysis (Kaplan-Meier, Cox regression)
 - `matplotlib`: Visualization
@@ -85,15 +71,6 @@ Install with:
 ```bash
 pip install pandas numpy scipy lifelines matplotlib pyyaml
 ```
-
-## References Included
-
-1. **Patient Cohort Analysis**: Stratification methods, biomarker correlations, statistical comparisons
-2. **Treatment Recommendations**: Evidence grading, treatment sequencing, special populations
-3. **Clinical Decision Algorithms**: Risk scores, decision trees, TikZ flowcharts
-4. **Biomarker Classification**: Genomic alterations, molecular subtypes, companion diagnostics
-5. **Outcome Analysis**: Survival methods, response criteria (RECIST), effect sizes
-6. **Evidence Synthesis**: Guideline integration, systematic reviews, meta-analysis
 
 ## Templates Provided
 

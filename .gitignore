@@ -15,6 +15,7 @@ build/
 dist/
 *.egg-info/
 *.egg
+.pytest_cache/
 
 # ==========================================
 # IDE / OS
@@ -38,6 +39,7 @@ downloads/
 secrets/
 .env
 .env.*
+config.yaml
 config_local.yaml
 
 # ==========================================
@@ -46,13 +48,83 @@ config_local.yaml
 *.log
 *.bak
 *.tmp
-.pytest_cache/
 .ipynb_checkpoints/
 ~$*
+~$*.csv
 
 # ==========================================
 # Reports (generated artifacts)
 # ==========================================
-reports/*.docx
+reports/
 
- 
+# If you ever generate reports elsewhere, keep them out too
+**/report/
+**/reports/
+
+# Keep an empty top-level reports/ folder in repo
+!reports/
+!reports/.gitkeep
+
+# Office / PDF exports (common generated artifacts)
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.pdf
+*.rtf
+*.odt
+*.ods
+*.odp
+
+# Common generated media artifacts
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+
+# Allow docs & skill assets to be versioned
+!docs/**/*.doc
+!docs/**/*.docx
+!docs/**/*.ppt
+!docs/**/*.pptx
+!docs/**/*.xls
+!docs/**/*.xlsx
+!docs/**/*.pdf
+!docs/**/*.rtf
+!docs/**/*.odt
+!docs/**/*.ods
+!docs/**/*.odp
+!docs/**/*.png
+!docs/**/*.jpg
+!docs/**/*.jpeg
+!docs/**/*.gif
+!docs/**/*.webp
+!docs/**/*.svg
+
+!skills/**/assets/**/*.doc
+!skills/**/assets/**/*.docx
+!skills/**/assets/**/*.ppt
+!skills/**/assets/**/*.pptx
+!skills/**/assets/**/*.xls
+!skills/**/assets/**/*.xlsx
+!skills/**/assets/**/*.pdf
+!skills/**/assets/**/*.rtf
+!skills/**/assets/**/*.odt
+!skills/**/assets/**/*.ods
+!skills/**/assets/**/*.odp
+!skills/**/assets/**/*.png
+!skills/**/assets/**/*.jpg
+!skills/**/assets/**/*.jpeg
+!skills/**/assets/**/*.gif
+!skills/**/assets/**/*.webp
+!skills/**/assets/**/*.svg
+
+# "Generated report sources" (ONLY under typical artifact dirs)
+reports/**/*.md
+reports/**/*.py
+output/**/*.md
+output/**/*.py
