@@ -1,148 +1,84 @@
 # K-Dense-AI-for-Clinical_Trial
 
-临床试验AI辅助系统 - 基于Claude Scientific Skills的临床研究工具集
+临床试验 / 临床研究 AI 辅助系统（仓库核心内容：`skills/`）。
 
-## 📋 项目简介
+## 项目定位
 
-本项目整合了[Claude Scientific Skills](claude-scientific-skills-local/)，为临床试验研究提供AI驱动的分析和决策支持工具。通过148+科学技能和250+数据库访问能力，帮助研究人员加速临床试验设计、数据分析和报告生成。
+本仓库维护一组面向临床研究与临床试验的 AI skills/技能，覆盖临床试验检索、循证/决策支持、临床报告与合规文档、统计与建模、生存分析、可解释性，以及常用医学/科研数据库访问等工作流。
 
-## 🎯 核心功能
-
-- **临床试验设计与分析** - 基于ClinicalTrials.gov数据库的试验检索和分析
-- **临床决策支持** - 患者队列分析、治疗推荐、结果预测
-- **临床报告生成** - 符合监管要求的病例报告、试验报告、不良事件报告
-- **变异解读** - ClinVar、COSMIC、ClinPGx数据库整合的基因变异临床意义分析
-- **药物基因组学** - 个体化用药指导和药物相互作用分析
-- **多组学整合** - RNA-seq、蛋白质组、代谢组数据的系统生物学分析
-
-## 📦 项目结构
-
-```
-K-Dense-AI-for-Clinical_Trial/
-├── README.md                          # 本文件
-├── claude-scientific-skills-local/    # Claude科学技能库
-│   ├── README.md                      # 技能库详细文档
-│   ├── docs/                          # 文档和示例
-│   └── scientific-skills/             # 148+科学技能
-│       ├── clinical-decision-support/ # 临床决策支持
-│       ├── clinical-reports/          # 临床报告生成
-│       ├── clinvar-database/          # ClinVar变异数据库
-│       ├── clinpgx-database/          # 药物基因组学数据库
-│       ├── cosmic-database/           # 癌症体细胞突变数据库
-│       └── ...                        # 其他科学技能
-└── downloads/                         # 下载文件目录
-```
-
-## 🚀 快速开始
+## 快速开始
 
 ### 环境要求
 
-- **Python**: 3.9+ (推荐3.12+)
-- **uv**: Python包管理器
-- **AI客户端**: Cursor、Claude Code或Codex
-- **系统**: Windows 10/11、macOS或Linux
+- **Python**：3.10+（CI 当前使用 3.10）
+- **AI 客户端**：Cursor / Claude Code / Codex（需要支持 skills 机制）
 
-### 安装步骤
-
-1. **克隆项目**
-```bash
-git clone <repository-url>
-cd K-Dense-AI-for-Clinical_Trial
-```
-
-2. **安装uv包管理器**
-```bash
-# Windows
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# macOS/Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-3. **配置技能库**
-
-将技能复制到AI客户端的技能目录：
+### 安装（Python 依赖）
 
 ```bash
-# Cursor (全局安装)
-cp -r claude-scientific-skills-local/scientific-skills/* ~/.cursor/skills/
-
-# Claude Code (全局安装)
-cp -r claude-scientific-skills-local/scientific-skills/* ~/.claude/skills/
+python -m pip install -r requirements.txt
 ```
 
-4. **开始使用**
+### 安装（skills 到客户端）
 
-在AI客户端中直接提问，系统会自动调用相关技能。
+如果你的客户端支持“直接引用项目目录”，推荐直接指向本仓库的 `skills/`；否则可复制到客户端的全局 skills 目录。
 
-## 💡 使用示例
+Windows（PowerShell）示例：
 
-### 临床变异解读
-
-```
-使用可用技能分析VCF文件，注释变异的临床意义。查询ClinVar获取致病性评级，
-检查COSMIC癌症突变数据库，从NCBI Gene获取基因信息，通过UniProt分析蛋白质影响，
-搜索PubMed相关病例报告，查询ClinPGx药物基因组学数据，生成临床报告，
-并在ClinicalTrials.gov查找匹配的临床试验。
+```powershell
+$dst = Join-Path $env:USERPROFILE ".cursor\skills"
+New-Item -ItemType Directory -Force -Path $dst | Out-Null
+Copy-Item -Recurse -Force ".\skills\*" $dst
 ```
 
-### 临床试验检索与分析
+macOS/Linux（bash）示例：
 
-```
-使用可用技能在ClinicalTrials.gov搜索肺癌EGFR抑制剂的临床试验，
-分析入组标准和排除标准，评估试验设计质量，提取主要终点和次要终点，
-生成试验对比报告。
-```
-
-### 药物基因组学分析
-
-```
-使用可用技能查询ClinPGx数据库，分析患者基因型对华法林代谢的影响，
-提供个体化剂量推荐，检查药物相互作用，生成用药指导报告。
+```bash
+mkdir -p ~/.cursor/skills
+cp -r ./skills/* ~/.cursor/skills/
 ```
 
-## 📚 详细文档
+## 仓库结构（长期维护版）
 
-完整的技能文档和使用指南请参见：
+```
+K-Dense-AI-for-Clinical_Trial/
+├── skills/                # 每个 skill 一个目录（核心内容）
+├── docs/                  # 长文档（索引见 docs/README.md）
+├── scripts/               # 仓库级可执行脚本入口
+├── reports/               # 生成产物（默认不入库；见 .gitignore）
+├── tests/                 # 测试
+├── requirements.txt
+├── requirements-dev.txt
+└── CONTRIBUTING.md
+```
 
-- **[Claude Scientific Skills完整文档](claude-scientific-skills-local/README.md)** - 148+技能详细说明
-- **[使用示例](claude-scientific-skills-local/docs/examples.md)** - 跨领域工作流示例
-- **[技能列表](claude-scientific-skills-local/docs/scientific-skills.md)** - 所有可用技能清单
+维护约定与更详细解释见 `docs/repo_layout.md`。
 
-### 临床相关技能
+## 常用入口
 
-- **[临床决策支持](claude-scientific-skills-local/scientific-skills/clinical-decision-support/)** - 证据综合、结果分析、队列分析
-- **[临床报告](claude-scientific-skills-local/scientific-skills/clinical-reports/)** - 病例报告、试验报告、监管合规
-- **[ClinVar数据库](claude-scientific-skills-local/scientific-skills/clinvar-database/)** - 变异临床意义注释
-- **[ClinPGx数据库](claude-scientific-skills-local/scientific-skills/clinpgx-database/)** - 药物基因组学指导
-- **[COSMIC数据库](claude-scientific-skills-local/scientific-skills/cosmic-database/)** - 癌症体细胞突变
+- **Skills 导览（推荐工作流）**：`docs/skills_guide.md`
+- **Skills 清单与 prompt 模板**：`docs/skills_catalog.md`
+- **贡献指南**：`CONTRIBUTING.md`
 
-## 🤝 贡献
+## 示例：生成一份 docx 报告（本地产物）
 
-欢迎贡献新的临床试验相关功能和技能！
+```bash
+python scripts/generate_norovirus_review_docx.py
+```
 
-1. Fork本项目
-2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 提交Pull Request
+生成的 `.docx` 默认输出到 `reports/`，该目录下的二进制产物默认不会被提交（见 `.gitignore`）。
 
-## 📄 许可证
+## 来源与归属（合规声明）
 
-本项目采用MIT许可证。详见[LICENSE](LICENSE)文件。
+- **上游项目**：本仓库从 [`K-Dense-AI/claude-scientific-skills`](https://github.com/K-Dense-AI/claude-scientific-skills.git) 提取并裁剪出更聚焦“临床研究/临床试验”场景的一部分 skills。
+- **许可证**：上游与本仓库均为 MIT License；本仓库在再分发时保留上游版权与许可声明。
+- **改动范围（摘要）**：删除与临床研究无关的 skills/文档，仅保留并重组与临床研究相关的 skills；补充本仓库的目录规范、依赖与 CI。
+- **非背书声明**：本仓库为社区维护的裁剪/整理版本，不代表上游作者或组织的官方立场、认证或背书。
 
-**注意**: 各个技能模块可能有独立的许可证，使用前请查看对应技能的`SKILL.md`文件中的`license`字段。
+## 许可证
 
-## 💬 支持与社区
+本项目采用 MIT 许可证，详见 `LICENSE.md`。
 
-- **问题反馈**: [GitHub Issues](https://github.com/K-Dense-AI/claude-scientific-skills/issues)
-- **社区讨论**: [K-Dense Slack社区](https://join.slack.com/t/k-densecommunity/shared_invite/zt-3iajtyls1-EwmkwIZk0g_o74311Tkf5g)
-- **企业支持**: [K-Dense官网](https://k-dense.ai/)
+注意：各 skill 可能有独立许可证或对外部数据源/SDK 有额外限制，使用前请查看对应 skill 的 `SKILL.md`。
 
-## 🌟 致谢
-
-本项目基于[Claude Scientific Skills](https://github.com/K-Dense-AI/claude-scientific-skills)构建，感谢K-Dense团队和开源社区的贡献。
-
----
-
-**Copyright © 2026** | 基于Claude Scientific Skills构建
+另见：`THIRD_PARTY_NOTICES.md`（外部数据源/第三方条款提醒）。
