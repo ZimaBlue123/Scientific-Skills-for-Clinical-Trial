@@ -1,4 +1,4 @@
-# Scientific-Skills-for-Clinical_Trial
+# K-Dense-AI-for-Clinical_Trial
 
 临床试验 / 临床研究 AI 辅助系统（仓库核心内容：`skills/`）。
 
@@ -41,7 +41,7 @@ cp -r ./skills/* ~/.cursor/skills/
 ## 仓库结构（长期维护版）
 
 ```
-Scientific-Skills-for-Clinical_Trial/
+K-Dense-AI-for-Clinical_Trial/
 ├── skills/                # 每个 skill 一个目录（核心内容）
 ├── docs/                  # 长文档（索引见 README.md 的“文档索引”）
 ├── scripts/               # 仓库级可执行脚本入口
