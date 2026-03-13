@@ -36,6 +36,7 @@ data/
 raw_data/
 output/
 downloads/
+review_materials/
 secrets/
 .env
 .env.*
