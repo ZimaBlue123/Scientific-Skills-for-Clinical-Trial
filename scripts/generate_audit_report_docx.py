@@ -57,19 +57,40 @@ def _add_heading(doc, text: str, level: int = 1) -> None:
 
 
 def main() -> int:
+    import argparse
+
     from docx import Document
     from docx.enum.text import WD_ALIGN_PARAGRAPH
 
+    parser = argparse.ArgumentParser(description="Generate strict audit report docx.")
+    parser.add_argument(
+        "--root",
+        type=str,
+        default=str(Path(__file__).resolve().parents[1]),
+        help="Project root path (default: inferred from this script location)",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="review_materials",
+        help="Output directory relative to root unless absolute path is provided",
+    )
+    args = parser.parse_args()
+
     today = date.today().isoformat()
 
-    root = Path(r"E:\Cursor Project\Scientific-Skills-for-Clinical_Trial\review_materials")
+    project_root = Path(args.root)
+    output_dir = Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = project_root / output_dir
+
     main_doc = "YDSWX(TVAX-006)-002(II)_数据审核报告_V0.7_20260312.docx"
     ref_xlsx = "YDSWX(TVAX-006)-002(II)_数据审核报告清单_20260312.xlsx"
     ref_protocol = "远大重组带状疱疹疫苗Ⅱ期-方案（版本号：1.3，版本日期：2026年01月05日）-清洁版-定稿.docx"
 
     # Use ASCII filename to avoid Windows console encoding issues.
     out_name = f"audit_report_data_review_v0.7_strict_audit_{today}.docx"
-    out_path = root / out_name
+    out_path = output_dir / out_name
 
     findings: list[Finding] = [
         Finding(

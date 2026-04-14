@@ -19,6 +19,6 @@ description: Generate or update Word (.docx) audit/review reports with enforced 
 - 设置 East Asia 字体需要通过 `w:eastAsia`（`qn("w:eastAsia")`）写入 `rFonts`。
 
 ## 项目内默认实现
-- 使用脚本：`tools/generate_audit_report_docx.py`
+- 使用脚本：`scripts/generate_audit_report_docx.py`
 - 关键函数：`_apply_cn_en_fonts(doc)`
 

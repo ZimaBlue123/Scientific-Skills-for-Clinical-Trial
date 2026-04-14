@@ -129,6 +129,9 @@ reports/
 !.cursor/skills/
 !.cursor/skills/**
 
+# Converted temp files (docs/_converted/)
+docs/_converted/
+
 # "Generated report sources" (ONLY under typical artifact dirs)
 reports/**/*.md
 reports/**/*.py
