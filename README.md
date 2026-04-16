@@ -19,6 +19,11 @@
 python -m pip install -r requirements.txt
 ```
 
+### 隐私与合规（强烈建议）
+
+- 不要把原始个体数据（含受试者层面字段、明细导出）提交到 Git。请把输入 CSV 放在 `data/`（已在 `.gitignore` 中忽略），并把输出放到 `output/`（同样会被忽略）。
+- 抗体动力学分析脚本会输出“已汇总/已建模”的结果（参数、预测均值/CI、阈值时间），但仍建议不要把输出产物上传到不可信环境。
+
 ### 开发与质量（可选）
 
 安装开发依赖（测试/Lint）：
@@ -91,6 +96,7 @@ Scientific-Skills-for-Clinical_Trial/
 |-------|------|----------|
 | `exploratory-data-analysis` | 200+ 格式科研数据 EDA | `python skills/exploratory-data-analysis/scripts/eda_analyzer.py <file>` |
 | `statistical-analysis` | 假设检验、效应量、APA 报告 | `from scripts.assumption_checks import comprehensive_assumption_check` |
+| `antibody-kinetics` | 抗体动力学/免疫持久性：幂律模型 + MixedLM，支持 M12+ 外推与阈值时间 | `python skills/antibody-kinetics/scripts/run_antibody_kinetics_pipeline.py --infile data/subject.csv --outdir output/antibody-kinetics --threshold 10` |
 | `scikit-learn` | 经典 ML 建模与管线 | `python skills/scikit-learn/scripts/classification_pipeline.py` |
 | `scikit-survival` | 生存分析（Cox/RSF/GBS） | 见 SKILL.md 中的代码示例 |
 | `shap` | 模型可解释性（SHAP values） | `shap.TreeExplainer(model)(X_test)` |

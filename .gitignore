@@ -38,6 +38,13 @@ output/
 downloads/
 review_materials/
 secrets/
+
+# Avoid accidental data source leakage (raw exports often contain PHI/PII)
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.parquet
 .env
 .env.*
 config.yaml

@@ -3,3 +3,9 @@ pymupdf>=1.24.0
 markitdown>=0.1.0
 pypdf>=4.2.0
 
+# --- Clinical/Scientific compute dependencies (skills that require modeling & plotting) ---
+numpy>=1.23
+pandas>=2.0
+statsmodels>=0.14
+matplotlib>=3.7
+
