@@ -86,7 +86,7 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # 每个 skill 一个目录（核心内容，26 个）
+├── skills/                # 每个 skill 一个目录（核心内容，28 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
 ├── scripts/               # 仓库级可执行脚本入口（含 CSR/审核报告生成）
 ├── tests/                 # 测试
@@ -101,7 +101,7 @@ Scientific-Skills-for-Clinical_Trial/
 
 ## Skills 清单与使用方法
 
-本仓库包含 **26 个 skills**，分为以下几类：
+本仓库包含 **28 个 skills**，分为以下几类：
 
 ### 核心数据分析 Skills
 
@@ -129,6 +129,8 @@ Scientific-Skills-for-Clinical_Trial/
 | `clinicaltrials-database` | ClinicalTrials.gov API v2 | `python skills/clinicaltrials-database/scripts/query_clinicaltrials.py` |
 | `pubmed-database` | PubMed E-utilities 检索 | 见 `references/api_reference.md` |
 | `openalex-database` | OpenAlex 文献检索 | `python skills/openalex-database/scripts/openalex_client.py` |
+| `database-lookup` | 聚合数据库入口（自动路由到 ClinicalTrials/PubMed/OpenAlex/FDA/ClinVar/ClinPGx/COSMIC） | 见 `skills/database-lookup/SKILL.md` |
+| `paper-lookup` | 聚合文献入口（自动路由到 PubMed/OpenAlex，按需补充试验检索） | 见 `skills/paper-lookup/SKILL.md` |
 | `fda-database` | openFDA 药品/器械/召回 | `python skills/fda-database/scripts/fda_query.py` |
 | `clinvar-database` | ClinVar 变异致病性 | 见 `references/api_reference.md` |
 | `clinpgx-database` | ClinPGx 基因-药物相互作用 | `python skills/clinpgx-database/scripts/query_clinpgx.py` |

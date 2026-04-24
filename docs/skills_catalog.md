@@ -2,7 +2,7 @@
 
 本文件提供"做什么用"的速览与可复制的常用 prompt 模板；更细的参数/脚本入口请以各 skill 目录下的 `SKILL.md` 为准。
 
-## Skills 清单（项目内置 - 26 个）
+## Skills 清单（项目内置 - 28 个）
 
 ### 核心数据分析
 
@@ -29,6 +29,8 @@
 | `clinicaltrials-database` | ClinicalTrials.gov API v2：按条件/药物/地区/状态检索与导出 | Public | `scripts/query_clinicaltrials.py` |
 | `pubmed-database` | PubMed（E-utilities）：高级检索、批量抓取、系统综述检索策略 | Public | 见 references/ |
 | `openalex-database` | OpenAlex：文献检索/引用分析/趋势与计量学 | CC0 | `scripts/openalex_client.py`, `scripts/query_helpers.py` |
+| `database-lookup` | 数据库聚合入口：自动路由到 ClinicalTrials/PubMed/OpenAlex/FDA/ClinVar/ClinPGx/COSMIC | MIT | 见 `skills/database-lookup/SKILL.md` |
+| `paper-lookup` | 文献聚合入口：自动路由到 PubMed/OpenAlex，按需补充试验信息 | MIT | 见 `skills/paper-lookup/SKILL.md` |
 | `fda-database` | openFDA：药品/器械/召回/不良事件等 | Public | `scripts/fda_query.py`, `scripts/fda_examples.py` |
 | `clinvar-database` | ClinVar：变异致病性/星级/批量下载与注释 | Public | 见 references/ |
 | `clinpgx-database` | ClinPGx：基因-药物相互作用、CPIC 指南等 | Public | `scripts/query_clinpgx.py` |
@@ -105,9 +107,19 @@ git -c http.proxy= -c https.proxy= -C ".\skills\fireworks-tech-graph" pull
   在 ClinicalTrials.gov 检索：condition=<疾病>，intervention=<药物/疗法>，status=RECRUITING，地区=<国家/州>；输出前 20 条对比表并总结入排标准。
   ```
 
+- **database-lookup**
+  ```
+  我不确定该查哪个数据库：请以 <疾病/药物/基因/监管问题> 为目标，自动选择最合适的数据库并给出可复核结果摘要。
+  ```
+
 - **pubmed-database**
   ```
   请为 <PICO 问题> 构建 PubMed 检索式（含 MeSH/同义词/限制条件），并给出可直接用于 E-utilities 的查询字符串。
+  ```
+
+- **paper-lookup**
+  ```
+  请围绕主题 <topic> 做文献聚合检索（近 <N> 年）：先给 PubMed 核心证据，再用 OpenAlex 补充引用趋势与关键作者/机构。
   ```
 
 - **openalex-database**
@@ -163,6 +175,43 @@ git -c http.proxy= -c https.proxy= -C ".\skills\fireworks-tech-graph" pull
   ```
   搜索 <topic> 的最新研究进展（2024年以来），要求有来源引用，输出结构化摘要。
   ```
+
+---
+
+## Smoke Prompts（端到端自检模板）
+
+### 1) 数据库聚合路由
+
+```text
+请用 database-lookup 检索：condition=NSCLC，intervention=PD-1/PD-L1，status=RECRUITING，region=United States。
+输出：采用了哪些原子 skills、关键检索参数、Top 10 结果摘要。
+```
+
+预期：
+- 主路由到 `clinicaltrials-database`
+- 返回结构化 trial 摘要
+
+### 2) 文献聚合路由
+
+```text
+请用 paper-lookup 检索：topic=RSV vaccine efficacy，time_range=2022-2026。
+输出：PubMed 核心证据 + OpenAlex 引用趋势（年份计数）。
+```
+
+预期：
+- 路由到 `pubmed-database` + `openalex-database`
+- 同时给出题名列表与趋势摘要
+
+### 3) 文献+试验联合
+
+```text
+请用 paper-lookup 回答：CAR-T 在自身免疫病中的最新证据，并补充当前在研试验（RECRUITING）。
+输出：证据摘要、试验摘要、下一步检索建议。
+```
+
+预期：
+- 先文献路由，再追加 `clinicaltrials-database`
+- 输出可复核且可复现的参数
 
 ---
 

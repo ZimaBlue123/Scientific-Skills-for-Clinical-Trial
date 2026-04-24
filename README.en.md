@@ -86,7 +86,7 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```text
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # One directory per skill (core content, 26 total)
+├── skills/                # One directory per skill (core content, 28 total)
 ├── docs/                  # Long-form docs (see index below)
 ├── scripts/               # Repository-level executable scripts
 ├── tests/                 # Tests
@@ -101,7 +101,7 @@ For maintenance conventions and details, see `docs/repo_layout.md`.
 
 ## Skills List and Usage
 
-This repository currently includes **26 skills**, grouped as follows.
+This repository currently includes **28 skills**, grouped as follows.
 
 ### Core Data Analysis Skills
 
@@ -129,6 +129,8 @@ This repository currently includes **26 skills**, grouped as follows.
 | `clinicaltrials-database` | ClinicalTrials.gov API v2 | `python skills/clinicaltrials-database/scripts/query_clinicaltrials.py` |
 | `pubmed-database` | PubMed E-utilities queries | see `references/api_reference.md` |
 | `openalex-database` | OpenAlex literature search | `python skills/openalex-database/scripts/openalex_client.py` |
+| `database-lookup` | Aggregated database entrypoint (routes to ClinicalTrials/PubMed/OpenAlex/FDA/ClinVar/ClinPGx/COSMIC) | see `skills/database-lookup/SKILL.md` |
+| `paper-lookup` | Aggregated literature entrypoint (routes to PubMed/OpenAlex; trial lookup on demand) | see `skills/paper-lookup/SKILL.md` |
 | `fda-database` | openFDA drugs/devices/recalls | `python skills/fda-database/scripts/fda_query.py` |
 | `clinvar-database` | ClinVar pathogenicity interpretation | see `references/api_reference.md` |
 | `clinpgx-database` | ClinPGx gene-drug interactions | `python skills/clinpgx-database/scripts/query_clinpgx.py` |
