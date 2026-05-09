@@ -11,7 +11,13 @@ import os
 import sys
 from pathlib import Path
 from markitdown import MarkItDown
-from openai import OpenAI
+
+_OPENAI_IMPORT_ERROR = None
+try:
+    from openai import OpenAI
+except ModuleNotFoundError as e:
+    OpenAI = None
+    _OPENAI_IMPORT_ERROR = e
 
 
 # Predefined prompts for different use cases
@@ -200,6 +206,12 @@ Popular Models (use with --model):
     )
     
     args = parser.parse_args()
+
+    if _OPENAI_IMPORT_ERROR is not None:
+        raise SystemExit(
+            "Missing dependency for AI conversion: "
+            f"{_OPENAI_IMPORT_ERROR}. Install with: pip install openai"
+        )
     
     # List prompts and exit
     if args.list_prompts:

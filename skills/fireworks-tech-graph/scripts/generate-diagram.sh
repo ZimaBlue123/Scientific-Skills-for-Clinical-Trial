@@ -145,9 +145,30 @@ if [ -f "$SVG_FILE" ]; then
             exit 1
         fi
     else
-        echo -e "${RED}Error: rsvg-convert not found${NC}"
-        echo "Install with: brew install librsvg"
-        exit 1
+        # Fallback: CairoSVG via python3
+        if command -v python3 &> /dev/null && python3 -c "import cairosvg" >/dev/null 2>&1; then
+            if python3 - "$SVG_FILE" "$PNG_FILE" "$WIDTH" <<'PY'
+import sys
+import cairosvg
+
+svg_path = sys.argv[1]
+png_path = sys.argv[2]
+width = int(sys.argv[3])
+cairosvg.svg2png(url=svg_path, write_to=png_path, output_width=width)
+PY
+            then
+                PNG_SIZE=$(du -h "$PNG_FILE" | cut -f1)
+                echo -e "${YELLOW}rsvg-convert not found; used CairoSVG fallback${NC}"
+                echo -e "${GREEN}PNG exported: $PNG_FILE (${PNG_SIZE})${NC}"
+            else
+                echo -e "${RED}PNG export failed with CairoSVG fallback${NC}"
+                exit 1
+            fi
+        else
+            echo -e "${RED}Error: rsvg-convert not found${NC}"
+            echo "Install librsvg (recommended), or install Python cairosvg as fallback."
+            exit 1
+        fi
     fi
 else
     echo -e "${YELLOW}SVG file not found. Generate it first with Claude Code.${NC}"

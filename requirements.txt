@@ -2,12 +2,19 @@ python-docx>=1.1.0
 pymupdf>=1.24.0
 markitdown>=0.1.0
 pypdf>=4.2.0
+striprtf>=0.0.26
+
+# Optional but improves robustness for PDF text extraction fallback
+pdfplumber>=0.11.0
 
 # --- Clinical/Scientific compute dependencies (skills that require modeling & plotting) ---
 numpy>=1.23
 pandas>=2.0
 statsmodels>=0.14
 matplotlib>=3.7
+lifelines>=0.28.0
+openai>=1.50.0
+cairosvg>=2.7.1
 
 # Diagram skill note:
 # `skills/fireworks-tech-graph` is SVG/PNG oriented and does not require extra Python packages here.

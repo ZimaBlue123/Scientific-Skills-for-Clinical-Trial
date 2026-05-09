@@ -6,7 +6,8 @@ from pathlib import Path
 
 
 def main() -> int:
-    src = Path(r"E:\Cursor Project\Scientific-Skills-for-Clinical_Trial\review_materials\_md")
+    root = Path(__file__).resolve().parents[1]
+    src = root / "review_materials" / "_md"
     if not src.exists():
         raise SystemExit(f"missing: {src}")
 

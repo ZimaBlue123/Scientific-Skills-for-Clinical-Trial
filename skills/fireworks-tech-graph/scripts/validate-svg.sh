@@ -286,11 +286,11 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# Check 7: rsvg-convert validation
-echo -n "Running rsvg-convert validation... "
+# Check 7: renderer validation (rsvg-convert preferred, CairoSVG fallback)
+echo -n "Running renderer validation... "
 if command -v rsvg-convert &> /dev/null; then
     if rsvg-convert "$SVG_FILE" -o /tmp/test-output.png 2>/dev/null; then
-        echo -e "${GREEN}✓ Pass${NC}"
+        echo -e "${GREEN}✓ Pass${NC} (rsvg-convert)"
         rm -f /tmp/test-output.png
     else
         echo -e "${RED}✗ Fail${NC}"
@@ -298,8 +298,22 @@ if command -v rsvg-convert &> /dev/null; then
         rsvg-convert "$SVG_FILE" -o /tmp/test-output.png 2>&1 || true
         FAILURES=$((FAILURES + 1))
     fi
+elif command -v python3 &> /dev/null && python3 -c "import cairosvg" >/dev/null 2>&1; then
+    if python3 - "$SVG_FILE" /tmp/test-output.png <<'PY'
+import sys
+import cairosvg
+cairosvg.svg2png(url=sys.argv[1], write_to=sys.argv[2])
+PY
+    then
+        echo -e "${GREEN}✓ Pass${NC} (CairoSVG fallback)"
+        rm -f /tmp/test-output.png
+    else
+        echo -e "${RED}✗ Fail${NC}"
+        echo "CairoSVG fallback render error"
+        FAILURES=$((FAILURES + 1))
+    fi
 else
-    echo -e "${YELLOW}⚠ Skipped${NC} (rsvg-convert not found)"
+    echo -e "${YELLOW}⚠ Skipped${NC} (no rsvg-convert or CairoSVG)"
 fi
 
 echo "----------------------------------------"

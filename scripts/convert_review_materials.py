@@ -7,7 +7,7 @@ from striprtf.striprtf import rtf_to_text
 
 
 def main() -> int:
-    src = Path(r"E:\Cursor Project\Scientific-Skills-for-Clinical_Trial\review_materials")
+    src = Path(__file__).resolve().parents[1] / "review_materials"
     out = src / "_md"
     out.mkdir(exist_ok=True)
 

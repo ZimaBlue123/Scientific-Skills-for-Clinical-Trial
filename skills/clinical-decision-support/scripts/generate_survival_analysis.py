@@ -13,14 +13,19 @@ This script creates publication-quality survival curves with:
 Dependencies: lifelines, matplotlib, pandas, numpy
 """
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from lifelines import KaplanMeierFitter
-from lifelines.statistics import logrank_test, multivariate_logrank_test
-from lifelines import CoxPHFitter
 import argparse
 from pathlib import Path
+
+_IMPORT_ERROR = None
+try:
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from lifelines import KaplanMeierFitter
+    from lifelines.statistics import logrank_test, multivariate_logrank_test
+    from lifelines import CoxPHFitter
+except ModuleNotFoundError as e:
+    _IMPORT_ERROR = e
 
 
 def load_survival_data(filepath):
@@ -391,6 +396,13 @@ def main():
                        help='Column name for grouping variable')
     
     args = parser.parse_args()
+
+    if _IMPORT_ERROR is not None:
+        raise SystemExit(
+            "Missing runtime dependency for survival analysis: "
+            f"{_IMPORT_ERROR}. Install required packages first "
+            "(e.g., pip install lifelines matplotlib pandas numpy)."
+        )
     
     # Load data
     print(f"Loading data from {args.input_file}...")
