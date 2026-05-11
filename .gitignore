@@ -69,6 +69,11 @@ reports/
 **/report/
 **/reports/
 
+# Reusable local template outputs (do not commit)
+scripts/common_templates/
+scripts/deliverables/
+**/deliverables/
+
 # Keep an empty top-level reports/ folder in repo
 !reports/
 !reports/.gitkeep
