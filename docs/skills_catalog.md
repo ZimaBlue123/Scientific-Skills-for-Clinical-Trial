@@ -2,7 +2,7 @@
 
 本文件提供"做什么用"的速览与可复制的常用 prompt 模板；更细的参数/脚本入口请以各 skill 目录下的 `SKILL.md` 为准。
 
-## Skills 清单（项目内置 - 28 个）
+## Skills 清单（项目内置 - 30 个）
 
 ### 核心数据分析
 
@@ -54,6 +54,8 @@
 | `pyhealth` | 医疗 AI：EHR 任务/数据集/模型 | MIT | 见 references/ |
 | `csr-stage-docx-workflow` | CSR 阶段性小结 Word 生成（Shell结构+PDF自动填数） | MIT | `scripts/generate_csr_docx.py` |
 | `word-audit-report-format` | Word 审核报告字体规范（中文宋体/英文TNR） | MIT | `scripts/generate_audit_report_docx.py` |
+| `pptx-gmc-sync-from-word` | Word GMC/例数/P 值同步到 PPT 表格（PPS/FAS 分流） | MIT | `scripts/sync_pptx_from_word.py`, `scripts/export_ppt_tables_to_word.py` |
+| `docx-to-markdown` | DOCX 抽取为 Markdown/文本 | MIT | `scripts/extract_docx_text.py` |
 
 ### 图表扩展（项目内置）
 
@@ -157,6 +159,11 @@ git -c http.proxy= -c https.proxy= -C ".\skills\fireworks-tech-graph" pull
 - **clinical-decision-support**
   ```
   对队列 <n> 例按生物标志物 <biomarker> 分层，比较 OS/PFS/ORR（含 HR、95%CI、KM 曲线/森林图），生成 LaTeX/PDF 的 CDS 报告与执行摘要。
+  ```
+
+- **pptx-gmc-sync-from-word**
+  ```
+  根据 Word <report.docx> 更新 PPT <deck.pptx> 第1/2/4页表格：用 GMC（非校正GMC）、例数、P值；第1页用PPS源表、第2页用FAS；导出横版 Word 便于复制。先核对 M4 是否 PPS/FAS 串表。
   ```
 
 - **treatment-plans**

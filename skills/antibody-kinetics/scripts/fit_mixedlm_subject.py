@@ -42,7 +42,7 @@ def main() -> int:
     ap.add_argument("--in", dest="infile", required=True, help="输入CSV，至少包含 USUBJID,Group,t_post,以及滴度列")
     ap.add_argument("--outdir", required=True, help="输出目录")
     ap.add_argument("--titer-col", default="TITER", help="滴度/浓度列名（默认 TITER）")
-    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95% CI")
+    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95%% CI")
     ap.add_argument("--target-t-post", type=float, default=30.0, help="外推最大 t_post（如 30≈M36）")
     ap.add_argument("--grid-n", type=int, default=200, help="预测网格点数")
     ap.add_argument("--threshold", type=float, default=10.0, help="保护阈值（用于反解持续时间；点估计）")

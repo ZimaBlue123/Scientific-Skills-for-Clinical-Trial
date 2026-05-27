@@ -147,9 +147,10 @@ def display_results(filepath: Path, checklist: List[bool], missing: List[str],
     print(f"Required sections present: {present_count}/{total_sections} ({completeness_pct:.0f}%)")
     
     if completeness_pct == 100:
-        print("✓ All required sections present")
+        print("[OK] All required sections present")
     else:
-        print(f"✗ {len(missing)} section(s) missing")
+        print(f"[FAIL] {len(missing)} section(s) missing")
+
     
     # Section details
     print("\n" + "-"*70)
@@ -157,7 +158,7 @@ def display_results(filepath: Path, checklist: List[bool], missing: List[str],
     print("-"*70)
     
     for i, (present, desc) in enumerate(zip(checklist, SECTION_DESCRIPTIONS.values())):
-        status = "✓" if present else "✗"
+        status = "[OK]" if present else "[FAIL]"
         print(f"{status} {desc}")
     
     # Missing sections
@@ -166,7 +167,7 @@ def display_results(filepath: Path, checklist: List[bool], missing: List[str],
         print("MISSING SECTIONS")
         print("-"*70)
         for section in missing:
-            print(f"  • {section}")
+            print(f"  - {section}")
     
     # SMART goals
     print("\n" + "-"*70)
@@ -174,11 +175,11 @@ def display_results(filepath: Path, checklist: List[bool], missing: List[str],
     print("-"*70)
     
     if smart_complete:
-        print("✓ All SMART criteria mentioned in document")
+        print("[OK] All SMART criteria mentioned in document")
     else:
-        print(f"✗ {len(smart_missing)} SMART criterion/criteria not found:")
+        print(f"[FAIL] {len(smart_missing)} SMART criterion/criteria not found:")
         for criterion in smart_missing:
-            print(f"  • {criterion}")
+            print(f"  - {criterion}")
         print("\nNote: Goals should be Specific, Measurable, Achievable, Relevant, Time-bound")
     
     # HIPAA notice
@@ -187,15 +188,15 @@ def display_results(filepath: Path, checklist: List[bool], missing: List[str],
     print("-"*70)
     
     if has_hipaa:
-        print("✓ HIPAA/de-identification notice present")
+        print("[OK] HIPAA/de-identification notice present")
     else:
-        print("✗ HIPAA de-identification notice not found")
+        print("[FAIL] HIPAA de-identification notice not found")
         print("  Recommendation: Include HIPAA Safe Harbor de-identification guidance")
     
     if has_signature:
-        print("✓ Provider signature section present")
+        print("[OK] Provider signature section present")
     else:
-        print("✗ Provider signature section not found")
+        print("[FAIL] Provider signature section not found")
     
     # Placeholders
     print("\n" + "-"*70)
@@ -203,13 +204,14 @@ def display_results(filepath: Path, checklist: List[bool], missing: List[str],
     print("-"*70)
     
     if placeholder_count == 0:
-        print("✓ No uncustomized placeholders detected")
+        print("[OK] No uncustomized placeholders detected")
     else:
-        print(f"⚠ {placeholder_count} placeholder(s) may need customization")
+        print(f"[WARN] {placeholder_count} placeholder(s) may need customization")
         print("\nExamples:")
         for sample in placeholder_samples:
-            print(f"  • [{sample}]")
+            print(f"  - [{sample}]")
         print("\nRecommendation: Replace all [bracketed placeholders] with patient-specific information")
+
     
     # Summary
     print("\n" + "="*70)
@@ -230,13 +232,14 @@ def display_results(filepath: Path, checklist: List[bool], missing: List[str],
     print(f"\nOverall completeness score: {overall_score:.0f}%")
     
     if overall_score >= 90:
-        print("Status: ✓ EXCELLENT - Treatment plan is comprehensive")
+        print("Status: [EXCELLENT] Treatment plan is comprehensive")
     elif overall_score >= 75:
-        print("Status: ✓ GOOD - Minor improvements needed")
+        print("Status: [GOOD] Minor improvements needed")
     elif overall_score >= 60:
-        print("Status: ⚠ FAIR - Several sections need attention")
+        print("Status: [FAIR] Several sections need attention")
     else:
-        print("Status: ✗ INCOMPLETE - Significant work needed")
+        print("Status: [INCOMPLETE] Significant work needed")
+
     
     print("\n" + "="*70)
     

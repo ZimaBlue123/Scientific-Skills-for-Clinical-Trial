@@ -73,6 +73,9 @@ Windows（PowerShell）示例：
 $dst = Join-Path $env:USERPROFILE ".cursor\skills"
 New-Item -ItemType Directory -Force -Path $dst | Out-Null
 Copy-Item -Recurse -Force ".\skills\*" $dst
+
+# 仅同步单个 skill（示例）
+powershell -File .\scripts\sync_skills_to_global.ps1 -Skill pptx-gmc-sync-from-word
 ```
 
 macOS/Linux（bash）示例：
@@ -86,7 +89,7 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # 每个 skill 一个目录（核心内容，28 个）
+├── skills/                # 每个 skill 一个目录（核心内容，30 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
 ├── scripts/               # 仓库级可执行脚本入口（含 CSR/审核报告生成）
 ├── tests/                 # 测试
@@ -101,7 +104,7 @@ Scientific-Skills-for-Clinical_Trial/
 
 ## Skills 清单与使用方法
 
-本仓库包含 **28 个 skills**，分为以下几类：
+本仓库包含 **30 个 skills**，分为以下几类：
 
 ### 核心数据分析 Skills
 
@@ -154,6 +157,8 @@ Scientific-Skills-for-Clinical_Trial/
 | `pyhealth` | 医疗 AI（EHR 任务/模型） | 见 `references/datasets.md` |
 | `csr-stage-docx-workflow` | CSR 阶段性小结 Word 生成 | `python scripts/generate_csr_docx.py` |
 | `word-audit-report-format` | Word 审核报告字体规范 | `python scripts/generate_audit_report_docx.py` |
+| `pptx-gmc-sync-from-word` | Word GMC/例数/P 值同步到 PPT 指定页表格 | `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
+| `docx-to-markdown` | DOCX 文本/表格抽取为 Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
 
 ### 图表 Skill（项目内置）
 

@@ -1,6 +1,4 @@
-# Clinical Reports — References Index
-
-本文件是 `clinical-reports` 这个 skill 的参考资料索引。使用方式与入口说明请先看上一级目录的 `../SKILL.md`。
+# Clinical Reports Skill
 
 ## Overview
 
@@ -57,7 +55,7 @@ Comprehensive skill for writing clinical reports including case reports, diagnos
 ### Generate a Template
 
 ```bash
-cd skills/clinical-reports/scripts
+cd .claude/skills/clinical-reports/scripts
 python generate_report_template.py
 
 # Or specify type directly

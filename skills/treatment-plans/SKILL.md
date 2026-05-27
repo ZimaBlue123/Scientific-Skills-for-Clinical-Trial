@@ -1053,7 +1053,7 @@ Generates:
 Interactive template selection:
 
 ```bash
-cd skills/treatment-plans/scripts
+cd .claude/skills/treatment-plans/scripts
 python generate_template.py
 
 # Or specify type directly

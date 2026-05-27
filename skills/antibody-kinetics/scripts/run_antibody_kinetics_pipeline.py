@@ -312,7 +312,7 @@ def main() -> int:
     ap.add_argument("--titer-col", default="TITER", help="抗体滴度/浓度列名（默认 TITER）。")
 
     ap.add_argument("--log-base", default="e", choices=["e", "10"], help="对数底数：e=自然对数，10=以10为底（b不变）。")
-    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 对应 95% CI。")
+    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 对应 95%% CI。")
     ap.add_argument("--reml", action="store_true", help="使用 REML（默认 False）。")
 
     ap.add_argument("--covars", default="", help="固定效应协变量（逗号分隔；仅支持数值列）。例如：Age,Sex,BaselineIgG")

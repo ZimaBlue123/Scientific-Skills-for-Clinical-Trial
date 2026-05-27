@@ -1,4 +1,11 @@
 python-docx>=1.1.0
+python-pptx>=1.0.0
+pytesseract>=0.3.10
+Pillow>=10.0
+# Image → Word tables (scripts/extract_tables_to_docx.py, cansino_detail4843_manual_docx.py 表格章)
+img2table>=1.4.0
+opencv-contrib-python-headless>=4.9.0
+beautifulsoup4>=4.12.0
 pymupdf>=1.24.0
 markitdown>=0.1.0
 pypdf>=4.2.0

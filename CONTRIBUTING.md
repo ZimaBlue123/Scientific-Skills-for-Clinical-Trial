@@ -29,7 +29,9 @@ flake8 .
 目录约定：
 
 - 路径：`skills/<skill-name>/`
-- 一律在**项目内**创建 skill；不要放到 `~/.cursor/skills/` 这类全局目录
+- 一律在**项目内**创建 skill；源码以仓库 `skills/` 为准（不要只在全局目录改一份）
+- 新增或更新 skill 后：更新 `README.md`、`docs/skills_catalog.md`，并同步全局（可选）：
+  `powershell -File scripts/sync_skills_to_global.ps1 -Skill <skill-name>`
 - 至少包含：`SKILL.md`
 - 如包含脚本：放在 `skills/<skill-name>/scripts/` 下，并在 `SKILL.md` 里写清入口、参数与输出
 

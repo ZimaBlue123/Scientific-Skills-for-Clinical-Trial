@@ -104,7 +104,7 @@ def main() -> int:
     ap.add_argument("--target-t-post", type=float, default=30.0, help="外推的最大 t_post（如 30≈M36）")
     ap.add_argument("--grid-n", type=int, default=200, help="预测网格点数")
     ap.add_argument("--threshold", type=float, default=10.0, help="保护阈值（用于反解持续时间）")
-    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95% CI")
+    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95%% CI")
     ap.add_argument("--study-month-offset", type=float, default=0.0, help="若未提供StudyMonth，则用 StudyMonth=t_post+offset")
     args = ap.parse_args()
 

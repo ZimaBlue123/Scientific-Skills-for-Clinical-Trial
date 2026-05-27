@@ -1,0 +1,769 @@
+{
+  "root": "E:\\Cursor Project\\2-Scientific-Skills-for-Clinical_Trial",
+  "python": "C:\\Users\\Administrator\\.venvs\\clinical-trial\\Scripts\\python.exe",
+  "venv_policy": {
+    "root_venv_present": false,
+    "root_venv_file_count": 0,
+    "gitignore_has_venv_rule": true
+  },
+  "commands": [
+    {
+      "name": "rsvg-convert",
+      "argv": [
+        "rsvg-convert",
+        "--version"
+      ],
+      "ok": false,
+      "exit_code": null,
+      "stdout": "",
+      "stderr": "[WinError 2] 系统找不到指定的文件。"
+    },
+    {
+      "name": "node",
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "v22.22.0\n",
+      "stderr": ""
+    },
+    {
+      "name": "npm",
+      "argv": [
+        "npm",
+        "--version"
+      ],
+      "ok": false,
+      "exit_code": null,
+      "stdout": "",
+      "stderr": "[WinError 2] 系统找不到指定的文件。"
+    },
+    {
+      "name": "python-module:cairosvg",
+      "argv": [
+        "C:\\Users\\Administrator\\.venvs\\clinical-trial\\Scripts\\python.exe",
+        "-c",
+        "import cairosvg"
+      ],
+      "ok": false,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"C:\\Users\\Administrator\\.venvs\\clinical-trial\\lib\\site-packages\\cairosvg\\__init__.py\", line 25, in <module>\n    from . import surface  # noqa isort:skip\n  File \"C:\\Users\\Administrator\\.venvs\\clinical-trial\\lib\\site-packages\\cairosvg\\surface.py\", line 9, in <module>\n    import cairocffi as cairo\n  File \"C:\\Users\\Administrator\\.venvs\\clinical-trial\\lib\\site-packages\\cairocffi\\__init__.py\", line 60, in <module>\n    cairo = dlopen(\n  File \"C:\\Users\\Administrator\\.venvs\\clinical-trial\\lib\\site-packages\\cairocffi\\__init__.py\", line 57, in dlopen\n    raise OSError(error_message)  # pragma: no cover\nOSError: no library called \"cairo-2\" was found\nno library called \"cairo\" was found\nno library called \"libcairo-2\" was found\ncannot load library 'libcairo.so.2': error 0x7e.  Additionally, ctypes.util.find_library() did not manage to locate a library called 'libcairo.so.2'\ncannot load library 'libcairo.2.dylib': error 0x7e.  Additionally, ctypes.util.find_library() did not manage to locate a library called 'libcairo.2.dylib'\ncannot load library 'libcairo-2.dll': error 0x7e.  Additionally, ctypes.util.find_library() did not manage to locate a library called 'libcairo-2.dll'\n"
+    }
+  ],
+  "scripts": [
+    {
+      "path": "scripts/cleanup_generated_artifacts.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06651449203491211
+    },
+    {
+      "path": "scripts/convert_audit_report_md_to_docx.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06817913055419922
+    },
+    {
+      "path": "scripts/convert_fast.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06818413734436035
+    },
+    {
+      "path": "scripts/convert_review_materials.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06830334663391113
+    },
+    {
+      "path": "scripts/convert_review_to_md.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.07407426834106445
+    },
+    {
+      "path": "scripts/generate_audit_report_docx.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_audit_report_docx.py [-h] [--root ROOT]\n                                     [--output-dir OUTPUT_DIR]\n\nGenerate strict audit report docx.\n\noptions:\n  -h, --help            show this help message and exit\n  --root ROOT           Project root path (default: inferred from this script\n                        location)\n  --output-dir OUTPUT_DIR\n                        Output directory relative to root unless absolute path\n                        is provided\n",
+      "stderr": "",
+      "seconds": 0.16944146156311035
+    },
+    {
+      "path": "scripts/generate_audit_report_docx.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_audit_report_docx.py [-h] [--root ROOT]\n                                     [--output-dir OUTPUT_DIR]\n\nGenerate strict audit report docx.\n\noptions:\n  -h, --help            show this help message and exit\n  --root ROOT           Project root path (default: inferred from this script\n                        location)\n  --output-dir OUTPUT_DIR\n                        Output directory relative to root unless absolute path\n                        is provided\n",
+      "stderr": "",
+      "seconds": 0.16637182235717773
+    },
+    {
+      "path": "scripts/generate_csr_docx.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_csr_docx.py [-h] [--root ROOT]\n\nGenerate stage CSR docx from source PDFs.\n\noptions:\n  -h, --help   show this help message and exit\n  --root ROOT  Project root (default: inferred from this script path)\n",
+      "stderr": "",
+      "seconds": 0.16735053062438965
+    },
+    {
+      "path": "scripts/generate_csr_docx.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_csr_docx.py [-h] [--root ROOT]\n\nGenerate stage CSR docx from source PDFs.\n\noptions:\n  -h, --help   show this help message and exit\n  --root ROOT  Project root (default: inferred from this script path)\n",
+      "stderr": "",
+      "seconds": 0.17880558967590332
+    },
+    {
+      "path": "scripts/generate_norovirus_review_docx.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06717514991760254
+    },
+    {
+      "path": "scripts/make_safe_md_copies.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06664109230041504
+    },
+    {
+      "path": "scripts/md_to_docx.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: md_to_docx.py [-h] [-o OUTPUT] input_md\n\nConvert a simple Markdown file to .docx.\n\npositional arguments:\n  input_md\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT, --output OUTPUT\n",
+      "stderr": "",
+      "seconds": 0.16342806816101074
+    },
+    {
+      "path": "scripts/md_to_docx.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: md_to_docx.py [-h] [-o OUTPUT] input_md\n\nConvert a simple Markdown file to .docx.\n\npositional arguments:\n  input_md\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT, --output OUTPUT\n",
+      "stderr": "",
+      "seconds": 0.16242432594299316
+    },
+    {
+      "path": "skills/antibody-kinetics/scripts/fit_mixedlm_subject.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: fit_mixedlm_subject.py [-h] --in INFILE --outdir OUTDIR\n                              [--titer-col TITER_COL] [--alpha ALPHA]\n                              [--target-t-post TARGET_T_POST]\n                              [--grid-n GRID_N] [--threshold THRESHOLD]\n\n����ˮƽ MixedLM��log-log ����˥�����������б���ƶ���Ԥ�⣩��\n\noptions:\n  -h, --help            show this help message and exit\n  --in INFILE           ����CSV�����ٰ��� USUBJID,Group,t_post,�Լ��ζ���\n  --outdir OUTDIR       ���Ŀ¼\n  --titer-col TITER_COL\n                        �ζ�/Ũ��������Ĭ�� TITER��\n  --alpha ALPHA         ����ˮƽ��alpha=0.05 ��ʾ 95% CI\n  --target-t-post TARGET_T_POST\n                        ������� t_post���� 30��M36��\n  --grid-n GRID_N       Ԥ���������\n  --threshold THRESHOLD\n                        ������ֵ�����ڷ������ʱ�䣻����ƣ�\n",
+      "stderr": "",
+      "seconds": 1.2835092544555664
+    },
+    {
+      "path": "skills/antibody-kinetics/scripts/fit_mixedlm_subject.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: fit_mixedlm_subject.py [-h] --in INFILE --outdir OUTDIR\n                              [--titer-col TITER_COL] [--alpha ALPHA]\n                              [--target-t-post TARGET_T_POST]\n                              [--grid-n GRID_N] [--threshold THRESHOLD]\n\n����ˮƽ MixedLM��log-log ����˥�����������б���ƶ���Ԥ�⣩��\n\noptions:\n  -h, --help            show this help message and exit\n  --in INFILE           ����CSV�����ٰ��� USUBJID,Group,t_post,�Լ��ζ���\n  --outdir OUTDIR       ���Ŀ¼\n  --titer-col TITER_COL\n                        �ζ�/Ũ��������Ĭ�� TITER��\n  --alpha ALPHA         ����ˮƽ��alpha=0.05 ��ʾ 95% CI\n  --target-t-post TARGET_T_POST\n                        ������� t_post���� 30��M36��\n  --grid-n GRID_N       Ԥ���������\n  --threshold THRESHOLD\n                        ������ֵ�����ڷ������ʱ�䣻����ƣ�\n",
+      "stderr": "",
+      "seconds": 1.2602717876434326
+    },
+    {
+      "path": "skills/antibody-kinetics/scripts/fit_powerlaw_summary.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: fit_powerlaw_summary.py [-h] --in INFILE --outdir OUTDIR\n                               [--target-t-post TARGET_T_POST]\n                               [--grid-n GRID_N] [--threshold THRESHOLD]\n                               [--alpha ALPHA]\n                               [--study-month-offset STUDY_MONTH_OFFSET]\n\nPower-law(����)ģ�ͣ����ڻ���GMC��log-log��ϡ����ơ���ͼ��\n\noptions:\n  -h, --help            show this help message and exit\n  --in INFILE           ����CSV�����ٰ��� Group,t_post,GMC\n  --outdir OUTDIR       ���Ŀ¼\n  --target-t-post TARGET_T_POST\n                        ���Ƶ���� t_post���� 30��M36��\n  --grid-n GRID_N       Ԥ���������\n  --threshold THRESHOLD\n                        ������ֵ�����ڷ������ʱ�䣩\n  --alpha ALPHA         ����ˮƽ��alpha=0.05 ��ʾ 95% CI\n  --study-month-offset STUDY_MONTH_OFFSET\n                        ��δ�ṩStudyMonth������ StudyMonth=t_post+offset\n",
+      "stderr": "",
+      "seconds": 1.5062768459320068
+    },
+    {
+      "path": "skills/antibody-kinetics/scripts/fit_powerlaw_summary.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: fit_powerlaw_summary.py [-h] --in INFILE --outdir OUTDIR\n                               [--target-t-post TARGET_T_POST]\n                               [--grid-n GRID_N] [--threshold THRESHOLD]\n                               [--alpha ALPHA]\n                               [--study-month-offset STUDY_MONTH_OFFSET]\n\nPower-law(����)ģ�ͣ����ڻ���GMC��log-log��ϡ����ơ���ͼ��\n\noptions:\n  -h, --help            show this help message and exit\n  --in INFILE           ����CSV�����ٰ��� Group,t_post,GMC\n  --outdir OUTDIR       ���Ŀ¼\n  --target-t-post TARGET_T_POST\n                        ���Ƶ���� t_post���� 30��M36��\n  --grid-n GRID_N       Ԥ���������\n  --threshold THRESHOLD\n                        ������ֵ�����ڷ������ʱ�䣩\n  --alpha ALPHA         ����ˮƽ��alpha=0.05 ��ʾ 95% CI\n  --study-month-offset STUDY_MONTH_OFFSET\n                        ��δ�ṩStudyMonth������ StudyMonth=t_post+offset\n",
+      "stderr": "",
+      "seconds": 1.4902634620666504
+    },
+    {
+      "path": "skills/antibody-kinetics/scripts/run_antibody_kinetics_pipeline.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: run_antibody_kinetics_pipeline.py [-h] --infile INFILE --outdir OUTDIR\n                                         [--usubjid-col USUBJID_COL]\n                                         [--group-col GROUP_COL]\n                                         [--t-post-col T_POST_COL]\n                                         [--titer-col TITER_COL]\n                                         [--log-base {e,10}] [--alpha ALPHA]\n                                         [--reml] [--covars COVARS]\n                                         [--covar-strategy {mean}]\n                                         [--target-t-post TARGET_T_POST]\n                                         [--grid-n GRID_N]\n                                         [--key-t-post KEY_T_POST]\n                                         [--threshold THRESHOLD]\n\n����ˮƽ���嶯��ѧ��������״�����ߣ�MixedLM + M12+ ���� + ��ֵ����ʱ�䣨��CI����\n\noptions:\n  -h, --help            show this help message and exit\n  --infile INFILE       ���� CSV�������� data/ �£���Ҫ�ύԭʼ���ݣ���\n  --outdir OUTDIR       ���Ŀ¼�������� output/ �£���\n  --usubjid-col USUBJID_COL\n                        ������ID������Ĭ�� USUBJID����\n  --group-col GROUP_COL\n                        ����/����������Ĭ�� Group����\n  --t-post-col T_POST_COL\n                        t_post��ĩ���/�������룩������Ĭ�� t_post����\n  --titer-col TITER_COL\n                        ����ζ�/Ũ��������Ĭ�� TITER����\n  --log-base {e,10}     ����������e=��Ȼ������10=��10Ϊ�ף�b���䣩��\n  --alpha ALPHA         ����ˮƽ��alpha=0.05 ��Ӧ 95% CI��\n  --reml                ʹ�� REML��Ĭ�� False����\n  --covars COVARS       �̶�ЧӦЭ���������ŷָ�����֧����ֵ�У������磺Age,Sex,BaselineIgG\n  --covar-strategy {mean}\n                        Э��������Ԥ��ʱ��ȡֵ���ԣ�Ĭ�� mean����\n  --target-t-post TARGET_T_POST\n                        ������� t_post���� 30��M36����\n  --grid-n GRID_N       Ԥ�����������\n  --key-t-post KEY_T_POST\n                        ��Ҫ�������ֱ�ӱ����Ĺؼ� t_post�����ŷָ������� 18,30 ��Ӧ M24/M36����\n  --threshold THRESHOLD\n                        ������ֵ���� anti-HBs=10 mIU/mL�������ڷ������ʱ�䡣\n",
+      "stderr": "",
+      "seconds": 1.2399876117706299
+    },
+    {
+      "path": "skills/antibody-kinetics/scripts/run_antibody_kinetics_pipeline.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: run_antibody_kinetics_pipeline.py [-h] --infile INFILE --outdir OUTDIR\n                                         [--usubjid-col USUBJID_COL]\n                                         [--group-col GROUP_COL]\n                                         [--t-post-col T_POST_COL]\n                                         [--titer-col TITER_COL]\n                                         [--log-base {e,10}] [--alpha ALPHA]\n                                         [--reml] [--covars COVARS]\n                                         [--covar-strategy {mean}]\n                                         [--target-t-post TARGET_T_POST]\n                                         [--grid-n GRID_N]\n                                         [--key-t-post KEY_T_POST]\n                                         [--threshold THRESHOLD]\n\n����ˮƽ���嶯��ѧ��������״�����ߣ�MixedLM + M12+ ���� + ��ֵ����ʱ�䣨��CI����\n\noptions:\n  -h, --help            show this help message and exit\n  --infile INFILE       ���� CSV�������� data/ �£���Ҫ�ύԭʼ���ݣ���\n  --outdir OUTDIR       ���Ŀ¼�������� output/ �£���\n  --usubjid-col USUBJID_COL\n                        ������ID������Ĭ�� USUBJID����\n  --group-col GROUP_COL\n                        ����/����������Ĭ�� Group����\n  --t-post-col T_POST_COL\n                        t_post��ĩ���/�������룩������Ĭ�� t_post����\n  --titer-col TITER_COL\n                        ����ζ�/Ũ��������Ĭ�� TITER����\n  --log-base {e,10}     ����������e=��Ȼ������10=��10Ϊ�ף�b���䣩��\n  --alpha ALPHA         ����ˮƽ��alpha=0.05 ��Ӧ 95% CI��\n  --reml                ʹ�� REML��Ĭ�� False����\n  --covars COVARS       �̶�ЧӦЭ���������ŷָ�����֧����ֵ�У������磺Age,Sex,BaselineIgG\n  --covar-strategy {mean}\n                        Э��������Ԥ��ʱ��ȡֵ���ԣ�Ĭ�� mean����\n  --target-t-post TARGET_T_POST\n                        ������� t_post���� 30��M36����\n  --grid-n GRID_N       Ԥ�����������\n  --key-t-post KEY_T_POST\n                        ��Ҫ�������ֱ�ӱ����Ĺؼ� t_post�����ŷָ������� 18,30 ��Ӧ M24/M36����\n  --threshold THRESHOLD\n                        ������ֵ���� anti-HBs=10 mIU/mL�������ڷ������ʱ�䡣\n",
+      "stderr": "",
+      "seconds": 1.2251627445220947
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/biomarker_classifier.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: biomarker_classifier.py [-h] [-b BIOMARKER] [-t THRESHOLD]\n                               [-o OUTPUT_DIR] [--example]\n                               [input_file]\n\nBiomarker-based patient classification\n\npositional arguments:\n  input_file            CSV file with patient and biomarker data\n\noptions:\n  -h, --help            show this help message and exit\n  -b BIOMARKER, --biomarker BIOMARKER\n                        Biomarker column name for stratification\n  -t THRESHOLD, --threshold THRESHOLD\n                        Threshold for binary classification\n  -o OUTPUT_DIR, --output-dir OUTPUT_DIR\n                        Output directory\n  --example             Run with example data\n",
+      "stderr": "",
+      "seconds": 1.192631721496582
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/biomarker_classifier.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: biomarker_classifier.py [-h] [-b BIOMARKER] [-t THRESHOLD]\n                               [-o OUTPUT_DIR] [--example]\n                               [input_file]\n\nBiomarker-based patient classification\n\npositional arguments:\n  input_file            CSV file with patient and biomarker data\n\noptions:\n  -h, --help            show this help message and exit\n  -b BIOMARKER, --biomarker BIOMARKER\n                        Biomarker column name for stratification\n  -t THRESHOLD, --threshold THRESHOLD\n                        Threshold for binary classification\n  -o OUTPUT_DIR, --output-dir OUTPUT_DIR\n                        Output directory\n  --example             Run with example data\n",
+      "stderr": "",
+      "seconds": 1.144731044769287
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/build_decision_tree.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: build_decision_tree.py [-h] [-i INPUT] [-o OUTPUT] [--example]\n                              [--text TEXT]\n\nBuild clinical decision tree flowcharts\n\noptions:\n  -h, --help            show this help message and exit\n  -i INPUT, --input INPUT\n                        Input file (JSON format)\n  -o OUTPUT, --output OUTPUT\n                        Output .tex file\n  --example             Generate example algorithm\n  --text TEXT           Simple text algorithm (see format in docstring)\n",
+      "stderr": "",
+      "seconds": 0.06918215751647949
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/build_decision_tree.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: build_decision_tree.py [-h] [-i INPUT] [-o OUTPUT] [--example]\n                              [--text TEXT]\n\nBuild clinical decision tree flowcharts\n\noptions:\n  -h, --help            show this help message and exit\n  -i INPUT, --input INPUT\n                        Input file (JSON format)\n  -o OUTPUT, --output OUTPUT\n                        Output .tex file\n  --example             Generate example algorithm\n  --text TEXT           Simple text algorithm (see format in docstring)\n",
+      "stderr": "",
+      "seconds": 0.06863713264465332
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/create_cohort_tables.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: create_cohort_tables.py [-h] [-o OUTPUT_DIR] [--group-col GROUP_COL]\n                               [--example]\n                               [input_file]\n\nGenerate clinical cohort tables\n\npositional arguments:\n  input_file            CSV file with cohort data (if not provided, uses\n                        example data)\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT_DIR, --output-dir OUTPUT_DIR\n                        Output directory (default: tables)\n  --group-col GROUP_COL\n                        Column name for grouping variable\n  --example             Generate tables using example data\n",
+      "stderr": "",
+      "seconds": 1.168196678161621
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/create_cohort_tables.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: create_cohort_tables.py [-h] [-o OUTPUT_DIR] [--group-col GROUP_COL]\n                               [--example]\n                               [input_file]\n\nGenerate clinical cohort tables\n\npositional arguments:\n  input_file            CSV file with cohort data (if not provided, uses\n                        example data)\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT_DIR, --output-dir OUTPUT_DIR\n                        Output directory (default: tables)\n  --group-col GROUP_COL\n                        Column name for grouping variable\n  --example             Generate tables using example data\n",
+      "stderr": "",
+      "seconds": 1.1760411262512207
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/generate_survival_analysis.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_survival_analysis.py [-h] [-o OUTPUT] [-t TITLE] [-x XLABEL]\n                                     [-y YLABEL] [--time-col TIME_COL]\n                                     [--event-col EVENT_COL]\n                                     [--group-col GROUP_COL]\n                                     input_file\n\nGenerate Kaplan-Meier survival curves\n\npositional arguments:\n  input_file            CSV file with survival data\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT, --output OUTPUT\n                        Output directory (default: survival_output)\n  -t TITLE, --title TITLE\n                        Plot title\n  -x XLABEL, --xlabel XLABEL\n                        X-axis label\n  -y YLABEL, --ylabel YLABEL\n                        Y-axis label\n  --time-col TIME_COL   Column name for time variable\n  --event-col EVENT_COL\n                        Column name for event indicator\n  --group-col GROUP_COL\n                        Column name for grouping variable\n",
+      "stderr": "",
+      "seconds": 1.7018368244171143
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/generate_survival_analysis.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_survival_analysis.py [-h] [-o OUTPUT] [-t TITLE] [-x XLABEL]\n                                     [-y YLABEL] [--time-col TIME_COL]\n                                     [--event-col EVENT_COL]\n                                     [--group-col GROUP_COL]\n                                     input_file\n\nGenerate Kaplan-Meier survival curves\n\npositional arguments:\n  input_file            CSV file with survival data\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT, --output OUTPUT\n                        Output directory (default: survival_output)\n  -t TITLE, --title TITLE\n                        Plot title\n  -x XLABEL, --xlabel XLABEL\n                        X-axis label\n  -y YLABEL, --ylabel YLABEL\n                        Y-axis label\n  --time-col TIME_COL   Column name for time variable\n  --event-col EVENT_COL\n                        Column name for event indicator\n  --group-col GROUP_COL\n                        Column name for grouping variable\n",
+      "stderr": "",
+      "seconds": 1.6847474575042725
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/validate_cds_document.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_cds_document.py [-h] [-o OUTPUT] [--strict] input_file\n\nValidate clinical decision support documents\n\npositional arguments:\n  input_file            Document to validate (.tex, .md, .txt)\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT, --output OUTPUT\n                        Save validation report to file\n  --strict              Treat warnings as errors\n",
+      "stderr": "",
+      "seconds": 0.06617474555969238
+    },
+    {
+      "path": "skills/clinical-decision-support/scripts/validate_cds_document.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_cds_document.py [-h] [-o OUTPUT] [--strict] input_file\n\nValidate clinical decision support documents\n\npositional arguments:\n  input_file            Document to validate (.tex, .md, .txt)\n\noptions:\n  -h, --help            show this help message and exit\n  -o OUTPUT, --output OUTPUT\n                        Save validation report to file\n  --strict              Treat warnings as errors\n",
+      "stderr": "",
+      "seconds": 0.06513237953186035
+    },
+    {
+      "path": "skills/clinical-reports/scripts/check_deidentification.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: check_deidentification.py [-h] [--output OUTPUT] [--json] input_file\n\nCheck clinical reports for HIPAA identifiers\n\npositional arguments:\n  input_file            Path to clinical report file\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output JSON report to file\n  --json                Output JSON to stdout\n",
+      "stderr": "",
+      "seconds": 0.07018184661865234
+    },
+    {
+      "path": "skills/clinical-reports/scripts/check_deidentification.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: check_deidentification.py [-h] [--output OUTPUT] [--json] input_file\n\nCheck clinical reports for HIPAA identifiers\n\npositional arguments:\n  input_file            Path to clinical report file\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output JSON report to file\n  --json                Output JSON to stdout\n",
+      "stderr": "",
+      "seconds": 0.07198262214660645
+    },
+    {
+      "path": "skills/clinical-reports/scripts/compliance_checker.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: compliance_checker.py [-h] [--json] input_file\n\nCheck regulatory compliance\n\npositional arguments:\n  input_file  Path to clinical report\n\noptions:\n  -h, --help  show this help message and exit\n  --json\n",
+      "stderr": "",
+      "seconds": 0.061658620834350586
+    },
+    {
+      "path": "skills/clinical-reports/scripts/compliance_checker.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: compliance_checker.py [-h] [--json] input_file\n\nCheck regulatory compliance\n\npositional arguments:\n  input_file  Path to clinical report\n\noptions:\n  -h, --help  show this help message and exit\n  --json\n",
+      "stderr": "",
+      "seconds": 0.061276912689208984
+    },
+    {
+      "path": "skills/clinical-reports/scripts/extract_clinical_data.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: extract_clinical_data.py [-h] [--output OUTPUT] input_file\n\nExtract clinical data\n\npositional arguments:\n  input_file            Path to clinical report\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output JSON file\n",
+      "stderr": "",
+      "seconds": 0.06416845321655273
+    },
+    {
+      "path": "skills/clinical-reports/scripts/extract_clinical_data.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: extract_clinical_data.py [-h] [--output OUTPUT] input_file\n\nExtract clinical data\n\npositional arguments:\n  input_file            Path to clinical report\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output JSON file\n",
+      "stderr": "",
+      "seconds": 0.06399798393249512
+    },
+    {
+      "path": "skills/clinical-reports/scripts/format_adverse_events.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: format_adverse_events.py [-h] [--output OUTPUT] input_file\n\nFormat AE data into tables\n\npositional arguments:\n  input_file            Path to AE data CSV\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output markdown file\n",
+      "stderr": "",
+      "seconds": 0.06416726112365723
+    },
+    {
+      "path": "skills/clinical-reports/scripts/format_adverse_events.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: format_adverse_events.py [-h] [--output OUTPUT] input_file\n\nFormat AE data into tables\n\npositional arguments:\n  input_file            Path to AE data CSV\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output markdown file\n",
+      "stderr": "",
+      "seconds": 0.06617379188537598
+    },
+    {
+      "path": "skills/clinical-reports/scripts/generate_report_template.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_report_template.py [-h]\n                                   [--type {case_report,soap_note,h_and_p,discharge_summary,consult_note,radiology,pathology,lab,sae,csr}]\n                                   [--output OUTPUT] [--list]\n\nGenerate clinical report templates\n\noptions:\n  -h, --help            show this help message and exit\n  --type {case_report,soap_note,h_and_p,discharge_summary,consult_note,radiology,pathology,lab,sae,csr}\n                        Template type to generate\n  --output OUTPUT, -o OUTPUT\n                        Output filename\n  --list                List available templates\n",
+      "stderr": "",
+      "seconds": 0.06357932090759277
+    },
+    {
+      "path": "skills/clinical-reports/scripts/generate_report_template.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_report_template.py [-h]\n                                   [--type {case_report,soap_note,h_and_p,discharge_summary,consult_note,radiology,pathology,lab,sae,csr}]\n                                   [--output OUTPUT] [--list]\n\nGenerate clinical report templates\n\noptions:\n  -h, --help            show this help message and exit\n  --type {case_report,soap_note,h_and_p,discharge_summary,consult_note,radiology,pathology,lab,sae,csr}\n                        Template type to generate\n  --output OUTPUT, -o OUTPUT\n                        Output filename\n  --list                List available templates\n",
+      "stderr": "",
+      "seconds": 0.06216239929199219
+    },
+    {
+      "path": "skills/clinical-reports/scripts/terminology_validator.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: terminology_validator.py [-h] [--json] input_file\n\nValidate medical terminology\n\npositional arguments:\n  input_file  Path to clinical report\n\noptions:\n  -h, --help  show this help message and exit\n  --json\n",
+      "stderr": "",
+      "seconds": 0.06272125244140625
+    },
+    {
+      "path": "skills/clinical-reports/scripts/terminology_validator.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: terminology_validator.py [-h] [--json] input_file\n\nValidate medical terminology\n\npositional arguments:\n  input_file  Path to clinical report\n\noptions:\n  -h, --help  show this help message and exit\n  --json\n",
+      "stderr": "",
+      "seconds": 0.06364703178405762
+    },
+    {
+      "path": "skills/clinical-reports/scripts/validate_case_report.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_case_report.py [-h] [--output OUTPUT] [--json] input_file\n\nValidate clinical case reports against CARE guidelines\n\npositional arguments:\n  input_file            Path to case report file (Markdown or text)\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output JSON report to file\n  --json                Output JSON to stdout instead of human-readable report\n",
+      "stderr": "",
+      "seconds": 0.07113051414489746
+    },
+    {
+      "path": "skills/clinical-reports/scripts/validate_case_report.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_case_report.py [-h] [--output OUTPUT] [--json] input_file\n\nValidate clinical case reports against CARE guidelines\n\npositional arguments:\n  input_file            Path to case report file (Markdown or text)\n\noptions:\n  -h, --help            show this help message and exit\n  --output OUTPUT, -o OUTPUT\n                        Output JSON report to file\n  --json                Output JSON to stdout instead of human-readable report\n",
+      "stderr": "",
+      "seconds": 0.07118630409240723
+    },
+    {
+      "path": "skills/clinical-reports/scripts/validate_trial_report.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_trial_report.py [-h] [--json] input_file\n\nValidate CSR against ICH-E3\n\npositional arguments:\n  input_file  Path to CSR file\n\noptions:\n  -h, --help  show this help message and exit\n  --json      Output JSON\n",
+      "stderr": "",
+      "seconds": 0.06817889213562012
+    },
+    {
+      "path": "skills/clinical-reports/scripts/validate_trial_report.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_trial_report.py [-h] [--json] input_file\n\nValidate CSR against ICH-E3\n\npositional arguments:\n  input_file  Path to CSR file\n\noptions:\n  -h, --help  show this help message and exit\n  --json      Output JSON\n",
+      "stderr": "",
+      "seconds": 0.06517219543457031
+    },
+    {
+      "path": "skills/clinicaltrials-database/scripts/query_clinicaltrials.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06752276420593262
+    },
+    {
+      "path": "skills/clinpgx-database/scripts/query_clinpgx.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06892085075378418
+    },
+    {
+      "path": "skills/cosmic-database/scripts/download_cosmic.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: download_cosmic.py [-h] [--password PASSWORD] [--filepath FILEPATH]\n                          [--data-type {mutations,mutations_vcf,gene_census,resistance_mutations,structural_variants,gene_expression,copy_number,fusion_genes,signatures,sample_info}]\n                          [--assembly {GRCh37,GRCh38}] [--version VERSION]\n                          [-o OUTPUT]\n                          email\n\nDownload files from COSMIC database\n\npositional arguments:\n  email                 COSMIC account email\n\noptions:\n  -h, --help            show this help message and exit\n  --password PASSWORD   COSMIC account password (will prompt if not provided)\n  --filepath FILEPATH   Full filepath to download\n  --data-type {mutations,mutations_vcf,gene_census,resistance_mutations,structural_variants,gene_expression,copy_number,fusion_genes,signatures,sample_info}\n                        Common data type shorthand\n  --assembly {GRCh37,GRCh38}\n                        Genome assembly (default: GRCh38)\n  --version VERSION     COSMIC version (default: latest)\n  -o OUTPUT, --output OUTPUT\n                        Output filename\n\nExamples:\n  # Download mutations file\n  download_cosmic.py user@email.com --filepath GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz\n\n  # Download using shorthand\n  download_cosmic.py user@email.com --data-type mutations\n\n  # Download for GRCh37\n  download_cosmic.py user@email.com --data-type gene_census --assembly GRCh37\n        \n",
+      "stderr": "",
+      "seconds": 0.2440037727355957
+    },
+    {
+      "path": "skills/cosmic-database/scripts/download_cosmic.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: download_cosmic.py [-h] [--password PASSWORD] [--filepath FILEPATH]\n                          [--data-type {mutations,mutations_vcf,gene_census,resistance_mutations,structural_variants,gene_expression,copy_number,fusion_genes,signatures,sample_info}]\n                          [--assembly {GRCh37,GRCh38}] [--version VERSION]\n                          [-o OUTPUT]\n                          email\n\nDownload files from COSMIC database\n\npositional arguments:\n  email                 COSMIC account email\n\noptions:\n  -h, --help            show this help message and exit\n  --password PASSWORD   COSMIC account password (will prompt if not provided)\n  --filepath FILEPATH   Full filepath to download\n  --data-type {mutations,mutations_vcf,gene_census,resistance_mutations,structural_variants,gene_expression,copy_number,fusion_genes,signatures,sample_info}\n                        Common data type shorthand\n  --assembly {GRCh37,GRCh38}\n                        Genome assembly (default: GRCh38)\n  --version VERSION     COSMIC version (default: latest)\n  -o OUTPUT, --output OUTPUT\n                        Output filename\n\nExamples:\n  # Download mutations file\n  download_cosmic.py user@email.com --filepath GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz\n\n  # Download using shorthand\n  download_cosmic.py user@email.com --data-type mutations\n\n  # Download for GRCh37\n  download_cosmic.py user@email.com --data-type gene_census --assembly GRCh37\n        \n",
+      "stderr": "",
+      "seconds": 0.24340271949768066
+    },
+    {
+      "path": "skills/docx-to-markdown/scripts/extract_docx_text.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: extract_docx_text.py [-h] --input INPUT --output-dir OUTPUT_DIR\n                            [--base-name BASE_NAME]\n\nExtract DOCX body text to markdown and txt.\n\noptions:\n  -h, --help            show this help message and exit\n  --input INPUT         Absolute or relative path to .docx\n  --output-dir OUTPUT_DIR\n                        Directory for extracted files\n  --base-name BASE_NAME\n                        Output base name without extension\n",
+      "stderr": "",
+      "seconds": 0.07223677635192871
+    },
+    {
+      "path": "skills/docx-to-markdown/scripts/extract_docx_text.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: extract_docx_text.py [-h] --input INPUT --output-dir OUTPUT_DIR\n                            [--base-name BASE_NAME]\n\nExtract DOCX body text to markdown and txt.\n\noptions:\n  -h, --help            show this help message and exit\n  --input INPUT         Absolute or relative path to .docx\n  --output-dir OUTPUT_DIR\n                        Directory for extracted files\n  --base-name BASE_NAME\n                        Output base name without extension\n",
+      "stderr": "",
+      "seconds": 0.07192659378051758
+    },
+    {
+      "path": "skills/exploratory-data-analysis/scripts/eda_analyzer.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.07042288780212402
+    },
+    {
+      "path": "skills/fda-database/scripts/fda_examples.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.07092094421386719
+    },
+    {
+      "path": "skills/fda-database/scripts/fda_query.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06918120384216309
+    },
+    {
+      "path": "skills/fireworks-tech-graph/scripts/generate-from-template.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.07821464538574219
+    },
+    {
+      "path": "skills/fireworks-tech-graph/scripts/sanitize-svg-text.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06829214096069336
+    },
+    {
+      "path": "skills/markitdown/scripts/batch_convert.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: batch_convert.py [-h] [--extensions EXTENSIONS [EXTENSIONS ...]]\n                        [--recursive] [--workers WORKERS] [--verbose]\n                        [--plugins]\n                        input_dir output_dir\n\nBatch convert files to Markdown using MarkItDown\n\npositional arguments:\n  input_dir             Input directory\n  output_dir            Output directory\n\noptions:\n  -h, --help            show this help message and exit\n  --extensions EXTENSIONS [EXTENSIONS ...], -e EXTENSIONS [EXTENSIONS ...]\n                        File extensions to convert (e.g., .pdf .docx)\n  --recursive, -r       Search subdirectories recursively\n  --workers WORKERS, -w WORKERS\n                        Number of parallel workers (default: 4)\n  --verbose, -v         Verbose output\n  --plugins, -p         Enable MarkItDown plugins\n\nExamples:\n  # Convert all PDFs in a directory\n  python batch_convert.py papers/ output/ --extensions .pdf\n  \n  # Convert multiple formats recursively\n  python batch_convert.py documents/ markdown/ --extensions .pdf .docx .pptx -r\n  \n  # Use 8 parallel workers\n  python batch_convert.py input/ output/ --workers 8\n  \n  # Enable plugins\n  python batch_convert.py input/ output/ --plugins\n        \n",
+      "stderr": "",
+      "seconds": 0.9415388107299805
+    },
+    {
+      "path": "skills/markitdown/scripts/batch_convert.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: batch_convert.py [-h] [--extensions EXTENSIONS [EXTENSIONS ...]]\n                        [--recursive] [--workers WORKERS] [--verbose]\n                        [--plugins]\n                        input_dir output_dir\n\nBatch convert files to Markdown using MarkItDown\n\npositional arguments:\n  input_dir             Input directory\n  output_dir            Output directory\n\noptions:\n  -h, --help            show this help message and exit\n  --extensions EXTENSIONS [EXTENSIONS ...], -e EXTENSIONS [EXTENSIONS ...]\n                        File extensions to convert (e.g., .pdf .docx)\n  --recursive, -r       Search subdirectories recursively\n  --workers WORKERS, -w WORKERS\n                        Number of parallel workers (default: 4)\n  --verbose, -v         Verbose output\n  --plugins, -p         Enable MarkItDown plugins\n\nExamples:\n  # Convert all PDFs in a directory\n  python batch_convert.py papers/ output/ --extensions .pdf\n  \n  # Convert multiple formats recursively\n  python batch_convert.py documents/ markdown/ --extensions .pdf .docx .pptx -r\n  \n  # Use 8 parallel workers\n  python batch_convert.py input/ output/ --workers 8\n  \n  # Enable plugins\n  python batch_convert.py input/ output/ --plugins\n        \n",
+      "stderr": "",
+      "seconds": 0.9186427593231201
+    },
+    {
+      "path": "skills/markitdown/scripts/convert_literature.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: convert_literature.py [-h] [--organize-by-year] [--create-index]\n                             [--recursive]\n                             input_dir output_dir\n\nConvert scientific literature PDFs to Markdown\n\npositional arguments:\n  input_dir             Directory with PDF files\n  output_dir            Output directory for Markdown files\n\noptions:\n  -h, --help            show this help message and exit\n  --organize-by-year, -y\n                        Organize output into year subdirectories\n  --create-index, -i    Create an index/catalog of all papers\n  --recursive, -r       Search subdirectories recursively\n\nExamples:\n  # Convert all PDFs in a directory\n  python convert_literature.py papers/ output/\n  \n  # Organize by year\n  python convert_literature.py papers/ output/ --organize-by-year\n  \n  # Create index of all papers\n  python convert_literature.py papers/ output/ --create-index\n  \nFilename Conventions:\n  For best results, name your PDFs using this pattern:\n    Author_Year_Title.pdf\n    \n  Examples:\n    Smith_2023_Machine_Learning_Applications.pdf\n    Jones_2022_Climate_Change_Analysis.pdf\n        \n",
+      "stderr": "",
+      "seconds": 0.9042224884033203
+    },
+    {
+      "path": "skills/markitdown/scripts/convert_literature.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: convert_literature.py [-h] [--organize-by-year] [--create-index]\n                             [--recursive]\n                             input_dir output_dir\n\nConvert scientific literature PDFs to Markdown\n\npositional arguments:\n  input_dir             Directory with PDF files\n  output_dir            Output directory for Markdown files\n\noptions:\n  -h, --help            show this help message and exit\n  --organize-by-year, -y\n                        Organize output into year subdirectories\n  --create-index, -i    Create an index/catalog of all papers\n  --recursive, -r       Search subdirectories recursively\n\nExamples:\n  # Convert all PDFs in a directory\n  python convert_literature.py papers/ output/\n  \n  # Organize by year\n  python convert_literature.py papers/ output/ --organize-by-year\n  \n  # Create index of all papers\n  python convert_literature.py papers/ output/ --create-index\n  \nFilename Conventions:\n  For best results, name your PDFs using this pattern:\n    Author_Year_Title.pdf\n    \n  Examples:\n    Smith_2023_Machine_Learning_Applications.pdf\n    Jones_2022_Climate_Change_Analysis.pdf\n        \n",
+      "stderr": "",
+      "seconds": 0.9174542427062988
+    },
+    {
+      "path": "skills/markitdown/scripts/convert_with_ai.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: convert_with_ai.py [-h] [--api-key API_KEY] [--model MODEL]\n                          [--prompt-type {scientific,presentation,general,data_viz,medical}]\n                          [--custom-prompt CUSTOM_PROMPT] [--list-prompts]\n                          input output\n\nConvert documents to Markdown with AI-enhanced image descriptions\n\npositional arguments:\n  input                 Input file\n  output                Output Markdown file\n\noptions:\n  -h, --help            show this help message and exit\n  --api-key API_KEY, -k API_KEY\n                        OpenRouter API key (or set OPENROUTER_API_KEY env var)\n  --model MODEL, -m MODEL\n                        Model to use via OpenRouter (default:\n                        anthropic/claude-opus-4.5)\n  --prompt-type {scientific,presentation,general,data_viz,medical}, -t {scientific,presentation,general,data_viz,medical}\n                        Type of prompt to use (default: general)\n  --custom-prompt CUSTOM_PROMPT, -p CUSTOM_PROMPT\n                        Custom prompt (overrides --prompt-type)\n  --list-prompts, -l    List available prompt types and exit\n\nAvailable prompt types:\n  scientific    - For scientific diagrams, graphs, and charts\n  presentation  - For presentation slides\n  general       - General-purpose image description\n  data_viz      - For data visualizations and charts\n  medical       - For medical imaging\n\nExamples:\n  # Convert a scientific paper\n  python convert_with_ai.py paper.pdf output.md --prompt-type scientific\n  \n  # Convert a presentation with custom model\n  python convert_with_ai.py slides.pptx slides.md --model anthropic/claude-opus-4.5 --prompt-type presentation\n  \n  # Use custom prompt with advanced vision model\n  python convert_with_ai.py diagram.png diagram.md --model anthropic/claude-opus-4.5 --custom-prompt \"Describe this technical diagram\"\n  \n  # Set API key via environment variable\n  export OPENROUTER_API_KEY=\"sk-or-v1-...\"\n  python convert_with_ai.py image.jpg image.md\n\nEnvironment Variables:\n  OPENROUTER_API_KEY    OpenRouter API key (required if not passed via --api-key)\n\nPopular Models (use with --model):\n  anthropic/claude-opus-4.5 - Recommended for scientific vision\n  google/gemini-3-pro-preview   - Gemini Pro Vision\n        \n",
+      "stderr": "",
+      "seconds": 1.6675770282745361
+    },
+    {
+      "path": "skills/markitdown/scripts/convert_with_ai.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: convert_with_ai.py [-h] [--api-key API_KEY] [--model MODEL]\n                          [--prompt-type {scientific,presentation,general,data_viz,medical}]\n                          [--custom-prompt CUSTOM_PROMPT] [--list-prompts]\n                          input output\n\nConvert documents to Markdown with AI-enhanced image descriptions\n\npositional arguments:\n  input                 Input file\n  output                Output Markdown file\n\noptions:\n  -h, --help            show this help message and exit\n  --api-key API_KEY, -k API_KEY\n                        OpenRouter API key (or set OPENROUTER_API_KEY env var)\n  --model MODEL, -m MODEL\n                        Model to use via OpenRouter (default:\n                        anthropic/claude-opus-4.5)\n  --prompt-type {scientific,presentation,general,data_viz,medical}, -t {scientific,presentation,general,data_viz,medical}\n                        Type of prompt to use (default: general)\n  --custom-prompt CUSTOM_PROMPT, -p CUSTOM_PROMPT\n                        Custom prompt (overrides --prompt-type)\n  --list-prompts, -l    List available prompt types and exit\n\nAvailable prompt types:\n  scientific    - For scientific diagrams, graphs, and charts\n  presentation  - For presentation slides\n  general       - General-purpose image description\n  data_viz      - For data visualizations and charts\n  medical       - For medical imaging\n\nExamples:\n  # Convert a scientific paper\n  python convert_with_ai.py paper.pdf output.md --prompt-type scientific\n  \n  # Convert a presentation with custom model\n  python convert_with_ai.py slides.pptx slides.md --model anthropic/claude-opus-4.5 --prompt-type presentation\n  \n  # Use custom prompt with advanced vision model\n  python convert_with_ai.py diagram.png diagram.md --model anthropic/claude-opus-4.5 --custom-prompt \"Describe this technical diagram\"\n  \n  # Set API key via environment variable\n  export OPENROUTER_API_KEY=\"sk-or-v1-...\"\n  python convert_with_ai.py image.jpg image.md\n\nEnvironment Variables:\n  OPENROUTER_API_KEY    OpenRouter API key (required if not passed via --api-key)\n\nPopular Models (use with --model):\n  anthropic/claude-opus-4.5 - Recommended for scientific vision\n  google/gemini-3-pro-preview   - Gemini Pro Vision\n        \n",
+      "stderr": "",
+      "seconds": 1.684316635131836
+    },
+    {
+      "path": "skills/openalex-database/scripts/openalex_client.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.07319092750549316
+    },
+    {
+      "path": "skills/openalex-database/scripts/query_helpers.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06949925422668457
+    },
+    {
+      "path": "skills/perplexity-search/scripts/perplexity_search.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: perplexity_search.py [-h]\n                            [--model {sonar-pro,sonar-pro-search,sonar,sonar-reasoning-pro,sonar-reasoning}]\n                            [--max-tokens MAX_TOKENS]\n                            [--temperature TEMPERATURE] [--output OUTPUT]\n                            [--verbose] [--check-setup]\n                            query\n\nPerform AI-powered web searches using Perplexity via LiteLLM and OpenRouter\n\npositional arguments:\n  query                 The search query\n\noptions:\n  -h, --help            show this help message and exit\n  --model {sonar-pro,sonar-pro-search,sonar,sonar-reasoning-pro,sonar-reasoning}\n                        Perplexity model to use (default: sonar-pro)\n  --max-tokens MAX_TOKENS\n                        Maximum tokens in response (default: 4000)\n  --temperature TEMPERATURE\n                        Response temperature 0.0-1.0 (default: 0.2)\n  --output OUTPUT       Save results to JSON file\n  --verbose             Print detailed information\n  --check-setup         Check if dependencies and API key are configured\n\nExamples:\n  # Basic search\n  python perplexity_search.py \"What are the latest developments in CRISPR?\"\n\n  # Use Sonar Pro Search for deeper analysis\n  python perplexity_search.py \"Compare mRNA and viral vector vaccines\" --model sonar-pro-search\n\n  # Use Sonar Reasoning for complex queries\n  python perplexity_search.py \"Explain quantum entanglement\" --model sonar-reasoning-pro\n\n  # Save output to file\n  python perplexity_search.py \"COVID-19 vaccine efficacy studies\" --output results.json\n\n  # Verbose mode\n  python perplexity_search.py \"Machine learning trends 2024\" --verbose\n\nAvailable Models:\n  - sonar-pro (default): General-purpose search with good balance\n  - sonar-pro-search: Most advanced agentic search with multi-step reasoning\n  - sonar: Standard model for basic searches\n  - sonar-reasoning-pro: Advanced reasoning capabilities\n  - sonar-reasoning: Basic reasoning model\n        \n",
+      "stderr": "",
+      "seconds": 0.06817770004272461
+    },
+    {
+      "path": "skills/perplexity-search/scripts/perplexity_search.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: perplexity_search.py [-h]\n                            [--model {sonar-pro,sonar-pro-search,sonar,sonar-reasoning-pro,sonar-reasoning}]\n                            [--max-tokens MAX_TOKENS]\n                            [--temperature TEMPERATURE] [--output OUTPUT]\n                            [--verbose] [--check-setup]\n                            query\n\nPerform AI-powered web searches using Perplexity via LiteLLM and OpenRouter\n\npositional arguments:\n  query                 The search query\n\noptions:\n  -h, --help            show this help message and exit\n  --model {sonar-pro,sonar-pro-search,sonar,sonar-reasoning-pro,sonar-reasoning}\n                        Perplexity model to use (default: sonar-pro)\n  --max-tokens MAX_TOKENS\n                        Maximum tokens in response (default: 4000)\n  --temperature TEMPERATURE\n                        Response temperature 0.0-1.0 (default: 0.2)\n  --output OUTPUT       Save results to JSON file\n  --verbose             Print detailed information\n  --check-setup         Check if dependencies and API key are configured\n\nExamples:\n  # Basic search\n  python perplexity_search.py \"What are the latest developments in CRISPR?\"\n\n  # Use Sonar Pro Search for deeper analysis\n  python perplexity_search.py \"Compare mRNA and viral vector vaccines\" --model sonar-pro-search\n\n  # Use Sonar Reasoning for complex queries\n  python perplexity_search.py \"Explain quantum entanglement\" --model sonar-reasoning-pro\n\n  # Save output to file\n  python perplexity_search.py \"COVID-19 vaccine efficacy studies\" --output results.json\n\n  # Verbose mode\n  python perplexity_search.py \"Machine learning trends 2024\" --verbose\n\nAvailable Models:\n  - sonar-pro (default): General-purpose search with good balance\n  - sonar-pro-search: Most advanced agentic search with multi-step reasoning\n  - sonar: Standard model for basic searches\n  - sonar-reasoning-pro: Advanced reasoning capabilities\n  - sonar-reasoning: Basic reasoning model\n        \n",
+      "stderr": "",
+      "seconds": 0.07319140434265137
+    },
+    {
+      "path": "skills/perplexity-search/scripts/setup_env.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: setup_env.py [-h] [--api-key API_KEY] [--env-file ENV_FILE]\n                    [--validate]\n\nSetup Perplexity Search environment configuration\n\noptions:\n  -h, --help           show this help message and exit\n  --api-key API_KEY    Your OpenRouter API key\n  --env-file ENV_FILE  Path to .env file (default: .env)\n  --validate           Validate existing setup\n\nExamples:\n  # Set up API key\n  python setup_env.py --api-key sk-or-v1-xxxxx\n\n  # Validate existing setup\n  python setup_env.py --validate\n\n  # Use custom .env file location\n  python setup_env.py --api-key sk-or-v1-xxxxx --env-file /path/to/.env\n\nGet your OpenRouter API key from:\n  https://openrouter.ai/keys\n        \n",
+      "stderr": "",
+      "seconds": 0.06316542625427246
+    },
+    {
+      "path": "skills/perplexity-search/scripts/setup_env.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: setup_env.py [-h] [--api-key API_KEY] [--env-file ENV_FILE]\n                    [--validate]\n\nSetup Perplexity Search environment configuration\n\noptions:\n  -h, --help           show this help message and exit\n  --api-key API_KEY    Your OpenRouter API key\n  --env-file ENV_FILE  Path to .env file (default: .env)\n  --validate           Validate existing setup\n\nExamples:\n  # Set up API key\n  python setup_env.py --api-key sk-or-v1-xxxxx\n\n  # Validate existing setup\n  python setup_env.py --validate\n\n  # Use custom .env file location\n  python setup_env.py --api-key sk-or-v1-xxxxx --env-file /path/to/.env\n\nGet your OpenRouter API key from:\n  https://openrouter.ai/keys\n        \n",
+      "stderr": "",
+      "seconds": 0.06421899795532227
+    },
+    {
+      "path": "skills/scikit-learn/scripts/classification_pipeline.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.07018470764160156
+    },
+    {
+      "path": "skills/scikit-learn/scripts/clustering_analysis.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.07018327713012695
+    },
+    {
+      "path": "skills/statistical-analysis/scripts/assumption_checks.py",
+      "mode": "compile_only",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "seconds": 0.06922626495361328
+    },
+    {
+      "path": "skills/treatment-plans/scripts/check_completeness.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: check_completeness.py [-h] [-v] file\n\nCheck treatment plan completeness\n\npositional arguments:\n  file           Treatment plan file to check (.tex format)\n\noptions:\n  -h, --help     show this help message and exit\n  -v, --verbose  Show detailed output\n\nExamples:\n  # Check a treatment plan file\n  python check_completeness.py my_treatment_plan.tex\n\n  # Check and exit with error code if incomplete (for CI/CD)\n  python check_completeness.py plan.tex && echo \"Complete\"\n\nThis script checks for:\n  - All required sections (10 core sections)\n  - SMART goal criteria\n  - HIPAA de-identification notice\n  - Provider signature section\n  - Uncustomized placeholders\n\nExit codes:\n  0 - All required sections present (��80% complete)\n  1 - Missing required sections (<80% complete)\n  2 - File error or invalid arguments\n        \n",
+      "stderr": "",
+      "seconds": 0.06817865371704102
+    },
+    {
+      "path": "skills/treatment-plans/scripts/check_completeness.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: check_completeness.py [-h] [-v] file\n\nCheck treatment plan completeness\n\npositional arguments:\n  file           Treatment plan file to check (.tex format)\n\noptions:\n  -h, --help     show this help message and exit\n  -v, --verbose  Show detailed output\n\nExamples:\n  # Check a treatment plan file\n  python check_completeness.py my_treatment_plan.tex\n\n  # Check and exit with error code if incomplete (for CI/CD)\n  python check_completeness.py plan.tex && echo \"Complete\"\n\nThis script checks for:\n  - All required sections (10 core sections)\n  - SMART goal criteria\n  - HIPAA de-identification notice\n  - Provider signature section\n  - Uncustomized placeholders\n\nExit codes:\n  0 - All required sections present (��80% complete)\n  1 - Missing required sections (<80% complete)\n  2 - File error or invalid arguments\n        \n",
+      "stderr": "",
+      "seconds": 0.07018423080444336
+    },
+    {
+      "path": "skills/treatment-plans/scripts/generate_template.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_template.py [-h]\n                            [--type {general_medical,rehabilitation,mental_health,chronic_disease,perioperative,pain_management}]\n                            [--output OUTPUT] [--list]\n\nGenerate treatment plan template\n\noptions:\n  -h, --help            show this help message and exit\n  --type {general_medical,rehabilitation,mental_health,chronic_disease,perioperative,pain_management}\n                        Template type to generate\n  --output OUTPUT       Output filename (default: auto-generated with\n                        timestamp)\n  --list                List available templates and exit\n\nExamples:\n  # Interactive mode (recommended for first-time users)\n  python generate_template.py\n\n  # Direct generation with type specification\n  python generate_template.py --type general_medical --output diabetes_plan.tex\n\n  # Generate with default filename\n  python generate_template.py --type mental_health\n\n  # List available templates\n  python generate_template.py --list\n\nAvailable template types:\n  general_medical, rehabilitation, mental_health, chronic_disease,\n  perioperative, pain_management\n        \n",
+      "stderr": "",
+      "seconds": 0.06445193290710449
+    },
+    {
+      "path": "skills/treatment-plans/scripts/generate_template.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: generate_template.py [-h]\n                            [--type {general_medical,rehabilitation,mental_health,chronic_disease,perioperative,pain_management}]\n                            [--output OUTPUT] [--list]\n\nGenerate treatment plan template\n\noptions:\n  -h, --help            show this help message and exit\n  --type {general_medical,rehabilitation,mental_health,chronic_disease,perioperative,pain_management}\n                        Template type to generate\n  --output OUTPUT       Output filename (default: auto-generated with\n                        timestamp)\n  --list                List available templates and exit\n\nExamples:\n  # Interactive mode (recommended for first-time users)\n  python generate_template.py\n\n  # Direct generation with type specification\n  python generate_template.py --type general_medical --output diabetes_plan.tex\n\n  # Generate with default filename\n  python generate_template.py --type mental_health\n\n  # List available templates\n  python generate_template.py --list\n\nAvailable template types:\n  general_medical, rehabilitation, mental_health, chronic_disease,\n  perioperative, pain_management\n        \n",
+      "stderr": "",
+      "seconds": 0.07107758522033691
+    },
+    {
+      "path": "skills/treatment-plans/scripts/timeline_generator.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: timeline_generator.py [-h] --plan PLAN [--output OUTPUT] [--visual]\n                             [--start START]\n\nGenerate treatment timeline visualization\n\noptions:\n  -h, --help       show this help message and exit\n  --plan PLAN      Treatment plan file to analyze (.tex format)\n  --output OUTPUT  Output file (default: timeline.txt or timeline.png if\n                   --visual)\n  --visual         Generate visual timeline (requires matplotlib)\n  --start START    Start date for timeline (YYYY-MM-DD format, default: today)\n\nExamples:\n  # Generate text timeline\n  python timeline_generator.py --plan my_plan.tex\n\n  # Generate visual timeline (requires matplotlib)\n  python timeline_generator.py --plan my_plan.tex --output timeline.png --visual\n\n  # Specify start date for visual timeline\n  python timeline_generator.py --plan my_plan.tex --output timeline.pdf --visual --start 2025-02-01\n\nOutput formats:\n  Text: .txt\n  Visual: .png, .pdf, .svg (requires matplotlib)\n\nNote: Visual timeline generation requires matplotlib.\n  Install with: pip install matplotlib\n        \n",
+      "stderr": "",
+      "seconds": 0.5938594341278076
+    },
+    {
+      "path": "skills/treatment-plans/scripts/timeline_generator.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: timeline_generator.py [-h] --plan PLAN [--output OUTPUT] [--visual]\n                             [--start START]\n\nGenerate treatment timeline visualization\n\noptions:\n  -h, --help       show this help message and exit\n  --plan PLAN      Treatment plan file to analyze (.tex format)\n  --output OUTPUT  Output file (default: timeline.txt or timeline.png if\n                   --visual)\n  --visual         Generate visual timeline (requires matplotlib)\n  --start START    Start date for timeline (YYYY-MM-DD format, default: today)\n\nExamples:\n  # Generate text timeline\n  python timeline_generator.py --plan my_plan.tex\n\n  # Generate visual timeline (requires matplotlib)\n  python timeline_generator.py --plan my_plan.tex --output timeline.png --visual\n\n  # Specify start date for visual timeline\n  python timeline_generator.py --plan my_plan.tex --output timeline.pdf --visual --start 2025-02-01\n\nOutput formats:\n  Text: .txt\n  Visual: .png, .pdf, .svg (requires matplotlib)\n\nNote: Visual timeline generation requires matplotlib.\n  Install with: pip install matplotlib\n        \n",
+      "stderr": "",
+      "seconds": 0.5634922981262207
+    },
+    {
+      "path": "skills/treatment-plans/scripts/validate_treatment_plan.py",
+      "mode": "help:-h",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_treatment_plan.py [-h] file\n\nValidate treatment plan quality and compliance\n\npositional arguments:\n  file        Treatment plan file to validate (.tex format)\n\noptions:\n  -h, --help  show this help message and exit\n\nExamples:\n  # Validate a treatment plan\n  python validate_treatment_plan.py my_plan.tex\n\n  # Use in automated workflows (exits with error if quality <70%)\n  python validate_treatment_plan.py plan.tex && echo \"Quality check passed\"\n\nValidation Categories:\n  - SMART goals criteria (Specific, Measurable, Achievable, Relevant, Time-bound)\n  - Evidence-based practice (guidelines, citations)\n  - Patient-centered care (preferences, functional goals)\n  - Safety and risk mitigation (adverse effects, monitoring)\n  - Medication documentation (doses, frequencies, rationales)\n  - ICD-10 coding, timeframes, measurable metrics\n\nExit Codes:\n  0 - Quality ��70% (acceptable)\n  1 - Quality <70% (needs improvement)\n  2 - File error or invalid arguments\n        \n",
+      "stderr": "",
+      "seconds": 0.06841826438903809
+    },
+    {
+      "path": "skills/treatment-plans/scripts/validate_treatment_plan.py",
+      "mode": "help:--help",
+      "ok": true,
+      "exit_code": 0,
+      "stdout": "usage: validate_treatment_plan.py [-h] file\n\nValidate treatment plan quality and compliance\n\npositional arguments:\n  file        Treatment plan file to validate (.tex format)\n\noptions:\n  -h, --help  show this help message and exit\n\nExamples:\n  # Validate a treatment plan\n  python validate_treatment_plan.py my_plan.tex\n\n  # Use in automated workflows (exits with error if quality <70%)\n  python validate_treatment_plan.py plan.tex && echo \"Quality check passed\"\n\nValidation Categories:\n  - SMART goals criteria (Specific, Measurable, Achievable, Relevant, Time-bound)\n  - Evidence-based practice (guidelines, citations)\n  - Patient-centered care (preferences, functional goals)\n  - Safety and risk mitigation (adverse effects, monitoring)\n  - Medication documentation (doses, frequencies, rationales)\n  - ICD-10 coding, timeframes, measurable metrics\n\nExit Codes:\n  0 - Quality ��70% (acceptable)\n  1 - Quality <70% (needs improvement)\n  2 - File error or invalid arguments\n        \n",
+      "stderr": "",
+      "seconds": 0.0676419734954834
+    }
+  ]
+}

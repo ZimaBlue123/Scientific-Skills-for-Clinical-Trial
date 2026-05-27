@@ -86,7 +86,7 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```text
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # One directory per skill (core content, 28 total)
+├── skills/                # One directory per skill (core content, 30 total)
 ├── docs/                  # Long-form docs (see index below)
 ├── scripts/               # Repository-level executable scripts
 ├── tests/                 # Tests
@@ -101,7 +101,7 @@ For maintenance conventions and details, see `docs/repo_layout.md`.
 
 ## Skills List and Usage
 
-This repository currently includes **28 skills**, grouped as follows.
+This repository currently includes **30 skills**, grouped as follows.
 
 ### Core Data Analysis Skills
 
@@ -154,6 +154,8 @@ This repository currently includes **28 skills**, grouped as follows.
 | `pyhealth` | healthcare AI modeling toolkit | see `references/datasets.md` |
 | `csr-stage-docx-workflow` | CSR stage summary generation (Word) | `python scripts/generate_csr_docx.py` |
 | `word-audit-report-format` | Word audit report formatting | `python scripts/generate_audit_report_docx.py` |
+| `pptx-gmc-sync-from-word` | sync GMC/n/P-values from Word into PPT tables | `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
+| `docx-to-markdown` | extract DOCX text/tables to Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
 
 ### Diagram Skill (Project-Integrated)
 
