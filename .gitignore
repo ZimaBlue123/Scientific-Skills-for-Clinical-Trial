@@ -136,6 +136,25 @@ scripts/deliverables/
 !skills/**/assets/**/*.webp
 !skills/**/assets/**/*.svg
 
+# Allow skill reference materials to be versioned too (many skills keep docs/examples here)
+!skills/**/references/**/*.doc
+!skills/**/references/**/*.docx
+!skills/**/references/**/*.ppt
+!skills/**/references/**/*.pptx
+!skills/**/references/**/*.xls
+!skills/**/references/**/*.xlsx
+!skills/**/references/**/*.pdf
+!skills/**/references/**/*.rtf
+!skills/**/references/**/*.odt
+!skills/**/references/**/*.ods
+!skills/**/references/**/*.odp
+!skills/**/references/**/*.png
+!skills/**/references/**/*.jpg
+!skills/**/references/**/*.jpeg
+!skills/**/references/**/*.gif
+!skills/**/references/**/*.webp
+!skills/**/references/**/*.svg
+
 # Keep fireworks-tech-graph templates/samples versioned (outside assets/)
 !skills/fireworks-tech-graph/**/*.svg
 !skills/fireworks-tech-graph/**/*.png
@@ -147,6 +166,13 @@ scripts/deliverables/
 
 # Converted temp files (docs/_converted/)
 docs/_converted/
+
+# Python tooling caches
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
 
 # "Generated report sources" (ONLY under typical artifact dirs)
 reports/**/*.md

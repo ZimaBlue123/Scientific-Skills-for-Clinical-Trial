@@ -1,0 +1,10 @@
+* text=auto
+
+# Keep repository text files stable across OSes
+*.py  text eol=lf
+*.md  text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+
