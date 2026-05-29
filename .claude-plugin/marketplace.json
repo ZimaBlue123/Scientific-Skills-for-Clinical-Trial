@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    {
+      "skills": [
+        "./skills/open-notebook"
+      ]
+    }
+  ]
+}

@@ -352,7 +352,7 @@ class TestMarketplaceJson(unittest.TestCase):
     def test_marketplace_has_open_notebook_skill(self):
         """marketplace.json must list the open-notebook skill."""
         skills = self.marketplace["plugins"][0]["skills"]
-        skill_path = "./scientific-skills/open-notebook"
+        skill_path = "./skills/open-notebook"
         self.assertIn(
             skill_path,
             skills,
