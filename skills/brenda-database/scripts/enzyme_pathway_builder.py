@@ -55,7 +55,8 @@ try:
         search_enzymes_by_product, search_enzymes_by_substrate,
         get_environmental_parameters, compare_across_organisms,
         get_substrate_specificity, get_cofactor_requirements,
-        find_thermophilic_homologs, find_ph_stable_variants
+        find_thermophilic_homologs, find_ph_stable_variants,
+        search_by_pattern,
     )
     BRENDA_QUERIES_AVAILABLE = True
 except ImportError:
