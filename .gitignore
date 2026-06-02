@@ -177,5 +177,9 @@ htmlcov/
 # "Generated report sources" (ONLY under typical artifact dirs)
 reports/**/*.md
 reports/**/*.py
+reports/**/*.json
+reports/**/*.xlsx
+reports/**/*.doc
+reports/**/*.docx
 output/**/*.md
 output/**/*.py
