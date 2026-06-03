@@ -1,47 +1,21 @@
 from __future__ import annotations
 
+import logging
+import re
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-import re
 from typing import Iterable, Optional
+
+from common_scripts.docx_utils import apply_cn_en_fonts
+
+# Configure module logger
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
 class TableRow:
     cells: list[str]
-
-
-def _apply_cn_en_fonts(doc) -> None:
-    """
-    Enforce document-wide fonts:
-    - Chinese (East Asia): 宋体
-    - English (ASCII/HAnsi): Times New Roman
-    """
-    from docx.oxml.ns import qn
-
-    def set_style(style_name: str) -> None:
-        if style_name not in doc.styles:
-            return
-        style = doc.styles[style_name]
-        font = style.font
-        font.name = "Times New Roman"
-        rpr = style.element.get_or_add_rPr()
-        rfonts = rpr.get_or_add_rFonts()
-        rfonts.set(qn("w:ascii"), "Times New Roman")
-        rfonts.set(qn("w:hAnsi"), "Times New Roman")
-        rfonts.set(qn("w:eastAsia"), "宋体")
-        rfonts.set(qn("w:cs"), "Times New Roman")
-
-    for name in [
-        "Normal",
-        "Title",
-        "Heading 1",
-        "Heading 2",
-        "Heading 3",
-        "Table Grid",
-    ]:
-        set_style(name)
 
 
 def _add_table(doc, headers: list[str], rows: list[TableRow]) -> None:
@@ -105,8 +79,14 @@ def _find_pdf(review_dir: Path, keywords: list[str]) -> Path:
 def _pdf_pages_text(pdf_path: Path, max_pages: int | None = None) -> list[str]:
     """
     Extract per-page text via PyMuPDF (fitz).
+    Raises ImportError if PyMuPDF is not installed.
     """
-    import fitz  # PyMuPDF
+    try:
+        import fitz  # PyMuPDF
+    except ImportError as e:
+        raise ImportError(
+            "PyMuPDF (fitz) is required for PDF extraction. Install via: pip install pymupdf"
+        ) from e
 
     pages: list[str] = []
     with fitz.open(pdf_path) as doc:
@@ -468,7 +448,7 @@ def main() -> int:
     safety030 = _parse_safety_030_nonsolicited(inputs.safety_part3_pdf)
 
     doc = Document()
-    _apply_cn_en_fonts(doc)
+    apply_cn_en_fonts(doc)
 
     # Cover page (match shell structure doc)
     p_title = doc.add_paragraph("阶段性小结（安全性&体液免疫原性）")

@@ -1,54 +1,35 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
+from common_scripts.docx_utils import apply_cn_en_fonts
 
-@dataclass(frozen=True)
+# Configure module logger
+logger = logging.getLogger(__name__)
+
+
+@dataclass
 class Finding:
+    """Represents a single audit finding with validation."""
     id: str
-    severity: str  # 重大/重要/一般/建议
+    severity: str  # 重要/一般/建议
     category: str
     location: str
     issue: str
     recommendation: str
     rationale: str
-    cross_ref: str
+    cross_ref: str = ""
 
-
-def _apply_cn_en_fonts(doc) -> None:
-    """
-    Enforce document-wide fonts:
-    - Chinese (East Asia): 宋体
-    - English (ASCII/HAnsi): Times New Roman
-    """
-    from docx.oxml.ns import qn
-
-    def set_style(style_name: str) -> None:
-        if style_name not in doc.styles:
-            return
-        style = doc.styles[style_name]
-        font = style.font
-        font.name = "Times New Roman"
-        # East Asia font mapping (Chinese)
-        rpr = style.element.get_or_add_rPr()
-        rfonts = rpr.get_or_add_rFonts()
-        rfonts.set(qn("w:ascii"), "Times New Roman")
-        rfonts.set(qn("w:hAnsi"), "Times New Roman")
-        rfonts.set(qn("w:eastAsia"), "宋体")
-        rfonts.set(qn("w:cs"), "Times New Roman")
-
-    # Core styles that typically cover body/headings/tables.
-    for name in [
-        "Normal",
-        "Title",
-        "Heading 1",
-        "Heading 2",
-        "Heading 3",
-        "Table Grid",
-    ]:
-        set_style(name)
+    def __post_init__(self) -> None:
+        """Validate required non-empty fields after initialization."""
+        if not self.id:
+            raise ValueError("Finding.id cannot be empty")
+        if not self.severity:
+            raise ValueError("Finding.severity cannot be empty")
+        logger.debug("Finding initialized: id=%s, severity=%s", self.id, self.severity)
 
 
 def _add_heading(doc, text: str, level: int = 1) -> None:
@@ -262,7 +243,7 @@ def main() -> int:
     ]
 
     doc = Document()
-    _apply_cn_en_fonts(doc)
+    apply_cn_en_fonts(doc)
 
     title = doc.add_paragraph(
         "YDSWX(TVAX-006)-002(Ⅱ)\n数据审核报告（V0.7/2026-03-12）\n严格审计式交叉审核报告"
