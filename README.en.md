@@ -304,29 +304,97 @@ To supplement evidence/trial intelligence, run `clinicaltrials-database` with `p
 
 ## Common Scripts
 
-### Review Pipeline (materials -> Markdown -> Word)
+### Script Index
 
-1) Convert DOCX/XLSX/PDF to Markdown:
+| Script | Purpose | Status |
+|--------|---------|--------|
+| `scripts/convert_to_md.py` | Document to Markdown (recommended) | ✅ Recommended |
+| `scripts/md_to_docx.py` | Markdown to Word | ✅ Recommended |
+| `scripts/convert_doc_to_docx.py` | Legacy .doc conversion | ✅ Recommended |
+| `scripts/generate_csr_docx.py` | CSR stage summary | ✅ Recommended |
+| `scripts/project_self_check.py` | Project self-check | ✅ Recommended |
+| `scripts/cleanup_generated_artifacts.py` | Cleanup cache | ✅ Recommended |
 
-```bash
-python scripts/convert_review_materials.py --root "."
+### Deprecated Scripts
+
+> These scripts are deprecated. Functionality has been merged into `convert_to_md.py`:
+
+| Script | Alternative | Notes |
+|--------|-------------|-------|
+| `scripts/extract_docx_full.py` | `convert_to_md.py --mode standard` | Text extraction merged |
+| `scripts/extract_docx_to_md.py` | `convert_to_md.py --mode numbered` | Numbered output merged |
+| `scripts/extract_doc_text.py` | `convert_doc_to_docx.py` | ⚠️ Deprecated - .doc extraction integrated |
+| `scripts/convert_audit_report_md_to_docx.py` | `md_to_docx.py` | ⚠️ Deprecated - wrapper, use md_to_docx.py directly |
+| `scripts/_extract_docx_text.py` | `convert_to_md.py` | ⚠️ Deprecated - no-dependency fallback no longer needed |
+
+### Product-Specific Scripts
+
+> 以下脚本针对特定产品，通用场景请使用上方推荐脚本：
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/generate_audit_report_docx.py` | Audit report (generic) |
+| `scripts/generate_clinical_doc_audit_report.py` | Clinical document audit report |
+| `scripts/generate_clinical_overview_doc_review_docx.py` | Clinical overview review Word |
+| `scripts/generate_phase_summary_doc_review_docx.py` | Phase summary review Word |
+| `scripts/generate_norovirus_review_docx.py` | Norovirus epidemiological review |
+| `scripts/build_tvax006_IMA_v2_docx.py` | TVAX006 product-specific |
+| `scripts/cansino_detail4843_manual_docx.py` | Cansino product-specific |
+| `scripts/extract_tables_to_docx.py` | OCR image to Word table |
+
+### How to Choose
+
+```
+Need to extract text from docx?
+  → Use convert_to_md.py (supports pdf/rtf too)
+
+Need to convert Markdown to Word?
+  → Use md_to_docx.py
+
+Need to convert old .doc format?
+  → Use convert_doc_to_docx.py
+
+Need to generate a report?
+  → Check product-specific scripts or use generate_csr_docx.py for CSR
 ```
 
-Output: `review_materials/_converted_md/`
+### Document Review Workflow (materials -> Markdown -> Word)
 
-2) Convert Markdown audit report to Word:
+#### 1) Convert DOCX/XLSX/PDF to Markdown
+
+```bash
+# Single file
+python scripts/convert_to_md.py input.docx -o output.md
+
+# Batch folder (output to review_materials/converted/)
+python scripts/convert_to_md.py --folder review_materials -o review_materials/converted
+```
+
+#### 2) Convert Markdown audit report to Word
 
 ```bash
 python scripts/md_to_docx.py "review_materials/<your-report>.md" -o "review_materials/<your-report>.docx"
 ```
 
-3) Generate CSR stage summary (Word):
+#### 3) Generate CSR stage summary (Word)
 
 ```bash
 python scripts/generate_csr_docx.py --root "project-root"
 ```
 
 Note: `review_materials/` is ignored by `.gitignore` and not uploaded to GitHub.
+
+### Word Document Processing Tips
+
+**When filename contains Chinese characters**: Passing paths directly in command line may fail due to encoding issues. Use PowerShell to copy to a simple filename first:
+
+```powershell
+# Copy to ASCII filename
+Copy-Item "review_materials\1-3-1说明-20260529-新.docx" target.docx
+
+# Then process with script
+python scripts/convert_to_md.py target.docx -o output.md
+```
 
 ---
 

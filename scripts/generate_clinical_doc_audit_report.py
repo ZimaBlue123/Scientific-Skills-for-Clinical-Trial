@@ -14,6 +14,8 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
+from common_scripts.docx_utils import apply_cn_en_fonts
+
 
 @dataclass
 class AuditFinding:
@@ -37,34 +39,13 @@ class AuditReportConfig:
     findings: list[AuditFinding] = field(default_factory=list)
 
 
-def _apply_cn_en_fonts(doc) -> None:
-    """Enforce document-wide fonts: Chinese=宋体, English=Times New Roman"""
-    from docx.oxml.ns import qn
-
-    def set_style(style_name: str) -> None:
-        if style_name not in doc.styles:
-            return
-        style = doc.styles[style_name]
-        font = style.font
-        font.name = "Times New Roman"
-        rpr = style.element.get_or_add_rPr()
-        rfonts = rpr.get_or_add_rFonts()
-        rfonts.set(qn("w:ascii"), "Times New Roman")
-        rfonts.set(qn("w:hAnsi"), "Times New Roman")
-        rfonts.set(qn("w:eastAsia"), "宋体")
-        rfonts.set(qn("w:cs"), "Times New Roman")
-
-    for name in ["Normal", "Title", "Heading 1", "Heading 2", "Heading 3", "Table Grid"]:
-        set_style(name)
-
-
 def create_audit_report(config: AuditReportConfig, output_path: Path) -> None:
     """Generate audit report Word document from config."""
     from docx import Document
     from docx.enum.text import WD_ALIGN_PARAGRAPH
 
     doc = Document()
-    _apply_cn_en_fonts(doc)
+    apply_cn_en_fonts(doc)
     today = date.today().isoformat()
 
     # Title

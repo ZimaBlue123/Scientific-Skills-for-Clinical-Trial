@@ -8,25 +8,9 @@ from pathlib import Path
 
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml.ns import qn
 from docx.shared import Pt
 
-
-def _apply_cn_en_fonts(doc: Document) -> None:
-    def set_style(style_name: str) -> None:
-        if style_name not in doc.styles:
-            return
-        style = doc.styles[style_name]
-        style.font.name = "Times New Roman"
-        rpr = style.element.get_or_add_rPr()
-        rfonts = rpr.get_or_add_rFonts()
-        rfonts.set(qn("w:ascii"), "Times New Roman")
-        rfonts.set(qn("w:hAnsi"), "Times New Roman")
-        rfonts.set(qn("w:eastAsia"), "宋体")
-        rfonts.set(qn("w:cs"), "Times New Roman")
-
-    for name in ("Normal", "Title", "Heading 1", "Heading 2", "Heading 3", "Table Grid"):
-        set_style(name)
+from common_scripts.docx_utils import apply_cn_en_fonts
 
 
 def _set_run_font(run) -> None:
@@ -76,7 +60,7 @@ def _add_table(doc: Document, headers: list[str], rows: list[list[str]]) -> None
 
 def build_document() -> Document:
     doc = Document()
-    _apply_cn_en_fonts(doc)
+    apply_cn_en_fonts(doc)
 
     today = date.today().strftime("%Y年%m月%d日")
     src_doc = (
