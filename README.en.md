@@ -329,7 +329,7 @@ To supplement evidence/trial intelligence, run `clinicaltrials-database` with `p
 
 ### Product-Specific Scripts
 
-> 以下脚本针对特定产品，通用场景请使用上方推荐脚本：
+> These scripts target specific products. For general use cases, prefer the recommended scripts above.
 
 | Script | Purpose |
 |--------|---------|

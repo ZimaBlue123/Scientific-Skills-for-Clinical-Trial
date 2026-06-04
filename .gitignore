@@ -99,6 +99,34 @@ scripts/deliverables/
 *.webp
 *.svg
 
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+*.gz
+*.bz2
+*.xz
+
+# Editor / IDE local state
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/dictionaries/
+.idea/shelf/
+.idea/httpRequests/
+.vscode/*.log
+.vscode/settings.json
+.cursor/workspace.json
+.cursor/worktrees.json
+
+# Claude / Mavis local session caches
+.claude/settings.local.json
+.mavis/scratchpads/
+.mavis/cache/
+
 # Allow docs & skill assets to be versioned
 !docs/**/*.doc
 !docs/**/*.docx

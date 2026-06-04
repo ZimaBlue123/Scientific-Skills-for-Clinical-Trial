@@ -383,17 +383,6 @@ print(result.text_content)
 | `scripts/project_self_check.py` | 项目自检 | ✅ 推荐 |
 | `scripts/cleanup_generated_artifacts.py` | 清理缓存 | ✅ 推荐 |
 
-### 脚本索引
-
-| 脚本 | 用途 | 状态 |
-|------|------|------|
-| `scripts/convert_to_md.py` | 文档转Markdown（推荐） | ✅ 推荐 |
-| `scripts/md_to_docx.py` | Markdown转Word | ✅ 推荐 |
-| `scripts/convert_doc_to_docx.py` | 旧版.doc转换 | ✅ 推荐 |
-| `scripts/generate_csr_docx.py` | CSR阶段性小结 | ✅ 推荐 |
-| `scripts/project_self_check.py` | 项目自检 | ✅ 推荐 |
-| `scripts/cleanup_generated_artifacts.py` | 清理缓存 | ✅ 推荐 |
-
 ### 已废弃脚本
 
 > 以下脚本已被废弃，功能已合并到 `convert_to_md.py`：
@@ -434,22 +423,6 @@ print(result.text_content)
 | `scripts/build_tvax006_IMA_v2_docx.py` | TVAX006产品专用 |
 | `scripts/cansino_detail4843_manual_docx.py` | 康希诺产品专用 |
 | `scripts/extract_tables_to_docx.py` | OCR图片转Word表格 |
-
-### 如何选择
-
-```
-需要从docx提取纯文本？
-  → python scripts/convert_to_md.py input.docx -o output.md
-
-需要带编号段落提取（##P1, ##T1标记）？
-  → python scripts/convert_to_md.py input.docx -o output.md --mode numbered
-
-需要将Markdown转换为Word？
-  → python scripts/md_to_docx.py input.md -o output.docx
-
-需要转换旧版.doc格式？
-  → python scripts/convert_doc_to_docx.py input.doc output.docx
-```
 
 ### 文档审核工作流（素材 → Markdown → Word）
 
