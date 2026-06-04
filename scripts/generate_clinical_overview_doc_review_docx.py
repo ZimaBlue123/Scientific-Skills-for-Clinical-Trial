@@ -8,6 +8,7 @@ from pathlib import Path
 
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml.ns import qn
 from docx.shared import Pt
 
 from common_scripts.docx_utils import apply_cn_en_fonts
