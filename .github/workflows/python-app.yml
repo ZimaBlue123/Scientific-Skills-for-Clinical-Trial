@@ -25,15 +25,28 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
+        # Always use `python -m pip` so the pip binary matches the selected Python
+        # interpreter. Plain `pip` can resolve to a different Python on some
+        # GitHub-hosted runners.
         python -m pip install --upgrade pip
-        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; else pip install flake8 pytest; fi
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        # Install project deps first (project may pin the exact versions).
+        if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+        if [ -f requirements-dev.txt ]; then python -m pip install -r requirements-dev.txt; fi
+        # Defensive fallback: make sure flake8 + pytest binaries are on PATH even
+        # if requirements-dev.txt is missing them (see #31: flake8 command not found).
+        python -m pip install flake8 pytest
     - name: Lint with flake8
       run: |
-        # stop the build if there are Python syntax errors or undefined names
+        # Stop the build if there are Python syntax errors or undefined names.
+        # (E9/F63/F7/F82 are pyflakes/compile-time checks that catch real bugs.)
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        # exit-zero treats style violations as warnings. The GitHub editor is 127 chars wide.
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Lint with ruff
+      run: |
+        # Ruff is configured in pyproject.toml. We only run the linter here
+        # (the formatter is intentionally a developer-side tool, not a CI gate).
+        ruff check . || true
     - name: Test with pytest
       run: |
         pytest

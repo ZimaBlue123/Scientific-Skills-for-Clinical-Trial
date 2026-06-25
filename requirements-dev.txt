@@ -3,7 +3,14 @@
 # ============================================================
 -r requirements.txt
 
-# Linting / formatting (modern stack; replaces flake8)
+# CI lint stack (explicit so .github/workflows/python-app.yml can rely on
+# these binaries being installed even if the workflow conditional changes).
+flake8>=7.0.0
+pytest>=8.0.0
+
+# Modern linter / formatter (replaces flake8 long-term; config in
+# pyproject.toml). Kept alongside flake8 to keep CI green during the
+# migration window.
 ruff>=0.6.0
 
 # Static type checking
@@ -11,9 +18,6 @@ mypy>=1.10.0
 
 # Hooks / automation
 pre-commit>=3.8.0
-
-# Test runner (kept for parity with existing tooling)
-pytest>=8.0.0
 
 # ------------------------------------------------------------
 # Notes
