@@ -1,29 +1,47 @@
+# ============================================================
+# Scientific Skills for Clinical Trial — runtime dependencies
+# ============================================================
+# Pin minimal lower bounds; upper bound is intentionally permissive.
+# `pywin32` is restricted to Windows via PEP 508 markers.
+
+# --- Document parsing & generation (docx/pptx/rtf/pdf) ---
 python-docx>=1.1.0
 python-pptx>=1.0.0
-pytesseract>=0.3.10
+pymupdf>=1.24.0          # exposes the legacy `fitz` module as well
+pypdf>=4.2.0
+pdfplumber>=0.11.0        # optional PDF text-extraction fallback
+striprtf>=0.0.26
+markitdown>=0.1.0
+
+# Windows-only: legacy .doc reading and conversion via Word COM.
+# See scripts/convert_doc_to_docx.py, scripts/extract_doc_text.py,
+# and scripts/extract_docx_full.py.
+pywin32>=306 ; sys_platform == "win32"
+
+# --- Image & table extraction (used by cansino/build_tvax006 scripts) ---
 Pillow>=10.0
-# Image → Word tables (scripts/extract_tables_to_docx.py, cansino_detail4843_manual_docx.py 表格章)
+pytesseract>=0.3.10
 img2table>=1.4.0
 opencv-contrib-python-headless>=4.9.0
 beautifulsoup4>=4.12.0
-pymupdf>=1.24.0
-markitdown>=0.1.0
-pypdf>=4.2.0
-striprtf>=0.0.26
 
-# Optional but improves robustness for PDF text extraction fallback
-pdfplumber>=0.11.0
-
-# --- Clinical/Scientific compute dependencies (skills that require modeling & plotting) ---
+# --- Clinical / scientific compute (skills that need modelling & plotting) ---
 numpy>=1.23
 pandas>=2.0
 statsmodels>=0.14
 matplotlib>=3.7
 lifelines>=0.28.0
-openai>=1.50.0
 cairosvg>=2.7.1
 
-# Diagram skill note:
-# `skills/fireworks-tech-graph` is SVG/PNG oriented and does not require extra Python packages here.
-# It relies on system tool `rsvg-convert` from librsvg.
+# --- LLM client (used by some skills) ---
+openai>=1.50.0
 
+# ------------------------------------------------------------
+# Notes
+# ------------------------------------------------------------
+# * `skills/fireworks-tech-graph` is SVG/PNG oriented and does NOT
+#   require any extra Python packages here. It depends on the system
+#   tool `rsvg-convert` from librsvg (see scripts/project_self_check.py).
+# * `pywin32` is intentionally gated to Windows; on Linux/macOS the
+#   .doc-related entry points will exit with a clear "pywin32 missing"
+#   error rather than failing the whole dependency resolver.

@@ -1,5 +1,22 @@
+# ============================================================
+# Development-only dependencies
+# ============================================================
 -r requirements.txt
-flake8>=7.0.0
+
+# Linting / formatting (modern stack; replaces flake8)
+ruff>=0.6.0
+
+# Static type checking
+mypy>=1.10.0
+
+# Hooks / automation
+pre-commit>=3.8.0
+
+# Test runner (kept for parity with existing tooling)
 pytest>=8.0.0
 
-# No extra dev-only Python dependency is required for `skills/fireworks-tech-graph`.
+# ------------------------------------------------------------
+# Notes
+# ------------------------------------------------------------
+# * `skills/fireworks-tech-graph` does not require any extra Python
+#   dependency here; it uses the system tool `rsvg-convert`.

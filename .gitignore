@@ -201,6 +201,61 @@ docs/_converted/
 .coverage
 .coverage.*
 htmlcov/
+.pytest_cache/
+.cache/
+.benchmarks/
+
+# Build / packaging artifacts
+pip-wheel-metadata/
+*.whl
+*.egg
+*.egg-info/
+build/
+dist/
+pip-build/
+pip-log.txt
+
+# Bytecode / debug
+*.pyo
+*.pyd
+*.pyc
+__pycache__/
+__pypackages__/
+
+# Python interpreter
+.Python
+*.py[cod]
+*$py.class
+*.so
+.python-version   # pyenv
+.venv/
+venv/
+env/
+.python_history
+.hypothesis/
+
+# Editor / IDE backup
+*.py.bak
+*.py.orig
+*.py.rej
+.#*
+.#*.py
+*~
+*.swp
+*.swo
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+ehthumbs_view.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Git worktrees (developer-only; never commit)
+.worktrees/
 
 # "Generated report sources" (ONLY under typical artifact dirs)
 reports/**/*.md
