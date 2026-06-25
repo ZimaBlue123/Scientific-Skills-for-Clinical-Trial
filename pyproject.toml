@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scientific-skills-for-clinical-trial"
+version = "0.1.0"
+description = "Clinical trial document handling, generation and review tooling."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Scientific Skills for Clinical Trial Contributors" },
+]
+keywords = ["clinical-trial", "docx", "pdf", "markdown", "review"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Text Processing :: Markup",
+]
+# Runtime dependencies are intentionally not duplicated here; the source
+# of truth is `requirements.txt` (consumed directly by `pip install -r`).
+# Hatch will discover the project metadata above without bundling deps.
+
+[tool.hatch.build.targets.wheel]
+packages = ["scripts"]
+
+# ----------------------------------------------------------------------
+# Ruff (linter / formatter)
+# ----------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = [
+    ".venv",
+    "build",
+    "dist",
+    ".worktrees",
+    "scripts/__pycache__",
+]
+
+[tool.ruff.lint]
+# A pragmatic default: pycodestyle, pyflakes, isort, pyupgrade, bugbear.
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = [
+    "E501",  # line length handled by formatter
+    "B008",  # function-call-in-default-arg (FastAPI pattern)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["scripts", "common_scripts"]
+combine-as-imports = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# ----------------------------------------------------------------------
+# mypy
+# ----------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false   # start permissive; tighten incrementally
+ignore_missing_imports = true
+exclude = [
+    "build/",
+    "dist/",
+    ".venv/",
+    ".worktrees/",
+    "scripts/__pycache__/",
+]
+
+# ----------------------------------------------------------------------
+# pytest
+# ----------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
