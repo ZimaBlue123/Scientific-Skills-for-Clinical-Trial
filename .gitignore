@@ -218,19 +218,11 @@ pip-log.txt
 # Bytecode / debug
 *.pyo
 *.pyd
-*.pyc
-__pycache__/
 __pypackages__/
 
 # Python interpreter
 .Python
-*.py[cod]
-*$py.class
-*.so
 .python-version   # pyenv
-.venv/
-venv/
-env/
 .python_history
 .hypothesis/
 
