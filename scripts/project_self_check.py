@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Project self-check:
@@ -16,13 +16,11 @@ from __future__ import annotations
 
 import ast
 import json
-import os
 import subprocess
 import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 
 ROOT = Path(__file__).resolve().parents[1]

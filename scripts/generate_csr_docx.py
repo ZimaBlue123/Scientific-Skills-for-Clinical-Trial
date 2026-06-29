@@ -341,7 +341,7 @@ def _parse_safety_014_summary(safety1_pdf: Path) -> dict[str, object]:
         if c["trial_n"] == 43 and c["ctrl_n"] == 5 and c["total_n"] == 48
     ]
     if not sys_rows:
-        raise ValueError(f"未能在40~49分层块中定位“征集性全身”行（43 vs 5）")
+        raise ValueError("未能在40~49分层块中定位“征集性全身”行（43 vs 5）")
     sysr = sys_rows[0]
 
     # 50–59岁（对照组为阳性对照组2）：3级及以上 = 8 vs 9，合计17
@@ -462,7 +462,7 @@ def main() -> int:
     doc.add_paragraph("").add_run("")  # spacer
     doc.add_paragraph("申办方：远大赛威信生命科学（南京）有限公司 / 远大赛威信生命科学（杭州）有限公司")
     doc.add_paragraph("研究中心：山西省疾病预防控制中心（单中心）")
-    doc.add_paragraph(f"阶段性数据截断：全程接种后30天安全性+免疫原性主要时点").alignment = WD_ALIGN_PARAGRAPH.LEFT
+    doc.add_paragraph("阶段性数据截断：全程接种后30天安全性+免疫原性主要时点").alignment = WD_ALIGN_PARAGRAPH.LEFT
     doc.add_paragraph(f"报告生成日期：{today}")
     doc.add_page_break()
 
@@ -509,7 +509,7 @@ def main() -> int:
         f"受试者处置：筛选{disposition['screened']}例，筛选失败{disposition['screen_fail']}例；随机入组{disposition['randomized_total']}例。"
     )
     doc.add_paragraph(
-        f"免疫原性（PPS-h2，第2剂免后30天）：40–49岁试验组相对阳性对照组1抗gE/抗VZV抗体水平均显著更高；≥50岁试验组与阳性对照组2总体相近。"
+        "免疫原性（PPS-h2，第2剂免后30天）：40–49岁试验组相对阳性对照组1抗gE/抗VZV抗体水平均显著更高；≥50岁试验组与阳性对照组2总体相近。"
     )
     doc.add_paragraph(
         f"安全性（SS）：0–14天3级及以上AE合计{safety014['table_rows']['3级及以上AE'][3]}，SAE/AESI为0；0–30天非征集性AE合计{safety030['row'][3]}，未见3级及以上非征集性AE。"
