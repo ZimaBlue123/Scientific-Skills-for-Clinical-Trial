@@ -258,3 +258,10 @@ reports/**/*.doc
 reports/**/*.docx
 output/**/*.md
 output/**/*.py
+
+# ==========================================
+# Review side-products (review_clinical_xlsx.py)
+# ==========================================
+*.review_dump.txt
+*.review.md
+
