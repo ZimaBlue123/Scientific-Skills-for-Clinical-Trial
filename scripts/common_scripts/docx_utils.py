@@ -43,9 +43,17 @@ def _set_style_fonts(doc: Document, style_name: str) -> bool:
     Returns ``True`` if the style was found and updated, ``False`` if it
     was missing from the document (some style names are not always present).
     """
-    if style_name not in doc.styles:
+    styles = getattr(doc, "styles", None)
+    if styles is None:
+        logger.warning("document object exposes no .styles; aborting font update")
         return False
-    style = doc.styles[style_name]
+    if style_name not in styles:
+        return False
+    try:
+        style = styles[style_name]
+    except (KeyError, ValueError):
+        logger.debug("style lookup failed despite membership check: %s", style_name)
+        return False
     font = style.font
     font.name = _ASCII_FONT
 

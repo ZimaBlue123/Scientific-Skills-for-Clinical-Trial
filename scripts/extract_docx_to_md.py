@@ -125,7 +125,7 @@ def main() -> int:
             file=sys.stderr,
         )
         return 2
-    except Exception as e:
+    except (OSError, ValueError, KeyError) as e:
         print(f"ERROR: failed to parse docx: {src}\n{e}", file=sys.stderr)
         return 1
 
@@ -135,7 +135,7 @@ def main() -> int:
 
     try:
         dst.write_text(md, encoding="utf-8")
-    except Exception as e:
+    except OSError as e:
         print(f"ERROR: failed to write markdown: {dst}\n{e}", file=sys.stderr)
         return 1
     return 0
