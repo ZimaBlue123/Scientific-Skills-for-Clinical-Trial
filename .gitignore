@@ -265,3 +265,13 @@ output/**/*.py
 *.review_dump.txt
 *.review.md
 
+
+# ==========================================
+# One-shot audit / refactor helpers (do not commit)
+# ==========================================
+/_audit_*.py
+/_audit_*.sh
+/_audit_*.ps1
+**/_audit_*.py
+**/_audit_*.sh
+**/_audit_*.ps1
