@@ -3,18 +3,28 @@
 """Generate Word review report for CTD 2.5 clinical overview document."""
 from __future__ import annotations
 
+import logging
+import sys
 from datetime import date
 from pathlib import Path
+from typing import Any
 
-from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml.ns import qn
-from docx.shared import Pt
+from docx import Document  # type: ignore
+from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
+from docx.oxml.ns import qn  # type: ignore
+from docx.shared import Pt  # type: ignore
 
-from common_scripts.docx_utils import apply_cn_en_fonts
+from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
+
+LOGGER = logging.getLogger("generate_clinical_overview_review")
+if not LOGGER.handlers:
+    _h = logging.StreamHandler(stream=sys.stderr)
+    _h.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    LOGGER.addHandler(_h)
+    LOGGER.setLevel(logging.INFO)
 
 
-def _set_run_font(run) -> None:
+def _set_run_font(run: Any) -> None:
     run.font.name = "Times New Roman"
     run.font.size = Pt(12)
     rpr = run._element.get_or_add_rPr()
@@ -342,7 +352,11 @@ def main() -> int:
     out_path = out_dir / f"TVAX-006_2.5临床综述_文档审核报告_{date.today().isoformat()}.docx"
 
     doc = build_document()
-    doc.save(str(out_path))
+    try:
+        doc.save(str(out_path))
+    except (OSError, ValueError) as exc:
+        LOGGER.error("Cannot save %s: %s", out_path, exc)
+        return 1
     print(f"Wrote: {out_path}")
     return 0
 

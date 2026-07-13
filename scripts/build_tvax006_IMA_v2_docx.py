@@ -2,14 +2,24 @@
 """Merge TVAX-006_海外桥接法规清单_IMA_V2.md + IMA.docx URLs → TVAX-006_海外桥接法规清单_IMA_V2.docx."""
 from __future__ import annotations
 
+import logging
 import re
+import sys
 from pathlib import Path
+from typing import Any
 
-from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml.ns import qn
-from docx.shared import Pt
-from docx.table import Table
+from docx import Document  # type: ignore
+from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
+from docx.oxml.ns import qn  # type: ignore
+from docx.shared import Pt  # type: ignore
+from docx.table import Table  # type: ignore
+
+LOGGER = logging.getLogger("build_tvax006_ima_v2")
+if not LOGGER.handlers:
+    _h = logging.StreamHandler(stream=sys.stderr)
+    _h.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    LOGGER.addHandler(_h)
+    LOGGER.setLevel(logging.INFO)
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "TVAX-006_海外桥接法规清单_IMA_V2.docx"
@@ -19,12 +29,16 @@ def _strip_md_bold(s: str) -> str:
     return re.sub(r"\*\*(.+?)\*\*", r"\1", s)
 
 
-def _set_cell_font(cell, name: str = "Microsoft YaHei", size_pt: float = 9.0) -> None:
-    for p in cell.paragraphs:
-        for r in p.runs:
-            r.font.name = name
-            r._element.rPr.rFonts.set(qn("w:eastAsia"), name)
-            r.font.size = Pt(size_pt)
+def _set_cell_font(cell: Any, name: str = "Microsoft YaHei", size_pt: float = 9.0) -> None:
+    try:
+        for p in cell.paragraphs:
+            for r in p.runs:
+                r.font.name = name
+                if r._element.rPr is not None and r._element.rPr.rFonts is not None:
+                    r._element.rPr.rFonts.set(qn("w:eastAsia"), name)
+                r.font.size = Pt(size_pt)
+    except (AttributeError, KeyError) as exc:
+        LOGGER.debug("Skip font set on cell: %s", exc)
 
 
 def _add_table(doc: Document, headers: list[str], data_rows: list[list[str]]) -> Table:
@@ -45,7 +59,7 @@ def _add_table(doc: Document, headers: list[str], data_rows: list[list[str]]) ->
     return tbl
 
 
-def main() -> None:
+def main() -> int:
     doc = Document()
     normal = doc.styles["Normal"]
     normal.font.name = "Microsoft YaHei"
@@ -377,9 +391,15 @@ def main() -> None:
     endp.add_run("本清单基于知识库006及上传法规附件整理，更新时间2026年5月12日。建议结合项目进展持续跟踪各国法规动态。")
     endp.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    doc.save(OUT)
+    try:
+        OUT.parent.mkdir(parents=True, exist_ok=True)
+        doc.save(str(OUT))
+    except (OSError, ValueError) as exc:
+        LOGGER.error("Cannot save %s: %s", OUT, exc)
+        return 1
     print("saved", OUT)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

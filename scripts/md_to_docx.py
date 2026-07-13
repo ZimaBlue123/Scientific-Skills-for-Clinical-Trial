@@ -1,15 +1,26 @@
 from __future__ import annotations
 
 import argparse
+import logging
 import re
+import sys
 from pathlib import Path
+from typing import Any
 
-from docx import Document
-from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.shared import Pt
+from docx import Document  # type: ignore
+from docx.document import Document as _DocxDocument  # type: ignore
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT  # type: ignore
+from docx.shared import Pt  # type: ignore
+
+LOGGER = logging.getLogger("md_to_docx")
+if not LOGGER.handlers:
+    _h = logging.StreamHandler(stream=sys.stderr)
+    _h.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    LOGGER.addHandler(_h)
+    LOGGER.setLevel(logging.INFO)
 
 
-def _add_runs_with_inline(p, text: str) -> None:
+def _add_runs_with_inline(p: Any, text: str) -> None:
     parts = re.split(r"(\*\*.+?\*\*|`[^`]+`)", text)
     for part in parts:
         if not part:
@@ -26,7 +37,9 @@ def _add_runs_with_inline(p, text: str) -> None:
 
 
 def md_to_docx(md_text: str, out_path: Path) -> None:
-    doc = Document()
+    if not md_text:
+        LOGGER.warning("Empty markdown input; producing empty document.")
+    doc: _DocxDocument = Document()
     lines = md_text.splitlines()
     in_code = False
     code_buf: list[str] = []
@@ -87,8 +100,12 @@ def md_to_docx(md_text: str, out_path: Path) -> None:
         p = doc.add_paragraph()
         _add_runs_with_inline(p, s)
 
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    doc.save(str(out_path))
+    try:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        doc.save(str(out_path))
+    except (OSError, ValueError) as exc:
+        LOGGER.error("Cannot write %s: %s", out_path, exc)
+        raise
 
 
 def main() -> int:
@@ -99,18 +116,30 @@ def main() -> int:
 
     md_path = args.input_md.resolve()
     if not md_path.exists():
-        raise SystemExit(f"not found: {md_path}")
+        LOGGER.error("Input markdown not found: %s", md_path)
+        return 2
 
-    out = args.output
-    if out is None:
+    out: Path
+    if args.output is None:
         out = md_path.with_suffix(".docx")
     else:
-        out = out.resolve()
+        out = args.output.resolve()
 
-    md_to_docx(md_path.read_text(encoding="utf-8"), out)
+    try:
+        md_text = md_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        LOGGER.error("Cannot read %s: %s", md_path, exc)
+        return 1
+
+    try:
+        md_to_docx(md_text, out)
+    except (OSError, ValueError) as exc:
+        LOGGER.error("Conversion failed: %s", exc)
+        return 1
+
     print(f"wrote {out}")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

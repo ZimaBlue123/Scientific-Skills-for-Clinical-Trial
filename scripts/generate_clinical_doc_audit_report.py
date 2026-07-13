@@ -11,11 +11,22 @@ Usage:
 """
 from __future__ import annotations
 
+import argparse
+import logging
+import sys
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
+from typing import Any
 
-from common_scripts.docx_utils import apply_cn_en_fonts
+from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
+
+LOGGER = logging.getLogger("generate_clinical_doc_audit_report")
+if not LOGGER.handlers:
+    _h = logging.StreamHandler(stream=sys.stderr)
+    _h.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    LOGGER.addHandler(_h)
+    LOGGER.setLevel(logging.INFO)
 
 
 @dataclass
@@ -194,9 +205,13 @@ def main() -> int:
     else:
         output_path = folder / f"临床试验文档审核报告_{date.today().isoformat()}.docx"
 
-    create_audit_report(config, output_path)
+    try:
+        create_audit_report(config, output_path)
+    except (OSError, ValueError) as exc:
+        LOGGER.error("Report generation failed: %s", exc)
+        return 1
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

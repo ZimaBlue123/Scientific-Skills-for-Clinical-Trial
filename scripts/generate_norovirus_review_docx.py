@@ -1,11 +1,20 @@
 from __future__ import annotations
 
+import logging
+import sys
 from datetime import date
 from pathlib import Path
 
-from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt
+from docx import Document  # type: ignore
+from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
+from docx.shared import Pt  # type: ignore
+
+LOGGER = logging.getLogger("generate_norovirus_review")
+if not LOGGER.handlers:
+    _h = logging.StreamHandler(stream=sys.stderr)
+    _h.setFormatter(logging.Formatter("[%(levelname)s] %(name)s: %(message)s"))
+    LOGGER.addHandler(_h)
+    LOGGER.setLevel(logging.INFO)
 
 
 DEFAULT_OUT_PATH = Path("reports") / f"美国近两年诺如病毒流行病学数据综述_2024-2026_{date.today().isoformat()}.docx"
@@ -110,15 +119,24 @@ def generate_docx(out_path: Path) -> Path:
         else:
             _add_multiline_paragraphs(doc, content)
 
-    doc.save(str(out_path))
+    try:
+        doc.save(str(out_path))
+    except (OSError, ValueError) as exc:
+        LOGGER.error("Cannot save %s: %s", out_path, exc)
+        raise
     return out_path
 
 
-def main() -> None:
-    out_path = generate_docx(DEFAULT_OUT_PATH)
+def main() -> int:
+    try:
+        out_path = generate_docx(DEFAULT_OUT_PATH)
+    except (OSError, ValueError) as exc:
+        LOGGER.error("Generation failed: %s", exc)
+        return 1
     print(out_path.as_posix())
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
 
