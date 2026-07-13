@@ -51,11 +51,14 @@ Run tests:
 pytest
 ```
 
-Run lint:
+Run lint (ruff recommended):
 
 ```bash
-flake8
+ruff check scripts/ tests/
+ruff format --check scripts/ tests/
 ```
+
+> The project has migrated from flake8 to ruff (config in `pyproject.toml`). `requirements-dev.txt` still includes flake8 for legacy CI compatibility.
 
 Clean local ignored files (use with caution):
 
@@ -86,10 +89,13 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```text
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # One directory per skill (core content, 30 total)
+├── skills/                # One directory per skill (core content)
 ├── docs/                  # Long-form docs (see index below)
 ├── scripts/               # Repository-level executable scripts
+│   ├── common_scripts/    # Shared utility modules (e.g. docx_utils)
+│   └── _archive/          # Archived historical versions (unmaintained)
 ├── tests/                 # Tests
+├── pyproject.toml         # Project metadata + ruff/mypy/pytest config
 ├── requirements.txt
 ├── requirements-dev.txt
 └── CONTRIBUTING.md

@@ -5,29 +5,66 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.pyo
+*.pyd
 .Python
+__pypackages__/
 venv/
 .venv/
 env/
+.python-version
+.python_history
+.hypothesis/
 
 # Packaging
 build/
 dist/
 *.egg-info/
 *.egg
+*.whl
+pip-wheel-metadata/
+pip-build/
+pip-log.txt
+
+# Python tooling caches
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+.benchmarks/
 
 # ==========================================
 # IDE / OS
 # ==========================================
 .idea/
 .vscode/
-.cursor/
 *.swp
 *.swo
+*~
 .DS_Store
+.AppleDouble
+.LSOverride
 Thumbs.db
+ehthumbs.db
+ehthumbs_view.db
 Desktop.ini
+$RECYCLE.BIN/
+
+# Cursor — ignore everything except skills/ and rules/
+.cursor/*
+!.cursor/skills/
+!.cursor/rules/
+
+# Claude / Mavis / WorkBuddy local state
+.claude/
+.mavis/
+.workbuddy/
+
+# Git worktrees (developer-only; never commit)
+.worktrees/
 
 # ==========================================
 # Data / secrets / outputs
@@ -56,50 +93,28 @@ config_local.yaml
 *.log
 *.bak
 *.tmp
+*.download
 .ipynb_checkpoints/
 ~$*
-~$*.csv
 
 # ==========================================
-# Reports (generated artifacts)
+# Generated artifacts (Office / PDF / media / archives)
 # ==========================================
-reports/
-
-# If you ever generate reports elsewhere, keep them out too
-**/report/
-**/reports/
-
-# Reusable local template outputs (do not commit)
-scripts/common_templates/
-scripts/deliverables/
-**/deliverables/
-
-# Keep an empty top-level reports/ folder in repo
-!reports/
-!reports/.gitkeep
-
-# Office / PDF exports (common generated artifacts)
 *.doc
 *.docx
 *.ppt
 *.pptx
-*.xls
-*.xlsx
 *.pdf
 *.rtf
 *.odt
 *.ods
 *.odp
-
-# Common generated media artifacts
 *.png
 *.jpg
 *.jpeg
 *.gif
 *.webp
 *.svg
-
-# Archives
 *.zip
 *.tar
 *.tar.gz
@@ -110,24 +125,33 @@ scripts/deliverables/
 *.bz2
 *.xz
 
-# Editor / IDE local state
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/usage.statistics.xml
-.idea/dictionaries/
-.idea/shelf/
-.idea/httpRequests/
-.vscode/*.log
-.vscode/settings.json
-.cursor/workspace.json
-.cursor/worktrees.json
+# ==========================================
+# Reports (generated artifacts)
+# ==========================================
+# Keep an empty top-level reports/ folder in repo
+reports/
+!reports/
+!reports/.gitkeep
+# Generated report sources under artifact dirs
+reports/**/*.md
+reports/**/*.py
+reports/**/*.json
+reports/**/*.xlsx
+reports/**/*.doc
+reports/**/*.docx
+output/**/*.md
+output/**/*.py
+# If you ever generate reports elsewhere, keep them out too
+**/report/
+**/reports/
+# Reusable local template outputs (do not commit)
+scripts/common_templates/
+scripts/deliverables/
+**/deliverables/
 
-# Claude / Mavis local session caches
-.claude/settings.local.json
-.mavis/scratchpads/
-.mavis/cache/
-
-# Allow docs & skill assets to be versioned
+# ==========================================
+# Re-include docs & skill assets (override *.docx etc. above)
+# ==========================================
 !docs/**/*.doc
 !docs/**/*.docx
 !docs/**/*.ppt
@@ -164,7 +188,7 @@ scripts/deliverables/
 !skills/**/assets/**/*.webp
 !skills/**/assets/**/*.svg
 
-# Allow skill reference materials to be versioned too (many skills keep docs/examples here)
+# Allow skill reference materials to be versioned too
 !skills/**/references/**/*.doc
 !skills/**/references/**/*.docx
 !skills/**/references/**/*.ppt
@@ -187,88 +211,23 @@ scripts/deliverables/
 !skills/fireworks-tech-graph/**/*.svg
 !skills/fireworks-tech-graph/**/*.png
 
-# Allow project skills under .cursor/skills/ to be versioned
-!.cursor/
-!.cursor/skills/
-!.cursor/skills/**
-
-# Converted temp files (docs/_converted/)
+# ==========================================
+# Misc
+# ==========================================
+# Converted temp files
 docs/_converted/
 
-# Python tooling caches
-.ruff_cache/
-.mypy_cache/
-.coverage
-.coverage.*
-htmlcov/
-.pytest_cache/
-.cache/
-.benchmarks/
-
-# Build / packaging artifacts
-pip-wheel-metadata/
-*.whl
-*.egg
-*.egg-info/
-build/
-dist/
-pip-build/
-pip-log.txt
-
-# Bytecode / debug
-*.pyo
-*.pyd
-__pypackages__/
-
-# Python interpreter
-.Python
-.python-version   # pyenv
-.python_history
-.hypothesis/
-
-# Editor / IDE backup
+# Editor backup patterns
 *.py.bak
 *.py.orig
 *.py.rej
 .#*
-.#*.py
-*~
-*.swp
-*.swo
 
-# OS
-.DS_Store
-.AppleDouble
-.LSOverride
-Thumbs.db
-ehthumbs.db
-ehthumbs_view.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# Git worktrees (developer-only; never commit)
-.worktrees/
-
-# "Generated report sources" (ONLY under typical artifact dirs)
-reports/**/*.md
-reports/**/*.py
-reports/**/*.json
-reports/**/*.xlsx
-reports/**/*.doc
-reports/**/*.docx
-output/**/*.md
-output/**/*.py
-
-# ==========================================
 # Review side-products (review_clinical_xlsx.py)
-# ==========================================
 *.review_dump.txt
 *.review.md
 
-
-# ==========================================
 # One-shot audit / refactor helpers (do not commit)
-# ==========================================
 /_audit_*.py
 /_audit_*.sh
 /_audit_*.ps1

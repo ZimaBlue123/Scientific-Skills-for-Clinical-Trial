@@ -51,11 +51,14 @@ python -m pip install -r requirements-dev.txt
 pytest
 ```
 
-运行代码风格检查：
+运行代码风格检查（推荐使用 ruff）：
 
 ```bash
-flake8
+ruff check scripts/ tests/
+ruff format --check scripts/ tests/
 ```
+
+> 项目已从 flake8 迁移至 ruff（配置见 `pyproject.toml`）。`requirements-dev.txt` 仍保留 flake8 以兼容旧 CI。
 
 清理本地缓存/忽略文件（谨慎使用，会删除所有被 `.gitignore` 忽略的内容）：
 
@@ -92,7 +95,10 @@ Scientific-Skills-for-Clinical_Trial/
 ├── skills/                # 每个 skill 一个目录（核心内容，157 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
 ├── scripts/               # 仓库级可执行脚本入口（含 CSR/审核报告生成）
+│   ├── common_scripts/    # 共享工具模块（如 docx_utils）
+│   └── _archive/          # 已归档的历史版本（不再维护）
 ├── tests/                 # 测试
+├── pyproject.toml         # 项目元数据 + ruff/mypy/pytest 配置
 ├── requirements.txt
 ├── requirements-dev.txt
 └── CONTRIBUTING.md
@@ -381,7 +387,9 @@ print(result.text_content)
 | `scripts/convert_doc_to_docx.py` | 旧版.doc转换 | ✅ 推荐 |
 | `scripts/generate_csr_docx.py` | CSR阶段性小结 | ✅ 推荐 |
 | `scripts/project_self_check.py` | 项目自检 | ✅ 推荐 |
-| `scripts/cleanup_generated_artifacts.py` | 清理缓存 | ✅ 推荐 |
+| `scripts/cleanup_generated_artifacts.py` | 清理缓存与IDE历史记录 | ✅ 推荐 |
+| `scripts/on_open_cleanup.cmd` | 开机/打开项目时自动清理 | ✅ 辅助 |
+| `scripts/register_cleanup_logon_task.ps1` | 注册开机自启清理任务 | ✅ 辅助 |
 
 ### 已废弃脚本
 

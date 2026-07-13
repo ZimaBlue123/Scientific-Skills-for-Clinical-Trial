@@ -31,8 +31,9 @@ beautifulsoup4>=4.12.0
 openpyxl>=3.1.0
 
 # --- Legacy .doc (OLE2 compound binary) parsing ---
-# Required by scripts/extract_doc_text.py (fallback path on non-Windows
-# hosts) and any skill that touches pre-2007 Office documents.
+# Reserved for future non-Windows .doc parsing fallback.
+# Currently scripts/extract_doc_text.py uses win32com (Windows-only);
+# olefile is kept as a cross-platform fallback dependency.
 olefile>=0.46
 
 # --- Clinical / scientific compute (skills that need modelling & plotting) ---
