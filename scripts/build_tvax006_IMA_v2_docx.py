@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Merge TVAX-006_海外桥接法规清单_IMA_V2.md + IMA.docx URLs → TVAX-006_海外桥接法规清单_IMA_V2.docx."""
 from __future__ import annotations
 

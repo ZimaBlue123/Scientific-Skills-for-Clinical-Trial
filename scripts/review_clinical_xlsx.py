@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 review_clinical_xlsx.py
 ========================
@@ -47,9 +46,9 @@ import logging
 import os
 import re
 import sys
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, Iterable, Iterator
 
 # -------------------------------------------------------------- 可选依赖
 try:
@@ -275,8 +274,7 @@ def rule_filename_title_mismatch(text: str, xlsx_basename: str) -> list[Issue]:
     # 简化匹配：抽取标题和文件名中"X报告"短语
     file_report_type = re.search(r"_(.*?报告)", xlsx_basename)
     title_report_type = re.search(r"(.*?报告)", title)
-    if file_report_type and title_report_type:
-        if file_report_type.group(1) != title_report_type.group(1):
+    if file_report_type and title_report_type and file_report_type.group(1) != title_report_type.group(1):
             issues.append(Issue(
                 severity="P0", category="矛盾",
                 sheet="封面页", row_label=f"标题: {title}",

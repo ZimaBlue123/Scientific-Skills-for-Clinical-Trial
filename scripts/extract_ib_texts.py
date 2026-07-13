@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Extract text from Chinese and English IB (Investigator's Brochure) docx files
 for side-by-side comparison.
@@ -30,9 +29,9 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence
 
 try:
     from docx import Document  # type: ignore
@@ -42,7 +41,7 @@ except ModuleNotFoundError as exc:  # pragma: no cover - import guard
     # Keep the module importable for tooling (compileall, IDE inspection).
     # The CLI entrypoint will surface a clear, actionable error to the user.
     Document = None  # type: ignore[assignment]
-    _DOCX_IMPORT_ERROR: Optional[BaseException] = exc
+    _DOCX_IMPORT_ERROR: BaseException | None = exc
 else:
     _DOCX_IMPORT_ERROR = None
 
@@ -87,9 +86,9 @@ class IBExtractResult:
 # ---------------------------------------------------------------------------
 
 
-def _paragraph_lines(paragraphs: Iterable[object]) -> List[str]:
+def _paragraph_lines(paragraphs: Iterable[object]) -> list[str]:
     """Render paragraphs as `[P{n}] text` lines, skipping fully empty runs."""
-    lines: List[str] = []
+    lines: list[str] = []
     for idx, para in enumerate(paragraphs, start=1):
         text = getattr(para, "text", "") or ""
         # Keep empty paragraphs as blank lines so the marker stays unique;
@@ -100,16 +99,16 @@ def _paragraph_lines(paragraphs: Iterable[object]) -> List[str]:
 
 def _table_to_text(table: _TableT) -> str:  # type: ignore[name-defined]
     """Render a single docx Table as a `[Table n]` header plus pipe-joined rows."""
-    rendered_rows: List[str] = []
+    rendered_rows: list[str] = []
     for row in table.rows:
         cells = [cell.text.strip() for cell in row.cells]
         rendered_rows.append(" | ".join(cells))
     return "\n".join(rendered_rows)
 
 
-def _table_blocks(tables: Iterable[_TableT]) -> List[str]:  # type: ignore[name-defined]
+def _table_blocks(tables: Iterable[_TableT]) -> list[str]:  # type: ignore[name-defined]
     """Render a list of tables into `[Table n]` blocks separated by blank lines."""
-    blocks: List[str] = []
+    blocks: list[str] = []
     for idx, table in enumerate(tables, start=1):
         body = _table_to_text(table)
         blocks.append(f"[Table {idx}]\n{body}" if body else f"[Table {idx}]")
@@ -126,7 +125,7 @@ def _write_text(path: Path, lines: Sequence[str], *, terminator: str = "\n") -> 
     logger.debug("wrote %d bytes to %s", len(payload.encode(ENCODING)), path)
 
 
-def _load_doc(path: Path) -> "_DocumentT":  # type: ignore[name-defined]
+def _load_doc(path: Path) -> _DocumentT:  # type: ignore[name-defined]
     """Wrap `Document(path)` with a defensive import-error path."""
     if _DOCX_IMPORT_ERROR is not None or Document is None:  # pragma: no cover
         raise ModuleNotFoundError(
@@ -171,10 +170,10 @@ def extract_one(
 
 def extract_ib(
     input_dir: Path,
-    output_dir: Optional[Path] = None,
+    output_dir: Path | None = None,
     cn_name: str = DEFAULT_CN_NAME,
     en_name: str = DEFAULT_EN_NAME,
-) -> List[IBExtractResult]:
+) -> list[IBExtractResult]:
     """Run the full extract pipeline for both Chinese and English IBs.
 
     Parameters
@@ -200,7 +199,7 @@ def extract_ib(
         (en_src, output_dir / EN_TEXT_OUT, output_dir / EN_TABLES_OUT),
     ]
 
-    results: List[IBExtractResult] = []
+    results: list[IBExtractResult] = []
     for src, text_out, tables_out in jobs:
         try:
             results.append(extract_one(src, text_out, tables_out))
@@ -254,7 +253,7 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
 

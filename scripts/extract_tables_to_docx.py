@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 图片 / 截图 → Word：通用 OCR + 表格流水线（不绑定某一产品说明）。
 
@@ -22,13 +21,15 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import io
 import os
 import re
 import statistics
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, List, Sequence, Tuple
+from typing import Any
 
 from bs4 import BeautifulSoup
 from docx import Document
@@ -81,10 +82,8 @@ def _set_cell_run(
     p.paragraph_format.space_before = Pt(0)
     p.paragraph_format.space_after = Pt(0)
     p.alignment = align
-    try:
+    with contextlib.suppress(Exception):
         cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
-    except Exception:
-        pass
     r = p.add_run(text)
     r.font.size = Pt(size_pt)
     r.font.name = "Microsoft YaHei"
@@ -93,7 +92,7 @@ def _set_cell_run(
         r.bold = True
 
 
-def _html_table_to_grid(table_tag: Any) -> Tuple[List[List[Any]], int, int]:
+def _html_table_to_grid(table_tag: Any) -> tuple[list[list[Any]], int, int]:
     """
     将带 rowspan/colspan 的 HTML 表解析为逻辑网格。
     每个格子为 None（被合并占用）或 dict(text, rs, cs)。
@@ -106,7 +105,7 @@ def _html_table_to_grid(table_tag: Any) -> Tuple[List[List[Any]], int, int]:
         tds = tr.find_all(["td", "th"], recursive=False)
         n_cols = max(n_cols, sum(int(td.get("colspan", 1) or 1) for td in tds))
 
-    grid: List[List[Any]] = []
+    grid: list[list[Any]] = []
     r = 0
     for tr in trs:
         while len(grid) <= r:
@@ -134,7 +133,7 @@ def _html_table_to_grid(table_tag: Any) -> Tuple[List[List[Any]], int, int]:
     return grid, len(grid), n_cols
 
 
-def _column_char_weights(grid: List[List[Any]], n_cols: int) -> List[float]:
+def _column_char_weights(grid: list[list[Any]], n_cols: int) -> list[float]:
     wts = [10.0] * n_cols
     for ri in range(len(grid)):
         for ci in range(n_cols):
@@ -221,7 +220,7 @@ def _raw_html_table(extracted: Any) -> str:
     ]
     cell_span_list = [span for cell_span in cell_span_list for span in cell_span.html_cell_span()]
 
-    rows_html: List[str] = []
+    rows_html: list[str] = []
     for row_idx in range(len(extracted.content)):
         row_cells = sorted(
             [cell_span for cell_span in cell_span_list if cell_span.top_row == row_idx],
@@ -238,7 +237,7 @@ def extract_tables_from_bytes(
     lang: str = "chi_sim+eng",
     psm: int = 11,
     borderless: bool = True,
-) -> List[Any]:
+) -> list[Any]:
     _prepend_tesseract_to_path(tesseract_exe)
     from img2table.document import Image as I2Image  # type: ignore  # noqa: PLC0415
     from img2table.ocr import TesseractOCR  # type: ignore  # noqa: PLC0415
@@ -253,7 +252,7 @@ def extract_tables_from_bytes(
         min_confidence=20,
     )
     if isinstance(raw, dict):
-        out: List[Any] = []
+        out: list[Any] = []
         for k in sorted(raw.keys()):
             out.extend(raw[k])
         return out
@@ -280,7 +279,7 @@ def extract_tables_from_bytes_best(
     lang: str = "chi_sim+eng",
     psm: int = 11,
     dual_borderless: bool = True,
-) -> List[Any]:
+) -> list[Any]:
     """
     依次尝试 borderless_tables=True/False，按「单元格总数」择优，减少漏检与畸形表。
     """
@@ -293,8 +292,8 @@ def extract_tables_from_bytes_best(
             borderless=True,
         )
 
-    best: List[Any] = []
-    best_key: Tuple[int, int, int] = (-1, -1, -1)
+    best: list[Any] = []
+    best_key: tuple[int, int, int] = (-1, -1, -1)
     for borderless in (True, False):
         try:
             tabs = extract_tables_from_bytes(
@@ -323,7 +322,7 @@ def extract_tables_from_image_path(
     lang: str = "chi_sim+eng",
     psm: int = 11,
     borderless: bool = True,
-) -> List[Any]:
+) -> list[Any]:
     return extract_tables_from_bytes(
         Path(image_path).read_bytes(),
         tesseract_exe,
@@ -362,7 +361,7 @@ def prepare_jpeg_for_editable_page(
     borderless: bool,
     auto_upscale: bool,
     upscale_scales: Sequence[float] = (1.0, 1.5, 2.0),
-) -> Tuple[bytes, List[Any]]:
+) -> tuple[bytes, list[Any]]:
     """
     在多个缩放比例下跑 img2table，选单元格总数最多的一份；返回 (工作图像字节, 已解析表列表)。
     后续词级 OCR 与 bbox 掩膜均基于同一工作图像，避免坐标不一致。
@@ -382,7 +381,7 @@ def prepare_jpeg_for_editable_page(
         return image_bytes, tabs
 
     best_b = image_bytes
-    best_t: List[Any] = []
+    best_t: list[Any] = []
     best_key = (-1, -1)
     for sc in upscale_scales:
         if sc < 1.0:
@@ -411,7 +410,7 @@ def _pytesseract_words(
     min_conf: int = 35,
     psm: int = 6,
     lang: str = "chi_sim+eng",
-) -> List[dict[str, Any]]:
+) -> list[dict[str, Any]]:
     import pytesseract  # type: ignore  # noqa: PLC0415
     from pytesseract import Output  # type: ignore  # noqa: PLC0415
 
@@ -426,7 +425,7 @@ def _pytesseract_words(
         output_type=Output.DICT,
         config=f"--psm {int(psm)}",
     )
-    words: List[dict[str, Any]] = []
+    words: list[dict[str, Any]] = []
     n = len(data["text"])
     for i in range(n):
         t = (data["text"][i] or "").strip()
@@ -456,7 +455,7 @@ def _pytesseract_words(
     return words
 
 
-def _bbox_tuple(ext: Any) -> Tuple[float, float, float, float] | None:
+def _bbox_tuple(ext: Any) -> tuple[float, float, float, float] | None:
     b = getattr(ext, "bbox", None)
     if b is None:
         return None
@@ -464,13 +463,13 @@ def _bbox_tuple(ext: Any) -> Tuple[float, float, float, float] | None:
 
 
 def _expand_bbox(
-    bb: Tuple[float, float, float, float],
+    bb: tuple[float, float, float, float],
     img_w: int,
     img_h: int,
     *,
     pad_px: float,
     pad_rel: float,
-) -> Tuple[float, float, float, float]:
+) -> tuple[float, float, float, float]:
     x1, y1, x2, y2 = bb
     dw = max(x2 - x1, 1.0)
     dh = max(y2 - y1, 1.0)
@@ -489,8 +488,8 @@ def _table_mask_boxes(
     *,
     pad_px: float,
     pad_rel: float,
-) -> List[Tuple[float, float, float, float]]:
-    out: List[Tuple[float, float, float, float]] = []
+) -> list[tuple[float, float, float, float]]:
+    out: list[tuple[float, float, float, float]] = []
     for ext in tables:
         raw = _bbox_tuple(ext)
         if raw is None:
@@ -499,7 +498,7 @@ def _table_mask_boxes(
     return out
 
 
-def _word_overlap_table_fraction(w: dict[str, Any], bb: Tuple[float, float, float, float]) -> float:
+def _word_overlap_table_fraction(w: dict[str, Any], bb: tuple[float, float, float, float]) -> float:
     wx1, wy1 = float(w["left"]), float(w["top"])
     wx2, wy2 = float(w["right"]), float(w["bottom"])
     ix1, iy1 = max(wx1, bb[0]), max(wy1, bb[1])
@@ -511,13 +510,13 @@ def _word_overlap_table_fraction(w: dict[str, Any], bb: Tuple[float, float, floa
     return inter / wa
 
 
-def _center_in_box(cx: float, cy: float, bb: Tuple[float, float, float, float]) -> bool:
+def _center_in_box(cx: float, cy: float, bb: tuple[float, float, float, float]) -> bool:
     return bb[0] <= cx <= bb[2] and bb[1] <= cy <= bb[3]
 
 
 def _word_in_table_masks(
     w: dict[str, Any],
-    boxes: Sequence[Tuple[float, float, float, float]],
+    boxes: Sequence[tuple[float, float, float, float]],
     *,
     overlap_frac: float,
 ) -> bool:
@@ -545,18 +544,16 @@ def _looks_like_leaked_table_prose(s: str) -> bool:
     nparen = s.count("(") + s.count(")")
     if dr > 0.36 and nparen >= 10 and len(t) > 130:
         return True
-    if dr > 0.40 and len(t) > 180:
-        return True
-    return False
+    return bool(dr > 0.40 and len(t) > 180)
 
 
-def _join_row_words_with_gaps(row: List[dict[str, Any]]) -> str:
+def _join_row_words_with_gaps(row: list[dict[str, Any]]) -> str:
     if not row:
         return ""
     sr = sorted(row, key=lambda w: w["left"])
     med_h = statistics.median([float(w["height"]) for w in sr]) if sr else 9.0
     gap_need = max(2.0, med_h * 0.32)
-    parts: List[str] = []
+    parts: list[str] = []
     prev_right: float | None = None
     for w in sr:
         if prev_right is not None:
@@ -568,11 +565,11 @@ def _join_row_words_with_gaps(row: List[dict[str, Any]]) -> str:
     return "".join(parts).strip()
 
 
-def _cluster_rows_from_words(words: List[dict[str, Any]], y_tol: float) -> List[List[dict[str, Any]]]:
+def _cluster_rows_from_words(words: list[dict[str, Any]], y_tol: float) -> list[list[dict[str, Any]]]:
     if not words:
         return []
     items = sorted(words, key=lambda w: w["top"] + w["height"] / 2)
-    rows: List[List[dict[str, Any]]] = []
+    rows: list[list[dict[str, Any]]] = []
     for w in items:
         cy = w["top"] + w["height"] / 2
         placed = False
@@ -590,7 +587,7 @@ def _cluster_rows_from_words(words: List[dict[str, Any]], y_tol: float) -> List[
     return rows
 
 
-def _paragraphs_from_rows(rows: List[List[dict[str, Any]]]) -> List[Tuple[float, str]]:
+def _paragraphs_from_rows(rows: list[list[dict[str, Any]]]) -> list[tuple[float, str]]:
     """(段落顶边 y, 多行正文)，行间用换行。"""
     if not rows:
         return []
@@ -598,8 +595,8 @@ def _paragraphs_from_rows(rows: List[List[dict[str, Any]]]) -> List[Tuple[float,
     med_h = statistics.median(heights) if heights else 12.0
     gap_para = max(med_h * 2.2, 14.0)
 
-    paras: List[Tuple[float, str]] = []
-    buf_rows: List[List[dict[str, Any]]] = []
+    paras: list[tuple[float, str]] = []
+    buf_rows: list[list[dict[str, Any]]] = []
     prev_bottom: float | None = None
 
     def flush() -> None:
@@ -607,7 +604,7 @@ def _paragraphs_from_rows(rows: List[List[dict[str, Any]]]) -> List[Tuple[float,
         if not buf_rows:
             return
         ymin = min(float(w["top"]) for row in buf_rows for w in row)
-        lines: List[str] = []
+        lines: list[str] = []
         for row in buf_rows:
             row = sorted(row, key=lambda w: w["left"])
             lines.append(_join_row_words_with_gaps(row))
@@ -676,7 +673,7 @@ def append_editable_page_from_jpeg_bytes(
     boxes = _table_mask_boxes(tables, img_w, img_h, pad_px=pad_px, pad_rel=float(mask_pad_rel))
 
     words_all = _pytesseract_words(im, tesseract_exe, min_conf=int(ocr_min_conf), psm=int(prose_psm))
-    kept: List[dict[str, Any]] = []
+    kept: list[dict[str, Any]] = []
     for w in words_all:
         if _word_in_table_masks(w, boxes, overlap_frac=float(word_overlap_frac)):
             continue
@@ -688,7 +685,7 @@ def append_editable_page_from_jpeg_bytes(
     rows = _cluster_rows_from_words(kept, y_tol)
     prose_blocks = _paragraphs_from_rows(rows)
 
-    events: List[Tuple[float, int, str, str | None]] = []
+    events: list[tuple[float, int, str, str | None]] = []
     dropped_leaked_prose = False
     for ymin, txt in prose_blocks:
         if _looks_like_leaked_table_prose(txt):
@@ -740,7 +737,7 @@ def append_editable_page_from_jpeg_bytes(
 
 def editable_docx_append_pages_with_headings(
     doc: Document,
-    pages: Sequence[Tuple[str, bytes]],
+    pages: Sequence[tuple[str, bytes]],
     tesseract_exe: Path,
     *,
     width_in: float,
@@ -839,7 +836,7 @@ def build_editable_docx_from_image_paths(
     cw_mm = float(section.page_width.mm - section.left_margin.mm - section.right_margin.mm)
     width_in = max(4.0, (cw_mm / 25.4) * 0.94)
 
-    pages: List[Tuple[str, bytes]] = []
+    pages: list[tuple[str, bytes]] = []
     for ip in image_paths:
         pages.append((ip.name, Path(ip).read_bytes()))
 

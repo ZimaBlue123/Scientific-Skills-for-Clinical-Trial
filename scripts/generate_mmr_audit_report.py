@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Medical Monitoring Report (MMR) Audit Report Generator.
 
@@ -40,10 +39,10 @@ import logging
 import re
 import sys
 from collections import Counter, defaultdict
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] generate_mmr_audit_report: %(message)s"
 logger = logging.getLogger("generate_mmr_audit_report")
@@ -62,7 +61,7 @@ def extract_word_text(docx_path: Path) -> str:
     except ModuleNotFoundError as e:  # pragma: no cover
         raise SystemExit("python-docx is required: pip install python-docx") from e
     doc = Document(str(docx_path))
-    lines: List[str] = [f"# FILE: {docx_path.name}"]
+    lines: list[str] = [f"# FILE: {docx_path.name}"]
     for p in doc.paragraphs:
         t = p.text.strip()
         if t:
@@ -79,11 +78,11 @@ def extract_xlsx_text(xlsx_path: Path) -> str:
     return extract_xlsx(xlsx_path)
 
 
-def _parse_xlsx_dump(dump_text: str) -> Dict[str, Dict[str, List[str]]]:
+def _parse_xlsx_dump(dump_text: str) -> dict[str, dict[str, list[str]]]:
     """Group dump by sheet, return {sheet: {col_name_or_'_rows': [values]}}."""
-    sheets: Dict[str, Dict[str, List]] = defaultdict(lambda: defaultdict(list))
-    current_sheet: Optional[str] = None
-    field_names: List[str] = []
+    sheets: dict[str, dict[str, list]] = defaultdict(lambda: defaultdict(list))
+    current_sheet: str | None = None
+    field_names: list[str] = []
     for line in dump_text.splitlines():
         m_sheet = re.match(r"# Sheet: (\S+)", line)
         if m_sheet:
@@ -118,8 +117,8 @@ class Finding:
     rationale: str = ""
 
 
-def _scan_word_terms(word_text: str) -> List[Finding]:
-    findings: List[Finding] = []
+def _scan_word_terms(word_text: str) -> list[Finding]:
+    findings: list[Finding] = []
 
     def scan(pattern: str, severity: str, category: str, issue: str,
              rec: str, rationale: str = "") -> None:
@@ -184,8 +183,8 @@ def _scan_word_terms(word_text: str) -> List[Finding]:
     return findings
 
 
-def _cross_check_data(word_text: str, xlsx_sheets: Dict[str, Dict[str, List]]) -> List[Finding]:
-    findings: List[Finding] = []
+def _cross_check_data(word_text: str, xlsx_sheets: dict[str, dict[str, list]]) -> list[Finding]:
+    findings: list[Finding] = []
 
     def count_subjects_with_status(status_value: str) -> int:
         subs = xlsx_sheets.get("DM", {}).get("SUBJSTA", [])
@@ -249,17 +248,17 @@ def _cross_check_data(word_text: str, xlsx_sheets: Dict[str, Dict[str, List]]) -
 
     # ---- S-01 年龄层 AE 趋势补充建议 ----
     subs_age = dict(zip(xlsx_sheets.get("DM", {}).get("SUBJID", []),
-                         xlsx_sheets.get("DM", {}).get("AGE", [])))
-    tox_by_subj: Dict[str, set] = defaultdict(set)
+                         xlsx_sheets.get("DM", {}).get("AGE", []), strict=False))
+    tox_by_subj: dict[str, set] = defaultdict(set)
     for sid, tg in zip(xlsx_sheets.get("AE", {}).get("SUBJID", []),
-                        xlsx_sheets.get("AE", {}).get("AETOXGR", [])):
+                        xlsx_sheets.get("AE", {}).get("AETOXGR", []), strict=False):
         if sid.strip() and tg.strip():
             tox_by_subj[sid.strip()].add(tg.strip())
 
     layer_subj: Counter = Counter()
     ae_by_layer: Counter = Counter()
-    for sid, age in zip(xlsx_sheets.get("DM", {}).get("SUBJID", []),
-                          xlsx_sheets.get("DM", {}).get("AGE", [])):
+    for _sid, age in zip(xlsx_sheets.get("DM", {}).get("SUBJID", []),
+                          xlsx_sheets.get("DM", {}).get("AGE", []), strict=False):
         try:
             a = int(age)
         except ValueError:
@@ -270,7 +269,7 @@ def _cross_check_data(word_text: str, xlsx_sheets: Dict[str, Dict[str, List]]) -
             layer_subj["6-12y"] += 1
         elif 13 <= a <= 17:
             layer_subj["13-17y"] += 1
-    for sid in tox_by_subj.keys():
+    for sid in tox_by_subj:
         try:
             a = int(subs_age.get(sid, ""))
         except ValueError:
@@ -310,10 +309,10 @@ def _cross_check_data(word_text: str, xlsx_sheets: Dict[str, Dict[str, List]]) -
 # =========================================================================
 # 3. Report generation
 # =========================================================================
-def _make_doc(findings: List[Finding], project: str, files: Sequence[str], output: Path) -> None:
+def _make_doc(findings: list[Finding], project: str, files: Sequence[str], output: Path) -> None:
     from docx import Document  # type: ignore
-    from docx.enum.text import WD_ALIGN_PARAGRAPH
     from docx.enum.table import WD_TABLE_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
 
     try:
         from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
@@ -402,8 +401,8 @@ def _looks_like_mmr(path: Path) -> bool:
     return any(kw in path.name for kw in _MMR_KEYWORDS)
 
 
-def _resolve_files(folder: Optional[Path], word: Optional[Path],
-                    excel: Optional[Path]) -> Tuple[Path, Path]:
+def _resolve_files(folder: Path | None, word: Path | None,
+                    excel: Path | None) -> tuple[Path, Path]:
     if folder is not None:
         folder = folder.resolve()
         if not folder.is_dir():
@@ -423,7 +422,7 @@ def _resolve_files(folder: Optional[Path], word: Optional[Path],
     return word, excel
 
 
-def main(argv: Optional[List[str]] = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="MMR audit report generator (Word + EDC cross-check).")
     parser.add_argument("--folder", type=Path, help="folder containing MMR.docx + EDC.xlsx")
     parser.add_argument("--word", type=Path, help="MMR .docx path")

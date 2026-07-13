@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 DSUR §13 Literature search:
 - Search PubMed for safety-related varicella vaccine literature

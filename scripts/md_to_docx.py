@@ -119,11 +119,7 @@ def main() -> int:
         LOGGER.error("Input markdown not found: %s", md_path)
         return 2
 
-    out: Path
-    if args.output is None:
-        out = md_path.with_suffix(".docx")
-    else:
-        out = args.output.resolve()
+    out: Path = md_path.with_suffix(".docx") if args.output is None else args.output.resolve()
 
     try:
         md_text = md_path.read_text(encoding="utf-8")

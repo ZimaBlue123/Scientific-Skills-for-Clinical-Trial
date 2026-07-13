@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Download 康希诺官网 detail-4843 公示中的「说明书」两页（JPG），生成横版 Word。
 
@@ -25,8 +24,8 @@ import os
 import sys
 import urllib.error
 import urllib.request
+from collections.abc import Sequence
 from pathlib import Path
-from typing import List, Sequence, Tuple
 
 from docx import Document
 from docx.enum.section import WD_ORIENT
@@ -51,7 +50,7 @@ UA = (
 CHI_SIM_URL = "https://github.com/tesseract-ocr/tessdata/raw/main/chi_sim.traineddata"
 ENG_URL = "https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata"
 
-MANUAL_PAGES: Sequence[Tuple[str, str]] = (
+MANUAL_PAGES: Sequence[tuple[str, str]] = (
     (
         "说明书 第1页",
         "https://www.cansinotech.com.cn/uploadfile/2026/04/13/10-08-06/%E8%AF%B4%E6%98%8E%E4%B9%A61.jpg",
@@ -69,8 +68,13 @@ DEFAULT_TESSERACT = Path(r"D:\tesseract-ocr\tesseract.exe")
 
 def _download(url: str) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=300) as r:
-        data = r.read()
+    try:
+        with urllib.request.urlopen(req, timeout=300) as r:
+            data = r.read()
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError(f"HTTP {exc.code} 下载失败：{url}") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"网络错误，下载失败：{url} ({exc.reason})") from exc
     if len(data) < 2048:
         raise RuntimeError(f"下载内容异常偏小（{len(data)} bytes），请检查网络或 URL。")
     if not data.startswith(b"\xff\xd8") and not data.startswith(b"\x89PNG"):
@@ -82,8 +86,13 @@ def _download_file(url: str, dest: Path, min_bytes: int = 10_000) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     tmp = dest.with_suffix(dest.suffix + ".download")
-    with urllib.request.urlopen(req, timeout=600) as r:
-        tmp.write_bytes(r.read())
+    try:
+        with urllib.request.urlopen(req, timeout=600) as r:
+            tmp.write_bytes(r.read())
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError(f"HTTP {exc.code} 下载失败：{url}") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"网络错误，下载失败：{url} ({exc.reason})") from exc
     if tmp.stat().st_size < min_bytes:
         tmp.unlink(missing_ok=True)
         raise RuntimeError(f"下载异常：{url} → 体积过小")
@@ -116,13 +125,13 @@ def ensure_traineddata_files(
     tesseract_exe: Path,
     *,
     allow_download: bool,
-    names: Tuple[str, ...] = ("chi_sim", "eng"),
+    names: tuple[str, ...] = ("chi_sim", "eng"),
 ) -> Path:
     """确保 tessdata 目录存在且包含所需 *.traineddata。"""
     td = _tessdata_directory(tesseract_exe)
     td.mkdir(parents=True, exist_ok=True)
 
-    need: List[Tuple[str, str]] = []
+    need: list[tuple[str, str]] = []
     for name in names:
         f = td / f"{name}.traineddata"
         if f.is_file() and f.stat().st_size > 50_000:
@@ -190,7 +199,7 @@ def _configure_landscape_a4(section) -> None:
     section.bottom_margin = Mm(10)
 
 
-def _content_box_mm(section) -> Tuple[float, float]:
+def _content_box_mm(section) -> tuple[float, float]:
     w_mm = float(section.page_width.mm - section.left_margin.mm - section.right_margin.mm)
     h_mm = float(section.page_height.mm - section.top_margin.mm - section.bottom_margin.mm)
     if w_mm <= 1 or h_mm <= 1:
@@ -200,7 +209,7 @@ def _content_box_mm(section) -> Tuple[float, float]:
 
 def _configure_tesseract(tesseract_exe: Path) -> None:
     try:
-        import pytesseract  # type: ignore  # noqa: PLC0415
+        import pytesseract  # type: ignore  # noqa: PLC0415, F401
     except ImportError as e:  # pragma: no cover
         raise SystemExit("需要安装 pytesseract：pip install pytesseract") from e
 
@@ -274,7 +283,7 @@ def build_docx(
     n0r.font.color.rgb = RGBColor(0x44, 0x44, 0x44)
     doc.add_paragraph()
 
-    collected: List[Tuple[str, bytes]] = []
+    collected: list[tuple[str, bytes]] = []
     for idx, (label, url) in enumerate(MANUAL_PAGES, start=1):
         raw = _download(url)
         jpeg_bytes = _jpeg_bytes_for_docx(raw)
@@ -321,7 +330,7 @@ def build_docx(
             except Exception as e:
                 doc.add_paragraph().add_run(f"可编辑排版失败：{e}")
 
-    appendix_blocks: List[str] = []
+    appendix_blocks: list[str] = []
     if fulltext_appendix and collected:
         doc.add_page_break()
         ah = doc.add_heading("附录：整页全文 OCR（与上文结构化排版无关）", level=2)
@@ -353,7 +362,7 @@ def build_docx(
         )
 
 
-def main(argv: List[str] | None = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     default_out = DEFAULT_OUTPUT_DIR / "吸附无细胞百白破联合疫苗_说明书_官网4843.docx"
 
     p = argparse.ArgumentParser(description="康希诺 detail-4843 说明书两页 → 横版 Word")

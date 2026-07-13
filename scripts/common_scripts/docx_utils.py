@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Common utilities for docx generation scripts.
 
@@ -15,7 +14,7 @@ Usage
 from __future__ import annotations
 
 import logging
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 from docx import Document
 from docx.oxml.ns import qn
@@ -68,7 +67,7 @@ def _set_style_fonts(doc: Document, style_name: str) -> bool:
 
 def apply_cn_en_fonts(
     doc: Document,
-    styles: Optional[Iterable[str]] = None,
+    styles: Iterable[str] | None = None,
 ) -> int:
     """Enforce document-wide fonts:
 

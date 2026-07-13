@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Project self-check:
 - Verify external commands (rsvg-convert, node, npm) availability.
@@ -21,7 +20,6 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
-
 
 ROOT = Path(__file__).resolve().parents[1]
 PY = sys.executable
@@ -58,8 +56,7 @@ def _run(argv: list[str], cwd: Path | None = None, timeout_s: int = 20) -> tuple
         text=True,
         encoding="utf-8",
         errors="replace",
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         timeout=timeout_s,
     )
     return p.returncode, p.stdout, p.stderr, time.time() - t0
@@ -260,8 +257,7 @@ def main() -> int:
     for c in cmd_checks:
         status = "OK" if c.ok else "FAIL"
         lines.append(f"- **{c.name}**: {status} (`{' '.join(c.argv)}`)")
-        if not c.ok:
-            if c.stderr:
+        if not c.ok and c.stderr:
                 lines.append(f"  - stderr: `{c.stderr.strip()[:300]}`")
     lines.append("")
     # Renderer capability: either rsvg-convert or cairosvg is acceptable

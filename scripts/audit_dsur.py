@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Audit DSUR document: extract full text + tables from three documents for cross-reference review.
 
@@ -10,14 +9,12 @@ from __future__ import annotations
 import json
 import logging
 import os
-import re
 import sys
-from typing import Iterator
+from collections.abc import Iterator
 
 from docx import Document  # type: ignore
 from docx.document import Document as _DocxDocument  # type: ignore
-from docx.table import Table, _Cell  # type: ignore
-from docx.text.paragraph import Paragraph  # type: ignore
+from docx.table import _Cell  # type: ignore
 
 # ---------------------------------------------------------------------------
 # Logging configuration

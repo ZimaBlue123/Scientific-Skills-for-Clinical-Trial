@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
+import logging
 import sys
-from typing import Iterable, List, Optional, Tuple
+from collections.abc import Iterable
+from pathlib import Path
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] extract_docx_to_md: %(message)s", stream=sys.stderr)
+logger = logging.getLogger("extract_docx_to_md")
 
 _DOCX_IMPORT_ERROR: Exception | None = None
 try:
@@ -17,7 +21,7 @@ except ModuleNotFoundError as e:  # pragma: no cover
     _DOCX_IMPORT_ERROR = e
 
 
-def iter_block_items(doc: Document) -> Iterable[Tuple[str, object]]:
+def iter_block_items(doc: Document) -> Iterable[tuple[str, object]]:
     """
     Yield ('p', Paragraph) and ('tbl', Table) in document order.
     """
@@ -33,8 +37,8 @@ def _clean_cell_text(text: str) -> str:
     return " ".join(text.replace("\u00a0", " ").split())
 
 
-def table_to_md(table: Table, max_cols: Optional[int] = None) -> str:
-    rows: List[List[str]] = []
+def table_to_md(table: Table, max_cols: int | None = None) -> str:
+    rows: list[list[str]] = []
     for row in table.rows:
         cells = [_clean_cell_text(cell.text) for cell in row.cells]
         rows.append(cells)
@@ -46,7 +50,7 @@ def table_to_md(table: Table, max_cols: Optional[int] = None) -> str:
     if max_cols is not None:
         ncol = min(ncol, max_cols)
 
-    norm: List[List[str]] = []
+    norm: list[list[str]] = []
     for r in rows:
         r2 = (r + [""] * (ncol - len(r)))[:ncol]
         norm.append(r2)
@@ -63,12 +67,12 @@ def table_to_md(table: Table, max_cols: Optional[int] = None) -> str:
     return "\n".join(md_lines)
 
 
-def docx_to_md(src_path: Path, max_cols: Optional[int] = None) -> str:
+def docx_to_md(src_path: Path, max_cols: int | None = None) -> str:
     if _DOCX_IMPORT_ERROR is not None:  # pragma: no cover
         raise _DOCX_IMPORT_ERROR
     doc = Document(str(src_path))
 
-    out: List[str] = []
+    out: list[str] = []
     out.append(f"# Source: {src_path.name}")
     out.append("")
 
@@ -109,24 +113,20 @@ def main() -> int:
     dst = Path(args.output)
 
     if not src.exists() or not src.is_file():
-        print(f"ERROR: input file not found: {src}", file=sys.stderr)
+        logger.error("input file not found: %s", src)
         return 2
     if src.suffix.lower() != ".docx":
-        print(f"ERROR: input must be a .docx file: {src}", file=sys.stderr)
+        logger.error("input must be a .docx file: %s", src)
         return 2
     dst.parent.mkdir(parents=True, exist_ok=True)
 
     try:
         md = docx_to_md(src, max_cols=args.max_cols)
     except ModuleNotFoundError:
-        print(
-            "ERROR: missing dependency 'python-docx'. Install via:\n"
-            "  python -m pip install python-docx",
-            file=sys.stderr,
-        )
+        logger.error("missing dependency 'python-docx'. Install via: python -m pip install python-docx")
         return 2
     except (OSError, ValueError, KeyError) as e:
-        print(f"ERROR: failed to parse docx: {src}\n{e}", file=sys.stderr)
+        logger.error("failed to parse docx: %s\n%s", src, e)
         return 1
 
     # Ensure trailing newline for POSIX-friendly diffs
@@ -136,8 +136,9 @@ def main() -> int:
     try:
         dst.write_text(md, encoding="utf-8")
     except OSError as e:
-        print(f"ERROR: failed to write markdown: {dst}\n{e}", file=sys.stderr)
+        logger.error("failed to write markdown: %s\n%s", dst, e)
         return 1
+    logger.info("wrote %s", dst)
     return 0
 
 

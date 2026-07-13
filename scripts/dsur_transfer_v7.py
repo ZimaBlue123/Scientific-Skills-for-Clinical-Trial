@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 DSUR Content Transfer v7 - FINAL.
 
@@ -304,10 +303,9 @@ def _phase_toc(template: _DocxDocument) -> None:
     print("--- TOC Clearing ---")
     toc_cleared = 0
     for para in template.paragraphs:
-        if is_toc_style(para.style.name):
-            if para.text.strip():
-                replace_para_text(para, "")
-                toc_cleared += 1
+        if is_toc_style(para.style.name) and para.text.strip():
+            replace_para_text(para, "")
+            toc_cleared += 1
     print(f"  Cleared {toc_cleared} TOC paragraphs (XML level)")
 
 

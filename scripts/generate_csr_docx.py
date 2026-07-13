@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import logging
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Iterable, Optional
 
 from common_scripts.docx_utils import apply_cn_en_fonts
 
@@ -46,7 +46,7 @@ class Inputs:
     safety_part3_pdf: Path
 
 
-def _find_first(existing: Iterable[Path]) -> Optional[Path]:
+def _find_first(existing: Iterable[Path]) -> Path | None:
     for p in existing:
         if p.exists():
             return p

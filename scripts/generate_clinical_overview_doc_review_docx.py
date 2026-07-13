@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Generate Word review report for CTD 2.5 clinical overview document."""
 from __future__ import annotations
 

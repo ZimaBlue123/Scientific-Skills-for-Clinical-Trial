@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Extract text from .docx / .doc files.
 
@@ -21,8 +20,8 @@ import argparse
 import logging
 import os
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import List, Optional, Sequence
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] extract_docx_full: %(message)s"
 logger = logging.getLogger("extract_docx_full")
@@ -35,7 +34,7 @@ def extract_docx(filepath: Path) -> str:
     from docx import Document  # local import keeps module importable when missing
 
     doc = Document(str(filepath))
-    full_text: List[str] = []
+    full_text: list[str] = []
 
     for para in doc.paragraphs:
         if para.text.strip():
@@ -50,7 +49,7 @@ def extract_docx(filepath: Path) -> str:
     return "\n\n".join(full_text)
 
 
-def extract_doc_legacy(filepath: Path) -> Optional[str]:
+def extract_doc_legacy(filepath: Path) -> str | None:
     """Extract text from a legacy .doc file using Word COM (Windows only)."""
     try:
         import pythoncom  # type: ignore[import-not-found]
@@ -93,7 +92,7 @@ def extract_doc_legacy(filepath: Path) -> Optional[str]:
             logger.debug("pythoncom.CoUninitialize raised", exc_info=True)
 
 
-def extract_file(filepath: Path) -> Optional[str]:
+def extract_file(filepath: Path) -> str | None:
     """Dispatch to the right backend based on the file extension."""
     suffix = filepath.suffix.lower()
     if suffix == ".docx":
@@ -106,7 +105,7 @@ def extract_file(filepath: Path) -> Optional[str]:
 
 def extract_folder(
     folder_path: Path,
-    output_path: Optional[Path] = None,
+    output_path: Path | None = None,
 ) -> str:
     """Extract text from all docx/doc files in ``folder_path``."""
     files = [
@@ -114,7 +113,7 @@ def extract_folder(
         if f.lower().endswith((".docx", ".doc"))
     ]
 
-    combined: List[str] = [f"Found {len(files)} files", ""]
+    combined: list[str] = [f"Found {len(files)} files", ""]
 
     for fname in files:
         path = Path(folder_path) / fname
@@ -151,7 +150,7 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
     logging.basicConfig(level=getattr(logging, args.log_level), format=LOG_FORMAT)

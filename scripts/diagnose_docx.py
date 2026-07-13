@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 """Diagnose DOCX structure to understand paragraph styles and content mapping."""
 from __future__ import annotations
 
 import logging
 import sys
-from typing import NoReturn
 
 from docx import Document  # type: ignore
 from docx.document import Document as _DocxDocument  # type: ignore

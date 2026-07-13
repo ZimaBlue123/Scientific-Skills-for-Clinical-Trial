@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import argparse
 import heapq
+import logging
 import math
 import os
 import re
 import sys
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Iterable, List, Tuple
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] skill_dedupe: %(message)s", stream=sys.stderr)
+logger = logging.getLogger("skill_dedupe")
 
 
 @dataclass(frozen=True)
@@ -19,7 +23,7 @@ class SkillDoc:
     tf: Counter
 
 
-def _tokenize(markdown_text: str) -> List[str]:
+def _tokenize(markdown_text: str) -> list[str]:
     # Remove large code blocks and inline code to focus on semantic prose.
     text = re.sub(r"```[\s\S]*?```", " ", markdown_text)
     text = re.sub(r"`[^`]*`", " ", text)
@@ -43,7 +47,7 @@ def _iter_skill_docs(skills_root: Path) -> Iterable[SkillDoc]:
         yield SkillDoc(skill_path=skill_path, file_path=str(file_path), tf=Counter(toks))
 
 
-def _idf(docs: List[SkillDoc]) -> Dict[str, float]:
+def _idf(docs: list[SkillDoc]) -> dict[str, float]:
     df = Counter()
     for d in docs:
         df.update(d.tf.keys())
@@ -51,18 +55,18 @@ def _idf(docs: List[SkillDoc]) -> Dict[str, float]:
     return {t: math.log((n + 1) / (dfv + 1)) + 1.0 for t, dfv in df.items()}
 
 
-def _tfidf(tf: Counter, idf: Dict[str, float]) -> Dict[str, float]:
-    w: Dict[str, float] = {}
+def _tfidf(tf: Counter, idf: dict[str, float]) -> dict[str, float]:
+    w: dict[str, float] = {}
     for t, v in tf.items():
         w[t] = (1.0 + math.log(v)) * idf.get(t, 0.0)
     return w
 
 
-def _l2_norm(w: Dict[str, float]) -> float:
+def _l2_norm(w: dict[str, float]) -> float:
     return math.sqrt(sum(v * v for v in w.values())) or 1.0
 
 
-def _cosine(a: Dict[str, float], an: float, b: Dict[str, float], bn: float) -> float:
+def _cosine(a: dict[str, float], an: float, b: dict[str, float], bn: float) -> float:
     # iterate smaller dict
     if len(a) > len(b):
         a, b, an, bn = b, a, bn, an
@@ -78,7 +82,7 @@ def build_report(
     out_path: str = "docs/skill_dedupe_report.md",
     cosine_threshold: float = 0.87,
     top_k: int = 120,
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
     if not (0.0 <= cosine_threshold <= 1.0):
         raise ValueError(f"cosine_threshold must be within [0, 1], got {cosine_threshold}")
     if top_k <= 0:
@@ -113,8 +117,8 @@ def build_report(
         vecs.append((d.skill_path, d.file_path, w, n))
 
     # Full pairwise cosine; keep a heap for Top-K and also keep all >= threshold.
-    top_heap: List[Tuple[float, str, str]] = []
-    hits: List[Tuple[float, str, str]] = []
+    top_heap: list[tuple[float, str, str]] = []
+    hits: list[tuple[float, str, str]] = []
 
     for i in range(len(vecs)):
         ai, _, wi, ni = vecs[i]
@@ -184,9 +188,9 @@ def main() -> None:
             top_k=args.top,
         )
     except Exception as e:
-        print(f"ERROR: {e}", file=sys.stderr)
-        raise SystemExit(2)
-    print(f"Wrote {args.out} (skills={skill_count}, pairs={pair_count})")
+        logger.error("%s", e)
+        raise SystemExit(2) from e
+    logger.info("wrote %s (skills=%d, pairs=%d)", args.out, skill_count, pair_count)
 
 
 if __name__ == "__main__":

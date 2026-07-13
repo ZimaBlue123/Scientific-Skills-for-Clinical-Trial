@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Clinical Document Audit Report Generator
 
@@ -17,7 +16,6 @@ import sys
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
-from typing import Any
 
 from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
 
@@ -127,7 +125,6 @@ def create_audit_report(config: AuditReportConfig, output_path: Path) -> None:
 
 
 def main() -> int:
-    import argparse
     from pathlib import Path
 
     parser = argparse.ArgumentParser(description="Generate clinical document audit report.")
@@ -143,7 +140,7 @@ def main() -> int:
 
     # List files
     docx_files = sorted([f.name for f in folder.glob("*.docx")])
-    
+
     if not docx_files:
         print(f'No docx files found in {folder}')
         return 1

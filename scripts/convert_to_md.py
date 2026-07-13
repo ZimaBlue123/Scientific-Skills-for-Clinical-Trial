@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Unified document converter: Convert docx/pdf/rtf/doc to markdown.
 
@@ -21,8 +20,8 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence, Set, Tuple
 
 # Optional / heavy dependencies are imported lazily inside their respective
 # helper functions to keep the module importable for tooling and to give
@@ -44,7 +43,7 @@ except ModuleNotFoundError:  # pragma: no cover - import guard
 LOG_FORMAT = "%(asctime)s [%(levelname)s] convert_to_md: %(message)s"
 logger = logging.getLogger("convert_to_md")
 
-DEFAULT_EXTENSIONS: Set[str] = {".docx", ".pdf", ".rtf"}
+DEFAULT_EXTENSIONS: set[str] = {".docx", ".pdf", ".rtf"}
 MARKER_TERMINATOR = "\n"
 
 # markitdown handle (lazy). False means we tried and the import failed.
@@ -69,14 +68,14 @@ def _get_markitdown():
 # ---------------------------------------------------------------------------
 
 
-def _convert_docx_basic(filepath: Path) -> Optional[str]:
+def _convert_docx_basic(filepath: Path) -> str | None:
     """Fallback: read .docx via python-docx and emit plain text."""
     if Document is None:  # pragma: no cover
         logger.error("python-docx is not installed; cannot read %s", filepath)
         return None
     try:
         doc = Document(str(filepath))  # type: ignore[misc]
-        parts: List[str] = [p.text for p in doc.paragraphs]
+        parts: list[str] = [p.text for p in doc.paragraphs]
         for table in doc.tables:
             for row in table.rows:
                 parts.append(" | ".join(c.text for c in row.cells))
@@ -87,7 +86,7 @@ def _convert_docx_basic(filepath: Path) -> Optional[str]:
         return None
 
 
-def _convert_pdf_basic(filepath: Path) -> Optional[str]:
+def _convert_pdf_basic(filepath: Path) -> str | None:
     """Fallback: read .pdf via pypdf (preferred) or pdfplumber."""
     try:
         import pypdf  # type: ignore
@@ -116,9 +115,9 @@ def _clean_cell_text(text: str) -> str:
     return " ".join(text.replace("\u00a0", " ").split())
 
 
-def table_to_md(table: "DocxTable", max_cols: Optional[int] = None) -> str:  # type: ignore[name-defined]
+def table_to_md(table: DocxTable, max_cols: int | None = None) -> str:  # type: ignore[name-defined]
     """Render a docx Table as a markdown table."""
-    rows: List[List[str]] = [[_clean_cell_text(cell.text) for cell in row.cells] for row in table.rows]
+    rows: list[list[str]] = [[_clean_cell_text(cell.text) for cell in row.cells] for row in table.rows]
     if not rows:
         return ""
 
@@ -126,7 +125,7 @@ def table_to_md(table: "DocxTable", max_cols: Optional[int] = None) -> str:  # t
     if max_cols is not None:
         ncol = min(ncol, max_cols)
 
-    norm: List[List[str]] = [(r + [""] * (ncol - len(r)))[:ncol] for r in rows]
+    norm: list[list[str]] = [(r + [""] * (ncol - len(r)))[:ncol] for r in rows]
     header, body = norm[0], norm[1:] if len(norm) > 1 else []
 
     md_lines = [
@@ -137,7 +136,7 @@ def table_to_md(table: "DocxTable", max_cols: Optional[int] = None) -> str:  # t
     return "\n".join(md_lines)
 
 
-def iter_block_items(doc: "Document") -> Iterable[Tuple[str, object]]:  # type: ignore[name-defined]
+def iter_block_items(doc: Document) -> Iterable[tuple[str, object]]:  # type: ignore[name-defined]
     """Yield ``("p", Paragraph)`` and ``("tbl", Table)`` in document order."""
     if CT_P is None or CT_Tbl is None or DocxParagraph is None or DocxTable is None:  # pragma: no cover
         raise RuntimeError("python-docx is not installed; cannot iterate docx blocks.")
@@ -148,13 +147,13 @@ def iter_block_items(doc: "Document") -> Iterable[Tuple[str, object]]:  # type: 
             yield ("tbl", DocxTable(child, doc))
 
 
-def docx_to_md_numbered(src_path: Path, max_cols: Optional[int] = None) -> str:
+def docx_to_md_numbered(src_path: Path, max_cols: int | None = None) -> str:
     """Convert docx to markdown with ``##P{n}`` and ``##T{n}`` markers."""
     if Document is None:  # pragma: no cover
         raise RuntimeError("python-docx is not installed; cannot read docx.")
     doc = Document(str(src_path))  # type: ignore[misc]
 
-    out: List[str] = [f"# Source: {src_path.name}", ""]
+    out: list[str] = [f"# Source: {src_path.name}", ""]
     para_idx = 0
     table_idx = 0
 
@@ -180,7 +179,7 @@ def docx_to_md_numbered(src_path: Path, max_cols: Optional[int] = None) -> str:
 # ---------------------------------------------------------------------------
 
 
-def _read_rtf(src: Path) -> Optional[str]:
+def _read_rtf(src: Path) -> str | None:
     try:
         from striprtf.striprtf import rtf_to_text  # type: ignore
     except ImportError:
@@ -195,11 +194,11 @@ def _read_rtf(src: Path) -> Optional[str]:
 
 def convert_file(
     src: Path,
-    output_path: Optional[Path] = None,
+    output_path: Path | None = None,
     *,
     mode: str = "standard",
-    max_cols: Optional[int] = None,
-) -> Optional[Path]:
+    max_cols: int | None = None,
+) -> Path | None:
     """Convert a single file to markdown and return the output path (or None)."""
     if not src.exists() or not src.is_file():
         logger.error("file not found: %s", src)
@@ -210,7 +209,7 @@ def convert_file(
         logger.error("unsupported format: %s", suffix)
         return None
 
-    content: Optional[str] = None
+    content: str | None = None
 
     if mode == "numbered" and suffix == ".docx":
         try:
@@ -253,12 +252,12 @@ def convert_file(
 
 def convert_folder(
     input_dir: Path,
-    output_dir: Optional[Path] = None,
-    extensions: Optional[Set[str]] = None,
+    output_dir: Path | None = None,
+    extensions: set[str] | None = None,
     *,
     mode: str = "standard",
-    max_cols: Optional[int] = None,
-) -> List[Path]:
+    max_cols: int | None = None,
+) -> list[Path]:
     """Convert every supported file in ``input_dir`` to ``output_dir``."""
     if extensions is None:
         extensions = set(DEFAULT_EXTENSIONS)
@@ -268,8 +267,8 @@ def convert_folder(
         output_dir = input_dir / "converted"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    created: List[Path] = []
-    skipped: List[str] = []
+    created: list[Path] = []
+    skipped: list[str] = []
 
     for f in sorted(input_dir.iterdir()):
         if not f.is_file() or f.suffix.lower() not in extensions:
@@ -298,7 +297,7 @@ def convert_folder(
 # ---------------------------------------------------------------------------
 
 
-def _parse_extensions(raw: str) -> Set[str]:
+def _parse_extensions(raw: str) -> set[str]:
     parts = {p.strip().lower() for p in raw.split(",") if p.strip()}
     return {p if p.startswith(".") else f".{p}" for p in parts}
 
@@ -343,7 +342,7 @@ Examples:
     return parser
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
     logging.basicConfig(level=getattr(logging, args.log_level), format=LOG_FORMAT)

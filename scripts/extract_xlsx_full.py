@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Extract text/content from .xlsx files (UTF-8, robust).
 
@@ -39,13 +38,14 @@ stdlib only (zipfile + xml.etree.ElementTree).
 from __future__ import annotations
 
 import argparse
+import contextlib
 import logging
 import re
 import sys
-import zipfile
 import xml.etree.ElementTree as ET
+import zipfile
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator, List, Optional, Tuple
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] extract_xlsx_full: %(message)s"
 logger = logging.getLogger("extract_xlsx_full")
@@ -76,7 +76,7 @@ def _col_letters_to_idx(s: str) -> int:
     return n - 1
 
 
-def _split_ref(ref: str) -> Tuple[int, int]:
+def _split_ref(ref: str) -> tuple[int, int]:
     """Split ``A1`` or ``A1:B3`` into ((c1, r1), (c2, r2))."""
     m = _REF_RE.match(ref)
     if not m:
@@ -91,7 +91,7 @@ def _split_ref(ref: str) -> Tuple[int, int]:
     return ((c1, r1), (c2, r2))
 
 
-def _load_shared_strings(zf: zipfile.ZipFile) -> List[str]:
+def _load_shared_strings(zf: zipfile.ZipFile) -> list[str]:
     """Return the workbook's shared string table (decoded as text)."""
     try:
         data = zf.read("xl/sharedStrings.xml")
@@ -102,7 +102,7 @@ def _load_shared_strings(zf: zipfile.ZipFile) -> List[str]:
     except ET.ParseError as e:
         logger.warning("sharedStrings.xml parse error: %s", e)
         return []
-    out: List[str] = []
+    out: list[str] = []
     for si in root.findall("n:si", NS):
         # concatenate all <t> nodes (handles rich text via <r>)
         text = "".join((t.text or "") for t in si.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"))
@@ -110,14 +110,14 @@ def _load_shared_strings(zf: zipfile.ZipFile) -> List[str]:
     return out
 
 
-def _load_sheet_targets(zf: zipfile.ZipFile) -> List[Tuple[str, str]]:
+def _load_sheet_targets(zf: zipfile.ZipFile) -> list[tuple[str, str]]:
     """Return [(sheet_name, sheet_target_path), ...] in workbook order."""
     try:
         wb_xml = ET.fromstring(zf.read("xl/workbook.xml"))
     except ET.ParseError as e:
         logger.warning("workbook.xml parse error: %s", e)
         return []
-    sheets_meta: List[Tuple[str, str]] = []
+    sheets_meta: list[tuple[str, str]] = []
     sheets = wb_xml.find("n:sheets", NS)
     if sheets is None:
         return []
@@ -150,8 +150,8 @@ def _resolve_target(target: str) -> str:
 def _iter_sheet_rows(
     zf: zipfile.ZipFile,
     path: str,
-    sst: List[str],
-) -> Iterator[Tuple[int, List[str]]]:
+    sst: list[str],
+) -> Iterator[tuple[int, list[str]]]:
     """Yield (row_idx_1based, [cell_text_in_column_order]) for a sheet."""
     try:
         raw = zf.read(path)
@@ -164,7 +164,7 @@ def _iter_sheet_rows(
         return
 
     # Collect merged cell ranges so empty trailing cells inherit values.
-    merged: List[Tuple[int, int, int, int]] = []
+    merged: list[tuple[int, int, int, int]] = []
     for mc in ws.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}mergeCell"):
         ref = mc.attrib.get("ref", "")
         if ":" not in ref:
@@ -223,7 +223,7 @@ def _iter_sheet_rows(
 
 def extract_xlsx(xlsx_path: Path) -> str:
     """Dump every sheet of *xlsx_path* as UTF-8 text."""
-    out: List[str] = [f"# FILE: {xlsx_path.name}", f"# Path: {xlsx_path}"]
+    out: list[str] = [f"# FILE: {xlsx_path.name}", f"# Path: {xlsx_path}"]
     try:
         with zipfile.ZipFile(str(xlsx_path)) as zf:
             names = zf.namelist()
@@ -261,7 +261,7 @@ def _iter_xlsx_files(target: Path) -> Iterator[Path]:
             yield entry
 
 
-def main(argv: Optional[List[str]] = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Robust .xlsx -> UTF-8 text dumper (zip+xml).")
     parser.add_argument("target", help=".xlsx file or folder containing .xlsx files")
     parser.add_argument("-o", "--output", default=None, help="output file (default: stdout)")
@@ -275,7 +275,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         logger.error("Path not found: %s", target)
         return 2
 
-    chunks: List[str] = []
+    chunks: list[str] = []
     for xlsx in _iter_xlsx_files(target):
         logger.info("processing %s", xlsx)
         chunks.append(extract_xlsx(xlsx))
@@ -291,10 +291,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             return 1
         print(f"OK: wrote {args.output} ({len(text):,} chars)")
     else:
-        try:
+        with contextlib.suppress(Exception):  # some streams are not reconfigurable
             sys.stdout.reconfigure(encoding=ENCODING, errors="replace")
-        except Exception:  # noqa: BLE001 - some streams are not reconfigurable
-            pass
         sys.stdout.write(text)
     return 0
 

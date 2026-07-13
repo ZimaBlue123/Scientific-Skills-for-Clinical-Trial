@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """Generate Word review report for phase CSR interim summary document."""
 from __future__ import annotations
 

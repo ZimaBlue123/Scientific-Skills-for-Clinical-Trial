@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Extract plain text from legacy Microsoft Word `.doc` files via the
 Windows-only Win32 COM interface (Word.Application).
@@ -20,8 +19,8 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Optional, Sequence
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] extract_doc_text: %(message)s"
 logger = logging.getLogger("extract_doc_text")
@@ -47,8 +46,8 @@ def extract_doc_text(filepath: Path) -> str:
         raise FileNotFoundError(f"input file not found: {filepath}")
 
     try:
-        import win32com.client  # type: ignore[import-not-found]
         import pythoncom  # type: ignore[import-not-found]
+        import win32com.client  # type: ignore[import-not-found]
     except ImportError as exc:  # pragma: no cover - platform specific
         raise ImportError(
             "pywin32 is required to read legacy .doc files. "
@@ -123,7 +122,7 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
     logging.basicConfig(level=getattr(logging, args.log_level), format=LOG_FORMAT)

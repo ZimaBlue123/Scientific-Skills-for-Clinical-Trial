@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Build sanitized copies of every ``*.md`` file under a source folder.
 
@@ -19,9 +18,9 @@ import hashlib
 import json
 import logging
 import sys
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Sequence
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] make_safe_md: %(message)s"
 logger = logging.getLogger("make_safe_md_copies")
@@ -54,8 +53,8 @@ def make_safe_copies(
     src_dir: Path,
     out_dir: Path,
     *,
-    manifest_path: Optional[Path] = None,
-) -> List[CopyRecord]:
+    manifest_path: Path | None = None,
+) -> list[CopyRecord]:
     """Copy each ``*.md`` file in ``src_dir`` to ``out_dir`` under a safe name.
 
     Returns the list of produced records. Failures on individual files
@@ -68,8 +67,8 @@ def make_safe_copies(
     if manifest_path is None:
         manifest_path = src_dir / MANIFEST_NAME
 
-    records: List[CopyRecord] = []
-    failures: List[tuple[Path, str]] = []
+    records: list[CopyRecord] = []
+    failures: list[tuple[Path, str]] = []
 
     for p in sorted(src_dir.glob("*.md")):
         if not _is_target(p):
@@ -114,7 +113,7 @@ def make_safe_copies(
     return records
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="make_safe_md_copies",
         description="Copy *.md files to a sanitized folder with a manifest.",
