@@ -6,12 +6,16 @@ Supports a single file, a list of files, or every supported file in a
 folder. Modern .docx is handled via python-docx; legacy .doc is handled
 via the Windows-only Word COM interface.
 
+Output formats
+--------------
+* --format text  (default) plain paragraphs + tables-as-pipes
+* --format md    Markdown-flavoured rendering. Replaces the now-archived
+                 scripts/extract_docx_to_md.py.
+
 Usage
 -----
-    # Single file
     py -3 scripts/extract_docx_full.py document.docx [output.txt]
-
-    # Folder batch (all docx/doc files combined into one output)
+    py -3 scripts/extract_docx_full.py document.docx --format md output.md
     py -3 scripts/extract_docx_full.py folder/ [output.txt]
 """
 from __future__ import annotations
@@ -47,6 +51,69 @@ def extract_docx(filepath: Path) -> str:
                 full_text.append(" | ".join(row_text))
 
     return "\n\n".join(full_text)
+
+
+
+def extract_docx_to_markdown(filepath: Path) -> str:
+    """Render a .docx to Markdown.
+
+    Paragraph styles named "Heading 1..3" / "Title" map to ``#``-style
+    headings; tables render as GFM pipe tables. Replaces the archived
+    ``extract_docx_to_md.py``.
+    """
+    from docx import Document
+    from docx.oxml.table import CT_Tbl
+    from docx.oxml.text.paragraph import CT_P
+    from docx.table import Table
+    from docx.text.paragraph import Paragraph
+
+    doc = Document(str(filepath))
+    out: list[str] = []
+
+    def _heading_level(para: Paragraph) -> int | None:
+        name = (para.style.name or "").strip().lower()
+        if name == "title":
+            return 0
+        if name.startswith("heading "):
+            try:
+                return int(name.split()[1])
+            except (IndexError, ValueError):
+                return None
+        return None
+
+    def _esc(s: str) -> str:
+        return s.replace("|", "\\|").replace("\n", " ")
+
+    def _render_table(tbl: Table) -> list[str]:
+        rows = tbl.rows
+        if not rows:
+            return []
+        md: list[str] = []
+        header = [_esc(c.text.strip()) for c in rows[0].cells]
+        md.append("| " + " | ".join(header) + " |")
+        md.append("|" + "|".join(["---"] * len(header)) + "|")
+        for row in rows[1:]:
+            cells = [_esc(c.text.strip()) for c in row.cells]
+            md.append("| " + " | ".join(cells) + " |")
+        return md
+
+    for child in doc.element.body.iterchildren():
+        if isinstance(child, CT_P):
+            para = Paragraph(child, doc)
+            text = para.text.rstrip()
+            if not text:
+                continue
+            level = _heading_level(para)
+            if level == 0:
+                out.append(f"# {text}")
+            elif level is not None and 1 <= level <= 6:
+                out.append("#" * (level + 1) + " " + text)
+            else:
+                out.append(text)
+        elif isinstance(child, CT_Tbl):
+            tbl = Table(child, doc)
+            out.extend(_render_table(tbl))
+    return "\n\n".join(out) + "\n"
 
 
 def extract_doc_legacy(filepath: Path) -> str | None:
@@ -147,6 +214,12 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity (default: %(default)s).",
     )
+    parser.add_argument(
+        "--format", default="text",
+        choices=("text", "md"),
+        dest="fmt",
+        help="Output format (default: %(default)s).",
+    )
     return parser
 
 
@@ -166,11 +239,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         extract_folder(input_p, output_p)
         return 0
 
-    try:
-        text = extract_file(input_p)
-    except Exception as exc:  # noqa: BLE001
-        logger.exception("failed to extract %s: %s", input_p, exc)
-        return 1
+    if args.fmt == "md":
+        try:
+            text = extract_docx_to_markdown(input_p)
+        except Exception as exc:  # noqa: BLE001
+            logger.exception("failed to extract md from %s: %s", input_p, exc)
+            return 1
+    else:
+        try:
+            text = extract_file(input_p)
+        except Exception as exc:  # noqa: BLE001
+            logger.exception("failed to extract %s: %s", input_p, exc)
+            return 1
 
     if not text:
         logger.error("failed to extract content: %s", input_p)
