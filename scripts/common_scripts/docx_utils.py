@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterable
+from pathlib import Path
 
 from docx import Document
 from docx.oxml.ns import qn
@@ -131,8 +132,6 @@ def convert_doc_to_docx(input_path, output_path=None):
             "module unavailable in this environment."
         )
         return None
-
-    import os as _os  # local alias keeps the rest of this function self-contained
 
     pythoncom.CoInitialize()
     word = None
