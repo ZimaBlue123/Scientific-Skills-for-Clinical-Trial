@@ -105,6 +105,35 @@ Scientific-Skills-for-Clinical_Trial/
 ```
 
 维护约定与更详细解释见 `docs/repo_layout.md`。
+维护约定与更详细解释见 `docs/repo_layout.md`。
+
+---
+
+## 开发工作流
+
+本仓库在每次重大重构时会跑一组**自检脚本**（位于 `scripts/_tools/`）。这些脚本可独立于 IDE / CI 运行，方便人工排查。
+
+```bash
+# Phase 1: py_compile + pyflakes 全量扫描
+py -3 scripts/_tools/_audit_phase1_compile.py
+py -3 scripts/_tools/_audit_phase1_pyflakes.py
+py -3 scripts/_tools/_audit_phase1_ast.py
+
+# Phase 2: 扫描冗余文件 / 临时日志（不删除）
+py -3 scripts/_tools/_audit_phase2_scan.py
+# 拟删除清单写入 docs/cleanup_phase2_plan.md
+
+# Phase 3: 导入依赖审计（与 requirements.txt 对照）
+py -3 scripts/_tools/_audit_phase3_imports.py
+```
+
+报告分别落在：
+
+- `docs/audit_phase1.md` —— 静态分析 + AST 深度审查
+- `docs/cleanup_phase2_plan.md` —— 删除清单（含风险等级）
+- `reports/phase3_imports.md` —— 第三方 import 使用矩阵
+
+
 
 ---
 

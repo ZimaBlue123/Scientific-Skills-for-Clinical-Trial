@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **Refactor (scripts/ + docs/)**: 2026-07-30 five-phase project cleanup. Phase 1 audited 240 .py files and fixed a UTF-8 BOM in `scripts/verify_data.py`; phase 2 removed 351 stale `__pycache__/` directories and `.log` artifacts; phase 3 added `requests>=2.31`, `scipy>=1.10`, `lxml>=4.9`, `defusedxml>=0.7` to `requirements.txt` (previously used but undeclared; see `docs/audit_phase1.md` and `reports/phase3_imports.md` for evidence).
+- **scripts/ consolidation**: 19 root-level `.py` files migrated into `scripts/`, `scripts/_tools/`, and `scripts/_archive_2026_consolidation/`. See `docs/scripts_consolidation_analysis.md`.
 - **README / README.en**: removed duplicated "脚本索引 / Script Index" and "如何选择 / How to Choose" sections that had been accidentally duplicated by a previous merge.
 - **README.en**: replaced a stray Chinese sentence inside the English README with its English equivalent.
 - **.gitignore**: added archive types (`*.zip`, `*.tar*`, `*.7z`, `*.rar`, `*.gz`, `*.bz2`, `*.xz`) and a few IDE / Mavis / Claude local-state exclusions to keep noisy local files out of the repository.
