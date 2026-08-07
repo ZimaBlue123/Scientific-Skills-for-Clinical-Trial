@@ -105,7 +105,6 @@ Scientific-Skills-for-Clinical_Trial/
 ```
 
 维护约定与更详细解释见 `docs/repo_layout.md`。
-维护约定与更详细解释见 `docs/repo_layout.md`。
 
 ---
 
@@ -413,7 +412,6 @@ print(result.text_content)
 |------|------|------|
 | `scripts/convert_to_md.py` | 文档转Markdown（推荐） | ✅ 推荐 |
 | `scripts/md_to_docx.py` | Markdown转Word | ✅ 推荐 |
-| `scripts/convert_doc_to_docx.py` | 旧版.doc转换 | ✅ 推荐 |
 | `scripts/generate_csr_docx.py` | CSR阶段性小结 | ✅ 推荐 |
 | `scripts/project_self_check.py` | 项目自检 | ✅ 推荐 |
 | `scripts/cleanup_generated_artifacts.py` | 清理缓存与IDE历史记录 | ✅ 推荐 |
@@ -427,10 +425,7 @@ print(result.text_content)
 | 脚本 | 替代方案 | 说明 |
 |------|----------|------|
 | `scripts/extract_docx_full.py` | `convert_to_md.py --mode standard` | 文本提取功能已合并 |
-| `scripts/extract_docx_to_md.py` | `convert_to_md.py --mode numbered` | 编号输出功能已合并 |
-| `scripts/extract_doc_text.py` | `convert_doc_to_docx.py` | ⚠️ 已废弃 - .doc文本提取功能已集成 |
-| `scripts/convert_audit_report_md_to_docx.py` | `md_to_docx.py` | ⚠️ 已废弃 - 只是包装器，直接使用md_to_docx.py |
-| `scripts/_extract_docx_text.py` | `convert_to_md.py` | ⚠️ 已废弃 - 无依赖备用已不需要 |
+| `scripts/extract_doc_text.py` | `convert_to_md.py` | .doc文本提取（Windows COM） |
 
 ### 如何选择
 
@@ -443,9 +438,6 @@ print(result.text_content)
 
 需要将Markdown转换为Word？
   → python scripts/md_to_docx.py input.md -o output.docx
-
-需要转换旧版.doc格式？
-  → python scripts/convert_doc_to_docx.py input.doc output.docx
 ```
 
 > 以下脚本针对特定产品，通用场景请使用上方推荐脚本：
