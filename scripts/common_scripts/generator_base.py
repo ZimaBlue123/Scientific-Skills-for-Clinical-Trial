@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 generator_base.py — shared building blocks for the ``scripts/generate_*.py``
 family.
@@ -29,8 +28,8 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 from docx import Document
 
@@ -89,13 +88,24 @@ def load_template(name: str, templates_dir: Path | None = None) -> str:
     templates_dir : Path | None
         Folder containing templates. Defaults to
         ``scripts/common_templates/`` (kept in the repo).
+
+    Raises
+    ------
+    FileNotFoundError
+        If the template file does not exist.
+    OSError
+        If the template file cannot be read.
     """
     if templates_dir is None:
         templates_dir = Path(__file__).resolve().parent.parent / "common_templates"
     path = templates_dir / name
     if not path.exists():
         raise FileNotFoundError(f"template not found: {path}")
-    return path.read_text(encoding="utf-8")
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError:
+        logger.exception("failed to read template: %s", path)
+        raise
 
 
 def build_document(template_name: str | None = None) -> Document:
@@ -115,10 +125,24 @@ def build_document(template_name: str | None = None) -> Document:
 
 
 def save_document(doc: Document, output: Path | str) -> Path:
-    """Persist ``doc`` to ``output`` as UTF-8 (mkdir parents first)."""
+    """Persist ``doc`` to ``output`` (mkdir parents first).
+
+    Raises
+    ------
+    OSError
+        If the target directory cannot be created or the file cannot be written.
+    """
     out = Path(output)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    doc.save(str(out))
+    try:
+        out.parent.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        logger.exception("cannot create output directory: %s", out.parent)
+        raise
+    try:
+        doc.save(str(out))
+    except OSError:
+        logger.exception("failed to write document: %s", out)
+        raise
     logger.info("wrote %s", out)
     return out
 

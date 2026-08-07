@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Verify arithmetic self-consistency of the MMR (Medical Monitoring Report).
 

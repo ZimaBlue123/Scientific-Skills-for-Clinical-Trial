@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Robust extractor for review_materials/*.docx using only Python stdlib.
 
@@ -31,8 +30,8 @@ import argparse
 import logging
 import sys
 import zipfile
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 from xml.etree import ElementTree as ET
 
 # Word XML namespace. Bound at module level for readability + speed.
@@ -125,9 +124,8 @@ def iter_docx_targets(input_path: Path) -> Iterator[Path]:
         for p in sorted(input_path.iterdir()):
             if p.suffix.lower() == ".docx":
                 yield p
-    elif input_path.is_file():
-        if input_path.suffix.lower() == ".docx":
-            yield input_path
+    elif input_path.is_file() and input_path.suffix.lower() == ".docx":
+        yield input_path
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

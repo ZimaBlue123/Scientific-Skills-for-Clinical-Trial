@@ -124,8 +124,9 @@ def convert_doc_to_docx(input_path, output_path=None):
     """
     try:
         import os as _os
-        import win32com.client  # type: ignore[import-not-found]
+
         import pythoncom  # type: ignore[import-not-found]
+        import win32com.client  # type: ignore[import-not-found]
     except ImportError:
         logger.error(
             "convert_doc_to_docx requires pywin32 on Windows; "
