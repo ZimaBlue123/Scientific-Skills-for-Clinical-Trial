@@ -23,6 +23,7 @@ print(f"New size: {p.stat().st_size} bytes")
 
 # Re-run pyflakes
 import subprocess
+
 res = subprocess.run(
     ["C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
      "-m", "pyflakes", str(p)],

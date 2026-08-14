@@ -5,10 +5,10 @@ Strategy: Identify sections by heading patterns, replace content paragraph-by-pa
 preserving the template's paragraph styles and run-level formatting.
 """
 import sys
-import copy
+
 from docx import Document
-from docx.shared import Pt, Emu
 from docx.oxml.ns import qn
+
 
 def get_para_text(para):
     """Get full paragraph text."""
@@ -24,7 +24,7 @@ def identify_section(text):
     Returns section key or None.
     """
     t = text.strip().lower()
-    
+
     # Title page
     if t.startswith('development safety update report'):
         return 'title_dsur'
@@ -46,15 +46,15 @@ def identify_section(text):
         return 'title_approval'
     if t == 'confidentiality statement':
         return 'confidentiality_heading'
-    
+
     # Executive Summary
     if t == 'executive summary':
         return 'exec_summary_heading'
-    
+
     # Table of Contents
     if t == 'table of contents':
         return 'toc_heading'
-    
+
     # Main body sections
     section_patterns = [
         ('1. introduction', 'sec1_intro'),
@@ -103,11 +103,11 @@ def identify_section(text):
         ('19.2 important risks in the current cycle', 'sec19_2'),
         ('20. conclusions', 'sec20_conclusions'),
     ]
-    
+
     for pattern, key in section_patterns:
         if t.startswith(pattern):
             return key
-    
+
     # Appendices
     if t == 'appendices':
         return 'appendices_heading'
@@ -137,7 +137,7 @@ def identify_section(text):
         return 'appendix_r4'
     if t.startswith('appendix r5'):
         return 'appendix_r5'
-    
+
     return None
 
 
@@ -149,7 +149,7 @@ def build_content_index(doc):
     sections = {}
     current_section = '__preamble__'
     sections[current_section] = []
-    
+
     for para in doc.paragraphs:
         text = para.text.strip()
         if not text:
@@ -163,7 +163,7 @@ def build_content_index(doc):
             # We'll handle headings separately
         else:
             sections.setdefault(current_section, []).append(text)
-    
+
     return sections
 
 
@@ -194,17 +194,17 @@ def replace_paragraph_text(para, new_text):
     """
     if not para.runs:
         return
-    
+
     # Preserve formatting from the first run
     first_run = para.runs[0]
-    
+
     # Clear all existing runs
     for run in para.runs:
         run.text = ''
-    
+
     # Set text in first run
     first_run.text = new_text
-    
+
     # Remove any extra empty runs
     # We keep the first run and clear the rest
     for run in para.runs[1:]:
@@ -218,23 +218,23 @@ def replace_paragraph_full(para, new_text):
     """
     # Store formatting from first run if available
     pPr = para._element.find(qn('w:pPr'))
-    
+
     # Remove all existing runs
     for run in para.runs:
         run._element.getparent().remove(run._element)
-    
+
     # If no text, just clear
     if not new_text:
         return
-    
+
     # Add a single new run with the text
     from docx.oxml import OxmlElement
     new_run_elem = OxmlElement('w:r')
-    
+
     # Copy run properties from the paragraph's default style
     # For template-only, we use the paragraph style's formatting
     rPr = OxmlElement('w:rPr')
-    
+
     # Try to get font info from the paragraph style
     style = para.style
     if style and style.font:
@@ -251,15 +251,15 @@ def replace_paragraph_full(para, new_text):
         if style.font.bold:
             b = OxmlElement('w:b')
             rPr.append(b)
-    
+
     new_run_elem.append(rPr)
-    
+
     # Add text element
     t = OxmlElement('w:t')
     t.set(qn('xml:space'), 'preserve')
     t.text = new_text
     new_run_elem.append(t)
-    
+
     para._element.append(new_run_elem)
 
 
@@ -272,14 +272,14 @@ def transfer_content(template_path, source_path, output_path):
     """
     template_doc = Document(template_path)
     source_doc = Document(source_path)
-    
+
     # Build content index from source
     source_sections = build_content_index(source_doc)
-    
+
     # Build template structure
     template_structure = []
     current_section = '__preamble__'
-    
+
     for i, para in enumerate(template_doc.paragraphs):
         text = para.text.strip()
         section_key = identify_section(text) if text else None
@@ -293,12 +293,12 @@ def transfer_content(template_path, source_path, output_path):
             'is_toc': 'toc' in (para.style.name or '').lower(),
             'is_empty': not text,
         })
-    
+
     # Print section mapping for debugging
     print("=== Source Sections ===")
     for key, paras in source_sections.items():
         print(f"  {key}: {len(paras)} paragraphs")
-    
+
     print("\n=== Template Structure ===")
     current_sec = None
     for item in template_structure:
@@ -306,39 +306,39 @@ def transfer_content(template_path, source_path, output_path):
             current_sec = item['section']
             if item['is_heading']:
                 print(f"  [{current_sec}] HEADING: {item['text'][:80]}")
-    
+
     # Now do the actual content replacement
     # Strategy: For each section in the template, find corresponding source section
     # and replace paragraph texts
-    
+
     # Build a paragraph index per section in the template
     template_section_paras = {}
     for item in template_structure:
         sec = item['section']
         template_section_paras.setdefault(sec, []).append(item['index'])
-    
+
     # Sections we should NOT replace (they stay as template)
     # - __preamble__: title page content gets special handling
     # - toc-related items
-    
+
     # Create content replacement plan
     # For each section that exists in both, replace template paragraphs with source paragraphs
-    
+
     replaced_count = 0
-    
+
     for sec_key in source_sections:
         if sec_key == '__preamble__':
             continue
-        
+
         source_paras = source_sections[sec_key]
         if not source_paras:
             continue
-        
+
         template_indices = template_section_paras.get(sec_key, [])
         if not template_indices:
             print(f"  SKIP {sec_key}: no matching template section")
             continue
-        
+
         # Skip the heading paragraph (first one in the section)
         # The heading itself we handle based on what section it is
         content_indices = []
@@ -352,7 +352,7 @@ def transfer_content(template_path, source_path, output_path):
             if item['is_toc']:
                 continue
             content_indices.append(idx)
-        
+
         # Replace content paragraphs with source paragraphs
         # We might have more template paragraphs than source, or vice versa
         for j, src_text in enumerate(source_paras):
@@ -369,26 +369,26 @@ def transfer_content(template_path, source_path, output_path):
                     ref_para = template_doc.paragraphs[content_indices[-1]]
                     # We can't easily insert, so we'll skip for now
                     pass
-        
+
         # If template has more paragraphs than source, clear the extras
         for j in range(len(source_paras), len(content_indices)):
             tpl_idx = content_indices[j]
             para = template_doc.paragraphs[tpl_idx]
             replace_paragraph_full(para, '')
             replaced_count += 1
-    
+
     print(f"\nReplaced {replaced_count} paragraphs")
-    
+
     # Now handle special sections:
     # 1. Title page - replace key fields
     # 2. Tables need section-aware handling
     # 3. TOC - skip for now (will need manual update or can be removed)
-    
+
     # Handle title page paragraphs
     # Find and replace DSUR number, product name, dates
     for i, para in enumerate(template_doc.paragraphs):
         text = para.text.strip()
-        
+
         if text == 'Development Safety Update Report (DSUR) No. 2':
             replace_paragraph_full(para, 'Development Safety Update Report (DSUR) No. 1')
         elif text == 'Recombinant Hexavalent Norovirus Vaccine (Hansenula polymorpha)':
@@ -397,7 +397,7 @@ def transfer_content(template_path, source_path, output_path):
             replace_paragraph_full(para, 'Reporting Period: 26-Jun-2025 to 25-Jun-2026')
         elif text.startswith('Date of Report: 05 June 2026'):
             replace_paragraph_full(para, 'Date of Report: 09-Jul-2026')
-    
+
     # Handle sponsor info table
     if template_doc.tables:
         sponsor_table = template_doc.tables[0]
@@ -411,26 +411,26 @@ def transfer_content(template_path, source_path, output_path):
         sponsor_table.rows[3].cells[1].text = ''
         # Update email
         sponsor_table.rows[4].cells[1].text = ''
-    
+
     # Handle Confidentiality paragraph
     for i, para in enumerate(template_doc.paragraphs):
         text = para.text.strip()
         if text.startswith('All information contained in this document is the property of Grand Theravac Life Science'):
             replace_paragraph_full(para, 'All information contained in this document is the exclusive property of Grand Theravac Life Sciences (Nanjing) Co., Ltd. and Grand Theravac Life Sciences (Hangzhou) Co., Ltd., and is strictly confidential. It may not be disclosed or reproduced, in whole or in part, without prior written consent from the Sponsor.')
-    
+
     # Handle TOC - mark for manual update
     for i, para in enumerate(template_doc.paragraphs):
         if para.style and 'toc' in (para.style.name or '').lower():
             # Clear old TOC entries
             replace_paragraph_full(para, '')
-    
+
     # Handle data tables - they need to be cleared or marked as N/A since
     # the source DSUR #1 has no clinical data
     # Tables to keep or modify based on source content
-    
+
     # Now handle tables based on the source's situation (no clinical trials initiated)
     # Most data tables should be cleared/emptied
-    
+
     # Save
     template_doc.save(output_path)
     print(f"\nOutput saved to: {output_path}")

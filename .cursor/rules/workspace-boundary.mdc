@@ -1,0 +1,9 @@
+---
+description: Restrict all operations strictly to the project workspace directory
+alwaysApply: true
+---
+
+# Workspace Boundary Rule
+
+- All file operations (create, read, modify, delete) and command executions must occur strictly within this project repository directory (`e:/Cursor Project/2-Scientific-Skills-for-Clinical_Trial`).
+- Never touch, create, or alter files outside this workspace root.

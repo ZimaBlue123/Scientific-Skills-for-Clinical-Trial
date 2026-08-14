@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import sys
 import time
 import urllib.error
@@ -151,6 +152,7 @@ def main() -> int:
     out = [_record_from_summary(uid, summary) for uid in uids]
 
     try:
+        os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
             json.dump(out, f, ensure_ascii=False, indent=2)
     except OSError as exc:

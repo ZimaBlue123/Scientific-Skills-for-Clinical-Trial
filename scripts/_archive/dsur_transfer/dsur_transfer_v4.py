@@ -6,9 +6,10 @@ Key fixes:
 3. Handle missing section mappings for sec18 subsections
 """
 import sys
+
 from docx import Document
-from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 
 def identify_section_key(text):
@@ -98,25 +99,25 @@ def build_para_index(doc):
     """Build section -> list of paragraph indices, filtering out TOC entries."""
     index = {}
     current_key = '__preamble__'
-    
+
     for i, para in enumerate(doc.paragraphs):
         text = para.text.strip()
-        
+
         # Skip TOC paragraphs
         if is_toc_paragraph(para):
             continue
-        
+
         if not text:
             continue
-        
+
         key = identify_section_key(text)
         if key:
             current_key = key
             index.setdefault(current_key, []).append(i)
             continue
-        
+
         index.setdefault(current_key, []).append(i)
-    
+
     return index
 
 
@@ -124,13 +125,13 @@ def replace_para_text(para, new_text):
     """Replace paragraph text, preserving paragraph style formatting."""
     for run in list(para.runs):
         run._element.getparent().remove(run._element)
-    
+
     if not new_text:
         return
-    
+
     new_run = OxmlElement('w:r')
     rPr = OxmlElement('w:rPr')
-    
+
     style = para.style
     if style:
         try:
@@ -149,7 +150,7 @@ def replace_para_text(para, new_text):
                 rPr.append(sz)
         except:
             pass
-    
+
     new_run.append(rPr)
     t = OxmlElement('w:t')
     t.set(qn('xml:space'), 'preserve')
@@ -210,47 +211,47 @@ def get_src_content_texts(para_indices, doc):
 def replace_section_content(template_doc, tpl_indices, src_texts, operation_name=""):
     """Replace content in template paragraphs with source content."""
     tpl_content = get_content_indices(tpl_indices, template_doc)
-    
+
     replaced = 0
     cleared = 0
-    
+
     for j in range(min(len(src_texts), len(tpl_content))):
         para = template_doc.paragraphs[tpl_content[j]]
         replace_para_text(para, src_texts[j])
         replaced += 1
-    
+
     for j in range(len(src_texts), len(tpl_content)):
         para = template_doc.paragraphs[tpl_content[j]]
         if para.text.strip():
             replace_para_text(para, '')
             cleared += 1
-    
+
     if operation_name:
         print(f"  {operation_name}: replaced {replaced}, cleared {cleared}")
-    
+
     return replaced, cleared
 
 
 def main(template_path, source_path, output_path):
     template = Document(template_path)
     source = Document(source_path)
-    
+
     tpl_index = build_para_index(template)
     src_index = build_para_index(source)
-    
+
     print("=== Template Sections (TOC filtered) ===")
     for k, v in sorted(tpl_index.items()):
         hdr = template.paragraphs[v[0]].text[:60] if v else ''
         print(f"  {k}: {len(v)} paras, '{hdr}'")
-    
+
     print("\n=== Source Sections ===")
     for k, v in sorted(src_index.items()):
         hdr = source.paragraphs[v[0]].text[:60] if v else ''
         print(f"  {k}: {len(v)} paras, '{hdr}'")
-    
+
     total_replaced = 0
     total_cleared = 0
-    
+
     # ---- PHASE 1: Title Page ----
     print("\n--- Title Page ---")
     for i, para in enumerate(template.paragraphs):
@@ -265,7 +266,7 @@ def main(template_path, source_path, output_path):
             replace_para_text(para, 'Date of Report: 09-Jul-2026')
         elif text.startswith('All information contained in this document is the property of Grand Theravac Life Science'):
             replace_para_text(para, 'All information contained in this document is the exclusive property of Grand Theravac Life Sciences (Nanjing) Co., Ltd. and Grand Theravac Life Sciences (Hangzhou) Co., Ltd., and is strictly confidential. It may not be disclosed or reproduced, in whole or in part, without prior written consent from the Sponsor.')
-    
+
     # Sponsor info table
     if template.tables:
         t = template.tables[0]
@@ -280,7 +281,7 @@ def main(template_path, source_path, output_path):
                     t.rows[row_idx].cells[1].paragraphs[0].add_run(val)
             except:
                 pass
-    
+
     # ---- PHASE 2: Executive Summary (pre-TOC) ----
     print("\n--- Executive Summary ---")
     if 'exec_summary' in tpl_index and 'exec_summary' in src_index:
@@ -290,7 +291,7 @@ def main(template_path, source_path, output_path):
         r, c = replace_section_content(template, tpl_paras, src_texts, "Exec Summary")
         total_replaced += r
         total_cleared += c
-    
+
     # ---- PHASE 3: Clear TOC ----
     print("\n--- TOC Clearing ---")
     # Find TOC boundary and clear all TOC paragraphs
@@ -298,14 +299,14 @@ def main(template_path, source_path, output_path):
     for i, para in enumerate(template.paragraphs):
         text = para.text.strip().lower()
         style_name = (para.style.name or '').lower()
-        
+
         if text == 'table of contents':
             toc_found = True
             continue
-        
+
         if toc_found and 'toc' in style_name:
             replace_para_text(para, '')
-        
+
         if toc_found:
             # Check if we've passed the TOC
             key = identify_section_key(text)
@@ -313,19 +314,19 @@ def main(template_path, source_path, output_path):
                 # Also check this is actually a real heading, not a TOC entry
                 if not is_toc_paragraph(para):
                     toc_found = False
-    
+
     # ---- PHASE 4: Main Body Sections ----
     print("\n--- Main Body ---")
-    
+
     # Define sections to skip (containers, title page, already processed, pure heading)
     skip_sections = {
-        '__preamble__', 'toc_heading', 'exec_summary', 
+        '__preamble__', 'toc_heading', 'exec_summary',
         'title_dsur', 'confidentiality',
         'appendices', 'regional',
         'sec6', 'sec7', 'sec8', 'sec18', 'sec18_1', 'sec19',
         # Container headings with no direct content - only sub-sections
     }
-    
+
     # Handle mapping for sec18_2: source has combined benefit-risk in sec18_2,
     # template has separate sec18_2_1, sec18_2_2, sec18_2_3, sec18_2_4, sec18_2_5
     # Source puts all benefit-risk content (3 paragraphs) under sec18_2
@@ -344,49 +345,49 @@ def main(template_path, source_path, output_path):
                 r, c = replace_section_content(template, tpl_index[sub], [], sub)
                 total_replaced += r
                 total_cleared += c
-    
+
     for sec_key in sorted(tpl_index.keys()):
         if sec_key in skip_sections:
             continue
         # Skip already processed sec18_2 subsections
         if sec_key.startswith('sec18_2'):
             continue
-        
+
         if sec_key not in src_index:
             # No source content - clear
             r, c = replace_section_content(template, tpl_index[sec_key], [], sec_key)
             total_replaced += r
             total_cleared += c
             continue
-        
+
         src_texts = get_src_content_texts(src_index[sec_key], source)
         r, c = replace_section_content(template, tpl_index[sec_key], src_texts, sec_key)
         total_replaced += r
         total_cleared += c
-    
+
     # Handle sec18_1 heading content (source has no direct content under sec18_1, only subsections)
     # Already handled via sub-sections
-    
+
     print(f"\nTotal: replaced {total_replaced}, cleared {total_cleared}")
-    
+
     # ---- PHASE 5: Tables ----
     print("\n--- Tables ---")
-    
+
     # Clear data tables
     data_tables = [1, 2, 3, 7, 9]  # Exposure, AE I, AE II, Demographics, SAE cumulative
     for t_idx in data_tables:
         if t_idx < len(template.tables):
             clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Clear Appendix R4 tables
     for t_idx in range(14, min(20, len(template.tables))):
         clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Handle Appendix 3 table (Table 5): Replace with source's trial table
     if len(template.tables) > 5 and source.tables:
         tpl_ap3 = template.tables[5]
         src_ap3 = source.tables[0]
-        
+
         # Copy source data
         if len(src_ap3.rows) > 1:
             src_row = src_ap3.rows[1]
@@ -401,7 +402,7 @@ def main(template_path, source_path, output_path):
             for r_idx in range(2, len(tpl_ap3.rows)):
                 for cell in tpl_ap3.rows[r_idx].cells:
                     clear_cell_text(cell)
-    
+
     template.save(output_path)
     print(f"\nSaved: {output_path}")
 

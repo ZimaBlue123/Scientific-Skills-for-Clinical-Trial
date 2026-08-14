@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 """数据交叉核对与错别字扫描脚本。"""
-import re
 import io
 import sys
 
-text = open(r"e:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\doc_utf8.txt", "r", encoding="utf-8-sig").read()
+text = open(r"e:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\doc_utf8.txt", encoding="utf-8-sig").read()
 
 # 集中所有数表关键数字，逐项核对
 checks = []
@@ -131,7 +129,7 @@ local_ae = [
     ("呕吐",2,2,2/420*100,0.48),
     ("呼吸困难",1,1,1/420*100,0.24),
 ]
-for name,cnt,n,r,pct in local_ae:
+for name,_cnt,_n,r,pct in local_ae:
     checks.append((f"{name}发生率", round(r,2), pct))
 
 # 个体征集性AE例数合计 vs 230 / 例次合计 vs 688
@@ -194,7 +192,7 @@ checks.append(("进展报告 例次 vs EDC", 13+3, 16, "OK"))
 findings = []
 
 # 检查术语统一性
-for term_a, term_b, ctx in [
+for term_a, term_b, _ctx in [
     ("医学监查", "医学核查", "质疑清单段"),
     ("试验用疫苗", "试验疫苗", ""),
     ("Ⅱ期", "II期", "全文混用"),
@@ -222,10 +220,7 @@ ok = 0; err = 0
 for c in checks:
     if len(c) == 3:
         name, calc, expected = c
-        if isinstance(calc, float):
-            match = abs(calc - expected) < 0.01
-        else:
-            match = (calc == expected)
+        match = abs(calc - expected) < 0.01 if isinstance(calc, float) else calc == expected
         status = "OK" if match else "MISMATCH"
         if match: ok += 1
         else: err += 1

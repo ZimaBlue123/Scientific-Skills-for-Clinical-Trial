@@ -5,9 +5,10 @@ Key fixes:
 - Fix Appendix 3 table data
 """
 import sys
+
 from docx import Document
-from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 
 def identify_section_key(text):
@@ -213,13 +214,13 @@ def replace_section_content(template_doc, tpl_indices, src_texts, op_name=""):
 def main(template_path, source_path, output_path):
     template = Document(template_path)
     source = Document(source_path)
-    
+
     tpl_index = build_para_index(template)
     src_index = build_para_index(source)
-    
+
     total_replaced = 0
     total_cleared = 0
-    
+
     # ---- PHASE 1: Title Page ----
     print("--- Title Page ---")
     title_replacements = {
@@ -228,14 +229,14 @@ def main(template_path, source_path, output_path):
         'Reporting Period: 25 April 2025 to 24 April 2026': 'Reporting Period: 26-Jun-2025 to 25-Jun-2026',
         'Date of Report: 05 June 2026': 'Date of Report: 09-Jul-2026',
     }
-    
+
     conf_replacement = (
         'All information contained in this document is the exclusive property of '
         'Grand Theravac Life Sciences (Nanjing) Co., Ltd. and Grand Theravac Life Sciences '
         '(Hangzhou) Co., Ltd., and is strictly confidential. It may not be disclosed or '
         'reproduced, in whole or in part, without prior written consent from the Sponsor.'
     )
-    
+
     for i, para in enumerate(template.paragraphs):
         text = para.text.strip()
         for old, new in title_replacements.items():
@@ -245,7 +246,7 @@ def main(template_path, source_path, output_path):
         else:
             if text.startswith('All information contained in this document is the property of Grand Theravac Life Science'):
                 replace_para_text(para, conf_replacement)
-    
+
     # Sponsor info table
     if template.tables:
         t = template.tables[0]
@@ -258,7 +259,7 @@ def main(template_path, source_path, output_path):
                 set_cell_text(t.rows[row_idx].cells[1], val)
             except:
                 pass
-    
+
     # ---- PHASE 2: Executive Summary ----
     print("--- Executive Summary ---")
     if 'exec_summary' in tpl_index and 'exec_summary' in src_index:
@@ -266,7 +267,7 @@ def main(template_path, source_path, output_path):
         r, c = replace_section_content(template, tpl_index['exec_summary'], src_texts, "Exec Summary")
         total_replaced += r
         total_cleared += c
-    
+
     # ---- PHASE 3: Clear TOC aggressively ----
     print("--- TOC Clearing ---")
     toc_start = None
@@ -285,9 +286,9 @@ def main(template_path, source_path, output_path):
                 if key and key not in ('toc_heading', 'title_dsur', 'exec_summary'):
                     toc_end = i
                     break
-    
+
     print(f"  TOC range: {toc_start} to {toc_end}, cleared")
-    
+
     # ---- PHASE 4: Main Body ----
     print("--- Main Body ---")
     skip_sections = {
@@ -296,13 +297,13 @@ def main(template_path, source_path, output_path):
         'appendices', 'regional',
         'sec6', 'sec7', 'sec8', 'sec18', 'sec18_1', 'sec19',
     }
-    
+
     # Handle sec18_2 combined benefit-risk
     if 'sec18_2' in src_index and 'sec18_2_1' in tpl_index:
         src_texts_all = get_src_content_texts(src_index['sec18_2'], source)
         if src_texts_all:
-            r, c = replace_section_content(template, tpl_index['sec18_2_1'], 
-                                           src_texts_all[:min(3, len(src_texts_all))], 
+            r, c = replace_section_content(template, tpl_index['sec18_2_1'],
+                                           src_texts_all[:min(3, len(src_texts_all))],
                                            "sec18_2_1 (combined)")
             total_replaced += r
             total_cleared += c
@@ -311,49 +312,49 @@ def main(template_path, source_path, output_path):
                 r, c = replace_section_content(template, tpl_index[sub], [], sub)
                 total_replaced += r
                 total_cleared += c
-    
+
     for sec_key in sorted(tpl_index.keys()):
         if sec_key in skip_sections:
             continue
         if sec_key.startswith('sec18_2'):
             continue
-        
+
         if sec_key not in src_index:
             r, c = replace_section_content(template, tpl_index[sec_key], [], sec_key)
             total_replaced += r
             total_cleared += c
             continue
-        
+
         src_texts = get_src_content_texts(src_index[sec_key], source)
         r, c = replace_section_content(template, tpl_index[sec_key], src_texts, sec_key)
         total_replaced += r
         total_cleared += c
-    
+
     print(f"  Total: replaced {total_replaced}, cleared {total_cleared}")
-    
+
     # ---- PHASE 5: Tables ----
     print("--- Tables ---")
-    
+
     # Clear large data tables (keep headers)
     data_tables = [1, 2, 3, 7, 9]
     for t_idx in data_tables:
         if t_idx < len(template.tables):
             clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Clear Appendix R4 tables (14-19)
     for t_idx in range(14, min(20, len(template.tables))):
         clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Fix Appendix 3 table (Table 5 / index 5)
     if len(template.tables) > 5 and source.tables:
         tpl_table = template.tables[5]
         src_table = source.tables[0]
-        
+
         # Clear all data rows first
         for r_idx in range(1, len(tpl_table.rows)):
             for cell in tpl_table.rows[r_idx].cells:
                 clear_cell_text(cell)
-        
+
         # Copy source data to first data row
         if len(src_table.rows) > 1:
             src_row = src_table.rows[1]
@@ -361,12 +362,12 @@ def main(template_path, source_path, output_path):
             for c_idx in range(min(len(src_row.cells), len(tpl_row.cells))):
                 src_text = src_row.cells[c_idx].text.strip()
                 set_cell_text(tpl_row.cells[c_idx], src_text)
-            
+
             # Fix "Subject Exposure" column (last column) - source says "0"
             # The source Subject Exposure column should be "0"
             last_col = len(tpl_row.cells) - 1
             set_cell_text(tpl_row.cells[last_col], '0')
-    
+
     # Save
     template.save(output_path)
     print(f"\nSaved: {output_path}")

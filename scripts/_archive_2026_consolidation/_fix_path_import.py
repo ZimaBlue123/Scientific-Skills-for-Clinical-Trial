@@ -43,6 +43,7 @@ print("OK" if res.returncode == 0 else "FAIL")
 # Self-check 2: AST-based undefined name check (mimic pyflakes F821)
 print("\n=== AST undefined-name check ===")
 import ast
+
 tree = ast.parse(src)
 imported = set()
 for node in ast.walk(tree):
@@ -54,6 +55,7 @@ for node in ast.walk(tree):
             imported.add(n.asname or n.name)
 # also collect builtins to ignore
 import builtins
+
 defined_names = set(dir(builtins)) | imported | {"__name__", "__file__", "__doc__"}
 
 # Walk tree collecting Name nodes
@@ -72,6 +74,7 @@ else:
 # Self-check 3: explicit definition lookup in source
 print("\n=== Direct grep for 'Path' usage ===")
 import re
+
 for i, line in enumerate(src.splitlines(), 1):
     if "Path(" in line or re.search(r"\bPath\b", line):
         print(f"  L{i}: {line.rstrip()[:80]}")

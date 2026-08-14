@@ -54,10 +54,7 @@ DELETE_PATTERNS = (
 
 
 def matches_pattern(name: str) -> bool:
-    for pat in DELETE_PATTERNS:
-        if fnmatch.fnmatch(name, pat):
-            return True
-    return False
+    return any(fnmatch.fnmatch(name, pat) for pat in DELETE_PATTERNS)
 
 
 def get_untracked(root: Path) -> list[str]:
@@ -128,7 +125,7 @@ def main() -> int:
         "# Phase 2 — 拟删除文件清单（待批准）",
         "",
         f"- 根目录: `{ROOT}`",
-        f"- 扫描规则: 未追踪文件 + 匹配启发式 pattern 或已废弃原型",
+        "- 扫描规则: 未追踪文件 + 匹配启发式 pattern 或已废弃原型",
         f"- 扫描结果: **{len(candidates)} 个候选文件**",
         "",
         "| # | 路径 | 大小 (字节) | 判定理由 |",

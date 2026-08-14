@@ -3,9 +3,10 @@ DSUR Content Transfer v6 - FINAL.
 Fix: Proper TOC clearing by creating empty run, use hard-coded TOC range.
 """
 import sys
+
 from docx import Document
-from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 
 def identify_section_key(text):
@@ -109,9 +110,9 @@ def replace_para_text(para, new_text):
     """Replace paragraph text properly. Always creates at least one empty run."""
     for run in list(para.runs):
         run._element.getparent().remove(run._element)
-    
+
     new_run = OxmlElement('w:r')
-    
+
     # Only add run properties if we have meaningful text
     if new_text:
         rPr = OxmlElement('w:rPr')
@@ -133,7 +134,7 @@ def replace_para_text(para, new_text):
             except:
                 pass
         new_run.append(rPr)
-    
+
     t = OxmlElement('w:t')
     t.set(qn('xml:space'), 'preserve')
     t.text = new_text if new_text else ''
@@ -199,36 +200,36 @@ def replace_section_content(template_doc, tpl_indices, src_texts, op_name=""):
 def main(template_path, source_path, output_path):
     template = Document(template_path)
     source = Document(source_path)
-    
+
     tpl_index = build_para_index(template)
     src_index = build_para_index(source)
-    
+
     total_replaced = 0
     total_cleared = 0
-    
+
     # ---- PHASE 1: Title Page ----
     print("--- Title Page ---")
-    
+
     title_map = {
         'Development Safety Update Report (DSUR) No. 2': 'Development Safety Update Report (DSUR) No. 1',
         'Recombinant Hexavalent Norovirus Vaccine (Hansenula polymorpha)': 'Recombinant Varicella Vaccine (CHO Cell)',
         'Reporting Period: 25 April 2025 to 24 April 2026': 'Reporting Period: 26-Jun-2025 to 25-Jun-2026',
         'Date of Report: 05 June 2026': 'Date of Report: 09-Jul-2026',
     }
-    
+
     conf_new = (
         'All information contained in this document is the exclusive property of '
         'Grand Theravac Life Sciences (Nanjing) Co., Ltd. and Grand Theravac Life Sciences '
         '(Hangzhou) Co., Ltd., and is strictly confidential. It may not be disclosed or '
         'reproduced, in whole or in part, without prior written consent from the Sponsor.'
     )
-    
+
     for i, para in enumerate(template.paragraphs):
         text = para.text.strip()
         # Skip TOC paragraphs
         if is_toc_paragraph(para):
             continue
-        
+
         for old, new in title_map.items():
             if old in text and '\t' not in text:
                 replace_para_text(para, new)
@@ -236,7 +237,7 @@ def main(template_path, source_path, output_path):
         else:
             if text.startswith('All information contained in this document is the property of Grand Theravac'):
                 replace_para_text(para, conf_new)
-    
+
     # Sponsor info table
     if template.tables:
         t = template.tables[0]
@@ -249,7 +250,7 @@ def main(template_path, source_path, output_path):
                 set_cell_text(t.rows[row_idx].cells[1], val)
             except:
                 pass
-    
+
     # ---- PHASE 2: Executive Summary ----
     print("--- Executive Summary ---")
     if 'exec_summary' in tpl_index and 'exec_summary' in src_index:
@@ -257,7 +258,7 @@ def main(template_path, source_path, output_path):
         r, c = replace_section_content(template, tpl_index['exec_summary'], src_texts, "Exec Summary")
         total_replaced += r
         total_cleared += c
-    
+
     # ---- PHASE 3: Clear TOC (use style-based detection) ----
     print("--- TOC Clearing ---")
     toc_cleared = 0
@@ -267,7 +268,7 @@ def main(template_path, source_path, output_path):
                 replace_para_text(para, '')
                 toc_cleared += 1
     print(f"  Cleared {toc_cleared} TOC paragraphs")
-    
+
     # ---- PHASE 4: Main Body ----
     print("--- Main Body ---")
     skip_sections = {
@@ -276,7 +277,7 @@ def main(template_path, source_path, output_path):
         'appendices', 'regional',
         'sec6', 'sec7', 'sec8', 'sec18', 'sec18_1', 'sec19',
     }
-    
+
     # Handle sec18_2 benefit-risk (combined in source)
     if 'sec18_2' in src_index and 'sec18_2_1' in tpl_index:
         src_texts_all = get_src_content_texts(src_index['sec18_2'], source)
@@ -291,47 +292,47 @@ def main(template_path, source_path, output_path):
                 r, c = replace_section_content(template, tpl_index[sub], [], sub)
                 total_replaced += r
                 total_cleared += c
-    
+
     for sec_key in sorted(tpl_index.keys()):
         if sec_key in skip_sections or sec_key.startswith('sec18_2'):
             continue
-        
+
         if sec_key not in src_index:
             r, c = replace_section_content(template, tpl_index[sec_key], [], sec_key)
             total_replaced += r
             total_cleared += c
             continue
-        
+
         src_texts = get_src_content_texts(src_index[sec_key], source)
         r, c = replace_section_content(template, tpl_index[sec_key], src_texts, sec_key)
         total_replaced += r
         total_cleared += c
-    
+
     print(f"  Total: replaced {total_replaced}, cleared {total_cleared}")
-    
+
     # ---- PHASE 5: Tables ----
     print("--- Tables ---")
-    
+
     # Clear data tables
     for t_idx in [1, 2, 3, 7, 9]:
         if t_idx < len(template.tables):
             clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Clear Appendix R4 tables
     for t_idx in range(14, min(20, len(template.tables))):
         clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Fix Appendix 3 table (index 5)
     if len(template.tables) > 5 and source.tables:
         tpl_table = template.tables[5]
         src_table = source.tables[0]
-        
+
         # Clear data rows
         for r_idx in range(1, len(tpl_table.rows)):
             for cell in tpl_table.rows[r_idx].cells:
                 for para in cell.paragraphs:
                     replace_para_text(para, '')
-        
+
         # Copy source data
         if len(src_table.rows) > 1:
             src_row = src_table.rows[1]
@@ -339,10 +340,10 @@ def main(template_path, source_path, output_path):
             for c_idx in range(min(len(src_row.cells), len(tpl_row.cells))):
                 src_text = src_row.cells[c_idx].text.strip()
                 set_cell_text(tpl_row.cells[c_idx], src_text)
-            
+
             # Fix Subject Exposure column
             set_cell_text(tpl_row.cells[len(tpl_row.cells) - 1], '0')
-    
+
     # Save
     template.save(output_path)
     print(f"\nSaved: {output_path}")

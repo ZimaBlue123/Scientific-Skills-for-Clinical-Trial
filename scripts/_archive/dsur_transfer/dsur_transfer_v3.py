@@ -6,15 +6,16 @@ Complete rewrite with proper section handling:
 3. Main body: sections 1-20 + appendices
 """
 import sys
+
 from docx import Document
-from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 
 def identify_section_key(text):
     """Identify DSUR section key from heading text."""
     t = text.strip().lower()
-    
+
     mappings = [
         ('development safety update report (dsur)', 'title_dsur'),
         ('executive summary', 'exec_summary'),
@@ -84,7 +85,7 @@ def identify_section_key(text):
         ('appendix r5 -', 'appendix_r5'),
         ('r5:', 'appendix_r5'),
     ]
-    
+
     for pattern, key in mappings:
         if t.startswith(pattern):
             return key
@@ -98,20 +99,20 @@ def build_para_index(doc):
     """
     index = {}  # section_key -> list of paragraph indices
     current_key = '__preamble__'
-    
+
     for i, para in enumerate(doc.paragraphs):
         text = para.text.strip()
         if not text:
             continue
-        
+
         key = identify_section_key(text)
         if key:
             current_key = key
             index.setdefault(current_key, []).append(i)  # heading paragraph
             continue
-        
+
         index.setdefault(current_key, []).append(i)  # content paragraph
-    
+
     return index
 
 
@@ -119,13 +120,13 @@ def replace_para_text(para, new_text):
     """Replace all content in a paragraph with new text, preserving style formatting."""
     for run in list(para.runs):
         run._element.getparent().remove(run._element)
-    
+
     if not new_text:
         return
-    
+
     new_run = OxmlElement('w:r')
     rPr = OxmlElement('w:rPr')
-    
+
     style = para.style
     if style:
         try:
@@ -150,7 +151,7 @@ def replace_para_text(para, new_text):
                 rPr.append(b)
         except:
             pass
-    
+
     new_run.append(rPr)
     t = OxmlElement('w:t')
     t.set(qn('xml:space'), 'preserve')
@@ -183,28 +184,28 @@ def clear_table_data(table, keep_header=True):
 def main(template_path, source_path, output_path):
     template = Document(template_path)
     source = Document(source_path)
-    
+
     # Build paragraph indices for both documents
     tpl_index = build_para_index(template)
     src_index = build_para_index(source)
-    
+
     print("=== Template Sections ===")
     for k, v in tpl_index.items():
         hdr = template.paragraphs[v[0]].text[:60] if v else ''
         print(f"  {k}: {len(v)} paras, heading='{hdr}'")
-    
+
     print("\n=== Source Sections ===")
     for k, v in src_index.items():
         if len(v) <= 1:
             continue
         hdr = source.paragraphs[v[0]].text[:60] if v else ''
         print(f"  {k}: {len(v)} paras, heading='{hdr}'")
-    
+
     # ---- PHASE 1: Title Page ----
     # Replace title fields
     for i, para in enumerate(template.paragraphs):
         text = para.text.strip()
-        
+
         if 'Development Safety Update Report (DSUR) No. 2' in text:
             replace_para_text(para, 'Development Safety Update Report (DSUR) No. 1')
         elif text == 'Recombinant Hexavalent Norovirus Vaccine (Hansenula polymorpha)':
@@ -215,7 +216,7 @@ def main(template_path, source_path, output_path):
             replace_para_text(para, 'Date of Report: 09-Jul-2026')
         elif text.startswith('All information contained in this document is the property of Grand Theravac Life Science'):
             replace_para_text(para, 'All information contained in this document is the exclusive property of Grand Theravac Life Sciences (Nanjing) Co., Ltd. and Grand Theravac Life Sciences (Hangzhou) Co., Ltd., and is strictly confidential. It may not be disclosed or reproduced, in whole or in part, without prior written consent from the Sponsor.')
-    
+
     # Sponsor info table
     if template.tables:
         t = template.tables[0]
@@ -232,28 +233,28 @@ def main(template_path, source_path, output_path):
                 t.rows[row_idx].cells[1].paragraphs[0].add_run(val)
             except:
                 pass
-    
+
     # ---- PHASE 2: Pre-TOC Executive Summary ----
     # The exec summary content is between "Executive Summary" heading and "Table of Contents" heading
     # In the template, these are in __preamble__ section
-    
+
     preamble_tpl = tpl_index.get('__preamble__', [])
     preamble_src = src_index.get('__preamble__', [])
-    
+
     # Find exec_summary and confidentiality content paragraphs in template preamble
     exec_summary_src_paras = src_index.get('exec_summary', [])
     confidentiality_src_paras = src_index.get('confidentiality', [])
-    
+
     # The template preamble contains: title stuff, empty paragraphs, confidentiality heading+content, exec summary heading+content
     # We need to replace exec summary content paragraphs only
-    
+
     # Identify content-only (non-heading, non-title) paragraphs in preamble
     tpl_preamble_content = []
     in_exec = False
     for idx in preamble_tpl:
         para = template.paragraphs[idx]
         text = para.text.strip()
-        
+
         # Skip if it's a heading
         if identify_section_key(text):
             # Check if we're entering executive summary
@@ -262,10 +263,10 @@ def main(template_path, source_path, output_path):
             elif 'table of contents' in text.lower() or 'confidentiality' in text.lower():
                 in_exec = False
             continue
-        
+
         if in_exec and text:
             tpl_preamble_content.append(idx)
-    
+
     # Get exec summary content from source (excluding the heading)
     src_exec_content = []
     for idx in exec_summary_src_paras:
@@ -274,26 +275,26 @@ def main(template_path, source_path, output_path):
             continue
         if text:
             src_exec_content.append(text)
-    
+
     print(f"\nExec Summary: template has {len(tpl_preamble_content)} content paras, source has {len(src_exec_content)}")
-    
+
     # Replace exec summary content
     for j, src_text in enumerate(src_exec_content):
         if j < len(tpl_preamble_content):
             para = template.paragraphs[tpl_preamble_content[j]]
             replace_para_text(para, src_text)
-    
+
     # Clear extra template exec summary paragraphs
     for j in range(len(src_exec_content), len(tpl_preamble_content)):
         para = template.paragraphs[tpl_preamble_content[j]]
         replace_para_text(para, '')
-    
+
     # ---- PHASE 3: Clear Table of Contents ----
     toc_indices = tpl_index.get('toc_heading', [])
     if toc_indices:
         # Find TOC start (the TOC heading paragraph)
         toc_start = toc_indices[0]
-        
+
         # Find where TOC ends - next major section heading
         toc_end = None
         for i in range(toc_start + 1, len(template.paragraphs)):
@@ -305,9 +306,9 @@ def main(template_path, source_path, output_path):
                 if 'toc' not in style_name:
                     toc_end = i
                     break
-        
+
         print(f"TOC range: {toc_start} to {toc_end}")
-        
+
         if toc_end:
             for i in range(toc_start + 1, toc_end):
                 para = template.paragraphs[i]
@@ -315,29 +316,29 @@ def main(template_path, source_path, output_path):
                 text = para.text.strip()
                 if 'toc' in style_name or '\t' in text or text:
                     replace_para_text(para, '')
-    
+
     # ---- PHASE 4: Main Body Sections ----
     # Map section keys between template and source
     replaced_count = 0
     cleared_count = 0
-    
+
     for sec_key in sorted(tpl_index.keys()):
         # Skip preamble, TOC, and title-page sections
-        if sec_key in ('__preamble__', 'toc_heading', 'exec_summary', 
+        if sec_key in ('__preamble__', 'toc_heading', 'exec_summary',
                         'title_dsur', 'confidentiality', 'appendices', 'regional'):
             # 'appendices' and 'regional' are container headings, content is in sub-sections
             continue
-        
+
         tpl_paras = tpl_index[sec_key]
         if len(tpl_paras) <= 1:
             continue  # Only heading, no content
-        
+
         src_paras = src_index.get(sec_key, [])
-        
+
         # Get content-only paragraphs (skip heading)
-        tpl_content = [idx for idx in tpl_paras 
+        tpl_content = [idx for idx in tpl_paras
                        if not identify_section_key(template.paragraphs[idx].text.strip())]
-        
+
         src_content_texts = []
         for idx in src_paras:
             text = source.paragraphs[idx].text.strip()
@@ -345,7 +346,7 @@ def main(template_path, source_path, output_path):
                 continue
             if text:
                 src_content_texts.append(text)
-        
+
         if not src_content_texts:
             # No source content - clear template content
             for idx in tpl_content:
@@ -354,22 +355,22 @@ def main(template_path, source_path, output_path):
                     replace_para_text(para, '')
                     cleared_count += 1
             continue
-        
+
         # Replace content
         for j in range(min(len(src_content_texts), len(tpl_content))):
             para = template.paragraphs[tpl_content[j]]
             replace_para_text(para, src_content_texts[j])
             replaced_count += 1
-        
+
         # Clear extra template paragraphs
         for j in range(len(src_content_texts), len(tpl_content)):
             para = template.paragraphs[tpl_content[j]]
             if para.text.strip():
                 replace_para_text(para, '')
                 cleared_count += 1
-    
+
     print(f"\nBody: replaced {replaced_count}, cleared {cleared_count}")
-    
+
     # ---- PHASE 5: Handle Tables ----
     # Table 0: Sponsor info (already done above)
     # Table 1 (index 1): Estimated Cumulative Subject Exposure table -> clear all data
@@ -386,27 +387,27 @@ def main(template_path, source_path, output_path):
     # Table 12 (index 12): Appendix R2 Deaths -> keep current
     # Table 13 (index 13): Appendix R3 Dropouts -> keep current
     # Tables 14-19: Appendix R4 -> clear/keep as N/A
-    
+
     # Clear data tables that contain Norovirus-specific data
     data_table_indices = [1, 2, 3, 7, 9]  # Exposure, AE tables, Demographics, SAE cumulative
     for t_idx in data_table_indices:
         if t_idx < len(template.tables):
             clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Clear Appendix R4 tables (14-19)
     for t_idx in range(14, min(20, len(template.tables))):
         clear_table_data(template.tables[t_idx], keep_header=True)
-    
+
     # Handle Appendix 3 table (index 5): Replace with source's ongoing clinical trial table
     if len(template.tables) > 5 and source.tables:
         tpl_ap3 = template.tables[5]
         src_ap3 = source.tables[0]
-        
+
         # Keep header, clear data
         for r_idx in range(1, len(tpl_ap3.rows)):
             for cell in tpl_ap3.rows[r_idx].cells:
                 clear_cell_text(cell)
-        
+
         # Copy source data row
         if len(src_ap3.rows) > 1:
             src_row = src_ap3.rows[1]
@@ -416,15 +417,15 @@ def main(template_path, source_path, output_path):
                 if src_text:
                     clear_cell_text(tpl_row.cells[c_idx])
                     tpl_row.cells[c_idx].paragraphs[0].add_run(src_text)
-    
+
     # Keep tables 4, 6, 8, 10, 11, 12, 13 as they already have "Not Applicable" or blank content
-    
+
     # ---- PHASE 6: Handle Appendix 7 References ----
     # Source appendix7 has 1 paragraph, template has many literature references
     # Clear all reference paragraphs except the heading
     app7 = tpl_index.get('appendix7', [])
     src_app7 = src_index.get('appendix7', [])
-    
+
     if app7 and src_app7:
         src_texts = []
         for idx in src_app7:
@@ -433,18 +434,18 @@ def main(template_path, source_path, output_path):
                 continue
             if text:
                 src_texts.append(text)
-        
+
         # Get content-only paragraphs
-        app7_content = [idx for idx in app7 
+        app7_content = [idx for idx in app7
                         if not identify_section_key(template.paragraphs[idx].text.strip())]
-        
+
         for j, src_text in enumerate(src_texts):
             if j < len(app7_content):
                 replace_para_text(template.paragraphs[app7_content[j]], src_text)
-        
+
         for j in range(len(src_texts), len(app7_content)):
             replace_para_text(template.paragraphs[app7_content[j]], '')
-    
+
     # Save
     template.save(output_path)
     print(f"\nFinal output saved to: {output_path}")

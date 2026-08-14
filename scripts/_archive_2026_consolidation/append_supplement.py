@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 One-shot helper: append a 'Section 7: Supplementary notes' block to
 ``review_report.md``.

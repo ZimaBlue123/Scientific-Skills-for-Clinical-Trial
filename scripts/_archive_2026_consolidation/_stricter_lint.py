@@ -20,6 +20,7 @@ for node in ast.walk(tree):
             imports.add((n.asname or n.name, "module"))
 
 import builtins
+
 defined = set(dir(builtins)) | {n for n, _ in imports} | {"__name__", "__file__", "__doc__"}
 
 # At module level, look for Name nodes that are loaded but never bound
@@ -32,7 +33,7 @@ for node in tree.body:
                 module_top_assigns.add(tgt.id)
     elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
         module_top_assigns.add(node.name)
-    elif isinstance(node, ast.Import) or isinstance(node, ast.ImportFrom):
+    elif isinstance(node, (ast.Import, ast.ImportFrom)):
         for n in node.names:
             module_top_assigns.add(n.asname or n.name)
 
@@ -74,10 +75,7 @@ for node in tree.body:
                 for tgt in sub.targets:
                     if isinstance(tgt, ast.Name):
                         local_defined.add(tgt.id)
-            elif isinstance(sub, ast.Import):
-                for n in sub.names:
-                    local_defined.add(n.asname or n.name)
-            elif isinstance(sub, ast.ImportFrom):
+            elif isinstance(sub, (ast.Import, ast.ImportFrom)):
                 for n in sub.names:
                     local_defined.add(n.asname or n.name)
 
