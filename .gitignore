@@ -94,6 +94,8 @@ config_local.yaml
 *.bak
 *.tmp
 *.download
+*_result.txt
+verify_data_result.txt
 .ipynb_checkpoints/
 ~$*
 
