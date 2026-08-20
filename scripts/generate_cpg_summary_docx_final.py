@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Generate comprehensive Word document (V11) with customized Markdown hyperlink injection."""
+"""Generate comprehensive Word document (V12) with customized Markdown hyperlink injection and ordered grouped rows."""
 
 import sys
 import re
@@ -100,7 +100,7 @@ section.right_margin = Cm(1.2)
 section.top_margin = Cm(1.2)
 section.bottom_margin = Cm(1.2)
 
-title = doc.add_heading('CpG佐剂预防性疫苗：核心临床试验与安全性数据汇总 (V11)', level=1)
+title = doc.add_heading('CpG佐剂预防性疫苗：核心临床试验与安全性数据汇总 (V12)', level=1)
 title.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 subtitle = doc.add_paragraph()
@@ -133,6 +133,7 @@ for i, h in enumerate(headers):
         run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
 
 data = [
+    # ---------------- HBV (乙肝) ----------------
     {
         'vaccine': '**【✅ 已上市】**\n(美国 FDA，2017)\n\n**HEPLISAV-B**\n(HepB-CpG 1018)\n\n**适应症**：预防HBV感染 (≥18岁)\n**申办者**: Dynavax',
         'registry': 'FDA\n[NCT01282762](https://clinicaltrials.gov/study/NCT01282762)\n(HBV-23等)',
@@ -159,6 +160,31 @@ data = [
             '[DOI: 10.1016/j.vaccine.2023.04.028](https://doi.org/10.1016/j.vaccine.2023.04.028)'
         )
     },
+    {
+        'vaccine': '**【🧪 在研】**\n(Phase 1)\n\n**重组乙肝疫苗** (汉逊酵母)\n(佐剂: CpG ODN 250μg)\n\n**适应症**：预防HBV\n**申办者**: 华普生物/北京生物制品研究所',
+        'registry': '国内单中心\n(无CTR登记，2016年)',
+        'clinical': (
+            '**分期**: Phase 1\n'
+            '**设计**: 随机、双盲、对照\n'
+            '**样本量**: 48人\n'
+            '**试验分组**: CpG试验组 vs 铝对照组\n'
+            '**研究终点**: 安全性、耐受性及初步免疫原性'
+        ),
+        'safety': (
+            '【总体不良事件 (AE)】\n'
+            '■ CpG组 66.67% (16/24) vs 铝佐剂组 54.17% (13/24) (AE)\n'
+            ' (P=0.556, 差异无统计学意义)\n'
+            '■ 严重程度: 全部为 Grade 1-2 轻中度反应 (AE)\n'
+            '■ 无 ≥3级 不良事件报告 (AE)\n\n'
+            '【SAE / AESI】\n'
+            '■ SADR / AESI: 未报告任何严重不良事件或自免事件 (0例) (AE)'
+        ),
+        'ref': (
+            '[PMID: 32842315](https://pubmed.ncbi.nlm.nih.gov/32842315/)\n'
+            '[DOI: 10.3760/cma.j.cn112150-20200401-00490](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
+        )
+    },
+    # ---------------- COVID-19 (新冠) ----------------
     {
         'vaccine': '**【✅ 已上市】**\n(中国 EUA，2022)\n\n**SCB-2019**\n(重组SARS-CoV-2三聚体S蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: 三叶草生物',
         'registry': 'FDA\n[NCT04672395](https://clinicaltrials.gov/study/NCT04672395)\n(SPECTRA全球)',
@@ -234,145 +260,6 @@ data = [
         )
     },
     {
-        'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**ZR202-CoV**\n(重组新冠S蛋白三聚体疫苗 + CpG 7909)\n\n**适应症**：预防COVID-19\n**申办者**: 泽润生物',
-        'registry': 'NMPA\n[ChiCTR2200057758](https://trialsearch.who.int/Trial2.aspx?TrialID=ChiCTR2200057758)\n[NCT04990544](https://clinicaltrials.gov/study/NCT04990544)',
-        'clinical': (
-            '**分期**: Phase 1/2\n'
-            '**设计**: 随机、双盲、安慰剂对照\n'
-            '**样本量**: 72人(P1) / 1,056人(P2)\n'
-            '**试验分组**: 疫苗组 vs 安慰剂组\n'
-            '**研究终点**: 安全性及假病毒中和抗体滴度'
-        ),
-        'safety': (
-            '【征集性不良事件】\n'
-            '■ 注射部位疼痛(Pain): 轻至中度 (AE)\n'
-            '■ 发热(Fever): 罕见 (AE)\n'
-            '■ ≥3级(Severe)局部或全身不良事件: 0% (AE)\n\n'
-            '【SAE / SADR / AESI】\n'
-            '■ SADR: 未发生任何疫苗相关严重不良事件 (0例) (ADR)\n'
-            '■ AESI: 未观察到特殊关注事件 (AE)'
-        ),
-        'ref': (
-            '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)\n'
-            '[DOI: 10.1080/21645515.2023.2262635](https://doi.org/10.1080/21645515.2023.2262635)'
-        )
-    },
-    {
-        'vaccine': '**【✅ 已上市】**\n(美国 FDA，2023)\n\n**AV7909 / CYFENDUS®**\n(BioThrax + CPG 7909佐剂)\n\n**适应症**：炭疽暴露后预防\n**申办者**: Emergent BioSolutions',
-        'registry': 'FDA\n[NCT03877926](https://clinicaltrials.gov/study/NCT03877926)\n(Phase 3)',
-        'clinical': (
-            '**分期**: Phase 3 (关键注册试验)\n'
-            '**设计**: 随机、双盲、活性对照\n'
-            '**样本量**: 3,689人\n'
-            '**适应人群**: 18-65岁健康成人\n'
-            '**试验分组**: AV7909组 vs BioThrax对照组\n'
-            '**研究终点**: 免疫原性(TNA，替代终点)及安全性'
-        ),
-        'safety': (
-            '【FDA Package Insert 官方安全数据】\n'
-            '■ 最常见局部反应(发生率>10%): 触痛(Tenderness, 74%)、疼痛(Pain, 51%)、发红(Redness, 42%)、手臂活动受限(29%)、肿胀(Swelling, 22%) (ADR)\n'
-            '■ 最常见全身反应: 肌肉酸痛(Muscle Aches, 40%)、疲劳(Tiredness, 32%)、头痛(Headache, 24%) (ADR)\n'
-            '■ 特别体征(一过性): 在接受含 CpG 7909 佐剂的受试者中，观察到一过性的绝对淋巴细胞计数下降，FDA评估视为佐剂的一过性生理归巢效应，无临床病理意义。\n'
-            '■ SADR: 总体临床池未报告与疫苗因果关系明确的 SAE (0 SADR)。'
-        ),
-        'ref': (
-            '[FDA Package Insert (CYFENDUS)](https://www.fda.gov/vaccines-blood-biologics/cyfendus)\n'
-            '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)\n'
-            '[DOI: 10.1016/j.vaccine.2025.128068](https://doi.org/10.1016/j.vaccine.2025.128068)'
-        )
-    },
-    {
-        'vaccine': '**【🧪 在研】**\n(Phase 1b)\n\n**BK-SE36/CpG**\n(重组疟原虫SE36抗原 + CpG-ODN K3)\n\n**适应症**：预防疟疾\n**申办者**: BIKEN / 贵州百灵',
-        'registry': 'PACTR\n[PACTR201701001921166](https://trialsearch.who.int/Trial2.aspx?TrialID=PACTR201701001921166)',
-        'clinical': (
-            '**分期**: Phase 1b\n'
-            '**设计**: 随机、双盲、年龄降级\n'
-            '**样本量**: 135人\n'
-            '**试验分组**: BK-SE36/CpG组 vs 单铝对照组\n'
-            '**研究终点**: 安全性及抗SE36 IgG滴度'
-        ),
-        'safety': (
-            '【征集性反应原性 (Day 1-7)】\n'
-            '■ 总体疫苗相关事件发生率: 38% vs 对照组14% (ADR)\n'
-            '■ 局部疼痛/活动受限: 成人 17%–33%; 儿童 40%–57%; 幼儿 6%–19% (ADR)\n'
-            '■ 发热(Fever): 5-10岁组0-13%; 12-24月龄组13-29% (ADR)\n\n'
-            '【SAE / SADR】\n'
-            '■ SAE: 5例 (重症疟疾)，均评估与疫苗无关 (AE)\n'
-            '■ SADR / SUSAR: 零报告 (0例) (ADR)'
-        ),
-        'ref': (
-            '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)\n'
-            '[DOI: 10.3389/fimmu.2023.1267372](https://doi.org/10.3389/fimmu.2023.1267372)'
-        )
-    },
-    {
-        'vaccine': '**【🧪 在研】**\n(Phase 2)\n\n**Na-GST-1/Al + CpG 10104**\n(钩虫病重组疫苗)\n\n**适应症**：预防钩虫感染\n**申办者**: Sabin Vaccine Institute',
-        'registry': 'FDA\n[NCT03172975](https://clinicaltrials.gov/study/NCT03172975)',
-        'clinical': (
-            '**分期**: Phase 2 (含CHHI受控感染)\n'
-            '**设计**: 随机、双盲、安慰剂对照\n'
-            '**样本量**: 39人\n'
-            '**试验分组**: CpG联合佐剂组 vs 单铝组\n'
-            '**研究终点**: CHHI模型中钩虫感染强度及安全性'
-        ),
-        'safety': (
-            '【反应原性与常规不良事件】\n'
-            '■ 局部及全身反应: 大多数表现为轻度(Mild) (AE)\n'
-            '■ 免疫/血液指标: CpG佐剂组显著抑制了钩虫引发的外周血嗜酸性粒细胞增多 (中位值 0.6×10³/μL vs 安慰剂组 3.1×10³/μL, p=0.027) (ADR)\n\n'
-            '【SAE / SADR】\n'
-            '■ SADR: 全程未观察到疫苗相关的严重不良事件 (0 SADR)。'
-        ),
-        'ref': (
-            '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)\n'
-            '[DOI: 10.1016/S1473-3099(26)00018-6](https://doi.org/10.1016/S1473-3099(26)00018-6)'
-        )
-    },
-    {
-        'vaccine': '**【🧪 在研】**\n(Phase 1)\n\n**重组乙肝疫苗** (汉逊酵母)\n(佐剂: CpG ODN 250μg)\n\n**适应症**：预防HBV\n**申办者**: 华普生物/北京生物制品研究所',
-        'registry': '国内单中心\n(无CTR登记，2016年)',
-        'clinical': (
-            '**分期**: Phase 1\n'
-            '**设计**: 随机、双盲、对照\n'
-            '**样本量**: 48人\n'
-            '**试验分组**: CpG试验组 vs 铝对照组\n'
-            '**研究终点**: 安全性、耐受性及初步免疫原性'
-        ),
-        'safety': (
-            '【总体不良事件 (AE)】\n'
-            '■ CpG组 66.67% (16/24) vs 铝佐剂组 54.17% (13/24) (AE)\n'
-            ' (P=0.556, 差异无统计学意义)\n'
-            '■ 严重程度: 全部为 Grade 1-2 轻中度反应 (AE)\n'
-            '■ 无 ≥3级 不良事件报告 (AE)\n\n'
-            '【SAE / AESI】\n'
-            '■ SADR / AESI: 未报告任何严重不良事件或自免事件 (0例) (AE)'
-        ),
-        'ref': (
-            '[PMID: 32842315](https://pubmed.ncbi.nlm.nih.gov/32842315/)\n'
-            '[DOI: 10.3760/cma.j.cn112150-20200401-00490](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
-        )
-    },
-    {
-        'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**Z-1018**\n(带状疱疹疫苗 + CpG 1018)\n\n**适应症**：预防带状疱疹\n**申办者**: Dynavax',
-        'registry': 'FDA\n[NCT06569823](https://clinicaltrials.gov/study/NCT06569823)',
-        'clinical': (
-            '**分期**: Phase 1/2\n'
-            '**设计**: 随机、观察盲、对照(Shingrix)\n'
-            '**样本量**: 441人 (Part 1)\n'
-            '**试验分组**: Z-1018多剂量组 vs Shingrix\n'
-            '**研究终点**: 耐受性及抗gE IgG阳转率'
-        ),
-        'safety': (
-            '【核心安全数据 (Part 1期中分析)】\n'
-            '■ 局部反应发生率(PIR): 中重度疼痛/红肿等 Z-1018 (7.7%–35.0%) 显著低于 Shingrix (52.6%) (AE)\n'
-            '■ 全身反应发生率: 中重度肌痛/疲劳等 Z-1018 (17.5%–46.2%) 显著低于 Shingrix (63.2%) (AE)\n'
-            ' (核心结论: Z-1018 在提供可比抗体应答的同时，系统与局部反应原性大幅下降)\n'
-        ),
-        'ref': (
-            '[DOI: 10.1093/ofid/ofaf695.018](https://doi.org/10.1093/ofid/ofaf695.018)\n'
-            '(OFID 2026会议摘要)'
-        )
-    },
-    {
         'vaccine': '**【✅ 已上市】**\n(印度 EUA，2021)\n\n**CORBEVAX**\n(重组RBD蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: Biological E / 贝勒医学院',
         'registry': 'CTRI\n[CTRI/2021/08/036074](https://trialsearch.who.int/Trial2.aspx?TrialID=CTRI/2021/08/036074)',
         'clinical': (
@@ -398,6 +285,53 @@ data = [
         )
     },
     {
+        'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**ZR202-CoV**\n(重组新冠S蛋白三聚体疫苗 + CpG 7909)\n\n**适应症**：预防COVID-19\n**申办者**: 泽润生物',
+        'registry': 'NMPA\n[ChiCTR2200057758](https://trialsearch.who.int/Trial2.aspx?TrialID=ChiCTR2200057758)\n[NCT04990544](https://clinicaltrials.gov/study/NCT04990544)',
+        'clinical': (
+            '**分期**: Phase 1/2\n'
+            '**设计**: 随机、双盲、安慰剂对照\n'
+            '**样本量**: 72人(P1) / 1,056人(P2)\n'
+            '**试验分组**: 疫苗组 vs 安慰剂组\n'
+            '**研究终点**: 安全性及假病毒中和抗体滴度'
+        ),
+        'safety': (
+            '【征集性不良事件】\n'
+            '■ 注射部位疼痛(Pain): 轻至中度 (AE)\n'
+            '■ 发热(Fever): 罕见 (AE)\n'
+            '■ ≥3级(Severe)局部或全身不良事件: 0% (AE)\n\n'
+            '【SAE / SADR / AESI】\n'
+            '■ SADR: 未发生任何疫苗相关严重不良事件 (0例) (ADR)\n'
+            '■ AESI: 未观察到特殊关注事件 (AE)'
+        ),
+        'ref': (
+            '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)\n'
+            '[DOI: 10.1080/21645515.2023.2262635](https://doi.org/10.1080/21645515.2023.2262635)'
+        )
+    },
+    # ---------------- RSV (呼吸道合胞病毒) ----------------
+    {
+        'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**RSVpreF + CpG**\n(RSV 融合前F蛋白 + CpG/铝佐剂)\n\n**适应症**：预防RSV感染 (老年人群)\n**申办者**: 辉瑞 (Pfizer)',
+        'registry': 'FDA\n[NCT03572062](https://clinicaltrials.gov/study/NCT03572062)',
+        'clinical': (
+            '**分期**: Phase 1/2\n'
+            '**设计**: 随机、观察盲、安慰剂对照\n'
+            '**样本量**: 1,225人 (总队列)\n'
+            '**适应人群**: 65-85岁老年人\n'
+            '**试验分组**: RSVpreF(含或不含 CpG/铝佐剂) vs 安慰剂\n'
+            '**研究终点**: 安全性及RSV中和抗体滴度'
+        ),
+        'safety': (
+            '【核心安全数据 (Phase 1/2)】\n'
+            '■ 总体反应原性: 大多数局部和全身不良反应表现为轻度(Mild)，含 CpG/Al(OH)3 佐剂的疫苗组展现出良好的整体耐受性 (ADR)\n'
+            '■ 严重不良事件: 与对照组相比未增加额外严重风险 (AE)\n'
+            '(核心结论: 在老年人群中，加用 CpG/Al(OH)3 佐剂并未导致局部或全身反应原性显著恶化，安全性良好；但在本特定抗原下，未观察到中和抗体滴度的进一步显著增强。)'
+        ),
+        'ref': (
+            '[PMID: 35543281](https://pubmed.ncbi.nlm.nih.gov/35543281/)\n'
+            '[DOI: 10.1093/infdis/jiac192](https://doi.org/10.1093/infdis/jiac192)'
+        )
+    },
+    {
         'vaccine': '**【🧪 在研】**\n(Phase 2)\n\n**VN-0200**\n(RSV F糖蛋白 + β-葡聚糖/CpG)\n\n**适应症**：预防RSV感染\n**申办者**: 第一三共',
         'registry': '日本jRCT\n[jRCT2071220051](https://jrct.niph.go.jp/en-latest-detail/jRCT2071220051)',
         'clinical': (
@@ -419,6 +353,102 @@ data = [
             '[DOI: 10.1080/21645515.2025.2489900](https://doi.org/10.1080/21645515.2025.2489900)'
         )
     },
+    # ---------------- Zoster (带状疱疹) ----------------
+    {
+        'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**Z-1018**\n(带状疱疹疫苗 + CpG 1018)\n\n**适应症**：预防带状疱疹\n**申办者**: Dynavax',
+        'registry': 'FDA\n[NCT06569823](https://clinicaltrials.gov/study/NCT06569823)',
+        'clinical': (
+            '**分期**: Phase 1/2\n'
+            '**设计**: 随机、观察盲、对照(Shingrix)\n'
+            '**样本量**: 441人 (Part 1)\n'
+            '**试验分组**: Z-1018多剂量组 vs Shingrix\n'
+            '**研究终点**: 耐受性及抗gE IgG阳转率'
+        ),
+        'safety': (
+            '【核心安全数据 (Part 1期中分析)】\n'
+            '■ 局部反应发生率(PIR): 中重度疼痛/红肿等 Z-1018 (7.7%–35.0%) 显著低于 Shingrix (52.6%) (AE)\n'
+            '■ 全身反应发生率: 中重度肌痛/疲劳等 Z-1018 (17.5%–46.2%) 显著低于 Shingrix (63.2%) (AE)\n'
+            ' (核心结论: Z-1018 在提供可比抗体应答的同时，系统与局部反应原性大幅下降)\n'
+        ),
+        'ref': (
+            '[DOI: 10.1093/ofid/ofaf695.018](https://doi.org/10.1093/ofid/ofaf695.018)\n'
+            '(OFID 2026会议摘要)'
+        )
+    },
+    # ---------------- Anthrax (炭疽) ----------------
+    {
+        'vaccine': '**【✅ 已上市】**\n(美国 FDA，2023)\n\n**AV7909 / CYFENDUS®**\n(BioThrax + CPG 7909佐剂)\n\n**适应症**：炭疽暴露后预防\n**申办者**: Emergent BioSolutions',
+        'registry': 'FDA\n[NCT03877926](https://clinicaltrials.gov/study/NCT03877926)\n(Phase 3)',
+        'clinical': (
+            '**分期**: Phase 3 (关键注册试验)\n'
+            '**设计**: 随机、双盲、活性对照\n'
+            '**样本量**: 3,689人\n'
+            '**适应人群**: 18-65岁健康成人\n'
+            '**试验分组**: AV7909组 vs BioThrax对照组\n'
+            '**研究终点**: 免疫原性(TNA，替代终点)及安全性'
+        ),
+        'safety': (
+            '【FDA Package Insert 官方安全数据】\n'
+            '■ 最常见局部反应(发生率>10%): 触痛(Tenderness, 74%)、疼痛(Pain, 51%)、发红(Redness, 42%)、手臂活动受限(29%)、肿胀(Swelling, 22%) (ADR)\n'
+            '■ 最常见全身反应: 肌肉酸痛(Muscle Aches, 40%)、疲劳(Tiredness, 32%)、头痛(Headache, 24%) (ADR)\n'
+            '■ 特别体征(一过性): 在接受含 CpG 7909 佐剂的受试者中，观察到一过性的绝对淋巴细胞计数下降，FDA评估视为佐剂的一过性生理归巢效应，无临床病理意义。\n'
+            '■ SADR: 总体临床池未报告与疫苗因果关系明确的 SAE (0 SADR)。'
+        ),
+        'ref': (
+            '[FDA Package Insert (CYFENDUS)](https://www.fda.gov/vaccines-blood-biologics/cyfendus)\n'
+            '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)\n'
+            '[DOI: 10.1016/j.vaccine.2025.128068](https://doi.org/10.1016/j.vaccine.2025.128068)'
+        )
+    },
+    # ---------------- Malaria (疟疾) ----------------
+    {
+        'vaccine': '**【🧪 在研】**\n(Phase 1b)\n\n**BK-SE36/CpG**\n(重组疟原虫SE36抗原 + CpG-ODN K3)\n\n**适应症**：预防疟疾\n**申办者**: BIKEN / 贵州百灵',
+        'registry': 'PACTR\n[PACTR201701001921166](https://trialsearch.who.int/Trial2.aspx?TrialID=PACTR201701001921166)',
+        'clinical': (
+            '**分期**: Phase 1b\n'
+            '**设计**: 随机、双盲、年龄降级\n'
+            '**样本量**: 135人\n'
+            '**试验分组**: BK-SE36/CpG组 vs 单铝对照组\n'
+            '**研究终点**: 安全性及抗SE36 IgG滴度'
+        ),
+        'safety': (
+            '【征集性反应原性 (Day 1-7)】\n'
+            '■ 总体疫苗相关事件发生率: 38% vs 对照组14% (ADR)\n'
+            '■ 局部疼痛/活动受限: 成人 17%–33%; 儿童 40%–57%; 幼儿 6%–19% (ADR)\n'
+            '■ 发热(Fever): 5-10岁组0-13%; 12-24月龄组13-29% (ADR)\n\n'
+            '【SAE / SADR】\n'
+            '■ SAE: 5例 (重症疟疾)，均评估与疫苗无关 (AE)\n'
+            '■ SADR / SUSAR: 零报告 (0例) (ADR)'
+        ),
+        'ref': (
+            '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)\n'
+            '[DOI: 10.3389/fimmu.2023.1267372](https://doi.org/10.3389/fimmu.2023.1267372)'
+        )
+    },
+    # ---------------- Hookworm (钩虫病) ----------------
+    {
+        'vaccine': '**【🧪 在研】**\n(Phase 2)\n\n**Na-GST-1/Al + CpG 10104**\n(钩虫病重组疫苗)\n\n**适应症**：预防钩虫感染\n**申办者**: Sabin Vaccine Institute',
+        'registry': 'FDA\n[NCT03172975](https://clinicaltrials.gov/study/NCT03172975)',
+        'clinical': (
+            '**分期**: Phase 2 (含CHHI受控感染)\n'
+            '**设计**: 随机、双盲、安慰剂对照\n'
+            '**样本量**: 39人\n'
+            '**试验分组**: CpG联合佐剂组 vs 单铝组\n'
+            '**研究终点**: CHHI模型中钩虫感染强度及安全性'
+        ),
+        'safety': (
+            '【反应原性与常规不良事件】\n'
+            '■ 局部及全身反应: 大多数表现为轻度(Mild) (AE)\n'
+            '■ 免疫/血液指标: CpG佐剂组显著抑制了钩虫引发的外周血嗜酸性粒细胞增多 (中位值 0.6×10³/μL vs 安慰剂组 3.1×10³/μL, p=0.027) (ADR)\n\n'
+            '【SAE / SADR】\n'
+            '■ SADR: 全程未观察到疫苗相关的严重不良事件 (0 SADR)。'
+        ),
+        'ref': (
+            '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)\n'
+            '[DOI: 10.1016/S1473-3099(26)00018-6](https://doi.org/10.1016/S1473-3099(26)00018-6)'
+        )
+    },
+    # ---------------- Pipeline Summary (最后一行汇总) ----------------
     {
         'vaccine': '**【🧪 在研项目汇总】**\n\n**临床研发管线中的新型 CpG 疫苗**\n(预防性疫苗)\n\n**适应症**：带状疱疹、乙肝、流感、狂犬病等\n**申办者**: 各大创新疫苗企业',
         'registry': 'NMPA / FDA\n(中国及海外多中心)',
@@ -426,7 +456,7 @@ data = [
             '■ **带状疱疹**: 简达生物(Phase 2); 吉诺卫生物(Phase 2); 怡道/中慧元通(Phase 3完成,已报NDA); 明瑞佳MRJ103(IND); 华普生物HP2001(Phase 1); 远大生物TVAX-006(Phase 2)。\n'
             '■ **乙型肝炎**: 远大生物TVAX-008(Phase 3), TVAX-009(EOP2), 远大乙肝(Phase 2); 华普生物HP2002(Phase 1)。\n'
             '■ **流感**: 华普生物HP-3001裂解疫苗(NMPA IND); 简达生物重组蛋白流感疫苗(FDA IND)。\n'
-            '■ **其他疾病**: 长春卓谊狂犬(IND); Dynavax重组鼠疫(Phase 2); 辉瑞RSV+CpG(Phase 1/2); Uvax Bio HIV预防疫苗(Phase 1)。'
+            '■ **其他疾病**: 长春卓谊狂犬(IND); Dynavax重组鼠疫(Phase 2); Uvax Bio HIV预防疫苗(Phase 1)。'
         ),
         'safety': (
             '【管线安全性追踪状态】\n'
@@ -487,6 +517,6 @@ p_summary.paragraph_format.line_spacing = 1.3
 p_summary.runs[0].font.size = Pt(9.5)
 p_summary.runs[0].font.name = 'Microsoft YaHei'
 
-output_path = r'E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\CpG_Vaccine_Safety_Summary-V11-20260820.docx'
+output_path = r'E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\CpG_Vaccine_Safety_Summary-V12-20260820.docx'
 doc.save(output_path)
 logging.info(f"Document saved to: {output_path}")
