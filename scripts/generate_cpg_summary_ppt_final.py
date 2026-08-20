@@ -1,11 +1,12 @@
-import logging
-logging.basicConfig(level=logging.INFO)
 # -*- coding: utf-8 -*-
 """Script to convert Word summary table into V10 PPT with corrected conclusion."""
 
 import sys
 import os
 import re
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 try:
     import pptx
@@ -43,7 +44,7 @@ def estimate_row_height(row_data):
     return (max_lines * 0.15) + 0.1
 
 def create_ppt_from_docx(doc_path, ppt_path):
-    print(f"Reading document: {doc_path}")
+    logging.info(f"Reading document: {doc_path}")
     doc = docx.Document(doc_path)
     
     table = doc.tables[0]
@@ -62,7 +63,7 @@ def create_ppt_from_docx(doc_path, ppt_path):
     for row in table.rows[1:]:
         row_data.append([c.text for c in row.cells])
 
-    print(f"Extracted {len(row_data)} rows of data.")
+    logging.info(f"Extracted {len(row_data)} rows of data.")
 
     slides_data = []
     current_chunk = []
@@ -267,7 +268,7 @@ def create_ppt_from_docx(doc_path, ppt_path):
         p_body.line_spacing = 1.3
 
     prs.save(ppt_path)
-    print(f"Successfully saved PPT to: {ppt_path}")
+    logging.info(f"Successfully saved PPT to: {ppt_path}")
 
 if __name__ == "__main__":
     import traceback
@@ -276,5 +277,5 @@ if __name__ == "__main__":
         ppt_path = r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\CpG_Vaccine_Safety_Summary_PPT-V10-20260820.pptx"
         create_ppt_from_docx(doc_path, ppt_path)
     except Exception as e:
-        print("An error occurred:")
+        logging.error("An error occurred:")
         traceback.print_exc()
