@@ -469,12 +469,12 @@ def create_ppt_standalone(ppt_path):
 
     blank_layout = prs.slide_layouts[6]
 
-    def format_cell(cell, text, size=8.5, bold=False, text_color=BLACK, bg_color=None):
+    def format_cell(cell, text, size=8.0, bold=False, text_color=BLACK, bg_color=None):
         cell.text = ""
-        cell.margin_top = Pt(2)
-        cell.margin_bottom = Pt(2)
-        cell.margin_left = Pt(5)
-        cell.margin_right = Pt(5)
+        cell.margin_top = Pt(1.5)
+        cell.margin_bottom = Pt(1.5)
+        cell.margin_left = Pt(4)
+        cell.margin_right = Pt(4)
         
         if bg_color:
             cell.fill.solid()
@@ -588,23 +588,8 @@ def create_ppt_standalone(ppt_path):
 
 
     # ---------------- DETAILED SLIDES ----------------
-    slides_data = []
-    current_chunk = []
-    current_height = 0
-    MAX_HEIGHT = 5.5  # Restrict to safe margin so it doesn't overflow slide bounds!
-
-    for row in row_data:
-        h = estimate_row_height(row)
-        if current_height + h > MAX_HEIGHT and len(current_chunk) >= 1:
-            slides_data.append(current_chunk)
-            current_chunk = [row]
-            current_height = h
-        else:
-            current_chunk.append(row)
-            current_height += h
-
-    if current_chunk:
-        slides_data.append(current_chunk)
+    # Fixed 4 rows per slide as requested to minimize whitespace
+    slides_data = [row_data[i:i + 4] for i in range(0, len(row_data), 4)]
 
     col_widths = [Inches(1.8), Inches(1.2), Inches(3.2), Inches(5.8), Inches(1.2)]
     
@@ -638,7 +623,7 @@ def create_ppt_standalone(ppt_path):
             for c_idx, c_text in enumerate(r_data):
                 cell = tbl.cell(r_idx + 1, c_idx)
                 tbl.rows[r_idx + 1].height = Inches(0.5)
-                format_cell(cell, c_text, size=8.5, bold=False, text_color=BLACK, bg_color=bg_color)
+                format_cell(cell, c_text, size=8.0, bold=False, text_color=BLACK, bg_color=bg_color)
 
     # ---------------- FINAL SUMMARY SLIDE ----------------
     summary_slide = prs.slides.add_slide(blank_layout)
