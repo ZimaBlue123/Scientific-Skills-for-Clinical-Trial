@@ -21,20 +21,22 @@ from pptx.enum.text import PP_ALIGN
 import pptx.enum.shapes
 
 def estimate_row_height(row_data):
-    # Adjusted limits for smaller fonts and wider effective columns
-    col_limits = [30, 20, 50, 95, 25] 
+    # Strictly aligned limits to character capacity in PPT.
+    # col_widths: [1.8, 1.2, 3.2, 5.8, 1.2]
+    # Font 8.5Pt, roughly 0.08 inch per character.
+    col_limits = [22, 15, 40, 72, 15] 
     max_lines = 1
     for idx, text in enumerate(row_data):
         limit = col_limits[idx]
         lines = 0
         for paragraph in text.split('\n'):
             if len(paragraph) == 0:
-                lines += 0.5
+                lines += 1
             else:
                 lines += (len(paragraph) // limit) + 1
         if lines > max_lines:
             max_lines = lines
-    return (max_lines * 0.12) + 0.1
+    return (max_lines * 0.15) + 0.15
 
 def create_ppt_standalone(ppt_path):
     headers = [
@@ -71,8 +73,9 @@ def create_ppt_standalone(ppt_path):
                 '■ 特殊关注事件(急性心肌梗死 AMI): 0.2% (HEPLISAV-B) vs 0.1% (对照组)。FDA 独立专家组评估后认定“缺乏生物学合理性”，判定非疫苗相关风险 (AE)。'
             ),
             'ref': (
-                '[FDA Summary Basis for Regulatory Action](https://www.fda.gov/vaccines-blood-biologics/vaccines/heplisav-b)\n'
-                '[PMID: 37085451](https://pubmed.ncbi.nlm.nih.gov/37085451/)'
+                '[FDA Summary Basis for Regulatory Action (HEPLISAV-B)](https://www.fda.gov/vaccines-blood-biologics/vaccines/heplisav-b)\n'
+                '[PMID: 37085451](https://pubmed.ncbi.nlm.nih.gov/37085451/)\n'
+                '[DOI: 10.1016/j.vaccine.2023.04.028](https://doi.org/10.1016/j.vaccine.2023.04.028)'
             )
         },
         {
@@ -99,7 +102,7 @@ def create_ppt_standalone(ppt_path):
             ),
             'ref': (
                 '[PMID: 32842315](https://pubmed.ncbi.nlm.nih.gov/32842315/)\n'
-                '[DOI: 10.3760](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
+                '[DOI: 10.3760/cma.j.cn112150-20200401-00490](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
             )
         },
         # ---------------- COVID-19 ----------------
@@ -155,7 +158,8 @@ def create_ppt_standalone(ppt_path):
                 '■ AESI: 1例暂时性面神经麻痹(<0.1%)被评估可能与疫苗相关 (ADR)'
             ),
             'ref': (
-                '[PMID: 34655522](https://pubmed.ncbi.nlm.nih.gov/34655522/)'
+                '[PMID: 34655522](https://pubmed.ncbi.nlm.nih.gov/34655522/)\n'
+                '[DOI: 10.1016/S2213-2600(21)00402-1](https://doi.org/10.1016/S2213-2600(21)00402-1)'
             )
         },
         {
@@ -181,7 +185,8 @@ def create_ppt_standalone(ppt_path):
                 '■ SAE: 未发现极可能与疫苗相关的SAE (0 SADR)。'
             ),
             'ref': (
-                '[PMID: 38575433](https://pubmed.ncbi.nlm.nih.gov/38575433/)'
+                '[PMID: 38575433](https://pubmed.ncbi.nlm.nih.gov/38575433/)\n'
+                '[DOI: 10.1016/j.vaccine.2024.03.077](https://doi.org/10.1016/j.vaccine.2024.03.077)'
             )
         },
         {
@@ -208,7 +213,8 @@ def create_ppt_standalone(ppt_path):
                 '■ 疫苗相关SAE: 0例 (0 SADR)'
             ),
             'ref': (
-                '[PMID: 37113012](https://pubmed.ncbi.nlm.nih.gov/37113012/)'
+                '[PMID: 37113012](https://pubmed.ncbi.nlm.nih.gov/37113012/)\n'
+                '[DOI: 10.1080/21645515.2023.2203632](https://doi.org/10.1080/21645515.2023.2203632)'
             )
         },
         {
@@ -234,7 +240,8 @@ def create_ppt_standalone(ppt_path):
                 '■ AESI: 未观察到特殊关注事件 (AE)'
             ),
             'ref': (
-                '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)'
+                '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)\n'
+                '[DOI: 10.1080/21645515.2023.2262635](https://doi.org/10.1080/21645515.2023.2262635)'
             )
         },
         # ---------------- RSV ----------------
@@ -259,7 +266,8 @@ def create_ppt_standalone(ppt_path):
                 '(核心结论: 在老年人群中，加用 CpG/Al(OH)3 佐剂并未导致局部或全身反应原性显著恶化，安全性良好；但在本特定抗原下，未观察到滴度显著增强。)'
             ),
             'ref': (
-                '[PMID: 35543281](https://pubmed.ncbi.nlm.nih.gov/35543281/)'
+                '[PMID: 35543281](https://pubmed.ncbi.nlm.nih.gov/35543281/)\n'
+                '[DOI: 10.1093/infdis/jiac192](https://doi.org/10.1093/infdis/jiac192)'
             )
         },
         {
@@ -283,7 +291,8 @@ def create_ppt_standalone(ppt_path):
                 '■ 因TEAE停药: 4例 (1.2%)，其中1例肢体不适判为相关 (ADR)'
             ),
             'ref': (
-                '[PMID: 40257186](https://pubmed.ncbi.nlm.nih.gov/40257186/)'
+                '[PMID: 40257186](https://pubmed.ncbi.nlm.nih.gov/40257186/)\n'
+                '[DOI: 10.1080/21645515.2025.2489900](https://doi.org/10.1080/21645515.2025.2489900)'
             )
         },
         # ---------------- Zoster ----------------
@@ -307,7 +316,8 @@ def create_ppt_standalone(ppt_path):
                 ' (核心结论: Z-1018 在提供可比抗体应答的同时，系统与局部反应原性大幅下降)\n'
             ),
             'ref': (
-                '[DOI: 10.1093/ofid](https://doi.org/10.1093/ofid/ofaf695.018)'
+                '[DOI: 10.1093/ofid/ofaf695.018](https://doi.org/10.1093/ofid/ofaf695.018)\n'
+                '(OFID 2026会议摘要)'
             )
         },
         # ---------------- Anthrax ----------------
@@ -334,7 +344,8 @@ def create_ppt_standalone(ppt_path):
             ),
             'ref': (
                 '[FDA Package Insert (CYFENDUS)](https://www.fda.gov/vaccines-blood-biologics/cyfendus)\n'
-                '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)'
+                '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)\n'
+                '[DOI: 10.1016/j.vaccine.2025.128068](https://doi.org/10.1016/j.vaccine.2025.128068)'
             )
         },
         # ---------------- Malaria ----------------
@@ -361,7 +372,8 @@ def create_ppt_standalone(ppt_path):
                 '■ SADR / SUSAR: 零报告 (0例) (ADR)'
             ),
             'ref': (
-                '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)'
+                '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)\n'
+                '[DOI: 10.3389/fimmu.2023.1267372](https://doi.org/10.3389/fimmu.2023.1267372)'
             )
         },
         # ---------------- Hookworm ----------------
@@ -386,7 +398,8 @@ def create_ppt_standalone(ppt_path):
                 '■ SADR: 全程未观察到疫苗相关的严重不良事件 (0 SADR)。'
             ),
             'ref': (
-                '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)'
+                '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)\n'
+                '[DOI: 10.1016/S1473-3099(26)00018-6](https://doi.org/10.1016/S1473-3099(26)00018-6)'
             )
         },
         # ---------------- Pipeline Summary ----------------
@@ -572,7 +585,7 @@ def create_ppt_standalone(ppt_path):
     slides_data = []
     current_chunk = []
     current_height = 0
-    MAX_HEIGHT = 6.0 
+    MAX_HEIGHT = 5.5  # Restrict to safe margin so it doesn't overflow slide bounds!
 
     for row in row_data:
         h = estimate_row_height(row)

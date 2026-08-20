@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Generate comprehensive Word document (V13) with TOC and new column 1 layout."""
+"""Generate comprehensive Word document (V13) with TOC and full references."""
 
 import sys
 import re
@@ -135,8 +135,9 @@ raw_data = [
             '■ 特殊关注事件(急性心肌梗死 AMI): 0.2% (HEPLISAV-B) vs 0.1% (对照组)。FDA 独立专家组评估后认定“缺乏生物学合理性”，判定非疫苗相关风险 (AE)。'
         ),
         'ref': (
-            '[FDA Summary Basis for Regulatory Action](https://www.fda.gov/vaccines-blood-biologics/vaccines/heplisav-b)\n'
-            '[PMID: 37085451](https://pubmed.ncbi.nlm.nih.gov/37085451/)'
+            '[FDA Summary Basis for Regulatory Action (HEPLISAV-B)](https://www.fda.gov/vaccines-blood-biologics/vaccines/heplisav-b)\n'
+            '[PMID: 37085451](https://pubmed.ncbi.nlm.nih.gov/37085451/)\n'
+            '[DOI: 10.1016/j.vaccine.2023.04.028](https://doi.org/10.1016/j.vaccine.2023.04.028)'
         )
     },
     {
@@ -163,7 +164,7 @@ raw_data = [
         ),
         'ref': (
             '[PMID: 32842315](https://pubmed.ncbi.nlm.nih.gov/32842315/)\n'
-            '[DOI: 10.3760](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
+            '[DOI: 10.3760/cma.j.cn112150-20200401-00490](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
         )
     },
     # ---------------- COVID-19 ----------------
@@ -219,7 +220,8 @@ raw_data = [
             '■ AESI: 1例暂时性面神经麻痹(<0.1%)被评估可能与疫苗相关 (ADR)'
         ),
         'ref': (
-            '[PMID: 34655522](https://pubmed.ncbi.nlm.nih.gov/34655522/)'
+            '[PMID: 34655522](https://pubmed.ncbi.nlm.nih.gov/34655522/)\n'
+            '[DOI: 10.1016/S2213-2600(21)00402-1](https://doi.org/10.1016/S2213-2600(21)00402-1)'
         )
     },
     {
@@ -245,7 +247,8 @@ raw_data = [
             '■ SAE: 未发现极可能与疫苗相关的SAE (0 SADR)。'
         ),
         'ref': (
-            '[PMID: 38575433](https://pubmed.ncbi.nlm.nih.gov/38575433/)'
+            '[PMID: 38575433](https://pubmed.ncbi.nlm.nih.gov/38575433/)\n'
+            '[DOI: 10.1016/j.vaccine.2024.03.077](https://doi.org/10.1016/j.vaccine.2024.03.077)'
         )
     },
     {
@@ -272,7 +275,8 @@ raw_data = [
             '■ 疫苗相关SAE: 0例 (0 SADR)'
         ),
         'ref': (
-            '[PMID: 37113012](https://pubmed.ncbi.nlm.nih.gov/37113012/)'
+            '[PMID: 37113012](https://pubmed.ncbi.nlm.nih.gov/37113012/)\n'
+            '[DOI: 10.1080/21645515.2023.2203632](https://doi.org/10.1080/21645515.2023.2203632)'
         )
     },
     {
@@ -298,7 +302,8 @@ raw_data = [
             '■ AESI: 未观察到特殊关注事件 (AE)'
         ),
         'ref': (
-            '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)'
+            '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)\n'
+            '[DOI: 10.1080/21645515.2023.2262635](https://doi.org/10.1080/21645515.2023.2262635)'
         )
     },
     # ---------------- RSV ----------------
@@ -323,7 +328,8 @@ raw_data = [
             '(核心结论: 在老年人群中，加用 CpG/Al(OH)3 佐剂并未导致局部或全身反应原性显著恶化，安全性良好；但在本特定抗原下，未观察到滴度显著增强。)'
         ),
         'ref': (
-            '[PMID: 35543281](https://pubmed.ncbi.nlm.nih.gov/35543281/)'
+            '[PMID: 35543281](https://pubmed.ncbi.nlm.nih.gov/35543281/)\n'
+            '[DOI: 10.1093/infdis/jiac192](https://doi.org/10.1093/infdis/jiac192)'
         )
     },
     {
@@ -347,7 +353,8 @@ raw_data = [
             '■ 因TEAE停药: 4例 (1.2%)，其中1例肢体不适判为相关 (ADR)'
         ),
         'ref': (
-            '[PMID: 40257186](https://pubmed.ncbi.nlm.nih.gov/40257186/)'
+            '[PMID: 40257186](https://pubmed.ncbi.nlm.nih.gov/40257186/)\n'
+            '[DOI: 10.1080/21645515.2025.2489900](https://doi.org/10.1080/21645515.2025.2489900)'
         )
     },
     # ---------------- Zoster ----------------
@@ -371,7 +378,7 @@ raw_data = [
             ' (核心结论: Z-1018 在提供可比抗体应答的同时，系统与局部反应原性大幅下降)\n'
         ),
         'ref': (
-            '[DOI: 10.1093/ofid](https://doi.org/10.1093/ofid/ofaf695.018)'
+            '[DOI: 10.1093/ofid/ofaf695.018](https://doi.org/10.1093/ofid/ofaf695.018)\n(OFID 2026会议摘要)'
         )
     },
     # ---------------- Anthrax ----------------
@@ -398,7 +405,8 @@ raw_data = [
         ),
         'ref': (
             '[FDA Package Insert (CYFENDUS)](https://www.fda.gov/vaccines-blood-biologics/cyfendus)\n'
-            '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)'
+            '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)\n'
+            '[DOI: 10.1016/j.vaccine.2025.128068](https://doi.org/10.1016/j.vaccine.2025.128068)'
         )
     },
     # ---------------- Malaria ----------------
@@ -425,7 +433,8 @@ raw_data = [
             '■ SADR / SUSAR: 零报告 (0例) (ADR)'
         ),
         'ref': (
-            '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)'
+            '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)\n'
+            '[DOI: 10.3389/fimmu.2023.1267372](https://doi.org/10.3389/fimmu.2023.1267372)'
         )
     },
     # ---------------- Hookworm ----------------
@@ -450,7 +459,8 @@ raw_data = [
             '■ SADR: 全程未观察到疫苗相关的严重不良事件 (0 SADR)。'
         ),
         'ref': (
-            '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)'
+            '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)\n'
+            '[DOI: 10.1016/S1473-3099(26)00018-6](https://doi.org/10.1016/S1473-3099(26)00018-6)'
         )
     },
     # ---------------- Pipeline Summary ----------------
@@ -494,6 +504,14 @@ def format_col1(d):
         name_text = f"**{v_parts[0]}**"
 
     return f"{status_text}\n\n**申办者**: {d['sponsor']}\n{name_text}\n**适应症**：{d['indication']}"
+
+headers = [
+    '疫苗名称 / 申办者 / 适应症',
+    '注册平台 & 编号',
+    '临床试验基本信息',
+    '安全性数据汇总',
+    '核心参考文献'
+]
 
 # Render TOC Table
 doc.add_heading('【概览】CpG 预防性疫苗核心管线目录', level=2)
@@ -542,14 +560,6 @@ table.alignment = WD_TABLE_ALIGNMENT.CENTER
 col_widths = [Cm(5.0), Cm(2.8), Cm(5.2), Cm(10.5), Cm(3.8)]
 for i, width in enumerate(col_widths):
     table.columns[i].width = width
-
-headers = [
-    '疫苗名称 / 申办者 / 适应症',
-    '注册平台 & 编号',
-    '临床试验基本信息',
-    '安全性数据汇总',
-    '核心参考文献'
-]
 
 hdr_cells = table.rows[0].cells
 for i, h in enumerate(headers):
