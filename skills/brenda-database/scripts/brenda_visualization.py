@@ -39,10 +39,18 @@ except ImportError:
     PANDAS_AVAILABLE = False
 
 try:
-    from brenda_queries import (compare_across_organisms, get_environmental_parameters,
-                                get_km_values, get_modeling_parameters, get_reactions,
-                                get_substrate_specificity, parse_km_entry, parse_reaction_entry,
-                                search_by_pattern, search_enzymes_by_substrate)
+    from brenda_queries import (
+        compare_across_organisms,
+        get_environmental_parameters,
+        get_km_values,
+        get_modeling_parameters,
+        get_reactions,
+        get_substrate_specificity,
+        parse_km_entry,
+        parse_reaction_entry,
+        search_by_pattern,
+        search_enzymes_by_substrate,
+    )
 
     BRENDA_QUERIES_AVAILABLE = True
 except ImportError:

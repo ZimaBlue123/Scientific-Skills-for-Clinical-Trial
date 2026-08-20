@@ -196,8 +196,7 @@ def plot_degree_distribution(data, output_path: str | None = None):
 
 def plot_graph_statistics(data, output_path: str | None = None):
     """Plot various graph statistics."""
-    from torch_geometric.utils import contains_self_loops, degree
-    from torch_geometric.utils import is_undirected as check_undirected
+    from torch_geometric.utils import contains_self_loops, degree, is_undirected as check_undirected
 
     # Compute statistics
     row, col = data.edge_index

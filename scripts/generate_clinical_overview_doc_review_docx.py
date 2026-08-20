@@ -9,11 +9,12 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
 from docx import Document  # type: ignore
 from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
 from docx.oxml.ns import qn  # type: ignore
 from docx.shared import Pt  # type: ignore
+
+from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
 
 LOGGER = logging.getLogger("generate_clinical_overview_review")
 if not LOGGER.handlers:

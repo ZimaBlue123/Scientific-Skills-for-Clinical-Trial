@@ -52,11 +52,17 @@ except ImportError:
     MATPLOTLIB_AVAILABLE = False
 
 try:
-    from brenda_queries import (compare_across_organisms, find_ph_stable_variants,
-                                find_thermophilic_homologs, get_cofactor_requirements,
-                                get_environmental_parameters, get_substrate_specificity,
-                                search_by_pattern, search_enzymes_by_product,
-                                search_enzymes_by_substrate)
+    from brenda_queries import (
+        compare_across_organisms,
+        find_ph_stable_variants,
+        find_thermophilic_homologs,
+        get_cofactor_requirements,
+        get_environmental_parameters,
+        get_substrate_specificity,
+        search_by_pattern,
+        search_enzymes_by_product,
+        search_enzymes_by_substrate,
+    )
 
     BRENDA_QUERIES_AVAILABLE = True
 except ImportError:

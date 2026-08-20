@@ -24,12 +24,13 @@ from datetime import datetime
 # 让脚本可以导入 common_scripts.docx_utils
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from common_scripts.docx_utils import apply_cn_en_fonts
 from docx import Document
 from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
+
+from common_scripts.docx_utils import apply_cn_en_fonts
 
 JSON_PATH = ".workbuddy/audit/norovirus_trial_pubmed.json"
 DOCX_PATH = ".workbuddy/audit/norovirus_trial_lit_report.docx"

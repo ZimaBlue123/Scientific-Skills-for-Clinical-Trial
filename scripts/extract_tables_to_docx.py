@@ -212,7 +212,9 @@ def append_html_table_to_doc(
 def _raw_html_table(extracted: Any) -> str:
     """不 prettify，便于解析。"""
     from img2table.tables.extraction._utils import (  # type: ignore  # noqa: PLC0415
-        create_all_rectangles, group_cell_positions)
+        create_all_rectangles,
+        group_cell_positions,
+    )
 
     cell_span_list = [
         cell_span
