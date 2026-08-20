@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """阶段 1-3: 从已有的 phase1_pyflakes_raw.txt 解析（不重跑 pyflakes）。"""
 from __future__ import annotations
+
 import pathlib
 import re
 from collections import Counter, defaultdict

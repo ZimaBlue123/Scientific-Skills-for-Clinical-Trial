@@ -48,7 +48,9 @@ class ScriptCheck:
     seconds: float
 
 
-def _run(argv: list[str], cwd: Path | None = None, timeout_s: int = 20) -> tuple[int, str, str, float]:
+def _run(
+    argv: list[str], cwd: Path | None = None, timeout_s: int = 20
+) -> tuple[int, str, str, float]:
     t0 = time.time()
     p = subprocess.run(
         argv,
@@ -65,16 +67,29 @@ def _run(argv: list[str], cwd: Path | None = None, timeout_s: int = 20) -> tuple
 def check_command(name: str, argv: list[str]) -> CmdCheck:
     try:
         code, out, err, _ = _run(argv, cwd=ROOT, timeout_s=10)
-        return CmdCheck(name=name, argv=argv, ok=(code == 0), exit_code=code, stdout=out[:4000], stderr=err[:4000])
+        return CmdCheck(
+            name=name,
+            argv=argv,
+            ok=(code == 0),
+            exit_code=code,
+            stdout=out[:4000],
+            stderr=err[:4000],
+        )
     except FileNotFoundError as e:
-        return CmdCheck(name=name, argv=argv, ok=False, exit_code=None, stdout="", stderr=str(e))
+        return CmdCheck(
+            name=name, argv=argv, ok=False, exit_code=None, stdout="", stderr=str(e)
+        )
     except subprocess.TimeoutExpired:
-        return CmdCheck(name=name, argv=argv, ok=False, exit_code=None, stdout="", stderr="timeout")
+        return CmdCheck(
+            name=name, argv=argv, ok=False, exit_code=None, stdout="", stderr="timeout"
+        )
 
 
 def check_python_module(name: str) -> CmdCheck:
     try:
-        code, out, err, _ = _run([PY, "-c", f"import {name}; print('ok')"], cwd=ROOT, timeout_s=10)
+        code, out, err, _ = _run(
+            [PY, "-c", f"import {name}; print('ok')"], cwd=ROOT, timeout_s=10
+        )
         return CmdCheck(
             name=f"python-module:{name}",
             argv=[PY, "-c", f"import {name}"],
@@ -84,9 +99,23 @@ def check_python_module(name: str) -> CmdCheck:
             stderr=err[:4000],
         )
     except FileNotFoundError as e:
-        return CmdCheck(name=f"python-module:{name}", argv=[PY], ok=False, exit_code=None, stdout="", stderr=str(e))
+        return CmdCheck(
+            name=f"python-module:{name}",
+            argv=[PY],
+            ok=False,
+            exit_code=None,
+            stdout="",
+            stderr=str(e),
+        )
     except subprocess.TimeoutExpired:
-        return CmdCheck(name=f"python-module:{name}", argv=[PY], ok=False, exit_code=None, stdout="", stderr="timeout")
+        return CmdCheck(
+            name=f"python-module:{name}",
+            argv=[PY],
+            ok=False,
+            exit_code=None,
+            stdout="",
+            stderr="timeout",
+        )
 
 
 def iter_python_scripts() -> list[Path]:
@@ -110,7 +139,9 @@ def check_venv_policy() -> dict[str, object]:
         has_ignore = (".venv/" in text) or ("\n.venv\n" in f"\n{text}\n")
     return {
         "root_venv_present": root_venv.exists(),
-        "root_venv_file_count": sum(1 for _ in root_venv.rglob("*")) if root_venv.exists() else 0,
+        "root_venv_file_count": (
+            sum(1 for _ in root_venv.rglob("*")) if root_venv.exists() else 0
+        ),
         "gitignore_has_venv_rule": has_ignore,
     }
 
@@ -191,7 +222,9 @@ def run_script_check(p: Path) -> list[ScriptCheck]:
                 )
     else:
         try:
-            code, out, err, sec = _run([PY, "-m", "py_compile", str(p)], cwd=ROOT, timeout_s=20)
+            code, out, err, sec = _run(
+                [PY, "-m", "py_compile", str(p)], cwd=ROOT, timeout_s=20
+            )
             results.append(
                 ScriptCheck(
                     path=rel,
@@ -241,7 +274,9 @@ def main() -> int:
         "commands": [c.__dict__ for c in cmd_checks],
         "scripts": [s.__dict__ for s in script_results],
     }
-    OUT_JSON.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    OUT_JSON.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     failed_cmds = [c for c in cmd_checks if not c.ok]
     failed_scripts = [s for s in script_results if not s.ok]
@@ -258,22 +293,30 @@ def main() -> int:
         status = "OK" if c.ok else "FAIL"
         lines.append(f"- **{c.name}**: {status} (`{' '.join(c.argv)}`)")
         if not c.ok and c.stderr:
-                lines.append(f"  - stderr: `{c.stderr.strip()[:300]}`")
+            lines.append(f"  - stderr: `{c.stderr.strip()[:300]}`")
     lines.append("")
     # Renderer capability: either rsvg-convert or cairosvg is acceptable
     renderer_ok = any(
         c.ok and c.name in {"rsvg-convert", "python-module:cairosvg"}
         for c in cmd_checks
     )
-    lines.append(f"- renderer capability (rsvg-convert OR cairosvg): **{'OK' if renderer_ok else 'FAIL'}**")
+    lines.append(
+        f"- renderer capability (rsvg-convert OR cairosvg): **{'OK' if renderer_ok else 'FAIL'}**"
+    )
     lines.append("")
 
     lines.append("## Virtual env policy")
     lines.append(f"- root `.venv` present: **{venv_policy['root_venv_present']}**")
-    lines.append(f"- root `.venv` file count: **{venv_policy['root_venv_file_count']}**")
-    lines.append(f"- `.gitignore` has `.venv` rule: **{venv_policy['gitignore_has_venv_rule']}**")
+    lines.append(
+        f"- root `.venv` file count: **{venv_policy['root_venv_file_count']}**"
+    )
+    lines.append(
+        f"- `.gitignore` has `.venv` rule: **{venv_policy['gitignore_has_venv_rule']}**"
+    )
     if venv_policy["root_venv_present"]:
-        lines.append("- 建议将虚拟环境移出仓库根目录（例如 `~/.venvs/`），避免误扫和性能开销。")
+        lines.append(
+            "- 建议将虚拟环境移出仓库根目录（例如 `~/.venvs/`），避免误扫和性能开销。"
+        )
     lines.append("")
 
     lines.append("## Script smoke checks")
@@ -284,7 +327,9 @@ def main() -> int:
     if failed_scripts:
         lines.append("### Failures")
         for s in failed_scripts[:50]:
-            lines.append(f"- `{s.path}` ({s.mode}) exit={s.exit_code} err=`{(s.stderr or '').strip()[:200]}`")
+            lines.append(
+                f"- `{s.path}` ({s.mode}) exit={s.exit_code} err=`{(s.stderr or '').strip()[:200]}`"
+            )
         if len(failed_scripts) > 50:
             lines.append(f"- ... and {len(failed_scripts) - 50} more")
         lines.append("")
@@ -292,9 +337,13 @@ def main() -> int:
     # Minimal CLI consistency note: ensure help is available when argparse+main guard exists.
     lines.append("## Notes")
     if failed_cmds and not renderer_ok:
-        lines.append("- Renderer dependency missing: install `rsvg-convert` or ensure Python `cairosvg` is available.")
+        lines.append(
+            "- Renderer dependency missing: install `rsvg-convert` or ensure Python `cairosvg` is available."
+        )
     elif failed_cmds:
-        lines.append("- Some external commands are missing, but renderer is available via fallback.")
+        lines.append(
+            "- Some external commands are missing, but renderer is available via fallback."
+        )
     else:
         lines.append("- External command checks passed.")
     lines.append("")
@@ -305,4 +354,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

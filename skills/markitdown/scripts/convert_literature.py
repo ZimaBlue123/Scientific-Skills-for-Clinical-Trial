@@ -10,10 +10,11 @@ import argparse
 import json
 import re
 import sys
-from pathlib import Path
-from typing import List, Dict, Optional
-from markitdown import MarkItDown
 from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional
+
+from markitdown import MarkItDown
 
 
 def extract_metadata_from_filename(filename: str) -> Dict[str, str]:

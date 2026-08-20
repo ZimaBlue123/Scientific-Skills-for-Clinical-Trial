@@ -1,10 +1,13 @@
 """Insert Markdown rendering into scripts/extract_docx_full.py (priority 1)."""
+
 from pathlib import Path
 
-p = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\extract_docx_full.py")
+p = Path(
+    r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\extract_docx_full.py"
+)
 src = p.read_text(encoding="utf-8")
 
-OLD_DOC = '''Extract text from .docx / .doc files.
+OLD_DOC = """Extract text from .docx / .doc files.
 
 Supports a single file, a list of files, or every supported file in a
 folder. Modern .docx is handled via python-docx; legacy .doc is handled
@@ -17,9 +20,9 @@ Usage
 
     # Folder batch (all docx/doc files combined into one output)
     py -3 scripts/extract_docx_full.py folder/ [output.txt]
-'''
+"""
 
-NEW_DOC = '''Extract text from .docx / .doc files.
+NEW_DOC = """Extract text from .docx / .doc files.
 
 Supports a single file, a list of files, or every supported file in a
 folder. Modern .docx is handled via python-docx; legacy .doc is handled
@@ -36,7 +39,7 @@ Usage
     py -3 scripts/extract_docx_full.py document.docx [output.txt]
     py -3 scripts/extract_docx_full.py document.docx --format md output.md
     py -3 scripts/extract_docx_full.py folder/ [output.txt]
-'''
+"""
 
 assert OLD_DOC in src, "OLD_DOC not found"
 src = src.replace(OLD_DOC, NEW_DOC)
@@ -130,14 +133,14 @@ assert OLD_FUNC in src, "OLD_FUNC not found"
 src = src.replace(OLD_FUNC, NEW_FUNC)
 
 # Add --format to parser
-OLD_PARSER = '''    parser.add_argument(
+OLD_PARSER = """    parser.add_argument(
         "--log-level", default="INFO",
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity (default: %(default)s).",
     )
-    return parser'''
+    return parser"""
 
-NEW_PARSER = '''    parser.add_argument(
+NEW_PARSER = """    parser.add_argument(
         "--log-level", default="INFO",
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity (default: %(default)s).",
@@ -148,13 +151,13 @@ NEW_PARSER = '''    parser.add_argument(
         dest="fmt",
         help="Output format (default: %(default)s).",
     )
-    return parser'''
+    return parser"""
 
 assert OLD_PARSER in src, "OLD_PARSER not found"
 src = src.replace(OLD_PARSER, NEW_PARSER)
 
 # Inject --format dispatch in main()
-OLD_MAIN_DISPATCH = '''    if input_p.is_dir():
+OLD_MAIN_DISPATCH = """    if input_p.is_dir():
         extract_folder(input_p, output_p)
         return 0
 
@@ -162,9 +165,9 @@ OLD_MAIN_DISPATCH = '''    if input_p.is_dir():
         text = extract_file(input_p)
     except Exception as exc:  # noqa: BLE001
         logger.exception("failed to extract %s: %s", input_p, exc)
-        return 1'''
+        return 1"""
 
-NEW_MAIN_DISPATCH = '''    if input_p.is_dir():
+NEW_MAIN_DISPATCH = """    if input_p.is_dir():
         extract_folder(input_p, output_p)
         return 0
 
@@ -179,7 +182,7 @@ NEW_MAIN_DISPATCH = '''    if input_p.is_dir():
             text = extract_file(input_p)
         except Exception as exc:  # noqa: BLE001
             logger.exception("failed to extract %s: %s", input_p, exc)
-            return 1'''
+            return 1"""
 
 assert OLD_MAIN_DISPATCH in src, "OLD_MAIN_DISPATCH not found"
 src = src.replace(OLD_MAIN_DISPATCH, NEW_MAIN_DISPATCH)

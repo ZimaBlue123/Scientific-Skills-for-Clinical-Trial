@@ -5,6 +5,7 @@
 3. CHANGELOG.md: 在 Unreleased 追加本次重构条目
 """
 from __future__ import annotations
+
 import pathlib
 import sys
 

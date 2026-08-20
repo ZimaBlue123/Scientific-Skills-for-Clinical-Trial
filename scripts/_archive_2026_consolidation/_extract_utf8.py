@@ -1,4 +1,5 @@
 """一次性脚本：读取 extract_docx_full 输出的 GBK 文件并转换为 UTF-8 BOM。"""
+
 import sys
 
 sys.path.insert(0, r"e:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts")

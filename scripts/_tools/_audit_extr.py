@@ -1,5 +1,6 @@
 """Compare extract_* scripts at the function/class level."""
 from __future__ import annotations
+
 import ast
 from pathlib import Path
 

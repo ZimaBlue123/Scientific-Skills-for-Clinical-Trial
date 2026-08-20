@@ -4,9 +4,9 @@ Check Treatment Plan Completeness
 Validates that all required sections are present in a treatment plan.
 """
 
-import sys
-import re
 import argparse
+import re
+import sys
 from pathlib import Path
 from typing import List, Tuple
 

@@ -1,5 +1,6 @@
 """Find callers of scripts-to-be-merged."""
-import os, re
+import os
+import re
 
 ROOT = r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial"
 TARGETS = [

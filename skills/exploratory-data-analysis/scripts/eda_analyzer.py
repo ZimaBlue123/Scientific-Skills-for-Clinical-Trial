@@ -4,11 +4,11 @@ Exploratory Data Analysis Analyzer
 Analyzes scientific data files and generates comprehensive markdown reports
 """
 
+import json
 import os
 import sys
-from pathlib import Path
 from datetime import datetime
-import json
+from pathlib import Path
 
 
 def detect_file_type(filepath):
@@ -384,8 +384,8 @@ def analyze_imaging(filepath, extension):
 
     try:
         if extension in ['tif', 'tiff', 'png', 'jpg', 'jpeg']:
-            from PIL import Image
             import numpy as np
+            from PIL import Image
 
             img = Image.open(filepath)
             img_array = np.array(img)

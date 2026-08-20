@@ -6,6 +6,7 @@ Quick analysis of a gene: search, info, sequences, expression, and enrichment
 
 import argparse
 import sys
+
 import gget
 
 

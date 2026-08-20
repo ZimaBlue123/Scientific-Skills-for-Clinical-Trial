@@ -22,7 +22,9 @@ def parse_slides(spec: str) -> list[int]:
     return out
 
 
-def export_tables(ppt_path: Path, out_path: Path, slide_indices: list[int], title: str) -> None:
+def export_tables(
+    ppt_path: Path, out_path: Path, slide_indices: list[int], title: str
+) -> None:
     prs = Presentation(str(ppt_path))
     doc = Document()
 
@@ -61,7 +63,12 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--ppt", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)
-    ap.add_argument("--slides", type=str, default="1,2,4", help="1-based slide numbers, comma-separated")
+    ap.add_argument(
+        "--slides",
+        type=str,
+        default="1,2,4",
+        help="1-based slide numbers, comma-separated",
+    )
     ap.add_argument("--title", type=str, default="PPT 表格导出（横版，便于复制）")
     args = ap.parse_args()
     export_tables(args.ppt, args.out, parse_slides(args.slides), args.title)
@@ -69,4 +76,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

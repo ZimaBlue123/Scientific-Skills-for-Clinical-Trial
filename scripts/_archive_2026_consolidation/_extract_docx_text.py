@@ -13,6 +13,7 @@ The WordprocessingML namespace URI is intentionally hard-coded; misspelling
 it (e.g. ``schemas.openformats.org``) silently produces empty output because
 ``xml.etree.ElementTree`` then fails to match ``w:body``.
 """
+
 from __future__ import annotations
 
 import logging

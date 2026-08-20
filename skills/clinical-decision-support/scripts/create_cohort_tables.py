@@ -11,11 +11,12 @@ Creates publication-ready tables with:
 Dependencies: pandas, numpy, scipy
 """
 
-import pandas as pd
-import numpy as np
-from scipy import stats
-from pathlib import Path
 import argparse
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from scipy import stats
 
 
 def calculate_p_value(data, variable, group_col='group', var_type='categorical'):

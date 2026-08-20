@@ -24,6 +24,7 @@ Exit codes
     1  no .docx file discovered
     2  I/O or parsing error
 """
+
 from __future__ import annotations
 
 import argparse

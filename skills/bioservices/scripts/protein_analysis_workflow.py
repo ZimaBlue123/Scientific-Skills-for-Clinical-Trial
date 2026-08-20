@@ -20,10 +20,11 @@ Examples:
 Note: BLAST searches can take several minutes. Use --skip-blast to skip this step.
 """
 
+import argparse
 import sys
 import time
-import argparse
-from bioservices import UniProt, KEGG, NCBIblast, PSICQUIC, QuickGO
+
+from bioservices import KEGG, PSICQUIC, NCBIblast, QuickGO, UniProt
 
 
 def search_protein(query):
@@ -48,7 +49,9 @@ def search_protein(query):
             pass
 
     # Otherwise search
-    results = u.search(query, frmt="tab", columns="id,genes,organism,length,protein names", limit=5)
+    results = u.search(
+        query, frmt="tab", columns="id,genes,organism,length,protein names", limit=5
+    )
 
     if not results:
         print("✗ No results found")
@@ -73,7 +76,7 @@ def search_protein(query):
     length = first_entry[3] if len(first_entry) > 3 else "N/A"
     protein_name = first_entry[4] if len(first_entry) > 4 else "N/A"
 
-    print(f"\nUsing first result:")
+    print("\nUsing first result:")
     print(f"  UniProt ID: {uniprot_id}")
     print(f"  Gene names: {gene_names}")
     print(f"  Organism: {organism}")
@@ -98,7 +101,7 @@ def retrieve_sequence(uniprot, uniprot_id):
             header = lines[0]
             seq_only = "".join(lines[1:])
 
-            print(f"✓ Retrieved sequence:")
+            print("✓ Retrieved sequence:")
             print(f"  Header: {header}")
             print(f"  Length: {len(seq_only)} residues")
             print(f"  First 60 residues: {seq_only[:60]}...")
@@ -128,8 +131,8 @@ def run_blast(sequence, email, skip=False):
         return None
 
     try:
-        print(f"Submitting BLASTP job...")
-        print(f"  Database: uniprotkb")
+        print("Submitting BLASTP job...")
+        print("  Database: uniprotkb")
         print(f"  Sequence length: {len(sequence)} aa")
 
         s = NCBIblast(verbose=False)
@@ -139,11 +142,11 @@ def run_blast(sequence, email, skip=False):
             sequence=sequence,
             stype="protein",
             database="uniprotkb",
-            email=email
+            email=email,
         )
 
         print(f"✓ Job submitted: {jobid}")
-        print(f"  Waiting for completion...")
+        print("  Waiting for completion...")
 
         # Poll for completion
         max_wait = 300  # 5 minutes
@@ -162,7 +165,7 @@ def run_blast(sequence, email, skip=False):
 
                 # Parse and display summary
                 lines = results.split("\n")
-                print(f"\n  Results preview:")
+                print("\n  Results preview:")
                 for line in lines[:20]:
                     if line.strip():
                         print(f"    {line}")
@@ -170,7 +173,7 @@ def run_blast(sequence, email, skip=False):
                 return results
 
             elif status == "ERROR":
-                print(f"\n✗ BLAST job failed")
+                print("\n✗ BLAST job failed")
                 return None
 
             time.sleep(5)
@@ -192,7 +195,9 @@ def discover_pathways(uniprot, kegg, uniprot_id):
     try:
         # Map UniProt → KEGG
         print(f"Mapping {uniprot_id} to KEGG...")
-        kegg_mapping = uniprot.mapping(fr="UniProtKB_AC-ID", to="KEGG", query=uniprot_id)
+        kegg_mapping = uniprot.mapping(
+            fr="UniProtKB_AC-ID", to="KEGG", query=uniprot_id
+        )
 
         if not kegg_mapping or uniprot_id not in kegg_mapping:
             print("✗ No KEGG mapping found")
@@ -230,7 +235,7 @@ def discover_pathways(uniprot, kegg, uniprot_id):
                 pathway_info.append((pathway_id, pathway_name))
                 print(f"  • {pathway_id}: {pathway_name}")
 
-            except Exception as e:
+            except Exception:
                 print(f"  • {pathway_id}: [Error retrieving name]")
 
         return pathway_info
@@ -251,7 +256,7 @@ def find_interactions(protein_query):
 
         # Try querying MINT database
         query = f"{protein_query} AND species:9606"
-        print(f"Querying MINT database...")
+        print("Querying MINT database...")
         print(f"  Query: {query}")
 
         results = p.query("mint", query)
@@ -319,21 +324,21 @@ def get_go_annotations(uniprot_id):
 
         # Display summary
         print(f"  Biological Process (P): {len(aspects['P'])} terms")
-        for go_id, go_term in aspects['P'][:5]:
+        for go_id, go_term in aspects["P"][:5]:
             print(f"    • {go_id}: {go_term}")
-        if len(aspects['P']) > 5:
+        if len(aspects["P"]) > 5:
             print(f"    ... and {len(aspects['P'])-5} more")
 
         print(f"\n  Molecular Function (F): {len(aspects['F'])} terms")
-        for go_id, go_term in aspects['F'][:5]:
+        for go_id, go_term in aspects["F"][:5]:
             print(f"    • {go_id}: {go_term}")
-        if len(aspects['F']) > 5:
+        if len(aspects["F"]) > 5:
             print(f"    ... and {len(aspects['F'])-5} more")
 
         print(f"\n  Cellular Component (C): {len(aspects['C'])} terms")
-        for go_id, go_term in aspects['C'][:5]:
+        for go_id, go_term in aspects["C"][:5]:
             print(f"    • {go_id}: {go_term}")
-        if len(aspects['C']) > 5:
+        if len(aspects["C"]) > 5:
             print(f"    ... and {len(aspects['C'])-5} more")
 
         return aspects
@@ -352,12 +357,13 @@ def main():
 Examples:
   python protein_analysis_workflow.py ZAP70_HUMAN user@example.com
   python protein_analysis_workflow.py P43403 user@example.com --skip-blast
-        """
+        """,
     )
     parser.add_argument("protein", help="Protein name or UniProt ID")
     parser.add_argument("email", help="Email address (required for BLAST)")
-    parser.add_argument("--skip-blast", action="store_true",
-                       help="Skip BLAST search (faster)")
+    parser.add_argument(
+        "--skip-blast", action="store_true", help="Skip BLAST search (faster)"
+    )
 
     args = parser.parse_args()
 

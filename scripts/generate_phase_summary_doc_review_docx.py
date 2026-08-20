@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate Word review report for phase CSR interim summary document."""
+
 from __future__ import annotations
 
 import logging
@@ -8,12 +9,11 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
 from docx import Document  # type: ignore
 from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
 from docx.oxml.ns import qn  # type: ignore
 from docx.shared import Pt  # type: ignore
-
-from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
 
 LOGGER = logging.getLogger("generate_phase_summary_review")
 if not LOGGER.handlers:
@@ -84,8 +84,16 @@ def build_document() -> Document:
 
     _add_para(doc, f"审核日期：{today}", bold=False)
     _add_para(doc, f"受审文件：{src_doc}", bold=False)
-    _add_para(doc, "审核范围：全文逐节核对（摘要、正文、小结、讨论与结论及主要表格叙述）", bold=False)
-    _add_para(doc, "审核类型：数据与表述一致性、分析结论完整性、语言文字与术语规范", bold=False)
+    _add_para(
+        doc,
+        "审核范围：全文逐节核对（摘要、正文、小结、讨论与结论及主要表格叙述）",
+        bold=False,
+    )
+    _add_para(
+        doc,
+        "审核类型：数据与表述一致性、分析结论完整性、语言文字与术语规范",
+        bold=False,
+    )
     doc.add_paragraph()
 
     doc.add_heading("审核说明", level=1)
@@ -99,7 +107,9 @@ def build_document() -> Document:
     doc.add_heading("一、前后矛盾或易误导的数据与表述", level=1)
 
     doc.add_heading("1. 摘要：抗原指标名称写错（高优先级）", level=2)
-    _add_para(doc, "位置：摘要 → 40~49岁 → 抗VZV抗原免疫应答 → 基于PPS-h2、第2剂接种后30天。")
+    _add_para(
+        doc, "位置：摘要 → 40~49岁 → 抗VZV抗原免疫应答 → 基于PPS-h2、第2剂接种后30天。"
+    )
     _add_bullets(
         doc,
         [
@@ -205,9 +215,15 @@ def build_document() -> Document:
                 "明确相对第0天安慰剂的免疫原性；解读第60天接种减毒活疫苗后对照SCR仍低的原因",
             ],
             ["≥50岁", "分述与欣安立适SCR/GMI相当；≥60岁GMC差异的临床意义"],
-            ["安全性", "40~49岁反应高于对照1与亚单位疫苗预期一致；3级发热短暂，可增benefit-risk表述"],
+            [
+                "安全性",
+                "40~49岁反应高于对照1与亚单位疫苗预期一致；3级发热短暂，可增benefit-risk表述",
+            ],
             ["分析集", "可补充因方案偏离剔除PPS的例数及对主要终点的定性影响"],
-            ["合并用药", "试验组合并用药率更高，如与AE无关建议一句说明，避免读者误解为混杂"],
+            [
+                "合并用药",
+                "试验组合并用药率更高，如与AE无关建议一句说明，避免读者误解为混杂",
+            ],
         ],
     )
 
@@ -267,7 +283,10 @@ def build_document() -> Document:
         ["维度", "评价"],
         [
             ["核心数据一致性", "摘要、§2、§3主体与TFL趋势基本一致"],
-            ["主要风险点", "摘要VZV笔误；讨论对≥60岁GMC过度概括；3.4错别字；率差09.74%"],
+            [
+                "主要风险点",
+                "摘要VZV笔误；讨论对≥60岁GMC过度概括；3.4错别字；率差09.74%",
+            ],
             ["结论力度", "支持III期方向合理，但应限定在本次数据范围并单列待报内容"],
         ],
     )
@@ -298,7 +317,9 @@ def main() -> int:
     root = Path(__file__).resolve().parents[1]
     out_dir = root / "review_materials"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"YDSWX_phase_summary_document_review_{date.today().isoformat()}.docx"
+    out_path = (
+        out_dir / f"YDSWX_phase_summary_document_review_{date.today().isoformat()}.docx"
+    )
 
     doc = build_document()
     try:

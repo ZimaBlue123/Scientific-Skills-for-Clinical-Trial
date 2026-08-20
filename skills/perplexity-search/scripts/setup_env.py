@@ -11,9 +11,9 @@ Author: Scientific Skills
 License: MIT
 """
 
+import argparse
 import os
 import sys
-import argparse
 from pathlib import Path
 
 

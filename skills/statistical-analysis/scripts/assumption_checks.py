@@ -9,12 +9,13 @@ This module provides functions to check common statistical assumptions:
 - Outliers
 """
 
+from typing import Dict, List, Optional, Tuple, Union
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy import stats
-import matplotlib.pyplot as plt
 import seaborn as sns
-from typing import Dict, List, Tuple, Optional, Union
+from scipy import stats
 
 
 def check_normality(

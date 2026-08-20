@@ -9,6 +9,7 @@ Usage:
 """
 
 import os
+
 from fda_query import FDAQuery
 
 

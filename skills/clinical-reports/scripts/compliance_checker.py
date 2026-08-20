@@ -10,7 +10,6 @@ import argparse
 import json
 import re
 
-
 COMPLIANCE_CHECKS = {
     "hipaa": {
         "consent_statement": r"(?i)(informed\s+consent|written\s+consent).*obtained",

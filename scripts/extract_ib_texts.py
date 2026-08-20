@@ -24,6 +24,7 @@ Usage
     from extract_ib_texts import extract_ib
     extract_ib(input_dir=Path("review_materials"), output_dir=Path("review_materials"))
 """
+
 from __future__ import annotations
 
 import argparse

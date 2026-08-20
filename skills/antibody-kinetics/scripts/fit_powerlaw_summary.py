@@ -3,9 +3,9 @@ from __future__ import annotations
 import argparse
 import json
 import math
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, Iterable, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -33,7 +33,11 @@ def _ensure_positive(series: pd.Series, name: str) -> None:
         raise ValueError(f"列 {name} 必须全为正数（用于对数变换）。示例异常值: {bad}")
 
 
-def fit_powerlaw_by_group(df: pd.DataFrame) -> Tuple[Dict[str, sm.regression.linear_model.RegressionResultsWrapper], List[PowerLawFit]]:
+def fit_powerlaw_by_group(
+    df: pd.DataFrame,
+) -> tuple[
+    dict[str, sm.regression.linear_model.RegressionResultsWrapper], list[PowerLawFit]
+]:
     _require_cols(df, ["Group", "t_post", "GMC"])
     df = df.copy()
 
@@ -43,8 +47,8 @@ def fit_powerlaw_by_group(df: pd.DataFrame) -> Tuple[Dict[str, sm.regression.lin
     df["ln_t"] = np.log(df["t_post"].astype(float))
     df["ln_gmc"] = np.log(df["GMC"].astype(float))
 
-    models: Dict[str, sm.regression.linear_model.RegressionResultsWrapper] = {}
-    fits: List[PowerLawFit] = []
+    models: dict[str, sm.regression.linear_model.RegressionResultsWrapper] = {}
+    fits: list[PowerLawFit] = []
 
     for group, g in df.groupby("Group", sort=True):
         if len(g) < 2:
@@ -98,14 +102,32 @@ def threshold_time_from_params(A: float, b: float, threshold: float) -> float:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Power-law(幂律)模型：基于汇总GMC的log-log拟合、外推、绘图。")
-    ap.add_argument("--in", dest="infile", required=True, help="输入CSV，至少包含 Group,t_post,GMC")
+    ap = argparse.ArgumentParser(
+        description="Power-law(幂律)模型：基于汇总GMC的log-log拟合、外推、绘图。"
+    )
+    ap.add_argument(
+        "--in", dest="infile", required=True, help="输入CSV，至少包含 Group,t_post,GMC"
+    )
     ap.add_argument("--outdir", required=True, help="输出目录")
-    ap.add_argument("--target-t-post", type=float, default=30.0, help="外推的最大 t_post（如 30≈M36）")
+    ap.add_argument(
+        "--target-t-post",
+        type=float,
+        default=30.0,
+        help="外推的最大 t_post（如 30≈M36）",
+    )
     ap.add_argument("--grid-n", type=int, default=200, help="预测网格点数")
-    ap.add_argument("--threshold", type=float, default=10.0, help="保护阈值（用于反解持续时间）")
-    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95%% CI")
-    ap.add_argument("--study-month-offset", type=float, default=0.0, help="若未提供StudyMonth，则用 StudyMonth=t_post+offset")
+    ap.add_argument(
+        "--threshold", type=float, default=10.0, help="保护阈值（用于反解持续时间）"
+    )
+    ap.add_argument(
+        "--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95%% CI"
+    )
+    ap.add_argument(
+        "--study-month-offset",
+        type=float,
+        default=0.0,
+        help="若未提供StudyMonth，则用 StudyMonth=t_post+offset",
+    )
     args = ap.parse_args()
 
     outdir = Path(args.outdir)
@@ -116,8 +138,8 @@ def main() -> int:
 
     # 预测与阈值时间
     t_grid = np.linspace(1.0, float(args.target_t_post), int(args.grid_n))
-    pred_rows: List[pd.DataFrame] = []
-    threshold_rows: List[dict] = []
+    pred_rows: list[pd.DataFrame] = []
+    threshold_rows: list[dict] = []
     for f in fits:
         model = models[f.group]
         pred = predict_curve(model, t_grid, alpha=float(args.alpha))
@@ -126,7 +148,15 @@ def main() -> int:
 
         A = math.exp(f.lnA)
         t_thr = threshold_time_from_params(A=A, b=f.b, threshold=float(args.threshold))
-        threshold_rows.append({"Group": f.group, "A": A, "b": f.b, "threshold": float(args.threshold), "t_post_at_threshold": t_thr})
+        threshold_rows.append(
+            {
+                "Group": f.group,
+                "A": A,
+                "b": f.b,
+                "threshold": float(args.threshold),
+                "t_post_at_threshold": t_thr,
+            }
+        )
 
     pred_df = pd.concat(pred_rows, ignore_index=True)
     pred_df.to_csv(outdir / "powerlaw_predictions.csv", index=False)
@@ -134,7 +164,9 @@ def main() -> int:
     fit_df = pd.DataFrame([asdict(x) for x in fits]).sort_values(["group"])
     fit_df.to_csv(outdir / "powerlaw_fits.csv", index=False)
 
-    pd.DataFrame(threshold_rows).to_csv(outdir / "powerlaw_threshold_time.csv", index=False)
+    pd.DataFrame(threshold_rows).to_csv(
+        outdir / "powerlaw_threshold_time.csv", index=False
+    )
     (outdir / "run_metadata.json").write_text(
         json.dumps(
             {
@@ -165,10 +197,14 @@ def main() -> int:
         # 观测点（若提供 StudyMonth 则优先）
         plot_df = df.copy()
         if "StudyMonth" not in plot_df.columns:
-            plot_df["StudyMonth"] = plot_df["t_post"].astype(float) + float(args.study_month_offset)
+            plot_df["StudyMonth"] = plot_df["t_post"].astype(float) + float(
+                args.study_month_offset
+            )
 
         pred_plot = pred_df.copy()
-        pred_plot["StudyMonth"] = pred_plot["t_post"].astype(float) + float(args.study_month_offset)
+        pred_plot["StudyMonth"] = pred_plot["t_post"].astype(float) + float(
+            args.study_month_offset
+        )
 
         fig, ax = plt.subplots(figsize=(8.0, 5.6))
         groups = sorted(pred_plot["Group"].unique().tolist())
@@ -179,11 +215,37 @@ def main() -> int:
             obs = plot_df[plot_df["Group"] == g]
             pr = pred_plot[pred_plot["Group"] == g]
 
-            ax.scatter(obs["StudyMonth"], obs["GMC"], s=40, color=cmap[g], label=f"{g} observed", zorder=3)
-            ax.plot(pr["StudyMonth"], pr["gmc_mean"], linestyle="--", color=cmap[g], label=f"{g} power-law fit")
-            ax.fill_between(pr["StudyMonth"], pr["gmc_ci_lower"], pr["gmc_ci_upper"], color=cmap[g], alpha=0.15, linewidth=0)
+            ax.scatter(
+                obs["StudyMonth"],
+                obs["GMC"],
+                s=40,
+                color=cmap[g],
+                label=f"{g} observed",
+                zorder=3,
+            )
+            ax.plot(
+                pr["StudyMonth"],
+                pr["gmc_mean"],
+                linestyle="--",
+                color=cmap[g],
+                label=f"{g} power-law fit",
+            )
+            ax.fill_between(
+                pr["StudyMonth"],
+                pr["gmc_ci_lower"],
+                pr["gmc_ci_upper"],
+                color=cmap[g],
+                alpha=0.15,
+                linewidth=0,
+            )
 
-        ax.axhline(float(args.threshold), color="grey", linestyle=":", linewidth=1.0, label=f"threshold={float(args.threshold):g}")
+        ax.axhline(
+            float(args.threshold),
+            color="grey",
+            linestyle=":",
+            linewidth=1.0,
+            label=f"threshold={float(args.threshold):g}",
+        )
         ax.set_yscale("log")
         ax.set_xlabel("Time (Study Month)")
         ax.set_ylabel("GMC [log scale]")
@@ -200,4 +262,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

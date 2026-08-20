@@ -226,7 +226,12 @@ def _parse_immunogenicity_key(immuno_pdf: Path) -> dict[str, dict[str, str]]:
         block = pick_block(table_blocks(table_id), must)
         trial_gmc, ctrl_gmc = parse_gmc_pair(block)
         ratio, ci, p = parse_ratio_p(block)
-        return {"trial_gmc": trial_gmc, "ctrl_gmc": ctrl_gmc, "ratio_ci": f"{ratio}（{ci}）", "p": p}
+        return {
+            "trial_gmc": trial_gmc,
+            "ctrl_gmc": ctrl_gmc,
+            "ratio_ci": f"{ratio}（{ci}）",
+            "p": p,
+        }
 
     # gE: table 14.2.1.2.2.2.2
     ge_4049 = extract_one("表格14.2.1.2.2.2.2", ["40~49", "VS", "1"])
@@ -236,7 +241,12 @@ def _parse_immunogenicity_key(immuno_pdf: Path) -> dict[str, dict[str, str]]:
     vzv_4049 = extract_one("表格14.2.1.2.4.2.2", ["40~49", "VS", "1"])
     vzv_ge50 = extract_one("表格14.2.1.2.4.2.2", ["VS", "2", "50"])
 
-    return {"gE_40_49": ge_4049, "gE_ge_50": ge_ge50, "VZV_40_49": vzv_4049, "VZV_ge_50": vzv_ge50}
+    return {
+        "gE_40_49": ge_4049,
+        "gE_ge_50": ge_ge50,
+        "VZV_40_49": vzv_4049,
+        "VZV_ge_50": vzv_ge50,
+    }
 
 
 def _parse_safety_014_summary(safety1_pdf: Path) -> dict[str, object]:
@@ -282,6 +292,7 @@ def _parse_safety_014_summary(safety1_pdf: Path) -> dict[str, object]:
     row_pat = re.compile(
         r"(\d+)\(([\d.]+)\)\s+\d+\s+(\d+)\(([\d.]+)\)\s+\d+\s+(\d+)\(([\d.]+)\)\s+\d+\s+([<>\d.]+)"
     )
+
     def parse_age_block(age_token: str) -> list[dict[str, object]]:
         if age_token not in joined2:
             raise ValueError(f"未在{safety1_pdf.name}的前12页中定位到{age_token}分层")
@@ -346,11 +357,15 @@ def _parse_safety_014_summary(safety1_pdf: Path) -> dict[str, object]:
 
     # 50–59岁（对照组为阳性对照组2）：3级及以上 = 8 vs 9，合计17
     candidates_5059 = parse_age_block("50~59")
-    ge3_5059 = pick_row(candidates_5059, expected_trial_n=8, expected_ctrl_n=9, expected_total_n=17)
+    ge3_5059 = pick_row(
+        candidates_5059, expected_trial_n=8, expected_ctrl_n=9, expected_total_n=17
+    )
 
     # ≥60岁（对照组为阳性对照组2）：3级及以上 = 3 vs 2，合计5
     candidates_ge60 = parse_age_block("≥60")
-    ge3_ge60 = pick_row(candidates_ge60, expected_trial_n=3, expected_ctrl_n=2, expected_total_n=5)
+    ge3_ge60 = pick_row(
+        candidates_ge60, expected_trial_n=3, expected_ctrl_n=2, expected_total_n=5
+    )
 
     return {
         "table_rows": table_rows,
@@ -386,7 +401,9 @@ def _parse_safety_030_nonsolicited(safety3_pdf: Path) -> dict[str, object]:
         re.S,
     )
     if not m:
-        raise ValueError(f"未能从{safety3_pdf.name}抽取非征集性总体行（表14.3.1.8.3.1）")
+        raise ValueError(
+            f"未能从{safety3_pdf.name}抽取非征集性总体行（表14.3.1.8.3.1）"
+        )
     trial_n, trial_pct, c1_n, c1_pct, c2_n, c2_pct, total_n, total_pct = m.groups()
 
     # Conservative: default to 0; detailed grade-by-grade is handled in annex via part3 table.
@@ -429,7 +446,9 @@ def main() -> int:
     today = date.today().isoformat()
     import argparse
 
-    parser = argparse.ArgumentParser(description="Generate stage CSR docx from source PDFs.")
+    parser = argparse.ArgumentParser(
+        description="Generate stage CSR docx from source PDFs."
+    )
     parser.add_argument(
         "--root",
         type=str,
@@ -454,15 +473,23 @@ def main() -> int:
     p_title = doc.add_paragraph("阶段性小结（安全性&体液免疫原性）")
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_title.style = "Title"
-    doc.add_paragraph("方案编号：YDSWX（TVAX-006）-002（II）").alignment = WD_ALIGN_PARAGRAPH.CENTER
+    doc.add_paragraph("方案编号：YDSWX（TVAX-006）-002（II）").alignment = (
+        WD_ALIGN_PARAGRAPH.CENTER
+    )
     doc.add_paragraph(
         "评价重组带状疱疹疫苗（CHO 细胞）在 40 岁及以上人群中接种的"
     ).alignment = WD_ALIGN_PARAGRAPH.CENTER
-    doc.add_paragraph("免疫原性和安全性的随机、盲法、阳性对照Ⅱ期临床试验").alignment = WD_ALIGN_PARAGRAPH.CENTER
+    doc.add_paragraph("免疫原性和安全性的随机、盲法、阳性对照Ⅱ期临床试验").alignment = (
+        WD_ALIGN_PARAGRAPH.CENTER
+    )
     doc.add_paragraph("").add_run("")  # spacer
-    doc.add_paragraph("申办方：远大赛威信生命科学（南京）有限公司 / 远大赛威信生命科学（杭州）有限公司")
+    doc.add_paragraph(
+        "申办方：远大赛威信生命科学（南京）有限公司 / 远大赛威信生命科学（杭州）有限公司"
+    )
     doc.add_paragraph("研究中心：山西省疾病预防控制中心（单中心）")
-    doc.add_paragraph("阶段性数据截断：全程接种后30天安全性+免疫原性主要时点").alignment = WD_ALIGN_PARAGRAPH.LEFT
+    doc.add_paragraph(
+        "阶段性数据截断：全程接种后30天安全性+免疫原性主要时点"
+    ).alignment = WD_ALIGN_PARAGRAPH.LEFT
     doc.add_paragraph(f"报告生成日期：{today}")
     doc.add_page_break()
 
@@ -496,10 +523,17 @@ def main() -> int:
         doc,
         headers=["要素", "内容"],
         rows=[
-            TableRow(["申办者", "远大赛威信生命科学（杭州）有限公司；远大赛威信生命科学（南京）有限公司"]),
+            TableRow(
+                [
+                    "申办者",
+                    "远大赛威信生命科学（杭州）有限公司；远大赛威信生命科学（南京）有限公司",
+                ]
+            ),
             TableRow(["疫苗名称", "重组带状疱疹疫苗（CHO细胞）"]),
             TableRow(["试验分期", "II期"]),
-            TableRow(["本次报告内容", "第2剂接种后30天的安全性和体液免疫原性结果（阶段性）"]),
+            TableRow(
+                ["本次报告内容", "第2剂接种后30天的安全性和体液免疫原性结果（阶段性）"]
+            ),
         ],
     )
     doc.add_paragraph(
@@ -546,28 +580,42 @@ def main() -> int:
     _add_source(doc, f"《{inputs.pop_baseline_pdf.name}》表格14.1.1.1（受试者分布）")
 
     doc.add_heading("2.2. 分析数据集", level=2)
-    doc.add_paragraph("分析数据集（FAS、mFAS、PPS-h、SS等）汇总详见统计分析报告相应表格。本阶段性小结优先引用SS与PPS-h2结果。")
+    doc.add_paragraph(
+        "分析数据集（FAS、mFAS、PPS-h、SS等）汇总详见统计分析报告相应表格。本阶段性小结优先引用SS与PPS-h2结果。"
+    )
 
     doc.add_heading("2.3. 人口学资料", level=2)
-    doc.add_paragraph("人口学与基线特征（年龄、性别、民族等）及组间均衡性描述详见统计分析报告。本阶段性小结不展开逐表复述。")
+    doc.add_paragraph(
+        "人口学与基线特征（年龄、性别、民族等）及组间均衡性描述详见统计分析报告。本阶段性小结不展开逐表复述。"
+    )
 
     doc.add_heading("2.4. 合并用药/疫苗/非药物治疗", level=2)
-    doc.add_paragraph("合并用药/疫苗及非药物治疗情况详见统计分析报告。本阶段性小结不展开逐表复述。")
+    doc.add_paragraph(
+        "合并用药/疫苗及非药物治疗情况详见统计分析报告。本阶段性小结不展开逐表复述。"
+    )
 
     doc.add_heading("2.5. 方案偏离/违背", level=2)
-    doc.add_paragraph("方案偏离/违背的例数、类型及其对主要终点的潜在影响详见统计分析报告与SAP规定。")
+    doc.add_paragraph(
+        "方案偏离/违背的例数、类型及其对主要终点的潜在影响详见统计分析报告与SAP规定。"
+    )
 
     doc.add_heading("2.6. 依从性", level=2)
-    doc.add_paragraph("截至全程免后30天，受试者总体依从性良好，为体液免疫原性和安全性评价提供了可靠基础。")
+    doc.add_paragraph(
+        "截至全程免后30天，受试者总体依从性良好，为体液免疫原性和安全性评价提供了可靠基础。"
+    )
     doc.add_page_break()
 
     # 3. 免疫原性分析
     doc.add_heading("3. 免疫原性分析", level=1)
     doc.add_heading("3.1. 基线抗体水平", level=2)
-    doc.add_paragraph("基线抗体水平（mFAS）描述详见统计分析报告。本阶段性小结聚焦主要终点时点。")
+    doc.add_paragraph(
+        "基线抗体水平（mFAS）描述详见统计分析报告。本阶段性小结聚焦主要终点时点。"
+    )
 
     doc.add_heading("3.2. 主要免疫原性终点", level=2)
-    doc.add_paragraph("主要终点为第2剂接种后第30天（PPS-h2）的抗gE与抗VZV抗原特异性血清抗体水平。")
+    doc.add_paragraph(
+        "主要终点为第2剂接种后第30天（PPS-h2）的抗gE与抗VZV抗原特异性血清抗体水平。"
+    )
     doc.add_paragraph("3.2.1 抗gE抗原特异性血清抗体")
     _add_table(
         doc,
@@ -593,7 +641,10 @@ def main() -> int:
             ),
         ],
     )
-    _add_source(doc, f"《{inputs.immunogenicity_pdf.name}》表格14.2.1.2.2.2.2（PPS-h2，第2剂免后30天抗gE抗体）")
+    _add_source(
+        doc,
+        f"《{inputs.immunogenicity_pdf.name}》表格14.2.1.2.2.2.2（PPS-h2，第2剂免后30天抗gE抗体）",
+    )
 
     doc.add_paragraph("3.2.2 抗VZV抗原特异性血清抗体")
     _add_table(
@@ -620,10 +671,15 @@ def main() -> int:
             ),
         ],
     )
-    _add_source(doc, f"《{inputs.immunogenicity_pdf.name}》表格14.2.1.2.4.2.2（PPS-h2，第2剂免后30天抗VZV抗体）")
+    _add_source(
+        doc,
+        f"《{inputs.immunogenicity_pdf.name}》表格14.2.1.2.4.2.2（PPS-h2，第2剂免后30天抗VZV抗体）",
+    )
 
     doc.add_heading("3.3. 次要免疫原性终点", level=2)
-    doc.add_paragraph("次要免疫原性终点（如SCR、GMI、细胞免疫等）将在获得完整数据后于后续版本补充。")
+    doc.add_paragraph(
+        "次要免疫原性终点（如SCR、GMI、细胞免疫等）将在获得完整数据后于后续版本补充。"
+    )
 
     doc.add_heading("3.4. 免疫原性小结", level=2)
     doc.add_paragraph(
@@ -637,42 +693,96 @@ def main() -> int:
     doc.add_paragraph("4.1.1 所有剂次接种后0–14天不良事件总结（SS，总体）")
     _add_table(
         doc,
-        headers=["指标", "试验组 N=210", "阳性对照组1 N=70", "阳性对照组2 N=140", "合计 N=420"],
+        headers=[
+            "指标",
+            "试验组 N=210",
+            "阳性对照组1 N=70",
+            "阳性对照组2 N=140",
+            "合计 N=420",
+        ],
         rows=[
             TableRow(["所有AE（例数%）", *safety014["table_rows"]["所有AE"]]),
             TableRow(["征集性AE（例数%）", *safety014["table_rows"]["征集性AE"]]),
-            TableRow(["征集性局部AE（例数%）", *safety014["table_rows"]["征集性局部AE"]]),
-            TableRow(["征集性全身AE（例数%）", *safety014["table_rows"]["征集性全身AE"]]),
+            TableRow(
+                ["征集性局部AE（例数%）", *safety014["table_rows"]["征集性局部AE"]]
+            ),
+            TableRow(
+                ["征集性全身AE（例数%）", *safety014["table_rows"]["征集性全身AE"]]
+            ),
             TableRow(["非征集性AE（例数%）", *safety014["table_rows"]["非征集性AE"]]),
             TableRow(["3级及以上AE（例数%）", *safety014["table_rows"]["3级及以上AE"]]),
             TableRow(["SAE（例数%）", *safety014["table_rows"]["SAE"]]),
             TableRow(["AESI（例数%）", *safety014["table_rows"]["AESI"]]),
         ],
     )
-    _add_source(doc, f"《{inputs.safety_part1_pdf.name}》表格14.3.1.1.1（0–14天不良事件总结，SS，总体）")
+    _add_source(
+        doc,
+        f"《{inputs.safety_part1_pdf.name}》表格14.3.1.1.1（0–14天不良事件总结，SS，总体）",
+    )
 
     doc.add_paragraph("4.1.2 3级及以上AE（0–14天，按年龄分层）")
     _add_table(
         doc,
         headers=["年龄层", "试验组3级及以上AE", "对照组3级及以上AE", "P值"],
         rows=[
-            TableRow(["40–49岁", safety014["age4049_ge3"], safety014["age4049_ge3_ctrl"], safety014["age4049_ge3_p"]]),
-            TableRow(["50–59岁", safety014["age5059_ge3"], safety014["age5059_ge3_ctrl"], safety014["age5059_ge3_p"]]),
-            TableRow(["≥60岁", safety014["agege60_ge3"], safety014["agege60_ge3_ctrl"], safety014["agege60_ge3_p"]]),
+            TableRow(
+                [
+                    "40–49岁",
+                    safety014["age4049_ge3"],
+                    safety014["age4049_ge3_ctrl"],
+                    safety014["age4049_ge3_p"],
+                ]
+            ),
+            TableRow(
+                [
+                    "50–59岁",
+                    safety014["age5059_ge3"],
+                    safety014["age5059_ge3_ctrl"],
+                    safety014["age5059_ge3_p"],
+                ]
+            ),
+            TableRow(
+                [
+                    "≥60岁",
+                    safety014["agege60_ge3"],
+                    safety014["agege60_ge3_ctrl"],
+                    safety014["agege60_ge3_p"],
+                ]
+            ),
         ],
     )
-    _add_source(doc, f"《{inputs.safety_part1_pdf.name}》表格14.3.1.1.1（0–14天不良事件总结，分层）")
+    _add_source(
+        doc,
+        f"《{inputs.safety_part1_pdf.name}》表格14.3.1.1.1（0–14天不良事件总结，分层）",
+    )
 
     doc.add_paragraph("4.1.3 所有剂次接种后0–30天非征集性不良事件总结（SS）")
     _add_table(
         doc,
-        headers=["指标", "试验组 N=210", "阳性对照组1 N=70", "阳性对照组2 N=140", "合计 N=420"],
+        headers=[
+            "指标",
+            "试验组 N=210",
+            "阳性对照组1 N=70",
+            "阳性对照组2 N=140",
+            "合计 N=420",
+        ],
         rows=[
             TableRow(["非征集性AE（例数%）", *safety030["row"]]),
-            TableRow(["3级及以上非征集性AE（合计例数）", "-", "-", "-", safety030["grade3_total_n"]]),
+            TableRow(
+                [
+                    "3级及以上非征集性AE（合计例数）",
+                    "-",
+                    "-",
+                    "-",
+                    safety030["grade3_total_n"],
+                ]
+            ),
         ],
     )
-    _add_source(doc, f"《{inputs.safety_part3_pdf.name}》表格14.3.1.8.3.1（0–30天非征集性AE，SS）")
+    _add_source(
+        doc,
+        f"《{inputs.safety_part3_pdf.name}》表格14.3.1.8.3.1（0–30天非征集性AE，SS）",
+    )
 
     doc.add_heading("4.2. 不良事件分析", level=2)
     doc.add_paragraph(
@@ -727,10 +837,16 @@ def main() -> int:
     doc.add_paragraph("国家药品监督管理局《药物临床试验质量管理规范》（GCP）。")
     doc.add_paragraph("《赫尔辛基宣言》（福塔雷萨2013版）。")
     doc.add_paragraph("ICH E6：Good Clinical Practice。")
-    doc.add_paragraph("ICH E3（EMA科学指南页）：https://www.ema.europa.eu/en/ich-e3-structure-content-clinical-study-reports-scientific-guideline")
+    doc.add_paragraph(
+        "ICH E3（EMA科学指南页）：https://www.ema.europa.eu/en/ich-e3-structure-content-clinical-study-reports-scientific-guideline"
+    )
     doc.add_paragraph("FDA E3指南下载页：https://www.fda.gov/media/84857/download")
-    doc.add_paragraph("FDA SHINGRIX Clinical Review：https://www.fda.gov/media/108793/download")
-    doc.add_paragraph("EMA Shingrix EPAR主页：https://www.ema.europa.eu/en/medicines/human/EPAR/shingrix")
+    doc.add_paragraph(
+        "FDA SHINGRIX Clinical Review：https://www.fda.gov/media/108793/download"
+    )
+    doc.add_paragraph(
+        "EMA Shingrix EPAR主页：https://www.ema.europa.eu/en/medicines/human/EPAR/shingrix"
+    )
 
     doc.save(str(out_path))
     return 0
@@ -738,4 +854,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

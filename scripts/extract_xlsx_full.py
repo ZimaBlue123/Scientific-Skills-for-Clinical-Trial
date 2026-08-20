@@ -35,6 +35,7 @@ Dependencies
 ------------
 stdlib only (zipfile + xml.etree.ElementTree).
 """
+
 from __future__ import annotations
 
 import argparse
@@ -105,7 +106,12 @@ def _load_shared_strings(zf: zipfile.ZipFile) -> list[str]:
     out: list[str] = []
     for si in root.findall("n:si", NS):
         # concatenate all <t> nodes (handles rich text via <r>)
-        text = "".join((t.text or "") for t in si.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"))
+        text = "".join(
+            (t.text or "")
+            for t in si.iter(
+                "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"
+            )
+        )
         out.append(text)
     return out
 
@@ -123,7 +129,10 @@ def _load_sheet_targets(zf: zipfile.ZipFile) -> list[tuple[str, str]]:
         return []
     for s in sheets.findall("n:sheet", NS):
         name = s.attrib.get("name", "")
-        rid = s.attrib.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id", "")
+        rid = s.attrib.get(
+            "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id",
+            "",
+        )
         sheets_meta.append((name, rid))
 
     rels: dict[str, str] = {}
@@ -165,11 +174,15 @@ def _iter_sheet_rows(
 
     # Collect merged cell ranges so empty trailing cells inherit values.
     merged: list[tuple[int, int, int, int]] = []
-    for mc in ws.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}mergeCell"):
+    for mc in ws.iter(
+        "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}mergeCell"
+    ):
         ref = mc.attrib.get("ref", "")
         if ":" not in ref:
             continue
-        (c1, r1), (c2, r2) = _split_ref(ref.split(":", 1)[0]), _split_ref(ref.split(":", 1)[1])
+        (c1, r1), (c2, r2) = _split_ref(ref.split(":", 1)[0]), _split_ref(
+            ref.split(":", 1)[1]
+        )
         if c1 < 0 or r1 < 0 or c2 < 0 or r2 < 0:
             continue
         merged.append((c1, r1, c2, r2))
@@ -198,7 +211,9 @@ def _iter_sheet_rows(
             elif t == "inlineStr" and is_el is not None:
                 val = "".join(
                     (tt.text or "")
-                    for tt in is_el.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t")
+                    for tt in is_el.iter(
+                        "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"
+                    )
                 )
             elif t == "b" and v_el is not None:
                 val = "TRUE" if v_el.text == "1" else "FALSE"
@@ -210,7 +225,7 @@ def _iter_sheet_rows(
                 row_cells[_col_letters_to_idx(col_m.group(1))] = val
 
         # Apply merged ranges for this row.
-        for (c1, r1, c2, r2) in merged:
+        for c1, r1, c2, r2 in merged:
             if r1 <= r_attr - 1 <= r2 and c1 in row_cells:
                 for cc in range(c1, c2 + 1):
                     row_cells.setdefault(cc, row_cells[c1])
@@ -262,13 +277,20 @@ def _iter_xlsx_files(target: Path) -> Iterator[Path]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Robust .xlsx -> UTF-8 text dumper (zip+xml).")
+    parser = argparse.ArgumentParser(
+        description="Robust .xlsx -> UTF-8 text dumper (zip+xml)."
+    )
     parser.add_argument("target", help=".xlsx file or folder containing .xlsx files")
-    parser.add_argument("-o", "--output", default=None, help="output file (default: stdout)")
+    parser.add_argument(
+        "-o", "--output", default=None, help="output file (default: stdout)"
+    )
     parser.add_argument("--log-level", default="WARNING")
     args = parser.parse_args(argv)
 
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.WARNING), format=LOG_FORMAT)
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.WARNING),
+        format=LOG_FORMAT,
+    )
 
     target = Path(args.target)
     if not target.exists():

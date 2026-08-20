@@ -3,8 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import math
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, List
 
 import numpy as np
 import pandas as pd
@@ -38,14 +38,30 @@ def _z_value(alpha: float) -> float:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="个体水平 MixedLM：log-log 幂律衰减（用于组间斜率推断与预测）。")
-    ap.add_argument("--in", dest="infile", required=True, help="输入CSV，至少包含 USUBJID,Group,t_post,以及滴度列")
+    ap = argparse.ArgumentParser(
+        description="个体水平 MixedLM：log-log 幂律衰减（用于组间斜率推断与预测）。"
+    )
+    ap.add_argument(
+        "--in",
+        dest="infile",
+        required=True,
+        help="输入CSV，至少包含 USUBJID,Group,t_post,以及滴度列",
+    )
     ap.add_argument("--outdir", required=True, help="输出目录")
     ap.add_argument("--titer-col", default="TITER", help="滴度/浓度列名（默认 TITER）")
-    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95%% CI")
-    ap.add_argument("--target-t-post", type=float, default=30.0, help="外推最大 t_post（如 30≈M36）")
+    ap.add_argument(
+        "--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 表示 95%% CI"
+    )
+    ap.add_argument(
+        "--target-t-post", type=float, default=30.0, help="外推最大 t_post（如 30≈M36）"
+    )
     ap.add_argument("--grid-n", type=int, default=200, help="预测网格点数")
-    ap.add_argument("--threshold", type=float, default=10.0, help="保护阈值（用于反解持续时间；点估计）")
+    ap.add_argument(
+        "--threshold",
+        type=float,
+        default=10.0,
+        help="保护阈值（用于反解持续时间；点估计）",
+    )
     args = ap.parse_args()
 
     outdir = Path(args.outdir)
@@ -94,8 +110,8 @@ def main() -> int:
     ln_t_grid = np.log(t_grid.astype(float))
     z = _z_value(float(args.alpha))
 
-    pred_rows: List[dict] = []
-    threshold_rows: List[dict] = []
+    pred_rows: list[dict] = []
+    threshold_rows: list[dict] = []
 
     for g in groups:
         for t_post, ln_t in zip(t_grid, ln_t_grid, strict=True):
@@ -152,12 +168,24 @@ def main() -> int:
         slope = b1 + add1
         b = -slope
         A = math.exp(lnA)
-        t_thr = float((A / float(args.threshold)) ** (1.0 / b)) if b > 0 else float("nan")
-        threshold_rows.append({"Group": str(g), "A_at_t1": A, "b": float(b), "threshold": float(args.threshold), "t_post_at_threshold_point": t_thr})
+        t_thr = (
+            float((A / float(args.threshold)) ** (1.0 / b)) if b > 0 else float("nan")
+        )
+        threshold_rows.append(
+            {
+                "Group": str(g),
+                "A_at_t1": A,
+                "b": float(b),
+                "threshold": float(args.threshold),
+                "t_post_at_threshold_point": t_thr,
+            }
+        )
 
     pred_df = pd.DataFrame(pred_rows)
     pred_df.to_csv(outdir / "mixedlm_predictions_fixed_effects.csv", index=False)
-    pd.DataFrame(threshold_rows).to_csv(outdir / "mixedlm_threshold_time_point.csv", index=False)
+    pd.DataFrame(threshold_rows).to_csv(
+        outdir / "mixedlm_threshold_time_point.csv", index=False
+    )
 
     try:
         import matplotlib.pyplot as plt
@@ -176,14 +204,35 @@ def main() -> int:
 
         for g in groups:
             pr = pred_df[pred_df["Group"] == g]
-            ax.plot(pr["t_post"], pr["titer_mean"], linestyle="--", color=cmap[g], label=f"{g} fixed-effect mean")
-            ax.fill_between(pr["t_post"], pr["titer_ci_lower"], pr["titer_ci_upper"], color=cmap[g], alpha=0.15, linewidth=0)
+            ax.plot(
+                pr["t_post"],
+                pr["titer_mean"],
+                linestyle="--",
+                color=cmap[g],
+                label=f"{g} fixed-effect mean",
+            )
+            ax.fill_between(
+                pr["t_post"],
+                pr["titer_ci_lower"],
+                pr["titer_ci_upper"],
+                color=cmap[g],
+                alpha=0.15,
+                linewidth=0,
+            )
 
-        ax.axhline(float(args.threshold), color="grey", linestyle=":", linewidth=1.0, label=f"threshold={float(args.threshold):g}")
+        ax.axhline(
+            float(args.threshold),
+            color="grey",
+            linestyle=":",
+            linewidth=1.0,
+            label=f"threshold={float(args.threshold):g}",
+        )
         ax.set_yscale("log")
         ax.set_xlabel("t_post (months; aligned)")
         ax.set_ylabel("Titer [log scale]")
-        ax.set_title("Antibody persistence projection (MixedLM; fixed-effect marginal mean)")
+        ax.set_title(
+            "Antibody persistence projection (MixedLM; fixed-effect marginal mean)"
+        )
         ax.legend(loc="center left", bbox_to_anchor=(1, 0.5), frameon=False)
         fig.tight_layout()
         fig.savefig(outdir / "mixedlm_projection.png", bbox_inches="tight")
@@ -196,4 +245,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

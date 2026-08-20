@@ -12,7 +12,11 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] skill_dedupe: %(message)s", stream=sys.stderr)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] skill_dedupe: %(message)s",
+    stream=sys.stderr,
+)
 logger = logging.getLogger("skill_dedupe")
 
 
@@ -44,7 +48,9 @@ def _iter_skill_docs(skills_root: Path) -> Iterable[SkillDoc]:
             print(f"WARN: failed to read {file_path}: {e}", file=sys.stderr)
             continue
         toks = _tokenize(text)
-        yield SkillDoc(skill_path=skill_path, file_path=str(file_path), tf=Counter(toks))
+        yield SkillDoc(
+            skill_path=skill_path, file_path=str(file_path), tf=Counter(toks)
+        )
 
 
 def _idf(docs: list[SkillDoc]) -> dict[str, float]:
@@ -84,7 +90,9 @@ def build_report(
     top_k: int = 120,
 ) -> tuple[int, int]:
     if not (0.0 <= cosine_threshold <= 1.0):
-        raise ValueError(f"cosine_threshold must be within [0, 1], got {cosine_threshold}")
+        raise ValueError(
+            f"cosine_threshold must be within [0, 1], got {cosine_threshold}"
+        )
     if top_k <= 0:
         raise ValueError(f"top_k must be positive, got {top_k}")
 
@@ -161,9 +169,15 @@ def build_report(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate SKILL.md similarity dedupe report.")
-    parser.add_argument("--threshold", type=float, default=0.87, help="Cosine similarity threshold.")
-    parser.add_argument("--top", type=int, default=120, help="Top N pairs to keep in report.")
+    parser = argparse.ArgumentParser(
+        description="Generate SKILL.md similarity dedupe report."
+    )
+    parser.add_argument(
+        "--threshold", type=float, default=0.87, help="Cosine similarity threshold."
+    )
+    parser.add_argument(
+        "--top", type=int, default=120, help="Top N pairs to keep in report."
+    )
     parser.add_argument(
         "--skills-subdir",
         type=str,
@@ -195,4 +209,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

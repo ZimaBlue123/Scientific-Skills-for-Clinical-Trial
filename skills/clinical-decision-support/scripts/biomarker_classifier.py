@@ -11,11 +11,12 @@ Performs patient stratification based on biomarker profiles with:
 Dependencies: pandas, numpy, scipy, scikit-learn (optional for clustering)
 """
 
-import pandas as pd
-import numpy as np
-from scipy import stats
 import argparse
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from scipy import stats
 
 
 def classify_binary_biomarker(data, biomarker_col, threshold, 

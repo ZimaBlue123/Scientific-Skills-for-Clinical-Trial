@@ -6,8 +6,9 @@ This template provides a starting point for building SimPy simulations.
 Customize the process functions and parameters for your specific use case.
 """
 
-import simpy
 import random
+
+import simpy
 
 
 class SimulationConfig:
@@ -55,12 +56,16 @@ class SimulationStats:
 
         if self.wait_times:
             print(f"Total customers: {len(self.wait_times)}")
-            print(f"Average wait time: {sum(self.wait_times) / len(self.wait_times):.2f}")
+            print(
+                f"Average wait time: {sum(self.wait_times) / len(self.wait_times):.2f}"
+            )
             print(f"Max wait time: {max(self.wait_times):.2f}")
             print(f"Min wait time: {min(self.wait_times):.2f}")
 
         if self.service_times:
-            print(f"Average service time: {sum(self.service_times) / len(self.service_times):.2f}")
+            print(
+                f"Average service time: {sum(self.service_times) / len(self.service_times):.2f}"
+            )
 
         if self.arrival_times and self.departure_times:
             throughput = len(self.departure_times) / max(self.departure_times)
@@ -97,10 +102,9 @@ def customer_process(env, name, resource, stats, config):
         print(f"{name} started service at {service_start:.2f} (waited {wait_time:.2f})")
 
         # Service time (normally distributed)
-        service_time = max(0.1, random.gauss(
-            config.service_time_mean,
-            config.service_time_std
-        ))
+        service_time = max(
+            0.1, random.gauss(config.service_time_mean, config.service_time_std)
+        )
         stats.record_service_time(service_time)
 
         yield env.timeout(service_time)

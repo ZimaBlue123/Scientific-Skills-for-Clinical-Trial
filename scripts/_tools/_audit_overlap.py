@@ -1,8 +1,9 @@
 """Detect overlapping functionality in scripts/ via shared imports."""
 from __future__ import annotations
+
 import ast
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
 
 ROOT = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts")
 

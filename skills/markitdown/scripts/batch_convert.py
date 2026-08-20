@@ -7,11 +7,12 @@ in a directory to Markdown format.
 """
 
 import argparse
+import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import List, Optional
+
 from markitdown import MarkItDown
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import sys
 
 
 def convert_file(md: MarkItDown, file_path: Path, output_dir: Path, verbose: bool = False) -> tuple[bool, str, str]:

@@ -7,6 +7,7 @@ Analyze multiple sequences: BLAST, alignment, and structure prediction
 import argparse
 import sys
 from pathlib import Path
+
 import gget
 
 
@@ -16,7 +17,7 @@ def read_fasta(fasta_file):
     current_id = None
     current_seq = []
 
-    with open(fasta_file, "r") as f:
+    with open(fasta_file) as f:
         for line in f:
             line = line.strip()
             if line.startswith(">"):
@@ -53,7 +54,7 @@ def analyze_sequences(
     output_path = Path(output_dir)
     output_path.mkdir(exist_ok=True)
 
-    print(f"Batch Sequence Analysis")
+    print("Batch Sequence Analysis")
     print("=" * 60)
     print(f"Input file: {fasta_file}")
     print(f"Output directory: {output_dir}")
@@ -129,11 +130,11 @@ def analyze_sequences(
     print("\n" + "=" * 60)
     print("Batch analysis complete!")
     print(f"\nResults saved to: {output_dir}/")
-    print(f"  - BLAST results: *_blast.csv")
+    print("  - BLAST results: *_blast.csv")
     if align and len(sequences) > 1:
-        print(f"  - Alignment: alignment.afa")
+        print("  - Alignment: alignment.afa")
     if predict_structure:
-        print(f"  - Structures: structure_*/")
+        print("  - Structures: structure_*/")
 
     return True
 

@@ -18,6 +18,7 @@ Exit codes
     1  one or more mismatches detected
     2  I/O or runtime error
 """
+
 from __future__ import annotations
 
 import argparse
@@ -71,7 +72,11 @@ class SAECheck:
         return self.actual == self.reported_interval
 
     def render(self) -> str:
-        flag = OK if self.passed else f"{NO} (实差{self.actual}天, 偏差 {self.actual - self.reported_interval} 天)"
+        flag = (
+            OK
+            if self.passed
+            else f"{NO} (实差{self.actual}天, 偏差 {self.actual - self.reported_interval} 天)"
+        )
         return (
             f"  {self.subject}: 接种 {self.vacc_date.isoformat()} + "
             f"报告{self.reported_interval}天 vs 实际{self.actual}天  {flag}"
@@ -80,12 +85,12 @@ class SAECheck:
 
 def _build_sae_checks() -> list[SAECheck]:
     return [
-        SAECheck("0020 左肺肺炎",        date(2025, 3, 6),  254, date(2025, 11, 15)),
-        SAECheck("0039 桡骨茎突骨折",     date(2025, 3, 24), 245, date(2025, 11, 24)),
-        SAECheck("1034 颅内占位",         date(2025, 3, 29), 301, date(2026, 1, 24)),
-        SAECheck("1028 前列腺癌",         date(2025, 3, 29), 50,  date(2025, 5, 18)),
-        SAECheck("1033 右上叶肺炎",       date(2025, 1, 22), 20,  date(2025, 2, 11)),
-        SAECheck("1033 支气管哮喘",       date(2025, 1, 22), 20,  date(2025, 2, 11)),
+        SAECheck("0020 左肺肺炎", date(2025, 3, 6), 254, date(2025, 11, 15)),
+        SAECheck("0039 桡骨茎突骨折", date(2025, 3, 24), 245, date(2025, 11, 24)),
+        SAECheck("1034 颅内占位", date(2025, 3, 29), 301, date(2026, 1, 24)),
+        SAECheck("1028 前列腺癌", date(2025, 3, 29), 50, date(2025, 5, 18)),
+        SAECheck("1033 右上叶肺炎", date(2025, 1, 22), 20, date(2025, 2, 11)),
+        SAECheck("1033 支气管哮喘", date(2025, 1, 22), 20, date(2025, 2, 11)),
     ]
 
 
@@ -116,19 +121,23 @@ def verify() -> tuple[list[str], bool]:
 
     # --- 计数类校验 ---
     scalar_checks: list[Check] = [
-        Check("合并用药 144+13+3",       144 + 13 + 3,    160),
-        Check("AE 严重程度 159+98+11",   159 + 98 + 11,   268),
-        Check("征集性 1+2+3 级 131+73+5", 131 + 73 + 5,   209),
-        Check("非征集性 1+2+3 级 28+25+6", 28 + 25 + 6,    59),
-        Check("表4 剂次例次合计",         (118 + 91) + (45 + 14), 268),
-        Check("表6 部位例次合计",         (30 + 21 + 16 + 6 + 3) + (48 + 29 + 24 + 15 + 13 + 2 + 1), 208),
+        Check("合并用药 144+13+3", 144 + 13 + 3, 160),
+        Check("AE 严重程度 159+98+11", 159 + 98 + 11, 268),
+        Check("征集性 1+2+3 级 131+73+5", 131 + 73 + 5, 209),
+        Check("非征集性 1+2+3 级 28+25+6", 28 + 25 + 6, 59),
+        Check("表4 剂次例次合计", (118 + 91) + (45 + 14), 268),
+        Check(
+            "表6 部位例次合计",
+            (30 + 21 + 16 + 6 + 3) + (48 + 29 + 24 + 15 + 13 + 2 + 1),
+            208,
+        ),
         Check("全部 AE 相关性 30+173+34+30+1", 30 + 173 + 34 + 30 + 1, 268),
-        Check("征集性相关性 30+172+6",     30 + 172 + 6,    208),
-        Check("实验室/ECG 例次",          5 + 6 + 7 + 1 + 4, 23),
-        Check("合并非药物治疗",           1 + 6,            7),
-        Check("筛败 115+34",              115 + 34,         149),
-        Check("SAE 性质 可能无关5+无关1", 5 + 1,             6),
-        Check("SAE 转归 痊愈4+好转1+未好转1", 4 + 1 + 1,     6),
+        Check("征集性相关性 30+172+6", 30 + 172 + 6, 208),
+        Check("实验室/ECG 例次", 5 + 6 + 7 + 1 + 4, 23),
+        Check("合并非药物治疗", 1 + 6, 7),
+        Check("筛败 115+34", 115 + 34, 149),
+        Check("SAE 性质 可能无关5+无关1", 5 + 1, 6),
+        Check("SAE 转归 痊愈4+好转1+未好转1", 4 + 1 + 1, 6),
     ]
     add("=== 计数与合计 ===")
     for c in scalar_checks:
@@ -159,9 +168,7 @@ def verify() -> tuple[list[str], bool]:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Verify MMR numeric self-consistency."
-    )
+    parser = argparse.ArgumentParser(description="Verify MMR numeric self-consistency.")
     parser.add_argument(
         "-o",
         "--output",

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """阶段 1-3 (修正版): 解析 pyflakes 3.4 输出 path:line:col message。"""
 from __future__ import annotations
+
 import pathlib
 import re
 import subprocess

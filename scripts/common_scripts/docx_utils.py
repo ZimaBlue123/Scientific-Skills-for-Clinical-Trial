@@ -11,6 +11,7 @@ Usage
     from common_scripts.docx_utils import apply_cn_en_fonts
     apply_cn_en_fonts(doc)
 """
+
 from __future__ import annotations
 
 import logging
@@ -88,7 +89,9 @@ def apply_cn_en_fonts(
     int
         The number of styles that were actually found and updated.
     """
-    target_styles: Iterable[str] = list(styles) if styles is not None else _TARGET_STYLES
+    target_styles: Iterable[str] = (
+        list(styles) if styles is not None else _TARGET_STYLES
+    )
     updated = 0
     for name in target_styles:
         if _set_style_fonts(doc, name):
@@ -100,9 +103,6 @@ def apply_cn_en_fonts(
 
 # Backward compatibility alias.
 _apply_cn_en_fonts = apply_cn_en_fonts
-
-
-
 
 
 # -----------------------------------------------------------------------------
@@ -148,7 +148,9 @@ def convert_doc_to_docx(input_path, output_path=None):
             output_path = _os.path.splitext(str(input_path))[0] + ".docx"
         try:
             doc = word.Documents.Open(_os.path.abspath(str(input_path)))
-            doc.SaveAs(_os.path.abspath(str(output_path)), 16)  # 16 = wdFormatXMLDocument
+            doc.SaveAs(
+                _os.path.abspath(str(output_path)), 16
+            )  # 16 = wdFormatXMLDocument
         except Exception as exc:  # noqa: BLE001
             logger.error("COM error converting %s: %s", input_path, exc)
             return None

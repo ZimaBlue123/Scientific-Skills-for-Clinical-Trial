@@ -18,6 +18,7 @@ Usage
     py -3 scripts/extract_docx_full.py document.docx --format md output.md
     py -3 scripts/extract_docx_full.py folder/ [output.txt]
 """
+
 from __future__ import annotations
 
 import argparse
@@ -51,7 +52,6 @@ def extract_docx(filepath: Path) -> str:
                 full_text.append(" | ".join(row_text))
 
     return "\n\n".join(full_text)
-
 
 
 def extract_docx_to_markdown(filepath: Path) -> str:
@@ -176,8 +176,7 @@ def extract_folder(
 ) -> str:
     """Extract text from all docx/doc files in ``folder_path``."""
     files = [
-        f for f in os.listdir(folder_path)
-        if f.lower().endswith((".docx", ".doc"))
+        f for f in os.listdir(folder_path) if f.lower().endswith((".docx", ".doc"))
     ]
 
     combined: list[str] = [f"Found {len(files)} files", ""]
@@ -208,14 +207,18 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Extract text from .docx and legacy .doc files.",
     )
     parser.add_argument("input", help="Input .docx/.doc file or a folder.")
-    parser.add_argument("output", nargs="?", default=None, help="Optional output .txt path.")
     parser.add_argument(
-        "--log-level", default="INFO",
+        "output", nargs="?", default=None, help="Optional output .txt path."
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity (default: %(default)s).",
     )
     parser.add_argument(
-        "--format", default="text",
+        "--format",
+        default="text",
         choices=("text", "md"),
         dest="fmt",
         help="Output format (default: %(default)s).",

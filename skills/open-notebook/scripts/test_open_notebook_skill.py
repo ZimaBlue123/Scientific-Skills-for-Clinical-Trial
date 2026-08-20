@@ -60,12 +60,11 @@ class TestSkillMdFrontmatter(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        with open(SKILL_MD, "r", encoding="utf-8", errors="replace") as f:
+        with open(SKILL_MD, encoding="utf-8", errors="replace") as f:
             cls.content = f.read()
         # Extract frontmatter between --- delimiters
         match = re.match(r"^---\n(.*?)\n---", cls.content, re.DOTALL)
         cls.frontmatter = match.group(1) if match else ""
-
 
     def test_has_yaml_frontmatter(self):
         """SKILL.md must start with YAML frontmatter delimiters."""
@@ -114,9 +113,8 @@ class TestSkillMdContent(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        with open(SKILL_MD, "r", encoding="utf-8", errors="replace") as f:
+        with open(SKILL_MD, encoding="utf-8", errors="replace") as f:
             cls.content = f.read()
-
 
     def test_has_title_heading(self):
         """SKILL.md must have an H1 title heading."""
@@ -244,10 +242,9 @@ class TestReferenceFiles(unittest.TestCase):
             os.path.isfile(path),
             f"Reference file must exist: {filename}",
         )
-        with open(path, "r", encoding="utf-8", errors="replace") as f:
+        with open(path, encoding="utf-8", errors="replace") as f:
             content = f.read()
         return content
-
 
     def test_api_reference_exists_and_comprehensive(self):
         """references/api_reference.md must exist and cover key API endpoints."""
@@ -280,7 +277,9 @@ class TestReferenceFiles(unittest.TestCase):
     def test_configuration_reference_exists(self):
         """references/configuration.md must exist with setup details."""
         content = self._read_reference("configuration.md")
-        self.assertGreater(len(content), 1500, "Configuration guide must be substantive")
+        self.assertGreater(
+            len(content), 1500, "Configuration guide must be substantive"
+        )
         content_lower = content.lower()
         self.assertTrue(
             "docker" in content_lower,
@@ -313,7 +312,7 @@ class TestExampleScripts(unittest.TestCase):
             os.path.isfile(path),
             f"Script must exist: {filename}",
         )
-        with open(path, "r", encoding="utf-8", errors="replace") as f:
+        with open(path, encoding="utf-8", errors="replace") as f:
             content = f.read()
         # Verify it's valid Python syntax
         try:
@@ -321,7 +320,6 @@ class TestExampleScripts(unittest.TestCase):
         except SyntaxError as e:
             self.fail(f"Script {filename} has invalid Python syntax: {e}")
         return content
-
 
     def test_notebook_management_script_exists(self):
         """A notebook management example script must exist."""
@@ -345,9 +343,8 @@ class TestMarketplaceJson(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        with open(MARKETPLACE_JSON, "r", encoding="utf-8", errors="replace") as f:
+        with open(MARKETPLACE_JSON, encoding="utf-8", errors="replace") as f:
             cls.marketplace = json.load(f)
-
 
     def test_marketplace_has_open_notebook_skill(self):
         """marketplace.json must list the open-notebook skill."""
@@ -372,13 +369,12 @@ class TestSkillMdApiEndpointCoverage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        with open(SKILL_MD, "r", encoding="utf-8", errors="replace") as f:
+        with open(SKILL_MD, encoding="utf-8", errors="replace") as f:
             cls.skill_content = f.read()
         api_ref_path = os.path.join(REFERENCES_DIR, "api_reference.md")
-        with open(api_ref_path, "r", encoding="utf-8", errors="replace") as f:
+        with open(api_ref_path, encoding="utf-8", errors="replace") as f:
             cls.api_content = f.read()
         cls.combined = cls.skill_content + cls.api_content
-
 
     def test_covers_notebook_endpoints(self):
         """Must document notebook management endpoints."""

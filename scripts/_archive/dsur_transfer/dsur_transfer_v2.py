@@ -2,6 +2,7 @@
 DSUR Content Transfer Script v2 - Improved section mapping.
 Distinguishes TOC from body, handles sub-sections properly.
 """
+
 import sys
 
 from docx import Document
@@ -14,73 +15,76 @@ def identify_section_key(text):
     t = text.strip().lower()
 
     mappings = [
-        ('development safety update report (dsur)', 'title_dsur'),
-        ('executive summary', 'exec_summary'),
-        ('table of contents', 'toc_heading'),
-        ('confidentiality statement', 'confidentiality'),
-        ('1. introduction', 'sec1'),
-        ('2. worldwide marketing approval status', 'sec2'),
-        ('3. actions taken in the reporting period for safety reasons', 'sec3'),
-        ('4. changes to reference safety information', 'sec4'),
-        ('5. inventory of clinical trials', 'sec5'),
-        ('6. estimated cumulative exposure', 'sec6'),
-        ('6.1 cumulative subject exposure in development program', 'sec6_1'),
-        ('6.2 patient exposure from marketing experience', 'sec6_2'),
-        ('7. data in line listings and summary tabulations', 'sec7'),
-        ('7.1 reference information', 'sec7_1'),
-        ('7.2 line listings of serious adverse reactions', 'sec7_2'),
-        ('7.3 cumulative summary tabulations of serious adverse events', 'sec7_3'),
-        ('8. significant findings from clinical trials', 'sec8'),
-        ('8.1 completed clinical trials', 'sec8_1'),
-        ('8.2 ongoing clinical trials', 'sec8_2'),
-        ('8.3 long-term follow-up', 'sec8_3'),
-        ('8.4 other therapeutic use', 'sec8_4'),
-        ('8.5 new safety data related to combination therapies', 'sec8_5'),
-        ('9. safety findings from non-interventional studies', 'sec9'),
-        ('10. other clinical trial/study safety information', 'sec10'),
-        ('11. safety findings from marketing experience', 'sec11'),
-        ('12. non-clinical data', 'sec12'),
-        ('13. literature', 'sec13'),
-        ('14. other dsurs', 'sec14'),
-        ('15. lack of efficacy', 'sec15'),
-        ('16. region-specific information', 'sec16'),
-        ('17. late-breaking information', 'sec17'),
-        ('18. overall safety assessment', 'sec18'),
-        ('18.1 risk assessment', 'sec18_1'),
-        ('18.1.1 known adverse reactions', 'sec18_1_1'),
-        ('18.1.2 potential risks', 'sec18_1_2'),
-        ('18.1.3 adverse events resulting in death', 'sec18_1_3'),
-        ('18.1.4 potential impact of concomitant use', 'sec18_1_4'),
-        ('18.1.5', 'sec18_1_5'),
-        ('18.2 benefit-risk considerations', 'sec18_2'),
-        ('18.2.1 benefit assessment', 'sec18_2_1'),
-        ('18.2.2 pharmacodynamics suggested by completed clinical studies', 'sec18_2_2'),
-        ('18.2.3 impact of identified adverse reactions', 'sec18_2_3'),
-        ('18.2.4 do other potential risks have clinical significance', 'sec18_2_4'),
-        ('18.2.5 are there any events requiring close attention', 'sec18_2_5'),
-        ('19. summary of important risks', 'sec19'),
-        ('19.1 important risks in the previous cycle', 'sec19_1'),
-        ('19.2 important risks in the current cycle', 'sec19_2'),
-        ('20. conclusions', 'sec20'),
-        ('appendices', 'appendices'),
-        ('appendix 1 -', 'appendix1'),
-        ('appendix 2 -', 'appendix2'),
-        ('appendix 3 -', 'appendix3'),
-        ('appendix 4 -', 'appendix4'),
-        ('appendix 5 -', 'appendix5'),
-        ('appendix 6 -', 'appendix6'),
-        ('appendix 7 -', 'appendix7'),
-        ('regional appendices', 'regional'),
-        ('appendix r1 -', 'appendix_r1'),
-        ('appendix r2 -', 'appendix_r2'),
-        ('appendix r3 -', 'appendix_r3'),
-        ('appendix r4 -', 'appendix_r4'),
-        ('appendix r5 -', 'appendix_r5'),
-        ('r1:', 'appendix_r1'),
-        ('r2:', 'appendix_r2'),
-        ('r3:', 'appendix_r3'),
-        ('r4:', 'appendix_r4'),
-        ('r5:', 'appendix_r5'),
+        ("development safety update report (dsur)", "title_dsur"),
+        ("executive summary", "exec_summary"),
+        ("table of contents", "toc_heading"),
+        ("confidentiality statement", "confidentiality"),
+        ("1. introduction", "sec1"),
+        ("2. worldwide marketing approval status", "sec2"),
+        ("3. actions taken in the reporting period for safety reasons", "sec3"),
+        ("4. changes to reference safety information", "sec4"),
+        ("5. inventory of clinical trials", "sec5"),
+        ("6. estimated cumulative exposure", "sec6"),
+        ("6.1 cumulative subject exposure in development program", "sec6_1"),
+        ("6.2 patient exposure from marketing experience", "sec6_2"),
+        ("7. data in line listings and summary tabulations", "sec7"),
+        ("7.1 reference information", "sec7_1"),
+        ("7.2 line listings of serious adverse reactions", "sec7_2"),
+        ("7.3 cumulative summary tabulations of serious adverse events", "sec7_3"),
+        ("8. significant findings from clinical trials", "sec8"),
+        ("8.1 completed clinical trials", "sec8_1"),
+        ("8.2 ongoing clinical trials", "sec8_2"),
+        ("8.3 long-term follow-up", "sec8_3"),
+        ("8.4 other therapeutic use", "sec8_4"),
+        ("8.5 new safety data related to combination therapies", "sec8_5"),
+        ("9. safety findings from non-interventional studies", "sec9"),
+        ("10. other clinical trial/study safety information", "sec10"),
+        ("11. safety findings from marketing experience", "sec11"),
+        ("12. non-clinical data", "sec12"),
+        ("13. literature", "sec13"),
+        ("14. other dsurs", "sec14"),
+        ("15. lack of efficacy", "sec15"),
+        ("16. region-specific information", "sec16"),
+        ("17. late-breaking information", "sec17"),
+        ("18. overall safety assessment", "sec18"),
+        ("18.1 risk assessment", "sec18_1"),
+        ("18.1.1 known adverse reactions", "sec18_1_1"),
+        ("18.1.2 potential risks", "sec18_1_2"),
+        ("18.1.3 adverse events resulting in death", "sec18_1_3"),
+        ("18.1.4 potential impact of concomitant use", "sec18_1_4"),
+        ("18.1.5", "sec18_1_5"),
+        ("18.2 benefit-risk considerations", "sec18_2"),
+        ("18.2.1 benefit assessment", "sec18_2_1"),
+        (
+            "18.2.2 pharmacodynamics suggested by completed clinical studies",
+            "sec18_2_2",
+        ),
+        ("18.2.3 impact of identified adverse reactions", "sec18_2_3"),
+        ("18.2.4 do other potential risks have clinical significance", "sec18_2_4"),
+        ("18.2.5 are there any events requiring close attention", "sec18_2_5"),
+        ("19. summary of important risks", "sec19"),
+        ("19.1 important risks in the previous cycle", "sec19_1"),
+        ("19.2 important risks in the current cycle", "sec19_2"),
+        ("20. conclusions", "sec20"),
+        ("appendices", "appendices"),
+        ("appendix 1 -", "appendix1"),
+        ("appendix 2 -", "appendix2"),
+        ("appendix 3 -", "appendix3"),
+        ("appendix 4 -", "appendix4"),
+        ("appendix 5 -", "appendix5"),
+        ("appendix 6 -", "appendix6"),
+        ("appendix 7 -", "appendix7"),
+        ("regional appendices", "regional"),
+        ("appendix r1 -", "appendix_r1"),
+        ("appendix r2 -", "appendix_r2"),
+        ("appendix r3 -", "appendix_r3"),
+        ("appendix r4 -", "appendix_r4"),
+        ("appendix r5 -", "appendix_r5"),
+        ("r1:", "appendix_r1"),
+        ("r2:", "appendix_r2"),
+        ("r3:", "appendix_r3"),
+        ("r4:", "appendix_r4"),
+        ("r5:", "appendix_r5"),
     ]
 
     for pattern, key in mappings:
@@ -92,7 +96,7 @@ def identify_section_key(text):
 def build_source_index(doc):
     """Build source content index: section_key -> list of content paragraph texts."""
     sections = {}
-    current_key = '__preamble__'
+    current_key = "__preamble__"
 
     for para in doc.paragraphs:
         text = para.text.strip()
@@ -120,38 +124,38 @@ def replace_para_text(para, new_text):
         return
 
     # Create new run
-    new_run = OxmlElement('w:r')
-    rPr = OxmlElement('w:rPr')
+    new_run = OxmlElement("w:r")
+    rPr = OxmlElement("w:rPr")
 
     # Copy formatting from paragraph style
     style = para.style
     if style:
         try:
             if style.font.name:
-                rFonts = OxmlElement('w:rFonts')
-                rFonts.set(qn('w:ascii'), style.font.name)
-                rFonts.set(qn('w:hAnsi'), style.font.name)
-                rFonts.set(qn('w:eastAsia'), style.font.name)
+                rFonts = OxmlElement("w:rFonts")
+                rFonts.set(qn("w:ascii"), style.font.name)
+                rFonts.set(qn("w:hAnsi"), style.font.name)
+                rFonts.set(qn("w:eastAsia"), style.font.name)
                 rPr.append(rFonts)
         except:
             pass
         try:
             if style.font.size:
-                sz = OxmlElement('w:sz')
-                sz.set(qn('w:val'), str(int(style.font.size.pt * 2)))
+                sz = OxmlElement("w:sz")
+                sz.set(qn("w:val"), str(int(style.font.size.pt * 2)))
                 rPr.append(sz)
         except:
             pass
         try:
             if style.font.bold:
-                b = OxmlElement('w:b')
+                b = OxmlElement("w:b")
                 rPr.append(b)
         except:
             pass
 
     new_run.append(rPr)
-    t = OxmlElement('w:t')
-    t.set(qn('xml:space'), 'preserve')
+    t = OxmlElement("w:t")
+    t.set(qn("xml:space"), "preserve")
     t.text = new_text
     new_run.append(t)
     para._element.append(new_run)
@@ -164,17 +168,17 @@ def find_toc_boundaries(doc):
 
     for i, para in enumerate(doc.paragraphs):
         text = para.text.strip().lower()
-        style_name = (para.style.name or '').lower()
+        style_name = (para.style.name or "").lower()
 
-        if text == 'table of contents':
+        if text == "table of contents":
             toc_start = i
             continue
 
         if toc_start is not None and toc_end is None:
             # Check if we've exited TOC - looking for the first main section heading
             key = identify_section_key(text)
-            if key and key not in ('toc_heading',):
-                if 'toc' not in style_name:
+            if key and key not in ("toc_heading",):
+                if "toc" not in style_name:
                     toc_end = i
                     break
 
@@ -209,38 +213,45 @@ def main(template_path, source_path, output_path):
     for i, para in enumerate(template.paragraphs):
         text = para.text.strip()
 
-        if text == 'Development Safety Update Report (DSUR) No. 2':
-            replace_para_text(para, 'Development Safety Update Report (DSUR) No. 1')
-        elif text == 'Recombinant Hexavalent Norovirus Vaccine (Hansenula polymorpha)':
-            replace_para_text(para, 'Recombinant Varicella Vaccine (CHO Cell)')
-        elif 'Reporting Period: 25 April 2025' in text:
-            replace_para_text(para, 'Reporting Period: 26-Jun-2025 to 25-Jun-2026')
-        elif 'Date of Report: 05 June 2026' in text:
-            replace_para_text(para, 'Date of Report: 09-Jul-2026')
-        elif text.startswith('All information contained in this document is the property of Grand Theravac Life Science'):
-            replace_para_text(para, 'All information contained in this document is the exclusive property of Grand Theravac Life Sciences (Nanjing) Co., Ltd. and Grand Theravac Life Sciences (Hangzhou) Co., Ltd., and is strictly confidential. It may not be disclosed or reproduced, in whole or in part, without prior written consent from the Sponsor.')
+        if text == "Development Safety Update Report (DSUR) No. 2":
+            replace_para_text(para, "Development Safety Update Report (DSUR) No. 1")
+        elif text == "Recombinant Hexavalent Norovirus Vaccine (Hansenula polymorpha)":
+            replace_para_text(para, "Recombinant Varicella Vaccine (CHO Cell)")
+        elif "Reporting Period: 25 April 2025" in text:
+            replace_para_text(para, "Reporting Period: 26-Jun-2025 to 25-Jun-2026")
+        elif "Date of Report: 05 June 2026" in text:
+            replace_para_text(para, "Date of Report: 09-Jul-2026")
+        elif text.startswith(
+            "All information contained in this document is the property of Grand Theravac Life Science"
+        ):
+            replace_para_text(
+                para,
+                "All information contained in this document is the exclusive property of Grand Theravac Life Sciences (Nanjing) Co., Ltd. and Grand Theravac Life Sciences (Hangzhou) Co., Ltd., and is strictly confidential. It may not be disclosed or reproduced, in whole or in part, without prior written consent from the Sponsor.",
+            )
 
     # Step 1b: Handle sponsor info table
     if template.tables:
         t = template.tables[0]
         try:
-            t.rows[0].cells[1].text = 'Grand Theravac Life Sciences (Nanjing) Co., Ltd. / Grand Theravac Life Sciences (Hangzhou) Co., Ltd.'
+            t.rows[0].cells[
+                1
+            ].text = "Grand Theravac Life Sciences (Nanjing) Co., Ltd. / Grand Theravac Life Sciences (Hangzhou) Co., Ltd."
         except:
             pass
         try:
-            t.rows[1].cells[1].text = ''
+            t.rows[1].cells[1].text = ""
         except:
             pass
         try:
-            t.rows[2].cells[1].text = ''
+            t.rows[2].cells[1].text = ""
         except:
             pass
         try:
-            t.rows[3].cells[1].text = ''
+            t.rows[3].cells[1].text = ""
         except:
             pass
         try:
-            t.rows[4].cells[1].text = ''
+            t.rows[4].cells[1].text = ""
         except:
             pass
 
@@ -249,26 +260,28 @@ def main(template_path, source_path, output_path):
         for i in range(toc_start, toc_end):
             para = template.paragraphs[i]
             text = para.text.strip()
-            style_name = (para.style.name or '').lower()
+            style_name = (para.style.name or "").lower()
             # Only clear actual TOC entries, keep the heading
-            if 'toc' in style_name or ('\t' in text):
-                replace_para_text(para, '')
+            if "toc" in style_name or ("\t" in text):
+                replace_para_text(para, "")
 
     # Step 3: Build template body structure (paragraph index -> section key)
     # Start after TOC
     body_start = toc_end if toc_end else 0
 
-    template_sections = {}  # section_key -> list of paragraph indices (content only, no headings)
+    template_sections = (
+        {}
+    )  # section_key -> list of paragraph indices (content only, no headings)
     current_section = None
     content_buffer = []
 
     for i in range(body_start, len(template.paragraphs)):
         para = template.paragraphs[i]
         text = para.text.strip()
-        style_name = (para.style.name or '').lower()
+        style_name = (para.style.name or "").lower()
 
         # Skip TOC style paragraphs in body
-        if 'toc' in style_name:
+        if "toc" in style_name:
             continue
 
         sec_key = identify_section_key(text) if text else None
@@ -303,7 +316,7 @@ def main(template_path, source_path, output_path):
             for idx in tpl_indices:
                 para = template.paragraphs[idx]
                 if para.text.strip():
-                    replace_para_text(para, '')
+                    replace_para_text(para, "")
                     cleared += 1
             continue
 
@@ -321,7 +334,7 @@ def main(template_path, source_path, output_path):
                 idx = tpl_indices[j]
                 para = template.paragraphs[idx]
                 if para.text.strip():
-                    replace_para_text(para, '')
+                    replace_para_text(para, "")
                     cleared += 1
 
     print(f"\nReplaced: {replaced} paragraphs")
@@ -346,9 +359,23 @@ def main(template_path, source_path, output_path):
         if t_idx == 7:
             for row in table.rows:
                 for cell in row.cells:
-                    if cell.text.strip() and not any(h in cell.text.lower() for h in ['age', 'male', 'female', 'total', 'race', 'asian', 'black', 'white', 'other', 'unknown']):
+                    if cell.text.strip() and not any(
+                        h in cell.text.lower()
+                        for h in [
+                            "age",
+                            "male",
+                            "female",
+                            "total",
+                            "race",
+                            "asian",
+                            "black",
+                            "white",
+                            "other",
+                            "unknown",
+                        ]
+                    ):
                         for p in cell.paragraphs:
-                            replace_para_text(p, '')
+                            replace_para_text(p, "")
 
     # Step 6: Handle Appendix 3 table specifically
     # Source has a different table structure for Appendix 3
@@ -364,7 +391,7 @@ def main(template_path, source_path, output_path):
             for r_idx in range(1, len(tpl_table.rows)):
                 for cell in tpl_table.rows[r_idx].cells:
                     for p in cell.paragraphs:
-                        replace_para_text(p, '')
+                        replace_para_text(p, "")
 
             # Now set data from source
             if len(src_table.rows) > 1:  # has data row
@@ -390,7 +417,7 @@ def main(template_path, source_path, output_path):
                 for cell in row.cells:
                     for p in cell.paragraphs:
                         if p.text.strip():
-                            replace_para_text(p, '')
+                            replace_para_text(p, "")
 
     # Save
     template.save(output_path)

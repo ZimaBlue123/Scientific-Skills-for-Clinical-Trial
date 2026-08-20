@@ -11,6 +11,7 @@ Usage
     py -3 scripts/make_safe_md_copies.py
     py -3 scripts/make_safe_md_copies.py --src review_materials/_md --out review_materials/_md/_safe
 """
+
 from __future__ import annotations
 
 import argparse

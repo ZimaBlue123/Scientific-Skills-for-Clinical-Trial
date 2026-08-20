@@ -21,10 +21,11 @@ Requirements:
     - Valid COSMIC account credentials (register at cancer.sanger.ac.uk/cosmic)
 """
 
-import requests
-import sys
 import os
+import sys
 from typing import Optional
+
+import requests
 
 
 def download_cosmic_file(

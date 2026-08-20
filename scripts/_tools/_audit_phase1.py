@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """阶段一审计入口：枚举审计范围 + 计数 + 分组。"""
 from __future__ import annotations
+
 import pathlib
 import sys
 

@@ -4,12 +4,12 @@ Generate Treatment Plan Template
 Interactive script to select and generate treatment plan templates.
 """
 
-import os
-import sys
-import shutil
 import argparse
-from pathlib import Path
+import os
+import shutil
+import sys
 from datetime import datetime
+from pathlib import Path
 
 # Template types and descriptions
 TEMPLATES = {

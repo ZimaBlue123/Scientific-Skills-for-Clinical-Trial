@@ -1,4 +1,5 @@
 """Merge TVAX-006_海外桥接法规清单_IMA_V2.md + IMA.docx URLs → TVAX-006_海外桥接法规清单_IMA_V2.docx."""
+
 from __future__ import annotations
 
 import logging
@@ -28,7 +29,9 @@ def _strip_md_bold(s: str) -> str:
     return re.sub(r"\*\*(.+?)\*\*", r"\1", s)
 
 
-def _set_cell_font(cell: Any, name: str = "Microsoft YaHei", size_pt: float = 9.0) -> None:
+def _set_cell_font(
+    cell: Any, name: str = "Microsoft YaHei", size_pt: float = 9.0
+) -> None:
     try:
         for p in cell.paragraphs:
             for r in p.runs:
@@ -88,7 +91,9 @@ def main() -> int:
     U_WHO_PQ_VAR = "https://extranet.who.int/prequal/sites/default/files/document_files/PQ_VXA_Variations_V7.pdf"
     U_WHO_HZ_2025 = "https://www.who.int/publications/i/item/WER10027-28-265-284"
 
-    U_CFR600 = "https://www.ecfr.gov/on/2018-01-26/title-21/chapter-I/subchapter-F/part-600"
+    U_CFR600 = (
+        "https://www.ecfr.gov/on/2018-01-26/title-21/chapter-I/subchapter-F/part-600"
+    )
     U_CFR601 = "https://www.ecfr.gov/on/2024-01-14/title-21/part-601"
     U_FDA_FLU = "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/clinical-data-needed-support-licensure-seasonal-inactivated-influenza-vaccines"
     U_FDA_PAN = "https://www.fda.gov/downloads/BiologicsBloodVaccines/GuidanceComplianceRegulatoryInformation/Guidances/Vaccines/ucm091985.pdf"
@@ -104,7 +109,9 @@ def main() -> int:
 
     U_PMDA_E5 = "https://www.pmda.go.jp/files/000156836.pdf"
     U_EMA_E5QA = "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e-5-r1-questions-answers-ethnic-factors-acceptability-foreign-clinical-data_en.pdf"
-    U_ICH_E17 = "https://database.ich.org/sites/default/files/E17EWG_Step4_2017_1116.pdf"
+    U_ICH_E17 = (
+        "https://database.ich.org/sites/default/files/E17EWG_Step4_2017_1116.pdf"
+    )
     U_EMA_E17 = "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-guideline-e17-general-principles-planning-and-design-multi-regional-clinical-trials-step-5-first-version_en.pdf"
     U_ICH_E6 = "https://www.ich.org/page/efficacy-guidelines"
 
@@ -134,13 +141,55 @@ def main() -> int:
     h1("一、WHO（世界卫生组织）")
     _add_table(
         doc,
-        ["序号", "法规/指导原则", "发布年份", "核心内容", "对TVAX-006桥接的关联", "下载链接"],
         [
-            ["1", "Guidelines on Clinical Evaluation of Vaccines: Regulatory Expectations (WHO TRS No. 1004, Annex 9)", "2017", "疫苗临床评价总框架，含免疫原性替代终点、桥接研究等监管期望，替代2001版", "通用框架，所有疫苗桥接的基础依据", f"WHO官网\n{U_WHO_TRS1004}"],
-            ["2", "Procedure for Assessing the Acceptability, in Principle, of Vaccines for Purchase by UN Agencies (WHO TRS No. 978, Annex 6)", "2012", "WHO疫苗预认证(PQ)程序，含临床数据要求", "PQ路径必参考", f"WHO官网\n{U_WHO_TRS978}"],
-            ["3", "Points to Consider for Manufacturers of Human Vaccines: Clinical Considerations for Evaluation of Vaccines for Prequalification", "2010", "PQ临床评价要点，桥接数据与免疫原性证据要求", "PQ桥接数据具体要求", f"PDF下载\n{U_WHO_PQ_PTC}"],
-            ["4", "Considerations for the Assessment of COVID-19 Vaccines for Listing by WHO", "2021", "COVID-19疫苗WHO列名评估考量，含免疫桥接策略", "免疫桥接策略参考", f"WHO官网\n{U_WHO_COVID_LIST}"],
-            ["5", "Guidance on Variations to a Prequalified Vaccine", "持续更新", "预认证疫苗变更指导，含桥接研究要求", "变更场景桥接", f"PDF下载\n{U_WHO_PQ_VAR}"],
+            "序号",
+            "法规/指导原则",
+            "发布年份",
+            "核心内容",
+            "对TVAX-006桥接的关联",
+            "下载链接",
+        ],
+        [
+            [
+                "1",
+                "Guidelines on Clinical Evaluation of Vaccines: Regulatory Expectations (WHO TRS No. 1004, Annex 9)",
+                "2017",
+                "疫苗临床评价总框架，含免疫原性替代终点、桥接研究等监管期望，替代2001版",
+                "通用框架，所有疫苗桥接的基础依据",
+                f"WHO官网\n{U_WHO_TRS1004}",
+            ],
+            [
+                "2",
+                "Procedure for Assessing the Acceptability, in Principle, of Vaccines for Purchase by UN Agencies (WHO TRS No. 978, Annex 6)",
+                "2012",
+                "WHO疫苗预认证(PQ)程序，含临床数据要求",
+                "PQ路径必参考",
+                f"WHO官网\n{U_WHO_TRS978}",
+            ],
+            [
+                "3",
+                "Points to Consider for Manufacturers of Human Vaccines: Clinical Considerations for Evaluation of Vaccines for Prequalification",
+                "2010",
+                "PQ临床评价要点，桥接数据与免疫原性证据要求",
+                "PQ桥接数据具体要求",
+                f"PDF下载\n{U_WHO_PQ_PTC}",
+            ],
+            [
+                "4",
+                "Considerations for the Assessment of COVID-19 Vaccines for Listing by WHO",
+                "2021",
+                "COVID-19疫苗WHO列名评估考量，含免疫桥接策略",
+                "免疫桥接策略参考",
+                f"WHO官网\n{U_WHO_COVID_LIST}",
+            ],
+            [
+                "5",
+                "Guidance on Variations to a Prequalified Vaccine",
+                "持续更新",
+                "预认证疫苗变更指导，含桥接研究要求",
+                "变更场景桥接",
+                f"PDF下载\n{U_WHO_PQ_VAR}",
+            ],
             [
                 "6",
                 "WHO Position Paper on Herpes Zoster Vaccines 🆕",
@@ -157,15 +206,71 @@ def main() -> int:
     h1("二、FDA（美国食品药品监督管理局）")
     _add_table(
         doc,
-        ["序号", "法规/指导原则", "发布年份", "核心内容", "对TVAX-006桥接的关联", "下载链接"],
         [
-            ["7", "21 CFR Part 600 — Biological Products: General", "持续更新", "生物制品通用法规，含疫苗许可基础要求", "美国上市路径通用合规框架", f"eCFR在线\n{U_CFR600}"],
-            ["8", "21 CFR Part 601 — Licensing", "持续更新", "生物制品许可证申请(BLA)程序要求", "BLA资料组织与审评程序参照", f"eCFR在线\n{U_CFR601}"],
-            ["9", "Guidance for Industry: Clinical Data Needed to Support the Licensure of Seasonal Inactivated Influenza Vaccines", "2007", "季节性流感疫苗许可临床数据要求，含免疫原性桥接标准（HI抗体GMC比值、血清转换率）", "免疫原性桥接终点设定与可比性分析思路参考（病种不同需个案映射至gE/VZV）", f"FDA页面\n{U_FDA_FLU}"],
-            ["10", "Guidance for Industry: Clinical Data Needed to Support the Licensure of Pandemic Influenza Vaccines", "2007", "大流行流感疫苗许可临床数据要求，含加速审批下免疫原性替代终点", "加速路径下免疫学替代终点论证逻辑参考", f"PDF下载\n{U_FDA_PAN}"],
-            ["11", "Guidance for Industry: General Principles for the Development of Vaccines to Protect Against Global Infectious Diseases", "2009", "全球传染病疫苗开发一般原则，含境外数据利用与桥接策略", "境外临床数据外推与桥接策略表述参考", f"PDF下载\n{U_FDA_GLOBAL}"],
-            ["12", "Development and Licensure of Vaccines to Prevent COVID-19: Guidance for Industry", "2020", "COVID-19疫苗开发与许可，含免疫桥接和替代终点策略", "免疫桥接试验设计与监管沟通案例参考", f"PDF下载\n{U_FDA_COVID}"],
-            ["13", "Table of Surrogate Endpoints", "持续更新", "FDA认可的替代终点清单，含疫苗相关免疫学指标", "若主张免疫学终点支持效力推断，需对照清单与个案科学论证", f"FDA页面\n{U_FDA_SUR}"],
+            "序号",
+            "法规/指导原则",
+            "发布年份",
+            "核心内容",
+            "对TVAX-006桥接的关联",
+            "下载链接",
+        ],
+        [
+            [
+                "7",
+                "21 CFR Part 600 — Biological Products: General",
+                "持续更新",
+                "生物制品通用法规，含疫苗许可基础要求",
+                "美国上市路径通用合规框架",
+                f"eCFR在线\n{U_CFR600}",
+            ],
+            [
+                "8",
+                "21 CFR Part 601 — Licensing",
+                "持续更新",
+                "生物制品许可证申请(BLA)程序要求",
+                "BLA资料组织与审评程序参照",
+                f"eCFR在线\n{U_CFR601}",
+            ],
+            [
+                "9",
+                "Guidance for Industry: Clinical Data Needed to Support the Licensure of Seasonal Inactivated Influenza Vaccines",
+                "2007",
+                "季节性流感疫苗许可临床数据要求，含免疫原性桥接标准（HI抗体GMC比值、血清转换率）",
+                "免疫原性桥接终点设定与可比性分析思路参考（病种不同需个案映射至gE/VZV）",
+                f"FDA页面\n{U_FDA_FLU}",
+            ],
+            [
+                "10",
+                "Guidance for Industry: Clinical Data Needed to Support the Licensure of Pandemic Influenza Vaccines",
+                "2007",
+                "大流行流感疫苗许可临床数据要求，含加速审批下免疫原性替代终点",
+                "加速路径下免疫学替代终点论证逻辑参考",
+                f"PDF下载\n{U_FDA_PAN}",
+            ],
+            [
+                "11",
+                "Guidance for Industry: General Principles for the Development of Vaccines to Protect Against Global Infectious Diseases",
+                "2009",
+                "全球传染病疫苗开发一般原则，含境外数据利用与桥接策略",
+                "境外临床数据外推与桥接策略表述参考",
+                f"PDF下载\n{U_FDA_GLOBAL}",
+            ],
+            [
+                "12",
+                "Development and Licensure of Vaccines to Prevent COVID-19: Guidance for Industry",
+                "2020",
+                "COVID-19疫苗开发与许可，含免疫桥接和替代终点策略",
+                "免疫桥接试验设计与监管沟通案例参考",
+                f"PDF下载\n{U_FDA_COVID}",
+            ],
+            [
+                "13",
+                "Table of Surrogate Endpoints",
+                "持续更新",
+                "FDA认可的替代终点清单，含疫苗相关免疫学指标",
+                "若主张免疫学终点支持效力推断，需对照清单与个案科学论证",
+                f"FDA页面\n{U_FDA_SUR}",
+            ],
         ],
     )
     doc.add_paragraph()
@@ -174,7 +279,14 @@ def main() -> int:
     h1("三、EMA（欧洲药品管理局）")
     _add_table(
         doc,
-        ["序号", "法规/指导原则", "发布年份", "核心内容", "对TVAX-006桥接的关联", "下载链接"],
+        [
+            "序号",
+            "法规/指导原则",
+            "发布年份",
+            "核心内容",
+            "对TVAX-006桥接的关联",
+            "下载链接",
+        ],
         [
             [
                 "14",
@@ -224,12 +336,42 @@ def main() -> int:
         doc,
         ["变更维度", "2005版", "2023 Rev.1版", "对TVAX-006桥接的影响"],
         [
-            ["ICP框架", "提及免疫保护相关性概念，但未系统化识别路径", "新增ICP识别路径：效力试验子集分析→人体攻毒→动物模型→血清流行病学→被动免疫数据；明确ICP不可跨机制/年龄/亚型/给药途径推广", "TVAX-006无既定ICP，需依赖免疫桥接路径；gE抗体GMC/SCR作为推定ICP需个案论证"],
-            ["免疫桥接", '桥接章节为新增特殊考量之一；原则为"保护水平比例相似"', "大幅扩展：无ICP时可通过与已上市疫苗免疫应答非劣效推断效力；参考疫苗退市时可与同样通过桥接获批的疫苗比较；多亚型场景可通过交叉保护评估支持全亚型效力推断", "⭐TVAX-006与Shingrix®免疫桥接的核心法规依据"],
-            ["特殊人群桥接", "提及宿主因素影响，部分可上市后探索", "新增专项章节：老年人按年龄亚组（65-74/75-84/85+）分层；免疫缺陷人群仅入组特定高影响亚组；孕妇需先完成育龄非妊娠女性研究", "TVAX-006需关注≥50岁年龄亚组分层设计，免疫低下人群桥接需界定亚组"],
-            ["免疫程序桥接", "未覆盖", "新增：支持多疫苗完成同一程序、异源加强（需非劣效）、异源初免-加强（需优效+广覆盖）", "如TVAX-006拟支持与Shingrix®互换或加强，需参照此条款"],
-            ["安全数据库规模", "未明确分级标准", "新增分级：含未上市新组分→需估计不常见AE(1/100-1/1000)；全组分已上市→可参考已上市安全性数据；需覆盖所有目标年龄亚组", "TVAX-006含新佐剂TVA01，安全数据库规模需满足新组分标准"],
-            ["佐剂", "单独佐剂指南(EMEA/CHMP/VEG/134716/04)", "整合入本指南，佐剂不再单独出指南", "TVAX-006佐剂TVA01临床评价需参照整合后要求"],
+            [
+                "ICP框架",
+                "提及免疫保护相关性概念，但未系统化识别路径",
+                "新增ICP识别路径：效力试验子集分析→人体攻毒→动物模型→血清流行病学→被动免疫数据；明确ICP不可跨机制/年龄/亚型/给药途径推广",
+                "TVAX-006无既定ICP，需依赖免疫桥接路径；gE抗体GMC/SCR作为推定ICP需个案论证",
+            ],
+            [
+                "免疫桥接",
+                '桥接章节为新增特殊考量之一；原则为"保护水平比例相似"',
+                "大幅扩展：无ICP时可通过与已上市疫苗免疫应答非劣效推断效力；参考疫苗退市时可与同样通过桥接获批的疫苗比较；多亚型场景可通过交叉保护评估支持全亚型效力推断",
+                "⭐TVAX-006与Shingrix®免疫桥接的核心法规依据",
+            ],
+            [
+                "特殊人群桥接",
+                "提及宿主因素影响，部分可上市后探索",
+                "新增专项章节：老年人按年龄亚组（65-74/75-84/85+）分层；免疫缺陷人群仅入组特定高影响亚组；孕妇需先完成育龄非妊娠女性研究",
+                "TVAX-006需关注≥50岁年龄亚组分层设计，免疫低下人群桥接需界定亚组",
+            ],
+            [
+                "免疫程序桥接",
+                "未覆盖",
+                "新增：支持多疫苗完成同一程序、异源加强（需非劣效）、异源初免-加强（需优效+广覆盖）",
+                "如TVAX-006拟支持与Shingrix®互换或加强，需参照此条款",
+            ],
+            [
+                "安全数据库规模",
+                "未明确分级标准",
+                "新增分级：含未上市新组分→需估计不常见AE(1/100-1/1000)；全组分已上市→可参考已上市安全性数据；需覆盖所有目标年龄亚组",
+                "TVAX-006含新佐剂TVA01，安全数据库规模需满足新组分标准",
+            ],
+            [
+                "佐剂",
+                "单独佐剂指南(EMEA/CHMP/VEG/134716/04)",
+                "整合入本指南，佐剂不再单独出指南",
+                "TVAX-006佐剂TVA01临床评价需参照整合后要求",
+            ],
             ["SPC附件", "单独SPC附件(EMEA/CHMP/VWP/382702/06)", "整合入本指南", "—"],
         ],
     )
@@ -240,8 +382,20 @@ def main() -> int:
         doc,
         ["序号", "法规/指导原则", "发布年份", "核心内容", "下载链接"],
         [
-            ["18", "ICH E5(R1): Ethnic Factors in the Acceptability of Foreign Clinical Data", "1998/2003", "桥接研究的理论基础，种族敏感性三步评估法", f"PDF下载(PMDA)\n{U_PMDA_E5}"],
-            ["19", "ICH E5(R1) Q&A: Questions and Answers on Ethnic Factors", "2003/2006", "E5实施问答集，细化桥接实操要求", f"PDF下载(EMA)\n{U_EMA_E5QA}"],
+            [
+                "18",
+                "ICH E5(R1): Ethnic Factors in the Acceptability of Foreign Clinical Data",
+                "1998/2003",
+                "桥接研究的理论基础，种族敏感性三步评估法",
+                f"PDF下载(PMDA)\n{U_PMDA_E5}",
+            ],
+            [
+                "19",
+                "ICH E5(R1) Q&A: Questions and Answers on Ethnic Factors",
+                "2003/2006",
+                "E5实施问答集，细化桥接实操要求",
+                f"PDF下载(EMA)\n{U_EMA_E5QA}",
+            ],
             [
                 "20",
                 "ICH E17: General Principles for Planning and Design of Multi-Regional Clinical Trials",
@@ -249,7 +403,13 @@ def main() -> int:
                 "MRCT设计框架，区域样本量分配",
                 f"PDF下载(ICH)\n{U_ICH_E17}\nPDF下载(EMA)\n{U_EMA_E17}",
             ],
-            ["21", "ICH E6(R2): Guideline for Good Clinical Practice", "2016", "临床试验质量标准（GCP）", f"ICH页面\n{U_ICH_E6}"],
+            [
+                "21",
+                "ICH E6(R2): Guideline for Good Clinical Practice",
+                "2016",
+                "临床试验质量标准（GCP）",
+                f"ICH页面\n{U_ICH_E6}",
+            ],
         ],
     )
     doc.add_paragraph()
@@ -266,10 +426,34 @@ def main() -> int:
                 "最直接相关：疫苗免疫桥接适用范围、设计要点、评价标准",
                 f"CDE页面\n{U_CDE_BRIDGE}\n全文阅览\n{U_CDE_BRIDGE_FULL}",
             ],
-            ["23", "《接受药品境外临床试验数据的技术指导原则》", "2018", "境外数据接受条件、种族敏感性评估要求", f"NMPA页面\n{U_NMPA_OS}"],
-            ["24", "《境外已上市境内未上市药品临床技术要求》", "2020", "境外已上市药品桥接临床要求", f"CDE页面\n{U_CDE_OS}"],
-            ["25", "《预防用疫苗临床可比性研究技术指导原则》", "—", "疫苗临床可比研究设计", f"CDE页面\n{U_CDE_HOME}"],
-            ["26", "《国家药监局关于进一步优化临床急需境外已上市药品审评审批有关事项的公告》(2026年第3号)", "2026", "最新优化政策，加速境外已上市药品审批", f"NMPA页面\n{U_NMPA_2026}"],
+            [
+                "23",
+                "《接受药品境外临床试验数据的技术指导原则》",
+                "2018",
+                "境外数据接受条件、种族敏感性评估要求",
+                f"NMPA页面\n{U_NMPA_OS}",
+            ],
+            [
+                "24",
+                "《境外已上市境内未上市药品临床技术要求》",
+                "2020",
+                "境外已上市药品桥接临床要求",
+                f"CDE页面\n{U_CDE_OS}",
+            ],
+            [
+                "25",
+                "《预防用疫苗临床可比性研究技术指导原则》",
+                "—",
+                "疫苗临床可比研究设计",
+                f"CDE页面\n{U_CDE_HOME}",
+            ],
+            [
+                "26",
+                "《国家药监局关于进一步优化临床急需境外已上市药品审评审批有关事项的公告》(2026年第3号)",
+                "2026",
+                "最新优化政策，加速境外已上市药品审批",
+                f"NMPA页面\n{U_NMPA_2026}",
+            ],
         ],
     )
     doc.add_paragraph()
@@ -279,17 +463,83 @@ def main() -> int:
         doc,
         ["序号", "国家", "法规/指导原则", "核心内容", "下载链接"],
         [
-            ["27", "俄罗斯", '联邦法 №61-ФЗ "药品流通法"', "俄罗斯药品注册基本法", f"在线查阅\n{U_RU_LAW}"],
-            ["28", "俄罗斯", "Minzdrav 第200н号令", "临床试验审批程序", f"在线查阅\n{U_RU_MIN}"],
-            ["29", "俄罗斯", "欧亚经济联盟(EAEU) TR CU 005/2011", "EAEU路径注册统一标准", f"EAEU官网\n{U_EAEU}"],
-            ["30", "巴西", "RDC 36/2013", "ANVISA临床试验审批规范", f"PDF下载\n{U_BR_RDC36}"],
-            ["31", "巴西", "RDC 39/2013", "药品注册技术要求", f"ANVISA官网\n{U_ANVISA}"],
-            ["32", "巴西", "IN 74/2024", "等效外国监管机构审评利用（reliance机制）", f"ANVISA官网\n{U_ANVISA}"],
-            ["33", "巴西", "RDC 505/2021", "生物制品和疫苗注册要求", f"ANVISA官网\n{U_ANVISA}"],
-            ["34", "巴西", "CONEP Resolution 466/2012", "伦理审查要求", f"PDF下载\n{U_BR_CONEP}"],
-            ["35", "印尼", "BPOM Regulation No. 6/2020", "药品注册技术要求", f"BPOM官网\n{U_BPOM}"],
-            ["36", "埃及", "EDA Clinical Trial Registry Guidelines (2023)", "临床试验注册和审批要求", f"EDA官网\n{U_EDA}"],
-            ["37", "埃及", "Ministerial Decree 413/2021", "药品注册法规", f"EDA官网\n{U_EDA}"],
+            [
+                "27",
+                "俄罗斯",
+                '联邦法 №61-ФЗ "药品流通法"',
+                "俄罗斯药品注册基本法",
+                f"在线查阅\n{U_RU_LAW}",
+            ],
+            [
+                "28",
+                "俄罗斯",
+                "Minzdrav 第200н号令",
+                "临床试验审批程序",
+                f"在线查阅\n{U_RU_MIN}",
+            ],
+            [
+                "29",
+                "俄罗斯",
+                "欧亚经济联盟(EAEU) TR CU 005/2011",
+                "EAEU路径注册统一标准",
+                f"EAEU官网\n{U_EAEU}",
+            ],
+            [
+                "30",
+                "巴西",
+                "RDC 36/2013",
+                "ANVISA临床试验审批规范",
+                f"PDF下载\n{U_BR_RDC36}",
+            ],
+            [
+                "31",
+                "巴西",
+                "RDC 39/2013",
+                "药品注册技术要求",
+                f"ANVISA官网\n{U_ANVISA}",
+            ],
+            [
+                "32",
+                "巴西",
+                "IN 74/2024",
+                "等效外国监管机构审评利用（reliance机制）",
+                f"ANVISA官网\n{U_ANVISA}",
+            ],
+            [
+                "33",
+                "巴西",
+                "RDC 505/2021",
+                "生物制品和疫苗注册要求",
+                f"ANVISA官网\n{U_ANVISA}",
+            ],
+            [
+                "34",
+                "巴西",
+                "CONEP Resolution 466/2012",
+                "伦理审查要求",
+                f"PDF下载\n{U_BR_CONEP}",
+            ],
+            [
+                "35",
+                "印尼",
+                "BPOM Regulation No. 6/2020",
+                "药品注册技术要求",
+                f"BPOM官网\n{U_BPOM}",
+            ],
+            [
+                "36",
+                "埃及",
+                "EDA Clinical Trial Registry Guidelines (2023)",
+                "临床试验注册和审批要求",
+                f"EDA官网\n{U_EDA}",
+            ],
+            [
+                "37",
+                "埃及",
+                "Ministerial Decree 413/2021",
+                "药品注册法规",
+                f"EDA官网\n{U_EDA}",
+            ],
         ],
     )
     doc.add_paragraph()
@@ -341,8 +591,14 @@ def main() -> int:
         doc,
         ["条目", "强化内容"],
         [
-            ["EMA免疫低下补充(#15)", "WHO 2025 HZ立场文件提供免疫低下人群（HIV、HSCT、自身免疫病）疫苗效果数据，与EMA 2025 addendum形成双重支撑"],
-            ["ICMRA共识(#38)", "WHO 2025 HZ立场文件中免疫低下人群建议与ICMRA免疫桥接共识一致，互为佐证"],
+            [
+                "EMA免疫低下补充(#15)",
+                "WHO 2025 HZ立场文件提供免疫低下人群（HIV、HSCT、自身免疫病）疫苗效果数据，与EMA 2025 addendum形成双重支撑",
+            ],
+            [
+                "ICMRA共识(#38)",
+                "WHO 2025 HZ立场文件中免疫低下人群建议与ICMRA免疫桥接共识一致，互为佐证",
+            ],
         ],
     )
     doc.add_paragraph()
@@ -358,7 +614,12 @@ def main() -> int:
                 "直接适用，中国原产国数据桥接出境的起始框架",
                 f"{U_CDE_BRIDGE}\n{U_CDE_BRIDGE_FULL}",
             ],
-            ["2", "WHO TRS 1004 Annex 9: Guidelines on Clinical Evaluation of Vaccines", "全球疫苗桥接最高权威，各国PQ和注册的通用引用", U_WHO_TRS1004],
+            [
+                "2",
+                "WHO TRS 1004 Annex 9: Guidelines on Clinical Evaluation of Vaccines",
+                "全球疫苗桥接最高权威，各国PQ和注册的通用引用",
+                U_WHO_TRS1004,
+            ],
             [
                 "3",
                 "EMA CHMP/VWP/164653/05 Rev.1: Guideline on Clinical Evaluation of Vaccines",
@@ -377,7 +638,12 @@ def main() -> int:
                 "种族敏感性评估+桥接研究判定的基础框架",
                 f"{U_PMDA_E5}\n{U_EMA_E5QA}",
             ],
-            ["6", "ICMRA Consensus on Immunobridging for Authorising New Vaccines", "多国监管机构对免疫桥接的统一立场，对新兴市场国家有说服力", U_ICMRA],
+            [
+                "6",
+                "ICMRA Consensus on Immunobridging for Authorising New Vaccines",
+                "多国监管机构对免疫桥接的统一立场，对新兴市场国家有说服力",
+                U_ICMRA,
+            ],
         ],
     )
     foot = doc.add_paragraph()
@@ -387,7 +653,9 @@ def main() -> int:
     )
     doc.add_paragraph()
     endp = doc.add_paragraph()
-    endp.add_run("本清单基于知识库006及上传法规附件整理，更新时间2026年5月12日。建议结合项目进展持续跟踪各国法规动态。")
+    endp.add_run(
+        "本清单基于知识库006及上传法规附件整理，更新时间2026年5月12日。建议结合项目进展持续跟踪各国法规动态。"
+    )
     endp.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     try:

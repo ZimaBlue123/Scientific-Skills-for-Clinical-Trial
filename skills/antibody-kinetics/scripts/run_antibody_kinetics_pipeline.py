@@ -3,15 +3,15 @@ from __future__ import annotations
 import argparse
 import json
 import math
+from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from statistics import NormalDist
-from typing import Dict, Iterable, List, Literal, Optional, Sequence, Tuple
+from typing import Literal
 
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
-
 
 LogBase = Literal["e", "10"]
 
@@ -68,8 +68,8 @@ def _design_vector(
     *,
     group: str,
     ln_t: float,
-    group_ref: Optional[str],
-    covar_values: Dict[str, float],
+    group_ref: str | None,
+    covar_values: dict[str, float],
 ) -> np.ndarray:
     """
     依据 statsmodels formula 生成的 exog_names，把单个预测点映射到系数向量空间。
@@ -109,16 +109,20 @@ def _predict_fixed_effect_mean_and_ci(
     groups: Sequence[str],
     t_grid: np.ndarray,
     log_base: LogBase,
-    covar_values: Dict[str, float],
+    covar_values: dict[str, float],
     alpha: float,
 ) -> pd.DataFrame:
     beta = result.fe_params.to_numpy(dtype=float)
-    cov_fe = result.cov_params().loc[result.fe_params.index, result.fe_params.index].to_numpy(dtype=float)
+    cov_fe = (
+        result.cov_params()
+        .loc[result.fe_params.index, result.fe_params.index]
+        .to_numpy(dtype=float)
+    )
     z = _normal_z(alpha)
 
     _, pow_fn, _, _ = _make_log_fns(log_base)
 
-    rows: List[dict] = []
+    rows: list[dict] = []
     for g in groups:
         for t_post in t_grid:
             if log_base == "e":
@@ -163,8 +167,8 @@ def _extract_group_params_from_design(
     exog_names: Sequence[str],
     result,
     group: str,
-    covar_values: Dict[str, float],
-) -> Tuple[float, float]:
+    covar_values: dict[str, float],
+) -> tuple[float, float]:
     """
     返回：
     - lnA：在 ln_t=0（即 t_post=1）的预测水平（log 标度）
@@ -173,11 +177,23 @@ def _extract_group_params_from_design(
     beta = result.fe_params.to_numpy(dtype=float)
 
     # ln_t=0
-    x0 = _design_vector(exog_names, group=str(group), ln_t=0.0, group_ref=None, covar_values=covar_values)
+    x0 = _design_vector(
+        exog_names,
+        group=str(group),
+        ln_t=0.0,
+        group_ref=None,
+        covar_values=covar_values,
+    )
     lnA = float(x0 @ beta)
 
     # ln_t=1（用于得到 slope：y(1)-y(0)）
-    x1 = _design_vector(exog_names, group=str(group), ln_t=1.0, group_ref=None, covar_values=covar_values)
+    x1 = _design_vector(
+        exog_names,
+        group=str(group),
+        ln_t=1.0,
+        group_ref=None,
+        covar_values=covar_values,
+    )
     y1 = float(x1 @ beta)
     slope = y1 - lnA
     return lnA, slope
@@ -191,16 +207,20 @@ def _delta_method_threshold_ci(
     result,
     exog_names: Sequence[str],
     groups: Sequence[str],
-    covar_values: Dict[str, float],
-) -> List[ThresholdCI]:
+    covar_values: dict[str, float],
+) -> list[ThresholdCI]:
     beta = result.fe_params.to_numpy(dtype=float)
-    cov_fe = result.cov_params().loc[result.fe_params.index, result.fe_params.index].to_numpy(dtype=float)
+    cov_fe = (
+        result.cov_params()
+        .loc[result.fe_params.index, result.fe_params.index]
+        .to_numpy(dtype=float)
+    )
     z = _normal_z(alpha)
 
     _, pow_fn, _, y_from_t = _make_log_fns(log_base)
     y_thr = float(y_from_t(float(threshold)))
 
-    out: List[ThresholdCI] = []
+    out: list[ThresholdCI] = []
 
     # 有限差分步长（相对步长）
     eps_scale = 1e-5
@@ -243,8 +263,20 @@ def _delta_method_threshold_ci(
 
             # 重新计算 lnA 和 slope（依赖 beta）
             # 注意：design_vector(x) 与 covar_values/ln_t/群组无关，只是 dot 产品不同。
-            x0 = _design_vector(exog_names, group=str(g), ln_t=0.0, group_ref=None, covar_values=covar_values)
-            x1 = _design_vector(exog_names, group=str(g), ln_t=1.0, group_ref=None, covar_values=covar_values)
+            x0 = _design_vector(
+                exog_names,
+                group=str(g),
+                ln_t=0.0,
+                group_ref=None,
+                covar_values=covar_values,
+            )
+            x1 = _design_vector(
+                exog_names,
+                group=str(g),
+                ln_t=1.0,
+                group_ref=None,
+                covar_values=covar_values,
+            )
             lnA_p = float(x0 @ beta_p)
             y1_p = float(x1 @ beta_p)
             slope_p = y1_p - lnA_p
@@ -302,30 +334,72 @@ def _fit_mixedlm(
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="个体水平抗体动力学（幂律形状）管线：MixedLM + M12+ 外推 + 阈值持续时间（含CI）。")
-    ap.add_argument("--infile", required=True, help="输入 CSV（建议在 data/ 下；不要提交原始数据）。")
+    ap = argparse.ArgumentParser(
+        description="个体水平抗体动力学（幂律形状）管线：MixedLM + M12+ 外推 + 阈值持续时间（含CI）。"
+    )
+    ap.add_argument(
+        "--infile",
+        required=True,
+        help="输入 CSV（建议在 data/ 下；不要提交原始数据）。",
+    )
     ap.add_argument("--outdir", required=True, help="输出目录（建议用 output/ 下）。")
 
-    ap.add_argument("--usubjid-col", default="USUBJID", help="受试者ID列名（默认 USUBJID）。")
-    ap.add_argument("--group-col", default="Group", help="分组/程序列名（默认 Group）。")
-    ap.add_argument("--t-post-col", default="t_post", help="t_post（末免后/月数对齐）列名（默认 t_post）。")
-    ap.add_argument("--titer-col", default="TITER", help="抗体滴度/浓度列名（默认 TITER）。")
+    ap.add_argument(
+        "--usubjid-col", default="USUBJID", help="受试者ID列名（默认 USUBJID）。"
+    )
+    ap.add_argument(
+        "--group-col", default="Group", help="分组/程序列名（默认 Group）。"
+    )
+    ap.add_argument(
+        "--t-post-col",
+        default="t_post",
+        help="t_post（末免后/月数对齐）列名（默认 t_post）。",
+    )
+    ap.add_argument(
+        "--titer-col", default="TITER", help="抗体滴度/浓度列名（默认 TITER）。"
+    )
 
-    ap.add_argument("--log-base", default="e", choices=["e", "10"], help="对数底数：e=自然对数，10=以10为底（b不变）。")
-    ap.add_argument("--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 对应 95%% CI。")
+    ap.add_argument(
+        "--log-base",
+        default="e",
+        choices=["e", "10"],
+        help="对数底数：e=自然对数，10=以10为底（b不变）。",
+    )
+    ap.add_argument(
+        "--alpha", type=float, default=0.05, help="置信水平：alpha=0.05 对应 95%% CI。"
+    )
     ap.add_argument("--reml", action="store_true", help="使用 REML（默认 False）。")
 
-    ap.add_argument("--covars", default="", help="固定效应协变量（逗号分隔；仅支持数值列）。例如：Age,Sex,BaselineIgG")
-    ap.add_argument("--covar-strategy", default="mean", choices=["mean"], help="协变量用于预测时的取值策略（默认 mean）。")
+    ap.add_argument(
+        "--covars",
+        default="",
+        help="固定效应协变量（逗号分隔；仅支持数值列）。例如：Age,Sex,BaselineIgG",
+    )
+    ap.add_argument(
+        "--covar-strategy",
+        default="mean",
+        choices=["mean"],
+        help="协变量用于预测时的取值策略（默认 mean）。",
+    )
 
-    ap.add_argument("--target-t-post", type=float, default=30.0, help="外推最大 t_post（如 30≈M36）。")
+    ap.add_argument(
+        "--target-t-post",
+        type=float,
+        default=30.0,
+        help="外推最大 t_post（如 30≈M36）。",
+    )
     ap.add_argument("--grid-n", type=int, default=200, help="预测网格点数。")
     ap.add_argument(
         "--key-t-post",
         default="18,30",
         help="需要在输出中直接报数的关键 t_post（逗号分隔；例如 18,30 对应 M24/M36）。",
     )
-    ap.add_argument("--threshold", type=float, default=10.0, help="保护阈值（如 anti-HBs=10 mIU/mL）。用于反解持续时间。")
+    ap.add_argument(
+        "--threshold",
+        type=float,
+        default=10.0,
+        help="保护阈值（如 anti-HBs=10 mIU/mL）。用于反解持续时间。",
+    )
 
     args = ap.parse_args()
 
@@ -360,10 +434,12 @@ def main() -> int:
     covars = [c.strip() for c in covars]
     for c in covars:
         if c not in df.columns:
-            raise ValueError(f"--covars 中指定列不存在：{c}. 实际列: {list(df.columns)}")
+            raise ValueError(
+                f"--covars 中指定列不存在：{c}. 实际列: {list(df.columns)}"
+            )
 
     # 协变量用于预测时的取值
-    covar_values: Dict[str, float] = {}
+    covar_values: dict[str, float] = {}
     if covars:
         if args.covar_strategy == "mean":
             for c in covars:
@@ -386,7 +462,9 @@ def main() -> int:
 
     exog_names = list(result.model.exog_names)
     groups = sorted(df["Group"].astype(str).unique().tolist())
-    key_t_post = [float(x.strip()) for x in str(args.key_t_post).split(",") if x.strip()]
+    key_t_post = [
+        float(x.strip()) for x in str(args.key_t_post).split(",") if x.strip()
+    ]
     t_grid = np.linspace(1.0, float(args.target_t_post), int(args.grid_n))
     if key_t_post:
         t_grid = np.unique(np.concatenate([t_grid, np.array(key_t_post, dtype=float)]))
@@ -421,7 +499,7 @@ def main() -> int:
     thresh_df.to_csv(outdir / "threshold_time_ci.csv", index=False)
 
     # 产出 power-law 参数（以 b 表示衰减斜率绝对值；b 越大衰减越快）
-    rows_params: List[dict] = []
+    rows_params: list[dict] = []
     for g in groups:
         lnA, slope = _extract_group_params_from_design(
             exog_names=exog_names,
@@ -431,12 +509,20 @@ def main() -> int:
         )
         b = -slope
         A = float(pow_fn(lnA))
-        rows_params.append({"Group": g, "A_at_t_post=1": A, "b": float(b), "lnA": float(lnA), "slope_ln_scale": float(slope)})
+        rows_params.append(
+            {
+                "Group": g,
+                "A_at_t_post=1": A,
+                "b": float(b),
+                "lnA": float(lnA),
+                "slope_ln_scale": float(slope),
+            }
+        )
     params_df = pd.DataFrame(rows_params)
     params_df.to_csv(outdir / "powerlaw_params_from_mixedlm.csv", index=False)
 
     # 组间衰减斜率差异（交互项）用于 CSR 叙述
-    interaction_pvalues: Dict[str, float] = {}
+    interaction_pvalues: dict[str, float] = {}
     for name in result.pvalues.index.tolist():
         if name.startswith("ln_t:C(Group)[T.") and name.endswith("]"):
             lvl = name[len("ln_t:C(Group)[T.") : -1]
@@ -447,7 +533,7 @@ def main() -> int:
     ref_candidates = [g for g in groups if str(g) not in nonref_levels]
     ref_group = str(ref_candidates[0]) if ref_candidates else str(groups[0])
 
-    comp_rows: List[dict] = []
+    comp_rows: list[dict] = []
     params_df_idx = params_df.set_index("Group")
     for g in groups:
         b_row = float(params_df_idx.loc[str(g), "b"])
@@ -455,7 +541,15 @@ def main() -> int:
         p_vs_ref = float("nan")
         if str(g) != ref_group:
             p_vs_ref = float(interaction_pvalues.get(str(g), float("nan")))
-        comp_rows.append({"Group": str(g), "b": b_row, "slope_ln_scale": slope_row, "p_vs_reference_slope": p_vs_ref, "reference_group": ref_group})
+        comp_rows.append(
+            {
+                "Group": str(g),
+                "b": b_row,
+                "slope_ln_scale": slope_row,
+                "p_vs_reference_slope": p_vs_ref,
+                "reference_group": ref_group,
+            }
+        )
 
     pd.DataFrame(comp_rows).to_csv(outdir / "group_slope_comparison.csv", index=False)
 
@@ -480,7 +574,9 @@ def main() -> int:
         },
         "note": "预测与CI基于固定效应（固定效应边际均值）；随机效应不计入预测不确定性（CSR中需如实披露）。",
     }
-    (outdir / "run_metadata.json").write_text(json.dumps(run_metadata, ensure_ascii=False, indent=2), encoding="utf-8")
+    (outdir / "run_metadata.json").write_text(
+        json.dumps(run_metadata, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     # 绘图（固定效应外推曲线）
     try:
@@ -497,17 +593,47 @@ def main() -> int:
         obs = df.groupby(["Group", "t_post"], as_index=False)["TITER"].mean()
         for g in groups:
             sub_obs = obs[obs["Group"].astype(str) == str(g)]
-            ax.scatter(sub_obs["t_post"], sub_obs["TITER"], s=16, alpha=0.6, color=cmap[g], label=f"{g} observed (mean)")
+            ax.scatter(
+                sub_obs["t_post"],
+                sub_obs["TITER"],
+                s=16,
+                alpha=0.6,
+                color=cmap[g],
+                label=f"{g} observed (mean)",
+            )
 
-            sub_pred = pred_df[pred_df["Group"].astype(str) == str(g)].sort_values("t_post")
-            ax.plot(sub_pred["t_post"], sub_pred["titer_mean"], color=cmap[g], linestyle="--", linewidth=2.0, label=f"{g} fitted mean")
-            ax.fill_between(sub_pred["t_post"], sub_pred["titer_ci_lower"], sub_pred["titer_ci_upper"], color=cmap[g], alpha=0.15)
+            sub_pred = pred_df[pred_df["Group"].astype(str) == str(g)].sort_values(
+                "t_post"
+            )
+            ax.plot(
+                sub_pred["t_post"],
+                sub_pred["titer_mean"],
+                color=cmap[g],
+                linestyle="--",
+                linewidth=2.0,
+                label=f"{g} fitted mean",
+            )
+            ax.fill_between(
+                sub_pred["t_post"],
+                sub_pred["titer_ci_lower"],
+                sub_pred["titer_ci_upper"],
+                color=cmap[g],
+                alpha=0.15,
+            )
 
-        ax.axhline(float(args.threshold), color="grey", linestyle=":", linewidth=1.2, label=f"threshold={float(args.threshold):g}")
+        ax.axhline(
+            float(args.threshold),
+            color="grey",
+            linestyle=":",
+            linewidth=1.2,
+            label=f"threshold={float(args.threshold):g}",
+        )
         ax.set_yscale("log")
         ax.set_xlabel("t_post (months; aligned)")
         ax.set_ylabel("Titer (log scale)")
-        ax.set_title("Antibody persistence projection (MixedLM; fixed-effect marginal mean)")
+        ax.set_title(
+            "Antibody persistence projection (MixedLM; fixed-effect marginal mean)"
+        )
         ax.legend(loc="center left", bbox_to_anchor=(1, 0.5), frameon=False)
         fig.tight_layout()
         fig.savefig(plot_dir / "persistence_projection.png", bbox_inches="tight")
@@ -520,4 +646,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

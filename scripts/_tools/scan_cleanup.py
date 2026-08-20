@@ -7,6 +7,7 @@ in one pass (much faster than ``git ls-files --error-unmatch`` per path).
 Outputs ``cleanup_plan.md`` — a candidate-deletion manifest for user
 approval. NO file is removed by this script.
 """
+
 from __future__ import annotations
 
 import fnmatch
@@ -134,27 +135,29 @@ def main() -> int:
     for i, (rel, size, reason) in enumerate(candidates, 1):
         lines.append(f"| {i} | `{rel}` | {size} | {reason} |")
 
-    lines.extend([
-        "",
-        "## 受保护文件（**不删除**）",
-        "",
-        "以下文件虽未被 Git 追踪，但属于本次审查的可交付成果，**保留**：",
-        "",
-        "- `extracted_review_doc.txt` — 文本提取产物",
-        "- `verify_data_result.txt` — 算术校验产物",
-        "- `review_report.md` — 主审查报告",
-        "- `output_doc_full.txt` — 预先存在的审计产物",
-        "- `cross_check_result.txt` — 预先存在的审计产物",
-        "",
-        "## 操作说明",
-        "",
-        "请回复 **\"批准删除\"** 或明确批准的项目编号，才会真正删除上述文件。",
-        "若发生误操作，可通过阶段一本地提交 `f26f859` 回滚：",
-        "```",
-        "git reset --hard f26f859",
-        "```",
-        "",
-    ])
+    lines.extend(
+        [
+            "",
+            "## 受保护文件（**不删除**）",
+            "",
+            "以下文件虽未被 Git 追踪，但属于本次审查的可交付成果，**保留**：",
+            "",
+            "- `extracted_review_doc.txt` — 文本提取产物",
+            "- `verify_data_result.txt` — 算术校验产物",
+            "- `review_report.md` — 主审查报告",
+            "- `output_doc_full.txt` — 预先存在的审计产物",
+            "- `cross_check_result.txt` — 预先存在的审计产物",
+            "",
+            "## 操作说明",
+            "",
+            '请回复 **"批准删除"** 或明确批准的项目编号，才会真正删除上述文件。',
+            "若发生误操作，可通过阶段一本地提交 `f26f859` 回滚：",
+            "```",
+            "git reset --hard f26f859",
+            "```",
+            "",
+        ]
+    )
     plan.write_text("\n".join(lines), encoding="utf-8")
     logger.info("plan written to %s (%d candidates)", plan, len(candidates))
     return 0

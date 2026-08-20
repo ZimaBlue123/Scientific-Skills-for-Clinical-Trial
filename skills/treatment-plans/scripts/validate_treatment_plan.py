@@ -4,9 +4,9 @@ Validate Treatment Plan Quality
 Comprehensive validation of treatment plan content quality and compliance.
 """
 
-import sys
-import re
 import argparse
+import re
+import sys
 from pathlib import Path
 from typing import Dict, List, Tuple
 

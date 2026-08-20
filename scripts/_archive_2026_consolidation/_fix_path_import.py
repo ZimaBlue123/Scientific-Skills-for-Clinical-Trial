@@ -1,9 +1,12 @@
 """Add missing 'from pathlib import Path' to docx_utils.py and self-check."""
+
 import subprocess
 import sys
 from pathlib import Path as P
 
-target = P(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\common_scripts\docx_utils.py")
+target = P(
+    r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\common_scripts\docx_utils.py"
+)
 src = target.read_text(encoding="utf-8")
 
 OLD = """import logging
@@ -34,7 +37,9 @@ else:
 
 # Self-check 1: py_compile
 print("\n=== py_compile ===")
-res = subprocess.run([sys.executable, "-m", "py_compile", str(target)], capture_output=True, text=True)
+res = subprocess.run(
+    [sys.executable, "-m", "py_compile", str(target)], capture_output=True, text=True
+)
 print("rc:", res.returncode)
 if res.stderr:
     print("stderr:", res.stderr)

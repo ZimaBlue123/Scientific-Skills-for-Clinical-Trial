@@ -6,10 +6,9 @@ This script provides functions for retrieving biological activity data
 from PubChem for compounds and assays.
 """
 
-import sys
 import json
+import sys
 import time
-from typing import Dict, List, Optional
 
 try:
     import requests
@@ -25,7 +24,9 @@ PUG_VIEW_URL = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view"
 REQUEST_DELAY = 0.21  # seconds between requests
 
 
-def rate_limited_request(url: str, method: str = 'GET', **kwargs) -> Optional[requests.Response]:
+def rate_limited_request(
+    url: str, method: str = "GET", **kwargs
+) -> requests.Response | None:
     """
     Make a rate-limited request to PubChem API.
 
@@ -40,7 +41,7 @@ def rate_limited_request(url: str, method: str = 'GET', **kwargs) -> Optional[re
     time.sleep(REQUEST_DELAY)
 
     try:
-        if method.upper() == 'GET':
+        if method.upper() == "GET":
             response = requests.get(url, **kwargs)
         else:
             response = requests.post(url, **kwargs)
@@ -52,7 +53,7 @@ def rate_limited_request(url: str, method: str = 'GET', **kwargs) -> Optional[re
         return None
 
 
-def get_bioassay_summary(cid: int) -> Optional[Dict]:
+def get_bioassay_summary(cid: int) -> dict | None:
     """
     Get bioassay summary for a compound.
 
@@ -71,9 +72,8 @@ def get_bioassay_summary(cid: int) -> Optional[Dict]:
 
 
 def get_compound_bioactivities(
-    cid: int,
-    activity_outcome: Optional[str] = None
-) -> List[Dict]:
+    cid: int, activity_outcome: str | None = None
+) -> list[dict]:
     """
     Get bioactivity data for a compound.
 
@@ -90,16 +90,16 @@ def get_compound_bioactivities(
         return []
 
     activities = []
-    table = data.get('Table', {})
+    table = data.get("Table", {})
 
-    for row in table.get('Row', []):
+    for row in table.get("Row", []):
         activity = {}
-        for i, cell in enumerate(row.get('Cell', [])):
-            column_name = table['Columns']['Column'][i]
+        for i, cell in enumerate(row.get("Cell", [])):
+            column_name = table["Columns"]["Column"][i]
             activity[column_name] = cell
 
         if activity_outcome:
-            if activity.get('Activity Outcome', '').lower() == activity_outcome.lower():
+            if activity.get("Activity Outcome", "").lower() == activity_outcome.lower():
                 activities.append(activity)
         else:
             activities.append(activity)
@@ -107,7 +107,7 @@ def get_compound_bioactivities(
     return activities
 
 
-def get_assay_description(aid: int) -> Optional[Dict]:
+def get_assay_description(aid: int) -> dict | None:
     """
     Get detailed description for a specific assay.
 
@@ -125,7 +125,7 @@ def get_assay_description(aid: int) -> Optional[Dict]:
     return None
 
 
-def get_assay_targets(aid: int) -> List[str]:
+def get_assay_targets(aid: int) -> list[str]:
     """
     Get biological targets for an assay.
 
@@ -141,14 +141,14 @@ def get_assay_targets(aid: int) -> List[str]:
         return []
 
     targets = []
-    assay_data = description.get('PC_AssayContainer', [{}])[0]
-    assay = assay_data.get('assay', {})
+    assay_data = description.get("PC_AssayContainer", [{}])[0]
+    assay = assay_data.get("assay", {})
 
     # Extract target information
-    descr = assay.get('descr', {})
-    for target in descr.get('target', []):
-        mol_id = target.get('mol_id', '')
-        name = target.get('name', '')
+    descr = assay.get("descr", {})
+    for target in descr.get("target", []):
+        mol_id = target.get("mol_id", "")
+        name = target.get("name", "")
         if name:
             targets.append(name)
         elif mol_id:
@@ -157,10 +157,7 @@ def get_assay_targets(aid: int) -> List[str]:
     return targets
 
 
-def search_assays_by_target(
-    target_name: str,
-    max_results: int = 100
-) -> List[int]:
+def search_assays_by_target(target_name: str, max_results: int = 100) -> list[int]:
     """
     Search for assays targeting a specific protein or gene.
 
@@ -177,12 +174,12 @@ def search_assays_by_target(
 
     if response and response.status_code == 200:
         data = response.json()
-        aids = data.get('IdentifierList', {}).get('AID', [])
+        aids = data.get("IdentifierList", {}).get("AID", [])
         return aids[:max_results]
     return []
 
 
-def get_active_compounds_in_assay(aid: int, max_results: int = 1000) -> List[int]:
+def get_active_compounds_in_assay(aid: int, max_results: int = 1000) -> list[int]:
     """
     Get list of active compounds in an assay.
 
@@ -198,12 +195,12 @@ def get_active_compounds_in_assay(aid: int, max_results: int = 1000) -> List[int
 
     if response and response.status_code == 200:
         data = response.json()
-        cids = data.get('IdentifierList', {}).get('CID', [])
+        cids = data.get("IdentifierList", {}).get("CID", [])
         return cids[:max_results]
     return []
 
 
-def get_compound_annotations(cid: int, section: Optional[str] = None) -> Optional[Dict]:
+def get_compound_annotations(cid: int, section: str | None = None) -> dict | None:
     """
     Get comprehensive compound annotations from PUG-View.
 
@@ -226,7 +223,7 @@ def get_compound_annotations(cid: int, section: Optional[str] = None) -> Optiona
     return None
 
 
-def get_drug_information(cid: int) -> Optional[Dict]:
+def get_drug_information(cid: int) -> dict | None:
     """
     Get drug and medication information for a compound.
 
@@ -239,7 +236,7 @@ def get_drug_information(cid: int) -> Optional[Dict]:
     return get_compound_annotations(cid, section="Drug and Medication Information")
 
 
-def get_safety_hazards(cid: int) -> Optional[Dict]:
+def get_safety_hazards(cid: int) -> dict | None:
     """
     Get safety and hazard information for a compound.
 
@@ -252,7 +249,7 @@ def get_safety_hazards(cid: int) -> Optional[Dict]:
     return get_compound_annotations(cid, section="Safety and Hazards")
 
 
-def summarize_bioactivities(cid: int) -> Dict:
+def summarize_bioactivities(cid: int) -> dict:
     """
     Generate a summary of bioactivity data for a compound.
 
@@ -265,34 +262,32 @@ def summarize_bioactivities(cid: int) -> Dict:
     activities = get_compound_bioactivities(cid)
 
     summary = {
-        'total_assays': len(activities),
-        'active': 0,
-        'inactive': 0,
-        'inconclusive': 0,
-        'unspecified': 0,
-        'assay_types': {}
+        "total_assays": len(activities),
+        "active": 0,
+        "inactive": 0,
+        "inconclusive": 0,
+        "unspecified": 0,
+        "assay_types": {},
     }
 
     for activity in activities:
-        outcome = activity.get('Activity Outcome', '').lower()
+        outcome = activity.get("Activity Outcome", "").lower()
 
-        if 'active' in outcome:
-            summary['active'] += 1
-        elif 'inactive' in outcome:
-            summary['inactive'] += 1
-        elif 'inconclusive' in outcome:
-            summary['inconclusive'] += 1
+        if "active" in outcome:
+            summary["active"] += 1
+        elif "inactive" in outcome:
+            summary["inactive"] += 1
+        elif "inconclusive" in outcome:
+            summary["inconclusive"] += 1
         else:
-            summary['unspecified'] += 1
+            summary["unspecified"] += 1
 
     return summary
 
 
 def find_compounds_by_bioactivity(
-    target: str,
-    threshold: Optional[float] = None,
-    max_compounds: int = 100
-) -> List[Dict]:
+    target: str, threshold: float | None = None, max_compounds: int = 100
+) -> list[dict]:
     """
     Find compounds with bioactivity against a specific target.
 
@@ -321,11 +316,7 @@ def find_compounds_by_bioactivity(
         for cid in active_cids:
             if cid not in compound_set and len(compound_data) < max_compounds:
                 compound_set.add(cid)
-                compound_data.append({
-                    'cid': cid,
-                    'aid': aid,
-                    'target': target
-                })
+                compound_data.append({"cid": cid, "aid": aid, "target": target})
 
         if len(compound_data) >= max_compounds:
             break
@@ -343,7 +334,7 @@ def main():
 
     # Example 2: Get active bioactivities for a compound
     print("\nExample 2: Getting active bioactivities for aspirin...")
-    activities = get_compound_bioactivities(2244, activity_outcome='active')
+    activities = get_compound_bioactivities(2244, activity_outcome="active")
     print(f"Found {len(activities)} active bioactivities")
     if activities:
         print(f"First activity: {activities[0].get('Assay Name', 'N/A')}")
@@ -351,17 +342,17 @@ def main():
     # Example 3: Get assay information
     print("\nExample 3: Getting assay description...")
     if activities:
-        aid = activities[0].get('AID', 0)
+        aid = activities[0].get("AID", 0)
         targets = get_assay_targets(aid)
         print(f"Assay {aid} targets: {', '.join(targets) if targets else 'N/A'}")
 
     # Example 4: Search for compounds targeting EGFR
     print("\nExample 4: Searching for EGFR inhibitors...")
-    egfr_compounds = find_compounds_by_bioactivity('EGFR', max_compounds=5)
+    egfr_compounds = find_compounds_by_bioactivity("EGFR", max_compounds=5)
     print(f"Found {len(egfr_compounds)} compounds with EGFR activity")
     for comp in egfr_compounds[:5]:
         print(f"  CID {comp['cid']} (from AID {comp['aid']})")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

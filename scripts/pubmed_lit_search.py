@@ -4,6 +4,7 @@ DSUR §13 Literature search:
 - Window: 26-Jun-2025 to 25-Jun-2026
 - Query terms match DSUR spec: "Varicella Vaccine" AND recombinant AND safety; AE; AR
 """
+
 from __future__ import annotations
 
 import json
@@ -36,7 +37,12 @@ def _http_get_json(url: str, timeout: float = DEFAULT_TIMEOUT) -> dict[str, Any]
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             payload = resp.read().decode("utf-8")
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as exc:
+    except (
+        urllib.error.URLError,
+        urllib.error.HTTPError,
+        TimeoutError,
+        OSError,
+    ) as exc:
         LOGGER.error("HTTP failure for %s: %s", url, exc)
         raise
     try:
@@ -83,7 +89,9 @@ def _record_from_summary(uid: str, summary: dict[str, Any]) -> dict[str, Any]:
     rec = summary.get(uid, {}) if isinstance(summary, dict) else {}
     authors = rec.get("authors", []) or []
     first_author = authors[0].get("name", "") if authors else ""
-    all_authors = ", ".join((a.get("name", "") for a in authors), )
+    all_authors = ", ".join(
+        (a.get("name", "") for a in authors),
+    )
 
     doi = ""
     pmcid = ""
@@ -138,7 +146,11 @@ def main() -> int:
                 if pid not in seen:
                     seen.add(pid)
                     all_pmids.append(pid)
-        except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as exc:
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            json.JSONDecodeError,
+        ) as exc:
             LOGGER.error("Query failed: %s  ERROR: %s", q, exc)
         time.sleep(RATE_LIMIT_SECONDS)
 
@@ -161,7 +173,9 @@ def main() -> int:
 
     print(f"\nSaved {len(out)} records to {OUTPUT_PATH}")
     for r in out[:30]:
-        print(f"PMID {r['pmid']} | {r['pubdate']} | {r['journal'][:30]} | {r['first_author']} | {r['title'][:90]}")
+        print(
+            f"PMID {r['pmid']} | {r['pubdate']} | {r['journal'][:30]} | {r['first_author']} | {r['title'][:90]}"
+        )
     return 0
 
 

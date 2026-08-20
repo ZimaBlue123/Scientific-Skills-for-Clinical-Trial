@@ -1,11 +1,14 @@
 """Stage and commit the docx_utils fix."""
+
 import subprocess
 from pathlib import Path
 
 cwd = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial")
 
+
 def run(*args):
     return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+
 
 # 1. Stage
 res = run("add", "scripts/common_scripts/docx_utils.py")

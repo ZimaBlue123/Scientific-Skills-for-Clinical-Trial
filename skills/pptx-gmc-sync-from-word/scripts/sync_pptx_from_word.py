@@ -54,7 +54,9 @@ def build_month_arm_map(rows: list[list[str]]) -> dict[tuple[int, str], dict[str
     return out
 
 
-def supplement_pps_month4_b_groups(doc: Document, table_index0: int) -> tuple[dict[tuple[int, str], dict[str, str]], str | None]:
+def supplement_pps_month4_b_groups(
+    doc: Document, table_index0: int
+) -> tuple[dict[tuple[int, str], dict[str, str]], str | None]:
     pps_updates: dict[tuple[int, str], dict[str, str]] = {}
     p_m4_p: str | None = None
     for vals in table_rows(doc, table_index0)[2:]:
@@ -80,7 +82,9 @@ def supplement_fas_m4_p(doc: Document, table_index0: int) -> str | None:
     return None
 
 
-def build_c3c2_map(doc: Document, table_index0: int) -> dict[tuple[str, int], dict[str, str]]:
+def build_c3c2_map(
+    doc: Document, table_index0: int
+) -> dict[tuple[str, int], dict[str, str]]:
     out: dict[tuple[str, int], dict[str, str]] = {}
     for vals in table_rows(doc, table_index0)[2:]:
         grp = vals[0].strip() if vals else ""
@@ -114,7 +118,9 @@ def normalize_gmc_headers(table) -> None:
         for c in range(len(table.columns)):
             txt = table.cell(r, c).text
             if "校正" in txt and "GMC" in txt:
-                table.cell(r, c).text = txt.replace("校正\nGMC", "GMC").replace("校正GMC", "GMC")
+                table.cell(r, c).text = txt.replace("校正\nGMC", "GMC").replace(
+                    "校正GMC", "GMC"
+                )
 
 
 def update_main_slide_table(table, data: dict[tuple[int, str], dict[str, str]]) -> int:
@@ -151,7 +157,9 @@ def update_main_slide_table(table, data: dict[tuple[int, str], dict[str, str]]) 
     return changes
 
 
-def update_summary_table(table, data: dict[tuple[int, str], dict[str, str]], p_m4: str | None) -> int:
+def update_summary_table(
+    table, data: dict[tuple[int, str], dict[str, str]], p_m4: str | None
+) -> int:
     changes = 0
     for r in range(3, len(table.rows)):
         ma = month_num(table.cell(r, 1).text)
@@ -200,7 +208,13 @@ def update_slide4_table1(table, cmap: dict[tuple[str, int], dict[str, str]]) -> 
         dct = cmap.get((grp, mm))
         if not dct:
             continue
-        for c, key in ((3, "c3_n"), (4, "c3_gmc"), (5, "c2_n"), (6, "c2_gmc"), (7, "p")):
+        for c, key in (
+            (3, "c3_n"),
+            (4, "c3_gmc"),
+            (5, "c2_n"),
+            (6, "c2_gmc"),
+            (7, "p"),
+        ):
             if set_cell(table, r, c, dct.get(key)):
                 changes += 1
     return changes
@@ -224,7 +238,9 @@ def sync(
     pps = build_month_arm_map(table_rows(doc, pps_table - 1))
     fas = build_month_arm_map(table_rows(doc, fas_table - 1))
 
-    pps_m4_updates, pps_m4_p = supplement_pps_month4_b_groups(doc, pps_m4_supp_table - 1)
+    pps_m4_updates, pps_m4_p = supplement_pps_month4_b_groups(
+        doc, pps_m4_supp_table - 1
+    )
     pps.update(pps_m4_updates)
     fas_m4_p = supplement_fas_m4_p(doc, fas_m4_p_supp_table - 1)
     cmap = build_c3c2_map(doc, c3c2_table - 1)
@@ -281,4 +297,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

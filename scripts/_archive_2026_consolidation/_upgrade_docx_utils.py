@@ -1,7 +1,10 @@
 """Append a Windows-only convert_doc_to_docx() helper to scripts/common_scripts/docx_utils.py."""
+
 from pathlib import Path
 
-p = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\common_scripts\docx_utils.py")
+p = Path(
+    r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\common_scripts\docx_utils.py"
+)
 src = p.read_text(encoding="utf-8")
 
 NEW_BLOCK = '''

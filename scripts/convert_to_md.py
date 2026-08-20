@@ -15,6 +15,7 @@ Usage
     # Batch folder
     py -3 scripts/convert_to_md.py --folder review_materials -o review_materials/converted
 """
+
 from __future__ import annotations
 
 import argparse
@@ -92,7 +93,9 @@ def _convert_pdf_basic(filepath: Path) -> str | None:
         import pypdf  # type: ignore
 
         reader = pypdf.PdfReader(str(filepath))
-        return "\n\n".join((p.extract_text() or "") for p in reader.pages).strip() or None
+        return (
+            "\n\n".join((p.extract_text() or "") for p in reader.pages).strip() or None
+        )
     except ImportError:
         pass
     except Exception as exc:  # noqa: BLE001
@@ -103,7 +106,9 @@ def _convert_pdf_basic(filepath: Path) -> str | None:
         import pdfplumber  # type: ignore
 
         with pdfplumber.open(str(filepath)) as pdf:
-            return "\n\n".join((p.extract_text() or "") for p in pdf.pages).strip() or None
+            return (
+                "\n\n".join((p.extract_text() or "") for p in pdf.pages).strip() or None
+            )
     except ImportError:
         logger.error("Install pypdf or pdfplumber to read PDF files.")
     except Exception as exc:  # noqa: BLE001
@@ -117,7 +122,9 @@ def _clean_cell_text(text: str) -> str:
 
 def table_to_md(table: DocxTable, max_cols: int | None = None) -> str:  # type: ignore[name-defined]
     """Render a docx Table as a markdown table."""
-    rows: list[list[str]] = [[_clean_cell_text(cell.text) for cell in row.cells] for row in table.rows]
+    rows: list[list[str]] = [
+        [_clean_cell_text(cell.text) for cell in row.cells] for row in table.rows
+    ]
     if not rows:
         return ""
 
@@ -138,7 +145,9 @@ def table_to_md(table: DocxTable, max_cols: int | None = None) -> str:  # type: 
 
 def iter_block_items(doc: Document) -> Iterable[tuple[str, object]]:  # type: ignore[name-defined]
     """Yield ``("p", Paragraph)`` and ``("tbl", Table)`` in document order."""
-    if CT_P is None or CT_Tbl is None or DocxParagraph is None or DocxTable is None:  # pragma: no cover
+    if (
+        CT_P is None or CT_Tbl is None or DocxParagraph is None or DocxTable is None
+    ):  # pragma: no cover
         raise RuntimeError("python-docx is not installed; cannot iterate docx blocks.")
     for child in doc.element.body.iterchildren():
         if isinstance(child, CT_P):
@@ -171,7 +180,9 @@ def docx_to_md_numbered(src_path: Path, max_cols: int | None = None) -> str:
             table_idx += 1
             out.extend([f"## T{table_idx}", md, ""])
 
-    return ("\n".join(out).rstrip() + MARKER_TERMINATOR).rstrip("\n") + MARKER_TERMINATOR
+    return ("\n".join(out).rstrip() + MARKER_TERMINATOR).rstrip(
+        "\n"
+    ) + MARKER_TERMINATOR
 
 
 # ---------------------------------------------------------------------------
@@ -186,7 +197,10 @@ def _read_rtf(src: Path) -> str | None:
         logger.error("Install 'striprtf' to read .rtf files.")
         return None
     try:
-        return rtf_to_text(src.read_text(encoding="utf-8", errors="ignore")).strip() or None
+        return (
+            rtf_to_text(src.read_text(encoding="utf-8", errors="ignore")).strip()
+            or None
+        )
     except Exception as exc:  # noqa: BLE001
         logger.error("[striprtf] %s: %s", src.name, exc)
         return None
@@ -261,7 +275,9 @@ def convert_folder(
     """Convert every supported file in ``input_dir`` to ``output_dir``."""
     if extensions is None:
         extensions = set(DEFAULT_EXTENSIONS)
-    extensions = {e.lower() if e.startswith(".") else f".{e.lower()}" for e in extensions}
+    extensions = {
+        e.lower() if e.startswith(".") else f".{e.lower()}" for e in extensions
+    }
 
     if output_dir is None:
         output_dir = input_dir / "converted"
@@ -326,16 +342,21 @@ Examples:
         help="Comma-separated extensions to process (default: .docx,.pdf,.rtf).",
     )
     parser.add_argument(
-        "--mode", "-m", default="standard",
+        "--mode",
+        "-m",
+        default="standard",
         choices=["standard", "numbered"],
         help="Output mode: standard (default) or numbered (##P1/##T1 markers).",
     )
     parser.add_argument(
-        "--max-cols", type=int, default=None,
+        "--max-cols",
+        type=int,
+        default=None,
         help="Max columns when rendering tables (numbered mode only).",
     )
     parser.add_argument(
-        "--log-level", default="INFO",
+        "--log-level",
+        default="INFO",
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity (default: %(default)s).",
     )

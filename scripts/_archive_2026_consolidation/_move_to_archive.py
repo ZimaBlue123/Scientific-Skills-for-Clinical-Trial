@@ -1,4 +1,5 @@
 """Move 4 scripts to scripts/_archive_2026_consolidation/ (Python — more reliable than cmd move for unicode paths)."""
+
 import shutil
 from pathlib import Path
 

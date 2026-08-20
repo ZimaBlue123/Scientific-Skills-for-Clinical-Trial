@@ -4,17 +4,17 @@ Treatment Timeline Generator
 Generates visual treatment timelines from treatment plan files.
 """
 
-import sys
-import re
 import argparse
-from pathlib import Path
+import re
+import sys
 from datetime import datetime, timedelta
-from typing import List, Dict, Tuple
+from pathlib import Path
+from typing import Dict, List, Tuple
 
 # Try to import matplotlib, but make it optional
 try:
-    import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
+    import matplotlib.pyplot as plt
     from matplotlib.patches import Rectangle
     HAS_MATPLOTLIB = True
 except ImportError:

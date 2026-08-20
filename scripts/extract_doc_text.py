@@ -14,6 +14,7 @@ Usage
 If `-o` is omitted, the output is written next to the input as
 ``<input>.doc.txt`` (matching the legacy convention).
 """
+
 from __future__ import annotations
 
 import argparse
@@ -73,9 +74,7 @@ def extract_doc_text(filepath: Path) -> str:
             doc = word.Documents.Open(str(filepath.resolve()))
             return str(doc.Content.Text or "")
         except Exception as exc:  # noqa: BLE001
-            raise RuntimeError(
-                f"failed to read content from {filepath}"
-            ) from exc
+            raise RuntimeError(f"failed to read content from {filepath}") from exc
         finally:
             # Always close the document (if it was opened) before quitting Word.
             if doc is not None:

@@ -9,16 +9,12 @@ This template demonstrates best practices for:
 - Model saving and loading
 """
 
-import gymnasium as gym
-from stable_baselines3 import PPO
-from stable_baselines3.common.env_util import make_vec_env
-from stable_baselines3.common.callbacks import (
-    EvalCallback,
-    CheckpointCallback,
-    CallbackList,
-)
-from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 import os
+
+from stable_baselines3 import PPO
+from stable_baselines3.common.callbacks import CallbackList, CheckpointCallback, EvalCallback
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.vec_env import SubprocVecEnv
 
 
 def train_agent(

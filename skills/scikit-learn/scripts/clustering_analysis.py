@@ -2,17 +2,17 @@
 Clustering analysis example with multiple algorithms, evaluation, and visualization.
 """
 
+import warnings
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN, AgglomerativeClustering, KMeans
 from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
+from sklearn.metrics import calinski_harabasz_score, davies_bouldin_score, silhouette_score
 from sklearn.mixture import GaussianMixture
-from sklearn.metrics import (
-    silhouette_score, calinski_harabasz_score, davies_bouldin_score
-)
-import warnings
+from sklearn.preprocessing import StandardScaler
+
 warnings.filterwarnings('ignore')
 
 

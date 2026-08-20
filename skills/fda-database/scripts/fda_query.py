@@ -12,14 +12,15 @@ Usage:
     results = fda.query_drug_events(drug_name="aspirin", limit=100)
 """
 
-import requests
-import time
-import json
 import hashlib
-from pathlib import Path
+import json
+import time
+from collections import Counter, deque
 from datetime import datetime, timedelta
-from collections import deque, Counter
-from typing import Dict, List, Optional, Any
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import requests
 
 
 class RateLimiter:

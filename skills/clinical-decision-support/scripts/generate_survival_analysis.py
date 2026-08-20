@@ -13,14 +13,14 @@ This script creates publication-quality survival curves with:
 Dependencies: lifelines, matplotlib, pandas, numpy
 """
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from lifelines import KaplanMeierFitter
-from lifelines.statistics import logrank_test, multivariate_logrank_test
-from lifelines import CoxPHFitter
 import argparse
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from lifelines import CoxPHFitter, KaplanMeierFitter
+from lifelines.statistics import logrank_test, multivariate_logrank_test
 
 
 def load_survival_data(filepath):

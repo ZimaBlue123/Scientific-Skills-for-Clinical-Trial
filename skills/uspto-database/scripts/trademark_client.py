@@ -13,11 +13,12 @@ Environment variables:
     USPTO_API_KEY - Your USPTO API key
 """
 
+import json
 import os
 import sys
-import json
+from typing import Any
+
 import requests
-from typing import Dict, List, Optional, Any
 
 
 class TrademarkClient:
@@ -26,7 +27,7 @@ class TrademarkClient:
     TSDR_BASE_URL = "https://tsdrapi.uspto.gov/ts/cd"
     ASSIGNMENT_BASE_URL = "https://assignment-api.uspto.gov/trademark"
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: str | None = None):
         """
         Initialize client with API key.
 
@@ -35,11 +36,13 @@ class TrademarkClient:
         """
         self.api_key = api_key or os.getenv("USPTO_API_KEY")
         if not self.api_key:
-            raise ValueError("API key required. Set USPTO_API_KEY environment variable or pass to constructor.")
+            raise ValueError(
+                "API key required. Set USPTO_API_KEY environment variable or pass to constructor."
+            )
 
         self.headers = {"X-Api-Key": self.api_key}
 
-    def get_trademark_by_serial(self, serial_number: str) -> Optional[Dict]:
+    def get_trademark_by_serial(self, serial_number: str) -> dict | None:
         """
         Get trademark information by serial number.
 
@@ -60,7 +63,7 @@ class TrademarkClient:
                 return None
             raise
 
-    def get_trademark_by_registration(self, registration_number: str) -> Optional[Dict]:
+    def get_trademark_by_registration(self, registration_number: str) -> dict | None:
         """
         Get trademark information by registration number.
 
@@ -81,7 +84,7 @@ class TrademarkClient:
                 return None
             raise
 
-    def get_trademark_status(self, serial_or_registration: str) -> Dict[str, Any]:
+    def get_trademark_status(self, serial_or_registration: str) -> dict[str, Any]:
         """
         Get current status summary for a trademark.
 
@@ -106,21 +109,21 @@ class TrademarkClient:
         if not data:
             return {}
 
-        tm = data.get('TradeMarkAppln', {})
+        tm = data.get("TradeMarkAppln", {})
 
         return {
-            'mark_text': tm.get('MarkVerbalElementText'),
-            'status': tm.get('MarkCurrentStatusExternalDescriptionText'),
-            'status_date': tm.get('MarkCurrentStatusDate'),
-            'filing_date': tm.get('ApplicationDate'),
-            'application_number': tm.get('ApplicationNumber'),
-            'registration_number': tm.get('RegistrationNumber'),
-            'registration_date': tm.get('RegistrationDate'),
-            'mark_drawing_code': tm.get('MarkDrawingCode'),
-            'is_registered': tm.get('RegistrationNumber') is not None
+            "mark_text": tm.get("MarkVerbalElementText"),
+            "status": tm.get("MarkCurrentStatusExternalDescriptionText"),
+            "status_date": tm.get("MarkCurrentStatusDate"),
+            "filing_date": tm.get("ApplicationDate"),
+            "application_number": tm.get("ApplicationNumber"),
+            "registration_number": tm.get("RegistrationNumber"),
+            "registration_date": tm.get("RegistrationDate"),
+            "mark_drawing_code": tm.get("MarkDrawingCode"),
+            "is_registered": tm.get("RegistrationNumber") is not None,
         }
 
-    def get_goods_and_services(self, serial_or_registration: str) -> List[Dict]:
+    def get_goods_and_services(self, serial_or_registration: str) -> list[dict]:
         """
         Get goods and services classification for a trademark.
 
@@ -137,10 +140,10 @@ class TrademarkClient:
         if not data:
             return []
 
-        tm = data.get('TradeMarkAppln', {})
-        return tm.get('GoodsAndServices', [])
+        tm = data.get("TradeMarkAppln", {})
+        return tm.get("GoodsAndServices", [])
 
-    def get_owner_info(self, serial_or_registration: str) -> List[Dict]:
+    def get_owner_info(self, serial_or_registration: str) -> list[dict]:
         """
         Get owner/applicant information for a trademark.
 
@@ -157,10 +160,10 @@ class TrademarkClient:
         if not data:
             return []
 
-        tm = data.get('TradeMarkAppln', {})
-        return tm.get('Owners', [])
+        tm = data.get("TradeMarkAppln", {})
+        return tm.get("Owners", [])
 
-    def get_prosecution_history(self, serial_or_registration: str) -> List[Dict]:
+    def get_prosecution_history(self, serial_or_registration: str) -> list[dict]:
         """
         Get prosecution history for a trademark.
 
@@ -177,10 +180,10 @@ class TrademarkClient:
         if not data:
             return []
 
-        tm = data.get('TradeMarkAppln', {})
-        return tm.get('ProsecutionHistoryEntry', [])
+        tm = data.get("TradeMarkAppln", {})
+        return tm.get("ProsecutionHistoryEntry", [])
 
-    def check_trademark_health(self, serial_or_registration: str) -> Dict[str, Any]:
+    def check_trademark_health(self, serial_or_registration: str) -> dict[str, Any]:
         """
         Check trademark health and identify issues.
 
@@ -193,33 +196,33 @@ class TrademarkClient:
         status = self.get_trademark_status(serial_or_registration)
 
         if not status:
-            return {'error': 'Trademark not found'}
+            return {"error": "Trademark not found"}
 
-        current_status = status.get('status', '').upper()
+        current_status = status.get("status", "").upper()
         alerts = []
 
         # Check for problematic statuses
-        if 'ABANDON' in current_status:
-            alerts.append('⚠️  ABANDONED - Mark is no longer active')
-        elif 'CANCELLED' in current_status:
-            alerts.append('⚠️  CANCELLED - Registration cancelled')
-        elif 'EXPIRED' in current_status:
-            alerts.append('⚠️  EXPIRED - Registration has expired')
-        elif 'SUSPENDED' in current_status:
-            alerts.append('⏸️  SUSPENDED - Examination suspended')
-        elif 'PUBLISHED' in current_status:
-            alerts.append('📢 PUBLISHED - In opposition period')
-        elif 'REGISTERED' in current_status:
-            alerts.append('✅ ACTIVE - Mark is registered and active')
-        elif 'PENDING' in current_status:
-            alerts.append('⏳ PENDING - Application under examination')
+        if "ABANDON" in current_status:
+            alerts.append("⚠️  ABANDONED - Mark is no longer active")
+        elif "CANCELLED" in current_status:
+            alerts.append("⚠️  CANCELLED - Registration cancelled")
+        elif "EXPIRED" in current_status:
+            alerts.append("⚠️  EXPIRED - Registration has expired")
+        elif "SUSPENDED" in current_status:
+            alerts.append("⏸️  SUSPENDED - Examination suspended")
+        elif "PUBLISHED" in current_status:
+            alerts.append("📢 PUBLISHED - In opposition period")
+        elif "REGISTERED" in current_status:
+            alerts.append("✅ ACTIVE - Mark is registered and active")
+        elif "PENDING" in current_status:
+            alerts.append("⏳ PENDING - Application under examination")
 
         return {
-            'mark': status.get('mark_text'),
-            'status': current_status,
-            'status_date': status.get('status_date'),
-            'alerts': alerts,
-            'needs_attention': len([a for a in alerts if '⚠️' in a]) > 0
+            "mark": status.get("mark_text"),
+            "status": current_status,
+            "status_date": status.get("status_date"),
+            "alerts": alerts,
+            "needs_attention": len([a for a in alerts if "⚠️" in a]) > 0,
         }
 
 
@@ -228,7 +231,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description='Query USPTO Trademark Status & Document Retrieval (TSDR) API',
+        description="Query USPTO Trademark Status & Document Retrieval (TSDR) API",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -256,21 +259,37 @@ Examples:
 Environment:
   Set USPTO_API_KEY environment variable with your API key from:
   https://account.uspto.gov/api-manager/
-        """
+        """,
     )
 
     # Main operation arguments (mutually exclusive)
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--serial', '-s', help='Get trademark by serial number')
-    group.add_argument('--registration', '-r', help='Get trademark by registration number')
-    group.add_argument('--status', help='Get status summary (serial or registration number)')
-    group.add_argument('--health', help='Check trademark health (serial or registration number)')
-    group.add_argument('--goods', '-g', help='Get goods and services (serial or registration number)')
-    group.add_argument('--owner', '-o', help='Get owner information (serial or registration number)')
-    group.add_argument('--prosecution', '-p', help='Get prosecution history (serial or registration number)')
+    group.add_argument("--serial", "-s", help="Get trademark by serial number")
+    group.add_argument(
+        "--registration", "-r", help="Get trademark by registration number"
+    )
+    group.add_argument(
+        "--status", help="Get status summary (serial or registration number)"
+    )
+    group.add_argument(
+        "--health", help="Check trademark health (serial or registration number)"
+    )
+    group.add_argument(
+        "--goods", "-g", help="Get goods and services (serial or registration number)"
+    )
+    group.add_argument(
+        "--owner", "-o", help="Get owner information (serial or registration number)"
+    )
+    group.add_argument(
+        "--prosecution",
+        "-p",
+        help="Get prosecution history (serial or registration number)",
+    )
 
     # API key option
-    parser.add_argument('--api-key', '-k', help='USPTO API key (overrides USPTO_API_KEY env var)')
+    parser.add_argument(
+        "--api-key", "-k", help="USPTO API key (overrides USPTO_API_KEY env var)"
+    )
 
     args = parser.parse_args()
 
@@ -295,8 +314,15 @@ Environment:
         if result:
             print(json.dumps(result, indent=2))
         else:
-            number = (args.serial or args.registration or args.status or
-                     args.health or args.goods or args.owner or args.prosecution)
+            number = (
+                args.serial
+                or args.registration
+                or args.status
+                or args.health
+                or args.goods
+                or args.owner
+                or args.prosecution
+            )
             print(f"Trademark {number} not found", file=sys.stderr)
             sys.exit(1)
 

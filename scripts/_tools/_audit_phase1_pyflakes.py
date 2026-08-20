@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """阶段 1-3: pyflakes 全量扫描。结果分类写入 reports/。"""
 from __future__ import annotations
+
 import pathlib
 import subprocess
 import sys

@@ -10,7 +10,6 @@ import argparse
 import json
 import re
 
-
 # Common medical abbreviations that should be avoided (JCAHO "Do Not Use" list)
 DO_NOT_USE = {
     "U": "Unit",

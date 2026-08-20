@@ -66,10 +66,11 @@ logger = logging.getLogger("review_clinical_xlsx")
 @dataclass(frozen=True)
 class Issue:
     """审核问题条目。"""
-    severity: str            # "P0" / "P1" / "P2" / "INFO"
-    category: str            # "矛盾" / "错别字" / "格式" / "一致性" / "其他"
+
+    severity: str  # "P0" / "P1" / "P2" / "INFO"
+    category: str  # "矛盾" / "错别字" / "格式" / "一致性" / "其他"
     sheet: str
-    row_label: str           # "Rxxx: ..."  来源行摘要
+    row_label: str  # "Rxxx: ..."  来源行摘要
     description: str
     suggestion: str = ""
 
@@ -90,7 +91,9 @@ class ReviewReport:
     def render(self, excel_basename: str) -> str:
         out: list[str] = []
         out.append(f"# 临床 Excel 审核报告 — {excel_basename}\n")
-        out.append(f"**共扫描**: {len(self.sheets)} 个子表，触发 {len(self.issues)} 条问题\n")
+        out.append(
+            f"**共扫描**: {len(self.sheets)} 个子表，触发 {len(self.issues)} 条问题\n"
+        )
         sev_counter: dict[str, int] = {}
         cat_counter: dict[str, int] = {}
         for i in self.issues:
@@ -106,7 +109,11 @@ class ReviewReport:
         current_sev = None
         for issue in sorted(
             self.issues,
-            key=lambda x: ({"P0": 0, "P1": 1, "P2": 2, "INFO": 3}[x.severity], x.sheet, x.row_label),
+            key=lambda x: (
+                {"P0": 0, "P1": 1, "P2": 2, "INFO": 3}[x.severity],
+                x.sheet,
+                x.row_label,
+            ),
         ):
             if issue.severity != current_sev:
                 out.append(f"\n### {issue.severity} 级别\n")
@@ -198,26 +205,38 @@ def rule_typo_brackets(text: str) -> list[Issue]:
     bracket_re = re.compile(r"（[^（）]*\)）")  # 嵌套右括号
     for line in text.splitlines():
         if bracket_re.search(line):
-            issues.append(Issue(
-                severity="P1", category="错别字",
-                sheet=extract_sheet(line, text), row_label=line[:60],
-                description="括号嵌套错误：右括号多余",
-                suggestion="删除冗余的右括号",
-            ))
+            issues.append(
+                Issue(
+                    severity="P1",
+                    category="错别字",
+                    sheet=extract_sheet(line, text),
+                    row_label=line[:60],
+                    description="括号嵌套错误：右括号多余",
+                    suggestion="删除冗余的右括号",
+                )
+            )
         if "三里交" in line:
-            issues.append(Issue(
-                severity="P0", category="错别字",
-                sheet=extract_sheet(line, text), row_label=line[:60],
-                description='"足三里交" 应为 "足三里穴"',
-                suggestion="替换为“足三里穴”",
-            ))
+            issues.append(
+                Issue(
+                    severity="P0",
+                    category="错别字",
+                    sheet=extract_sheet(line, text),
+                    row_label=line[:60],
+                    description='"足三里交" 应为 "足三里穴"',
+                    suggestion="替换为“足三里穴”",
+                )
+            )
         if "肌内滴注" in line:
-            issues.append(Issue(
-                severity="P0", category="错别字",
-                sheet=extract_sheet(line, text), row_label=line[:60],
-                description='"肌内滴注" 为非规范用法',
-                suggestion="改为“肌内注射”/“肌肉注射”",
-            ))
+            issues.append(
+                Issue(
+                    severity="P0",
+                    category="错别字",
+                    sheet=extract_sheet(line, text),
+                    row_label=line[:60],
+                    description='"肌内滴注" 为非规范用法',
+                    suggestion="改为“肌内注射”/“肌肉注射”",
+                )
+            )
     return issues
 
 
@@ -228,12 +247,16 @@ def rule_duplicate_indications(text: str) -> list[Issue]:
         # 匹配类似 "4-骨质疏松 3-腰椎退变 2-膝关节退行性病变"
         nums = re.findall(r"(\d+)-[^|]+?(?=\s+\d+-|\s+\|)", line)
         if len(nums) >= 2 and len(set(nums)) != len(nums):
-            issues.append(Issue(
-                severity="P1", category="一致性",
-                sheet=extract_sheet(line, text), row_label=line[:80],
-                description="适应症编号出现重复",
-                suggestion="核对并修正重复引用",
-            ))
+            issues.append(
+                Issue(
+                    severity="P1",
+                    category="一致性",
+                    sheet=extract_sheet(line, text),
+                    row_label=line[:80],
+                    description="适应症编号出现重复",
+                    suggestion="核对并修正重复引用",
+                )
+            )
     return issues
 
 
@@ -255,12 +278,16 @@ def rule_order_inconsistency(text: str) -> list[Issue]:
     for sid, items in by_subject.items():
         orders: list[list[int]] = [it[1] for it in items]
         if len(set(tuple(o) for o in orders)) > 2:
-            issues.append(Issue(
-                severity="P2", category="格式",
-                sheet="合并用药", row_label=f"受试者 {sid}",
-                description="适应症编号排列顺序不一致",
-                suggestion="统一为子表内序号升序排列",
-            ))
+            issues.append(
+                Issue(
+                    severity="P2",
+                    category="格式",
+                    sheet="合并用药",
+                    row_label=f"受试者 {sid}",
+                    description="适应症编号排列顺序不一致",
+                    suggestion="统一为子表内序号升序排列",
+                )
+            )
     return issues
 
 
@@ -274,13 +301,21 @@ def rule_filename_title_mismatch(text: str, xlsx_basename: str) -> list[Issue]:
     # 简化匹配：抽取标题和文件名中"X报告"短语
     file_report_type = re.search(r"_(.*?报告)", xlsx_basename)
     title_report_type = re.search(r"(.*?报告)", title)
-    if file_report_type and title_report_type and file_report_type.group(1) != title_report_type.group(1):
-            issues.append(Issue(
-                severity="P0", category="矛盾",
-                sheet="封面页", row_label=f"标题: {title}",
+    if (
+        file_report_type
+        and title_report_type
+        and file_report_type.group(1) != title_report_type.group(1)
+    ):
+        issues.append(
+            Issue(
+                severity="P0",
+                category="矛盾",
+                sheet="封面页",
+                row_label=f"标题: {title}",
                 description=f'文件名 "{xlsx_basename}" 与封面标题 "{title}" 的报告类型不一致',
                 suggestion="统一文件名与封面标题",
-            ))
+            )
+        )
     return issues
 
 
@@ -317,13 +352,20 @@ def review(xlsx: Path) -> ReviewReport:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="临床 Excel 数据质量审核")
     parser.add_argument("xlsx", help="Excel 文件路径或目录")
-    parser.add_argument("--out", default=None, help="审核报告输出路径 (默认 <xlsx>.review.md)")
+    parser.add_argument(
+        "--out", default=None, help="审核报告输出路径 (默认 <xlsx>.review.md)"
+    )
     parser.add_argument("--dump", default=None, help="dump 文本输出路径")
     parser.add_argument("--no-dump", action="store_true", help="不生成 dump 文本")
-    parser.add_argument("--log-level", default="WARNING", help="日志级别 (DEBUG/INFO/WARNING/ERROR)")
+    parser.add_argument(
+        "--log-level", default="WARNING", help="日志级别 (DEBUG/INFO/WARNING/ERROR)"
+    )
     args = parser.parse_args(argv)
 
-    logging.basicConfig(level=getattr(logging, args.log_level.upper(), logging.WARNING), format=LOG_FORMAT)
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.WARNING),
+        format=LOG_FORMAT,
+    )
 
     try:
         xlsx = resolve_excel_path(args.xlsx)
@@ -361,7 +403,9 @@ def main(argv: list[str] | None = None) -> int:
 
     dump_info = f"  Dump: {dump_path}\n" if dump_path is not None else ""
     print(f"OK: dump + report written.{dump_info}  Report: {out_md}")
-    print(f"  Issues: {len(report.issues)} ({sum(1 for i in report.issues if i.severity == 'P0')} P0)")
+    print(
+        f"  Issues: {len(report.issues)} ({sum(1 for i in report.issues if i.severity == 'P0')} P0)"
+    )
     return 0
 
 

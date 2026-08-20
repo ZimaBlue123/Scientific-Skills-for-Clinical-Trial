@@ -24,13 +24,12 @@ from datetime import datetime
 # 让脚本可以导入 common_scripts.docx_utils
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from common_scripts.docx_utils import apply_cn_en_fonts
 from docx import Document
 from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
-
-from common_scripts.docx_utils import apply_cn_en_fonts
 
 JSON_PATH = ".workbuddy/audit/norovirus_trial_pubmed.json"
 DOCX_PATH = ".workbuddy/audit/norovirus_trial_lit_report.docx"
@@ -50,12 +49,18 @@ SEARCH_METHOD = {
         ("HilleVax[tiab] AND norovirus[tiab]", 2),
         ("HilleVax[tiab] AND (infant*[tiab] OR pediatric[tiab])", 0),
         ("HilleVax[tiab] AND adult*[tiab]", 1),
-        ('"norovirus vaccine"[tiab] AND infant*[tiab] AND (phase III[tiab] OR phase 3[tiab])', 0),
-        ('"norovirus vaccine"[tiab] AND adult*[tiab] AND (phase III[tiab] OR phase 3[tiab])', 0),
+        (
+            '"norovirus vaccine"[tiab] AND infant*[tiab] AND (phase III[tiab] OR phase 3[tiab])',
+            0,
+        ),
+        (
+            '"norovirus vaccine"[tiab] AND adult*[tiab] AND (phase III[tiab] OR phase 3[tiab])',
+            0,
+        ),
     ],
     "notes": [
         "NCT ID 直接字段（[si]）未命中：ClinicalTrials.gov→PubMed 自动链接在这两个较新试验上尚未建立索引。",
-        "候选疫苗代码 \"HIL-214\" 是最有效的检索锚点（命中 5 篇原始研究）。",
+        '候选疫苗代码 "HIL-214" 是最有效的检索锚点（命中 5 篇原始研究）。',
         "HilleVax + norovirus 关键词组合命中 2 篇，其中 PMID 42140216 为成人 post-hoc 分析。",
         "受控人群限定（infant* / adult* + phase III）的检索式无额外命中，表明试验主结果论文尚未以 PMID 形式公开。",
     ],
@@ -74,23 +79,35 @@ TRIAL_META = {
         "candidate": "HIL-214（双价 GI.1/GII.4 VLP 诺如疫苗，肌肉注射）",
         "key_topic": "成人急性胃肠炎预防；未达主要终点但减轻症状严重程度",
         "anchor_pmids": ["42140216", "39852862"],
-        "intro": "下表按出版日期倒序排列。带 ★ 的 PMID 为支撑\"未达主要终点但减轻症状严重程度\"解读的核心文献。",
+        "intro": '下表按出版日期倒序排列。带 ★ 的 PMID 为支撑"未达主要终点但减轻症状严重程度"解读的核心文献。',
     },
 }
 
 KEY_OBSERVATIONS = [
-    ("NCT ID 直接字段未索引",
-     "通过 NCT06120764[si] 与 NCT05507060[si] 均返回 0 条，说明 ClinicalTrials.gov→PubMed 自动链接在这两个较新试验上尚未建立。"),
-    ("候选疫苗代码 HIL-214 是最有效的检索锚点",
-     "共召回 5 篇原始研究 + 1 篇综述，涵盖 I/II 期安全性、免疫原性、免疫持久性与中和抗体相关性。"),
-    ("两个试验共用 HIL-214 平台，文献集合 100% 重叠",
-     "需按\"研究人群（婴儿 vs 成人）\"和\"试验阶段（I/II 期准备 vs III 期终点）\"做归属判定，而非简单去重。"),
-    ("未达主要终点的解读依据",
-     "主要见 PMID 42140216（post-hoc 血清学分析）与 PMID 39852862（成人长期免疫持久性数据），这两篇可作为\"减轻症状严重程度\"结论的文献支撑。"),
-    ("婴儿 III 期结果尚未以 PMID 形式公开",
-     "检索式 infant*/pediatric + phase III 均无命中；婴儿 III 期顶线数据预期会以公司公告或学术会议形式首发，后续可在 PubMed 增量跟踪。"),
-    ("建议补充检索",
-     "可在 ClinicalTrials.gov 结果发布 6-12 个月后追加检索：trial-result 字段、preprint（bioRxiv/medRxiv）、以及会议摘要（IDWeek / ESPID / ACIP）。"),
+    (
+        "NCT ID 直接字段未索引",
+        "通过 NCT06120764[si] 与 NCT05507060[si] 均返回 0 条，说明 ClinicalTrials.gov→PubMed 自动链接在这两个较新试验上尚未建立。",
+    ),
+    (
+        "候选疫苗代码 HIL-214 是最有效的检索锚点",
+        "共召回 5 篇原始研究 + 1 篇综述，涵盖 I/II 期安全性、免疫原性、免疫持久性与中和抗体相关性。",
+    ),
+    (
+        "两个试验共用 HIL-214 平台，文献集合 100% 重叠",
+        '需按"研究人群（婴儿 vs 成人）"和"试验阶段（I/II 期准备 vs III 期终点）"做归属判定，而非简单去重。',
+    ),
+    (
+        "未达主要终点的解读依据",
+        '主要见 PMID 42140216（post-hoc 血清学分析）与 PMID 39852862（成人长期免疫持久性数据），这两篇可作为"减轻症状严重程度"结论的文献支撑。',
+    ),
+    (
+        "婴儿 III 期结果尚未以 PMID 形式公开",
+        "检索式 infant*/pediatric + phase III 均无命中；婴儿 III 期顶线数据预期会以公司公告或学术会议形式首发，后续可在 PubMed 增量跟踪。",
+    ),
+    (
+        "建议补充检索",
+        "可在 ClinicalTrials.gov 结果发布 6-12 个月后追加检索：trial-result 字段、preprint（bioRxiv/medRxiv）、以及会议摘要（IDWeek / ESPID / ACIP）。",
+    ),
 ]
 
 HEADERS = ["PMID", "标题", "作者", "期刊", "日期", "DOI"]
@@ -99,8 +116,9 @@ HEADERS = ["PMID", "标题", "作者", "期刊", "日期", "DOI"]
 # ---------------------------------------------------------------------------
 # 渲染辅助
 # ---------------------------------------------------------------------------
-def _set_cell_text(cell, text: str, bold: bool = False, size: int = 10,
-                   align=WD_ALIGN_PARAGRAPH.LEFT) -> None:
+def _set_cell_text(
+    cell, text: str, bold: bool = False, size: int = 10, align=WD_ALIGN_PARAGRAPH.LEFT
+) -> None:
     cell.text = ""
     paragraphs = text.split("\n")
     for idx, line in enumerate(paragraphs):
@@ -126,6 +144,7 @@ def _shade_cell(cell, hex_color: str) -> None:
 def _add_hyperlink(paragraph, url, text, size=10):
     """Append a clickable hyperlink via raw OXML (python-docx 1.x)."""
     from docx import oxml as _oxml
+
     part = paragraph.part
     r_id = part.relate_to(
         url,
@@ -240,15 +259,29 @@ def render_search_method(doc: Document) -> None:
 
     tbl = doc.add_table(rows=1 + len(SEARCH_METHOD["queries_used"]), cols=2)
     tbl.style = "Table Grid"
-    _set_cell_text(tbl.rows[0].cells[0], "检索式", bold=True, size=10, align=WD_ALIGN_PARAGRAPH.CENTER)
-    _set_cell_text(tbl.rows[0].cells[1], "命中数", bold=True, size=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+    _set_cell_text(
+        tbl.rows[0].cells[0],
+        "检索式",
+        bold=True,
+        size=10,
+        align=WD_ALIGN_PARAGRAPH.CENTER,
+    )
+    _set_cell_text(
+        tbl.rows[0].cells[1],
+        "命中数",
+        bold=True,
+        size=10,
+        align=WD_ALIGN_PARAGRAPH.CENTER,
+    )
     _shade_cell(tbl.rows[0].cells[0], "DCE6F1")
     _shade_cell(tbl.rows[0].cells[1], "DCE6F1")
     tbl.columns[0].width = Cm(13.0)
     tbl.columns[1].width = Cm(3.0)
     for i, (q, n) in enumerate(SEARCH_METHOD["queries_used"], start=1):
         _set_cell_text(tbl.rows[i].cells[0], q, size=10)
-        _set_cell_text(tbl.rows[i].cells[1], str(n), size=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+        _set_cell_text(
+            tbl.rows[i].cells[1], str(n), size=10, align=WD_ALIGN_PARAGRAPH.CENTER
+        )
         tbl.rows[i].cells[0].width = Cm(13.0)
         tbl.rows[i].cells[1].width = Cm(3.0)
 
@@ -338,8 +371,9 @@ def _render_trial_table(doc: Document, records: list[dict], trial_key: str) -> N
         doi_cell.width = col_widths[5]
 
 
-def render_trial_section(doc: Document, trial_key: str, heading: str,
-                         records: list[dict]) -> None:
+def render_trial_section(
+    doc: Document, trial_key: str, heading: str, records: list[dict]
+) -> None:
     meta = TRIAL_META[trial_key]
 
     _add_section_heading(doc, heading, level=2)
@@ -373,7 +407,9 @@ def render_key_observations(doc: Document) -> None:
 
 def render_appendix(doc: Document, data: dict) -> None:
     _add_section_heading(doc, "附录：完整 JSON 元数据", level=1)
-    _add_body(doc, "完整检索元数据见 .workbuddy/audit/norovirus_trial_pubmed.json。", size=10)
+    _add_body(
+        doc, "完整检索元数据见 .workbuddy/audit/norovirus_trial_pubmed.json。", size=10
+    )
     code_text = json.dumps(data, ensure_ascii=False, indent=2)
     for line in code_text.split("\n"):
         p = doc.add_paragraph()

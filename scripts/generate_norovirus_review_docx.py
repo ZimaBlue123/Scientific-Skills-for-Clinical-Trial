@@ -17,7 +17,10 @@ if not LOGGER.handlers:
     LOGGER.setLevel(logging.INFO)
 
 
-DEFAULT_OUT_PATH = Path("reports") / f"美国近两年诺如病毒流行病学数据综述_2024-2026_{date.today().isoformat()}.docx"
+DEFAULT_OUT_PATH = (
+    Path("reports")
+    / f"美国近两年诺如病毒流行病学数据综述_2024-2026_{date.today().isoformat()}.docx"
+)
 
 
 def _add_multiline_paragraphs(doc: Document, text: str) -> None:
@@ -139,4 +142,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

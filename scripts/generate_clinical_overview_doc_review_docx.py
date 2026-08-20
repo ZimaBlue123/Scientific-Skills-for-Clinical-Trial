@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate Word review report for CTD 2.5 clinical overview document."""
+
 from __future__ import annotations
 
 import logging
@@ -8,12 +9,11 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
 from docx import Document  # type: ignore
 from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
 from docx.oxml.ns import qn  # type: ignore
 from docx.shared import Pt  # type: ignore
-
-from common_scripts.docx_utils import apply_cn_en_fonts  # type: ignore
 
 LOGGER = logging.getLogger("generate_clinical_overview_review")
 if not LOGGER.handlers:
@@ -106,8 +106,12 @@ def build_document() -> Document:
     # --- Section 1 ---
     doc.add_heading("一、前后矛盾或易误导的数据与表述", level=1)
 
-    doc.add_heading("1. 有效性评价：中老年层免疫原性概括与统计结果矛盾（高优先级）", level=2)
-    _add_para(doc, "位置：2.5.4.6 有效性评价，关于 50~59 岁、≥60 岁与阳性对照组 2 的概括段。")
+    doc.add_heading(
+        "1. 有效性评价：中老年层免疫原性概括与统计结果矛盾（高优先级）", level=2
+    )
+    _add_para(
+        doc, "位置：2.5.4.6 有效性评价，关于 50~59 岁、≥60 岁与阳性对照组 2 的概括段。"
+    )
     _add_bullets(
         doc,
         [
@@ -266,8 +270,16 @@ def build_document() -> Document:
         [
             ["2.5.5.1 II 期暴露", "阳性对照组 170 例", "阳性对照组 1，70 例"],
             ["2.5.5.1 II 期暴露", "试验组仅写佐剂成分", "补充 gE 50 μg + TVA01 佐剂"],
-            ["2.5.5.1 II 期暴露", "阳性对照组 1“共 1 剂”", "第 0 天安慰剂 + 第 60 天感维®，共 2 次接种"],
-            ["2.5.4.6 有效性评价", "中老年“均无显著差异”", "按终点拆分；≥60 岁 h2 写明 GMC P=0.011/0.030"],
+            [
+                "2.5.5.1 II 期暴露",
+                "阳性对照组 1“共 1 剂”",
+                "第 0 天安慰剂 + 第 60 天感维®，共 2 次接种",
+            ],
+            [
+                "2.5.4.6 有效性评价",
+                "中老年“均无显著差异”",
+                "按终点拆分；≥60 岁 h2 写明 GMC P=0.011/0.030",
+            ],
             ["2.5.6.1.2 / 2.5.6.4", "Zostava", "Zostavax 或统一商品名"],
             ["2.5.6.1.2", "HZ 的效率", "效力"],
             ["感维说明书转录", "失眼", "失眠"],
@@ -348,7 +360,9 @@ def main() -> int:
     root = Path(__file__).resolve().parents[1]
     out_dir = root / "review_materials"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"TVAX-006_2.5临床综述_文档审核报告_{date.today().isoformat()}.docx"
+    out_path = (
+        out_dir / f"TVAX-006_2.5临床综述_文档审核报告_{date.today().isoformat()}.docx"
+    )
 
     doc = build_document()
     try:

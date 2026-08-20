@@ -36,6 +36,7 @@ Typical usage
 
     python scripts/cleanup_generated_artifacts.py --apply --max-age-days 14
 """
+
 from __future__ import annotations
 
 import argparse
@@ -238,7 +239,9 @@ def rm_pycache(
     """
     n = 0
     cutoff_time = now if now is not None else time.time()
-    cutoff = cutoff_time - (max_age_days * 86400.0) if max_age_days is not None else None
+    cutoff = (
+        cutoff_time - (max_age_days * 86400.0) if max_age_days is not None else None
+    )
     for rel in _PYCACHE_SEARCH_DIRS:
         base = root / rel
         if not base.is_dir():
@@ -368,12 +371,12 @@ def discover_ide_history_dirs(home: Path | None = None) -> list[Path]:
     # which targets only specific subdirectories, not the root.
     candidates: list[Path] = [
         # Cursor
-        home / ".cursor" / "projects",          # per-workspace sessions & state
-        home / ".cursor" / "ai-tracking",        # AI code-tracking SQLite DB
-        home / ".cursor" / "cleanup-logs",       # chat cleanup history
-        home / ".cursor" / "skills-cursor",      # built-in skill snapshots
-        home / ".cursor" / "logs",               # Cursor's own logs
-        roaming / "Cursor" / "logs",             # Cursor's main log directory
+        home / ".cursor" / "projects",  # per-workspace sessions & state
+        home / ".cursor" / "ai-tracking",  # AI code-tracking SQLite DB
+        home / ".cursor" / "cleanup-logs",  # chat cleanup history
+        home / ".cursor" / "skills-cursor",  # built-in skill snapshots
+        home / ".cursor" / "logs",  # Cursor's own logs
+        roaming / "Cursor" / "logs",  # Cursor's main log directory
         roaming / "Cursor" / "CachedConfigurations",  # re-discoverable config snapshots
         # Roo Code standalone install paths (rare; most users install as
         # a VS Code / Cursor extension — handled below via dynamic discovery)
@@ -415,9 +418,9 @@ def discover_ide_history_dirs(home: Path | None = None) -> list[Path]:
     # .codebuddy component — these are active WorkBuddy state directories.
     _PROTECTED_NAMES = {".workbuddy", ".codebuddy"}
     return [
-        p for p in candidates
-        if p.exists()
-        and not any(part in _PROTECTED_NAMES for part in p.parts)
+        p
+        for p in candidates
+        if p.exists() and not any(part in _PROTECTED_NAMES for part in p.parts)
     ]
 
 
@@ -520,13 +523,17 @@ def cleanup_ide_history(
                 continue
             if mtime >= cutoff:
                 result.kept.append(entry)
-                logger.debug("keeping fresh entry: %s (%.1f days)",
-                             entry, (now - mtime) / 86400.0)
+                logger.debug(
+                    "keeping fresh entry: %s (%.1f days)",
+                    entry,
+                    (now - mtime) / 86400.0,
+                )
                 continue
             age_days = (now - mtime) / 86400.0
             if dry_run:
-                logger.info("[dry-run] would remove: %s (%.1f days old)",
-                            entry, age_days)
+                logger.info(
+                    "[dry-run] would remove: %s (%.1f days old)", entry, age_days
+                )
                 result.removed.append(entry)
                 continue
             try:
@@ -595,7 +602,9 @@ def _resolve_max_age_days(args: argparse.Namespace) -> float | None:
         try:
             return float(env_value)
         except ValueError:
-            logger.warning("CLEANUP_MAX_AGE_DAYS is not numeric (%s); ignoring", env_value)
+            logger.warning(
+                "CLEANUP_MAX_AGE_DAYS is not numeric (%s); ignoring", env_value
+            )
     fallback = getattr(args, "_default_max_age_days", None)
     return fallback
 
@@ -628,9 +637,7 @@ def _ensure_apply_or_dry_run(args: argparse.Namespace) -> tuple[bool, bool]:
     script should exit cleanly without doing anything.
     """
     if not args.apply and not args.dry_run:
-        logger.info(
-            "nothing to do: pass --apply to delete or --dry-run to preview."
-        )
+        logger.info("nothing to do: pass --apply to delete or --dry-run to preview.")
         return True, True
     return not args.apply, False
 
@@ -658,17 +665,13 @@ def run_artifacts(argv: Sequence[str] | None = None) -> int:
         "--max-age-days",
         type=float,
         default=None,
-        help=(
-            "Only delete items older than N days. Disabled by default."
-        ),
+        help=("Only delete items older than N days. Disabled by default."),
     )
     parser.add_argument(
         "--keep-manifest",
         type=Path,
         default=None,
-        help=(
-            "Optional path to write a JSON manifest of items that were kept."
-        ),
+        help=("Optional path to write a JSON manifest of items that were kept."),
     )
     args = parser.parse_args(argv)
     logging.basicConfig(level=getattr(logging, args.log_level), format=LOG_FORMAT)
@@ -772,9 +775,7 @@ def run_ide_history(argv: Sequence[str] | None = None) -> int:
         "--keep-manifest",
         type=Path,
         default=None,
-        help=(
-            "Optional path to write a JSON manifest of items that were kept."
-        ),
+        help=("Optional path to write a JSON manifest of items that were kept."),
     )
     args = parser.parse_args(argv)
     args._default_max_age_days = float(DEFAULT_MAX_AGE_DAYS)

@@ -6,7 +6,11 @@ import sys
 from collections.abc import Iterable
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] extract_docx_to_md: %(message)s", stream=sys.stderr)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] extract_docx_to_md: %(message)s",
+    stream=sys.stderr,
+)
 logger = logging.getLogger("extract_docx_to_md")
 
 _DOCX_IMPORT_ERROR: Exception | None = None
@@ -103,10 +107,14 @@ def docx_to_md(src_path: Path, max_cols: int | None = None) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Extract DOCX paragraphs/tables to markdown.")
+    parser = argparse.ArgumentParser(
+        description="Extract DOCX paragraphs/tables to markdown."
+    )
     parser.add_argument("--input", required=True, help="Input .docx path")
     parser.add_argument("--output", required=True, help="Output .md path")
-    parser.add_argument("--max-cols", type=int, default=None, help="Max columns when rendering tables")
+    parser.add_argument(
+        "--max-cols", type=int, default=None, help="Max columns when rendering tables"
+    )
     args = parser.parse_args()
 
     src = Path(args.input)
@@ -123,7 +131,9 @@ def main() -> int:
     try:
         md = docx_to_md(src, max_cols=args.max_cols)
     except ModuleNotFoundError:
-        logger.error("missing dependency 'python-docx'. Install via: python -m pip install python-docx")
+        logger.error(
+            "missing dependency 'python-docx'. Install via: python -m pip install python-docx"
+        )
         return 2
     except (OSError, ValueError, KeyError) as e:
         logger.error("failed to parse docx: %s\n%s", src, e)
@@ -144,4 +154,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

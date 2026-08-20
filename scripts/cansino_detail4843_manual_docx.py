@@ -16,6 +16,7 @@ Download 康希诺官网 detail-4843 公示中的「说明书」两页（JPG）�
   py -3.10 scripts/cansino_detail4843_manual_docx.py --fulltext-appendix
   py -3.10 scripts/cansino_detail4843_manual_docx.py --table-psm 11 --prose-psm 6 --no-ocr
 """
+
 from __future__ import annotations
 
 import argparse
@@ -200,8 +201,12 @@ def _configure_landscape_a4(section) -> None:
 
 
 def _content_box_mm(section) -> tuple[float, float]:
-    w_mm = float(section.page_width.mm - section.left_margin.mm - section.right_margin.mm)
-    h_mm = float(section.page_height.mm - section.top_margin.mm - section.bottom_margin.mm)
+    w_mm = float(
+        section.page_width.mm - section.left_margin.mm - section.right_margin.mm
+    )
+    h_mm = float(
+        section.page_height.mm - section.top_margin.mm - section.bottom_margin.mm
+    )
     if w_mm <= 1 or h_mm <= 1:
         raise RuntimeError(f"版心尺寸异常：w={w_mm}mm h={h_mm}mm")
     return w_mm, h_mm
@@ -302,7 +307,9 @@ def build_docx(
                     "（已使用 --no-ocr，主文未做表格与词级识别；若启用 --fulltext-appendix，见文末附录。）"
                 ).font.size = Pt(9)
             else:
-                doc.add_paragraph().add_run("（已使用 --no-ocr，未生成可编辑内容。）").font.size = Pt(9)
+                doc.add_paragraph().add_run(
+                    "（已使用 --no-ocr，未生成可编辑内容。）"
+                ).font.size = Pt(9)
             if idx < len(MANUAL_PAGES):
                 doc.add_page_break()
 
@@ -338,10 +345,14 @@ def build_docx(
             r.font.name = "Microsoft YaHei"
             r._element.rPr.rFonts.set(qn("w:eastAsia"), "Microsoft YaHei")
         note = doc.add_paragraph()
-        note.add_run("以下为整页 Tesseract 输出，便于检索；与正文中的表格/段落划分无关。").font.size = Pt(9)
+        note.add_run(
+            "以下为整页 Tesseract 输出，便于检索；与正文中的表格/段落划分无关。"
+        ).font.size = Pt(9)
         for label, jb in collected:
             with Image.open(io.BytesIO(jb)) as im2:
-                plain = _tesseract_plain_text(im2.convert("RGB"), tess_exe, psm=int(ocr_psm))
+                plain = _tesseract_plain_text(
+                    im2.convert("RGB"), tess_exe, psm=int(ocr_psm)
+                )
             appendix_blocks.append(f"【{label}】\n{plain}")
         body = doc.add_paragraph()
         br = body.add_run("\n\n".join(appendix_blocks))
@@ -373,7 +384,11 @@ def main(argv: list[str] | None = None) -> int:
         default=default_out,
         help="输出 .docx（默认：仓库根目录下 output 文件夹内）",
     )
-    p.add_argument("--no-ocr", action="store_true", help="不进行词级/表格识别；主文仅保留标题与说明（可与 --fulltext-appendix 同用）")
+    p.add_argument(
+        "--no-ocr",
+        action="store_true",
+        help="不进行词级/表格识别；主文仅保留标题与说明（可与 --fulltext-appendix 同用）",
+    )
     p.add_argument(
         "--no-download-lang",
         action="store_true",

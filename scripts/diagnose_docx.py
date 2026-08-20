@@ -1,4 +1,5 @@
 """Diagnose DOCX structure to understand paragraph styles and content mapping."""
+
 from __future__ import annotations
 
 import logging
@@ -36,7 +37,9 @@ def diagnose(docx_path: str) -> None:
 
     # Section info
     for i, section in enumerate(doc.sections):
-        print(f"\nSection {i}: width={section.page_width}, height={section.page_height}")
+        print(
+            f"\nSection {i}: width={section.page_width}, height={section.page_height}"
+        )
         print(
             f"  Margins: top={section.top_margin}, bottom={section.bottom_margin},"
             f" left={section.left_margin}, right={section.right_margin}"
@@ -50,7 +53,9 @@ def diagnose(docx_path: str) -> None:
         fmt_info = ""
         if para.runs:
             run = para.runs[0]
-            fmt_info = f"font={run.font.name}, size={run.font.size}, bold={run.font.bold}"
+            fmt_info = (
+                f"font={run.font.name}, size={run.font.size}, bold={run.font.bold}"
+            )
         print(f"  P{i}: style={style}, {fmt_info}")
         print(f"       text: {text}")
 

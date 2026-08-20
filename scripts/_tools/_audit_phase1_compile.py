@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """阶段 1-2: py_compile 全量编译 + AST 语法树解析。"""
 from __future__ import annotations
+
 import ast
 import pathlib
 import py_compile

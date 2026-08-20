@@ -6,9 +6,9 @@ Fixes the most common rendering failure:
 - unescaped '&' in text content (e.g., "A & B")
 """
 
-from pathlib import Path
 import re
 import sys
+from pathlib import Path
 
 
 def sanitize_text_chunk(chunk: str) -> str:

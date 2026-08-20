@@ -9,6 +9,7 @@ Builds a sandbox project tree with:
 Each case asserts the expected outcome (files removed / kept) and exits non-zero
 on the first failure so it is safe to wire into CI.
 """
+
 from __future__ import annotations
 
 import json
@@ -117,8 +118,12 @@ case(
         and (SANDBOX / "review_materials" / "_md" / "old_doc_b.md").exists()
         and (SANDBOX / "review_materials" / "_md" / "fresh_doc.md").exists()
         and (SANDBOX / "docs" / "_converted" / "old_doc.md").exists()
-        and (SANDBOX / "scripts" / "__pycache__" / "stale_module.cpython-314.pyc").exists()
-        and (SANDBOX / "scripts" / "__pycache__" / "fresh_module.cpython-314.pyc").exists()
+        and (
+            SANDBOX / "scripts" / "__pycache__" / "stale_module.cpython-314.pyc"
+        ).exists()
+        and (
+            SANDBOX / "scripts" / "__pycache__" / "fresh_module.cpython-314.pyc"
+        ).exists()
     ),
 )
 
@@ -133,7 +138,9 @@ case(
         and not (SANDBOX / "review_materials" / "_md" / "old_doc_b.md").exists()
         and (SANDBOX / "review_materials" / "_md" / "fresh_doc.md").exists()
         and not (SANDBOX / "docs" / "_converted" / "old_doc.md").exists()
-        and not (SANDBOX / "scripts" / "__pycache__" / "stale_module.cpython-314.pyc").exists()
+        and not (
+            SANDBOX / "scripts" / "__pycache__" / "stale_module.cpython-314.pyc"
+        ).exists()
     ),
 )
 
@@ -160,9 +167,12 @@ case(
         not (SANDBOX / "review_materials" / "_md" / "old_doc_a.md").exists()
         and not (SANDBOX / "review_materials" / "_md" / "old_doc_b.md").exists()
         and (SANDBOX / "review_materials" / "_md" / "fresh_doc.md").exists()
-        and not (SANDBOX / "scripts" / "__pycache__" / "stale_module.cpython-314.pyc").exists()
+        and not (
+            SANDBOX / "scripts" / "__pycache__" / "stale_module.cpython-314.pyc"
+        ).exists()
     ),
 )
+
 
 # Case 5: --keep-manifest
 def _manifest_ok() -> bool:

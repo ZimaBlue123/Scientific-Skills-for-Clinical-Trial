@@ -7,6 +7,7 @@ Perform comprehensive enrichment analysis on a gene list
 import argparse
 import sys
 from pathlib import Path
+
 import gget
 import pandas as pd
 
@@ -21,7 +22,7 @@ def read_gene_list(file_path):
         genes = df.iloc[:, 0].tolist()
     else:
         # Plain text file
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             genes = [line.strip() for line in f if line.strip()]
 
     return genes
@@ -80,7 +81,7 @@ def enrichment_pipeline(
                 print(f"Results saved to: {output_file}")
 
                 # Show top 5 results
-                print(f"\nTop 5 enriched terms:")
+                print("\nTop 5 enriched terms:")
                 for i, row in enrichment.head(5).iterrows():
                     term = row.get("name", row.get("term", "Unknown"))
                     p_val = row.get(
@@ -108,9 +109,9 @@ def enrichment_pipeline(
                 {
                     "Database": db_name,
                     "Total Terms": len(results[db_key]),
-                    "Top Term": results[db_key].iloc[0].get(
-                        "name", results[db_key].iloc[0].get("term", "N/A")
-                    ),
+                    "Top Term": results[db_key]
+                    .iloc[0]
+                    .get("name", results[db_key].iloc[0].get("term", "N/A")),
                 }
             )
 
@@ -157,7 +158,7 @@ def enrichment_pipeline(
     print("\n" + "=" * 60)
     print("Enrichment analysis complete!")
     print(f"\nOutput files (prefix: {output_prefix}):")
-    for db_key in databases.keys():
+    for db_key in databases:
         if db_key in results:
             print(f"  - {output_prefix}_{db_key}.csv")
     print(f"  - {output_prefix}_summary.csv")
@@ -184,11 +185,12 @@ def main():
         "-b", "--background", help="Background gene list file (optional)"
     )
     parser.add_argument(
-        "-o", "--output", default="enrichment", help="Output prefix (default: enrichment)"
+        "-o",
+        "--output",
+        default="enrichment",
+        help="Output prefix (default: enrichment)",
     )
-    parser.add_argument(
-        "--no-plot", action="store_true", help="Disable plotting"
-    )
+    parser.add_argument("--no-plot", action="store_true", help="Disable plotting")
 
     args = parser.parse_args()
 

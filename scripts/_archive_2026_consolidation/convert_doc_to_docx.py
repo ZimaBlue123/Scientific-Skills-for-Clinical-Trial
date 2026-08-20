@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Convert old .doc to .docx format"""
+
 import os
 import sys
 
@@ -30,6 +31,7 @@ def convert_doc_to_docx(input_path, output_path=None):
         return output_path
     finally:
         pythoncom.CoUninitialize()
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

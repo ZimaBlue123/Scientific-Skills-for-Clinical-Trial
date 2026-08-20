@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """阶段 3-2: 扫描所有 scripts/ + skills/ 的 import，生成依赖使用矩阵。"""
 from __future__ import annotations
+
 import ast
 import pathlib
 import sys

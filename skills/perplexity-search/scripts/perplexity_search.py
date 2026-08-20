@@ -16,11 +16,11 @@ Author: Scientific Skills
 License: MIT
 """
 
+import argparse
+import json
 import os
 import sys
-import json
-import argparse
-from typing import Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional
 
 
 def check_dependencies():

@@ -13,7 +13,6 @@ import argparse
 import shutil
 from pathlib import Path
 
-
 TEMPLATES = {
     "case_report": "case_report_template.md",
     "soap_note": "soap_note_template.md",

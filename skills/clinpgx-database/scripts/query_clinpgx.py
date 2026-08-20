@@ -10,11 +10,12 @@ Rate limit: 2 requests per second
 License: Creative Commons Attribution-ShareAlike 4.0 International
 """
 
-import requests
-import time
 import json
+import time
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
+import requests
 
 # API Configuration
 BASE_URL = "https://api.clinpgx.org/v1/"

@@ -13,7 +13,6 @@ import json
 import re
 from pathlib import Path
 
-
 ICH_E3_SECTIONS = {
     "title_page": "Title Page",
     "synopsis": "Synopsis (2)",

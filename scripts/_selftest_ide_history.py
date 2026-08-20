@@ -9,6 +9,7 @@ requested.
 The script never touches the real user home: it points ``--home`` at a
 sandbox directory and verifies behaviour entirely against mock state.
 """
+
 from __future__ import annotations
 
 import json
@@ -36,7 +37,8 @@ def _stamp(path: Path, age_days: float) -> None:
 def _run(args: list[str], *, home: Path) -> subprocess.CompletedProcess:
     return subprocess.run(
         [PYTHON, str(SCRIPT), "ide-history", *args, "--home", str(home)],
-        capture_output=True, text=True,
+        capture_output=True,
+        text=True,
     )
 
 
@@ -51,8 +53,7 @@ def _build_sandbox() -> None:
     ai_tracking = SANDBOX / ".cursor" / "ai-tracking"
     codebuddy = SANDBOX / ".codebuddy"
     roo_home = SANDBOX / ".roo"
-    for d in (projects, cleanup_logs, skills_cursor, ai_tracking,
-              codebuddy, roo_home):
+    for d in (projects, cleanup_logs, skills_cursor, ai_tracking, codebuddy, roo_home):
         d.mkdir(parents=True)
 
     # Stale + fresh workspace dirs.
@@ -90,9 +91,17 @@ def _build_sandbox() -> None:
 
     # ---- WorkBuddy historical subdirectories ----
     wb = SANDBOX / ".workbuddy"
-    for sub in ("sessions", "traces", "audit-log", "file-history",
-                "logs", "shell-snapshots", "artifact-index",
-                "tasks", "automation-backups"):
+    for sub in (
+        "sessions",
+        "traces",
+        "audit-log",
+        "file-history",
+        "logs",
+        "shell-snapshots",
+        "artifact-index",
+        "tasks",
+        "automation-backups",
+    ):
         (wb / sub).mkdir(parents=True)
 
     # sessions: stale + fresh PID-named JSON files
@@ -155,7 +164,7 @@ def _expected_state_after_apply_age14() -> dict:
         ".cursor/cleanup-logs/new.log": True,
         ".cursor/ai-tracking/ai-code-tracking.db": False,
         ".cursor/skills-cursor/old_skill": False,
-        ".codebuddy/old_state": True,   # protected — must NOT be cleaned
+        ".codebuddy/old_state": True,  # protected — must NOT be cleaned
         ".codebuddy/fresh_state": True,
         ".roo/history.json": False,
         # WorkBuddy history
@@ -166,7 +175,7 @@ def _expected_state_after_apply_age14() -> dict:
         ".workbuddy/audit-log/2026-06-15.jsonl": False,
         ".workbuddy/audit-log/state.json": True,  # fresh — kept
         ".workbuddy/logs/2026-06-15": False,
-        ".workbuddy/logs/AppStartup.log": True,    # fresh — kept
+        ".workbuddy/logs/AppStartup.log": True,  # fresh — kept
         ".workbuddy/shell-snapshots/snapshot-bash-old.sh": False,
         # WorkBuddy active state — never a target
         ".workbuddy/memory/MEMORY.md": True,
@@ -189,18 +198,20 @@ def case_no_args_exits_cleanly() -> bool:
     if proc.returncode != 0:
         print(proc.stdout, proc.stderr)
         return False
-    return _all_expected({
-        ".cursor/projects/old_workspace": True,
-        ".cursor/projects/fresh_workspace": True,
-        ".cursor/cleanup-logs/old.log": True,
-        ".cursor/ai-tracking/ai-code-tracking.db": True,
-        ".codebuddy/old_state": True,
-        ".roo/history.json": True,
-        ".workbuddy/sessions/99999.json": True,
-        ".workbuddy/traces/99999/trace_old.json": True,
-        ".workbuddy/audit-log/2026-06-15.jsonl": True,
-        ".workbuddy/memory/MEMORY.md": True,
-    })
+    return _all_expected(
+        {
+            ".cursor/projects/old_workspace": True,
+            ".cursor/projects/fresh_workspace": True,
+            ".cursor/cleanup-logs/old.log": True,
+            ".cursor/ai-tracking/ai-code-tracking.db": True,
+            ".codebuddy/old_state": True,
+            ".roo/history.json": True,
+            ".workbuddy/sessions/99999.json": True,
+            ".workbuddy/traces/99999/trace_old.json": True,
+            ".workbuddy/audit-log/2026-06-15.jsonl": True,
+            ".workbuddy/memory/MEMORY.md": True,
+        }
+    )
 
 
 def case_dry_run_preserves_fs() -> bool:
@@ -210,27 +221,29 @@ def case_dry_run_preserves_fs() -> bool:
     if proc.returncode != 0:
         print(proc.stdout, proc.stderr)
         return False
-    return _all_expected({
-        ".cursor/projects/old_workspace": True,
-        ".cursor/projects/fresh_workspace": True,
-        ".cursor/cleanup-logs/old.log": True,
-        ".cursor/cleanup-logs/new.log": True,
-        ".cursor/ai-tracking/ai-code-tracking.db": True,
-        ".cursor/skills-cursor/old_skill": True,
-        ".codebuddy/old_state": True,
-        ".codebuddy/fresh_state": True,
-        ".roo/history.json": True,
-        ".workbuddy/sessions/99999.json": True,
-        ".workbuddy/sessions/88888.json": True,
-        ".workbuddy/traces/99999/trace_old.json": True,
-        ".workbuddy/traces/88888/trace_fresh.json": True,
-        ".workbuddy/audit-log/2026-06-15.jsonl": True,
-        ".workbuddy/audit-log/state.json": True,
-        ".workbuddy/logs/2026-06-15": True,
-        ".workbuddy/logs/AppStartup.log": True,
-        ".workbuddy/shell-snapshots/snapshot-bash-old.sh": True,
-        ".workbuddy/memory/MEMORY.md": True,
-    })
+    return _all_expected(
+        {
+            ".cursor/projects/old_workspace": True,
+            ".cursor/projects/fresh_workspace": True,
+            ".cursor/cleanup-logs/old.log": True,
+            ".cursor/cleanup-logs/new.log": True,
+            ".cursor/ai-tracking/ai-code-tracking.db": True,
+            ".cursor/skills-cursor/old_skill": True,
+            ".codebuddy/old_state": True,
+            ".codebuddy/fresh_state": True,
+            ".roo/history.json": True,
+            ".workbuddy/sessions/99999.json": True,
+            ".workbuddy/sessions/88888.json": True,
+            ".workbuddy/traces/99999/trace_old.json": True,
+            ".workbuddy/traces/88888/trace_fresh.json": True,
+            ".workbuddy/audit-log/2026-06-15.jsonl": True,
+            ".workbuddy/audit-log/state.json": True,
+            ".workbuddy/logs/2026-06-15": True,
+            ".workbuddy/logs/AppStartup.log": True,
+            ".workbuddy/shell-snapshots/snapshot-bash-old.sh": True,
+            ".workbuddy/memory/MEMORY.md": True,
+        }
+    )
 
 
 def case_apply_removes_only_stale() -> bool:
@@ -266,9 +279,9 @@ def case_keep_manifest_ok() -> bool:
         and payload.get("dry_run") is False
         and any("fresh_workspace" in k for k in payload["kept"])
         and any("old_workspace" in r for r in payload["removed"])
-        and any("88888.json" in k for k in payload["kept"])        # WB fresh session
-        and any("99999.json" in r for r in payload["removed"])     # WB stale session
-        and any("state.json" in k for k in payload["kept"])        # WB audit state
+        and any("88888.json" in k for k in payload["kept"])  # WB fresh session
+        and any("99999.json" in r for r in payload["removed"])  # WB stale session
+        and any("state.json" in k for k in payload["kept"])  # WB audit state
     )
 
 

@@ -10,9 +10,9 @@ import argparse
 import os
 import sys
 from pathlib import Path
+
 from markitdown import MarkItDown
 from openai import OpenAI
-
 
 # Predefined prompts for different use cases
 PROMPTS = {

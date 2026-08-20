@@ -17,6 +17,7 @@ Exit codes
     1  already present (no-op)
     2  I/O error
 """
+
 from __future__ import annotations
 
 import argparse

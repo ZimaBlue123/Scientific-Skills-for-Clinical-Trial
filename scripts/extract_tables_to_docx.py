@@ -18,6 +18,7 @@
   py -3.10 scripts/extract_tables_to_docx.py --editable --image a.jpg --image b.jpg -o full.docx
   py -3.10 scripts/extract_tables_to_docx.py --editable --portrait --image x.png -o out.docx --tesseract D:\\\\tesseract-ocr\\\\tesseract.exe
 """
+
 from __future__ import annotations
 
 import argparse
@@ -146,7 +147,9 @@ def _column_char_weights(grid: list[list[Any]], n_cols: int) -> list[float]:
     return wts
 
 
-def append_html_table_to_doc(doc: Document, html_fragment: str, *, title: str | None, width_in: float) -> None:
+def append_html_table_to_doc(
+    doc: Document, html_fragment: str, *, title: str | None, width_in: float
+) -> None:
     soup = BeautifulSoup(html_fragment, "html.parser")
     table_tag = soup.find("table")
     if table_tag is None:
@@ -209,16 +212,16 @@ def append_html_table_to_doc(doc: Document, html_fragment: str, *, title: str | 
 def _raw_html_table(extracted: Any) -> str:
     """不 prettify，便于解析。"""
     from img2table.tables.extraction._utils import (  # type: ignore  # noqa: PLC0415
-        create_all_rectangles,
-        group_cell_positions,
-    )
+        create_all_rectangles, group_cell_positions)
 
     cell_span_list = [
         cell_span
         for cells in group_cell_positions(table=extracted)
         for cell_span in create_all_rectangles(cell_positions=cells)
     ]
-    cell_span_list = [span for cell_span in cell_span_list for span in cell_span.html_cell_span()]
+    cell_span_list = [
+        span for cell_span in cell_span_list for span in cell_span.html_cell_span()
+    ]
 
     rows_html: list[str] = []
     for row_idx in range(len(extracted.content)):
@@ -388,7 +391,9 @@ def prepare_jpeg_for_editable_page(
             continue
         cand = _jpeg_bytes_at_scale(image_bytes, sc) if sc > 1.001 else image_bytes
         if dual_borderless:
-            tabs = extract_tables_from_bytes_best(cand, tesseract_exe, psm=int(table_psm))
+            tabs = extract_tables_from_bytes_best(
+                cand, tesseract_exe, psm=int(table_psm)
+            )
         else:
             tabs = extract_tables_from_bytes(
                 cand,
@@ -498,7 +503,9 @@ def _table_mask_boxes(
     return out
 
 
-def _word_overlap_table_fraction(w: dict[str, Any], bb: tuple[float, float, float, float]) -> float:
+def _word_overlap_table_fraction(
+    w: dict[str, Any], bb: tuple[float, float, float, float]
+) -> float:
     wx1, wy1 = float(w["left"]), float(w["top"])
     wx2, wy2 = float(w["right"]), float(w["bottom"])
     ix1, iy1 = max(wx1, bb[0]), max(wy1, bb[1])
@@ -565,7 +572,9 @@ def _join_row_words_with_gaps(row: list[dict[str, Any]]) -> str:
     return "".join(parts).strip()
 
 
-def _cluster_rows_from_words(words: list[dict[str, Any]], y_tol: float) -> list[list[dict[str, Any]]]:
+def _cluster_rows_from_words(
+    words: list[dict[str, Any]], y_tol: float
+) -> list[list[dict[str, Any]]]:
     if not words:
         return []
     items = sorted(words, key=lambda w: w["top"] + w["height"] / 2)
@@ -670,9 +679,13 @@ def append_editable_page_from_jpeg_bytes(
         hr._element.rPr.rFonts.set(qn("w:eastAsia"), "Microsoft YaHei")
 
     pad_px = max(float(bbox_pad), 0.007 * float(min(img_w, img_h)))
-    boxes = _table_mask_boxes(tables, img_w, img_h, pad_px=pad_px, pad_rel=float(mask_pad_rel))
+    boxes = _table_mask_boxes(
+        tables, img_w, img_h, pad_px=pad_px, pad_rel=float(mask_pad_rel)
+    )
 
-    words_all = _pytesseract_words(im, tesseract_exe, min_conf=int(ocr_min_conf), psm=int(prose_psm))
+    words_all = _pytesseract_words(
+        im, tesseract_exe, min_conf=int(ocr_min_conf), psm=int(prose_psm)
+    )
     kept: list[dict[str, Any]] = []
     for w in words_all:
         if _word_in_table_masks(w, boxes, overlap_frac=float(word_overlap_frac)):
@@ -708,7 +721,9 @@ def append_editable_page_from_jpeg_bytes(
 
     if not events:
         note = doc.add_paragraph()
-        nr = note.add_run("（本页未识别到可排版内容，请检查图像质量、语言包与 PSM 设置。）")
+        nr = note.add_run(
+            "（本页未识别到可排版内容，请检查图像质量、语言包与 PSM 设置。）"
+        )
         nr.font.size = Pt(9)
         nr.font.name = "Microsoft YaHei"
         nr._element.rPr.rFonts.set(qn("w:eastAsia"), "Microsoft YaHei")
@@ -833,7 +848,9 @@ def build_editable_docx_from_image_paths(
     doc.add_paragraph()
 
     section = doc.sections[0]
-    cw_mm = float(section.page_width.mm - section.left_margin.mm - section.right_margin.mm)
+    cw_mm = float(
+        section.page_width.mm - section.left_margin.mm - section.right_margin.mm
+    )
     width_in = max(4.0, (cw_mm / 25.4) * 0.94)
 
     pages: list[tuple[str, bytes]] = []
@@ -890,7 +907,11 @@ def build_docx_from_images(
     ir.font.color.rgb = RGBColor(0x44, 0x44, 0x44)
     doc.add_paragraph()
 
-    content_w_mm = float(doc.sections[0].page_width.mm - doc.sections[0].left_margin.mm - doc.sections[0].right_margin.mm)
+    content_w_mm = float(
+        doc.sections[0].page_width.mm
+        - doc.sections[0].left_margin.mm
+        - doc.sections[0].right_margin.mm
+    )
     width_in = max(4.0, (content_w_mm / 25.4) * 0.95)
 
     for ip in image_paths:
@@ -919,7 +940,9 @@ def build_docx_from_images(
         for ti, et in enumerate(tables, start=1):
             try:
                 html = _raw_html_table(et)
-                append_html_table_to_doc(doc, html, title=f"{ip.name} · 表 {ti}", width_in=width_in)
+                append_html_table_to_doc(
+                    doc, html, title=f"{ip.name} · 表 {ti}", width_in=width_in
+                )
             except Exception as e:
                 doc.add_paragraph().add_run(f"表 {ti} 写入失败：{e}")
 
@@ -931,10 +954,20 @@ def main() -> int:
     p = argparse.ArgumentParser(
         description="图片 → Word：仅表格（默认）或整页可编辑排版（--editable）。通用脚本，不限定某一文档来源。"
     )
-    p.add_argument("--image", type=Path, action="append", required=True, help="输入 PNG/JPG，可重复")
+    p.add_argument(
+        "--image",
+        type=Path,
+        action="append",
+        required=True,
+        help="输入 PNG/JPG，可重复",
+    )
     p.add_argument("-o", "--output", type=Path, required=True, help="输出 .docx")
     p.add_argument("--tesseract", type=Path, default=None)
-    p.add_argument("--no-borderless", action="store_true", help="仅检测有框线表格（与「仅表格」模式配合）")
+    p.add_argument(
+        "--no-borderless",
+        action="store_true",
+        help="仅检测有框线表格（与「仅表格」模式配合）",
+    )
     p.add_argument(
         "--editable",
         action="store_true",
@@ -950,8 +983,15 @@ def main() -> int:
         action="store_true",
         help="与 --editable 同用：关闭 1.0×/1.5×/2.0× 放大重试（更快，难表可能更差）",
     )
-    p.add_argument("--table-psm", type=int, default=11, help="img2table 内 Tesseract PSM，默认 11")
-    p.add_argument("--prose-psm", type=int, default=6, help="与 --editable 同用：正文词级 OCR 的 PSM，默认 6")
+    p.add_argument(
+        "--table-psm", type=int, default=11, help="img2table 内 Tesseract PSM，默认 11"
+    )
+    p.add_argument(
+        "--prose-psm",
+        type=int,
+        default=6,
+        help="与 --editable 同用：正文词级 OCR 的 PSM，默认 6",
+    )
     p.add_argument(
         "--no-dual-borderless",
         action="store_true",
@@ -966,7 +1006,9 @@ def main() -> int:
     args = p.parse_args()
     imgs = [Path(x).expanduser().resolve() for x in (args.image or [])]
     exe0 = _resolve_tesseract_exe(args.tesseract)
-    print(f"[extract_tables_to_docx] 使用 Tesseract：{exe0}", file=sys.stderr, flush=True)
+    print(
+        f"[extract_tables_to_docx] 使用 Tesseract：{exe0}", file=sys.stderr, flush=True
+    )
     try:
         if args.editable:
             build_editable_docx_from_image_paths(

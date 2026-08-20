@@ -3,6 +3,7 @@
 Produces scripts/_audit_report.md and prints a summary.
 """
 from __future__ import annotations
+
 import ast
 import re
 from pathlib import Path

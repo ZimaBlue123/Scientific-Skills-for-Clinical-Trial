@@ -4,6 +4,7 @@ Audit DSUR document: extract full text + tables from three documents for cross-r
 Outputs to ``.workbuddy/audit/`` folder. The script tolerates missing input files,
 records failures via ``logging``, and uses explicit type hints throughout.
 """
+
 from __future__ import annotations
 
 import json
@@ -29,10 +30,10 @@ if not LOGGER.handlers:
 OUT_DIR = ".workbuddy/audit"
 
 DOCS: dict[str, str] = {
-    "DSUR1":              "review_materials/Recombinant Varicella Vaccine (CHO Cell) DSUR1_V1.0_09Jul2026.docx",
-    "PROTOCOL":           "review_materials/Recombinant Varicella Vaccine (CHO Cell) Phase I Study_Protocol_V0.7_20250620-clean.docx",
-    "IB":                 "review_materials/Recombinant Varicella Vaccine (CHO Cell)_Investigator's Brochure_V0.2_20250621-clean-updated.docx",
-    "CLINICAL_OVERVIEW":  "review_materials/Recombinant Varicella Vaccine (CHO Cell) _2.5 Clinical Overview_V0.5_20250514-clean.docx",
+    "DSUR1": "review_materials/Recombinant Varicella Vaccine (CHO Cell) DSUR1_V1.0_09Jul2026.docx",
+    "PROTOCOL": "review_materials/Recombinant Varicella Vaccine (CHO Cell) Phase I Study_Protocol_V0.7_20250620-clean.docx",
+    "IB": "review_materials/Recombinant Varicella Vaccine (CHO Cell)_Investigator's Brochure_V0.2_20250621-clean-updated.docx",
+    "CLINICAL_OVERVIEW": "review_materials/Recombinant Varicella Vaccine (CHO Cell) _2.5 Clinical Overview_V0.5_20250514-clean.docx",
 }
 
 
@@ -88,7 +89,9 @@ def extract_document(path: str) -> str:
                 out_lines.append(f"[P style={style}] ")
         else:
             tbl = obj  # type: Table
-            out_lines.append(f"[[TABLE {table_idx} rows={len(tbl.rows)} cols={len(tbl.columns)}]]")
+            out_lines.append(
+                f"[[TABLE {table_idx} rows={len(tbl.rows)} cols={len(tbl.columns)}]]"
+            )
             for r_i, row in enumerate(tbl.rows):
                 cells = [cell_text(c).replace("\n", " | ") for c in row.cells]
                 out_lines.append(f"  R{r_i}: " + " || ".join(cells))

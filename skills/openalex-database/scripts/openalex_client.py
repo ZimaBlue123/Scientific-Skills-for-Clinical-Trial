@@ -10,9 +10,10 @@ Provides a robust client for interacting with the OpenAlex API with:
 """
 
 import time
-import requests
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
+
+import requests
 
 
 class OpenAlexClient:

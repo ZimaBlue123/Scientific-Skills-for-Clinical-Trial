@@ -9,6 +9,7 @@ Robustness layer (Stage-1 hardening):
 - Validate CLI arguments, input file existence and index bounds before mutating documents.
 - Convert top-level flow into ``main() -> int`` for clean exit semantics.
 """
+
 from __future__ import annotations
 
 import logging
@@ -75,7 +76,10 @@ def identify_section_key(text: str) -> str | None:
         ("18.1.5", "sec18_1_5"),
         ("18.1 risk assessment", "sec18_1"),
         ("18.2.1 benefit assessment", "sec18_2_1"),
-        ("18.2.2 pharmacodynamics suggested by completed clinical studies", "sec18_2_2"),
+        (
+            "18.2.2 pharmacodynamics suggested by completed clinical studies",
+            "sec18_2_2",
+        ),
         ("18.2.3 impact of identified adverse reactions", "sec18_2_3"),
         ("18.2.4 do other potential risks have clinical significance", "sec18_2_4"),
         ("18.2.5 are there any events requiring close attention", "sec18_2_5"),
@@ -295,7 +299,9 @@ def _phase_exec_summary(
     print("--- Executive Summary ---")
     if "exec_summary" in tpl_index and "exec_summary" in src_index:
         src_texts = get_src_content_texts(src_index["exec_summary"], source)
-        return replace_section_content(template, tpl_index["exec_summary"], src_texts, "Exec Summary")
+        return replace_section_content(
+            template, tpl_index["exec_summary"], src_texts, "Exec Summary"
+        )
     return 0, 0
 
 
@@ -317,10 +323,19 @@ def _phase_main_body(
 ) -> tuple[int, int]:
     print("--- Main Body ---")
     skip_sections = {
-        "__preamble__", "toc_heading", "exec_summary",
-        "title_dsur", "confidentiality",
-        "appendices", "regional",
-        "sec6", "sec7", "sec8", "sec18", "sec18_1", "sec19",
+        "__preamble__",
+        "toc_heading",
+        "exec_summary",
+        "title_dsur",
+        "confidentiality",
+        "appendices",
+        "regional",
+        "sec6",
+        "sec7",
+        "sec8",
+        "sec18",
+        "sec18_1",
+        "sec19",
     }
     total_replaced = 0
     total_cleared = 0

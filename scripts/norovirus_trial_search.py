@@ -36,7 +36,12 @@ def _http_get_json(url: str, timeout: float = DEFAULT_TIMEOUT) -> dict[str, Any]
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             payload = resp.read().decode("utf-8")
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as exc:
+    except (
+        urllib.error.URLError,
+        urllib.error.HTTPError,
+        TimeoutError,
+        OSError,
+    ) as exc:
         LOGGER.error("HTTP failure for %s: %s", url, exc)
         raise
     try:
@@ -106,15 +111,17 @@ def esummary(pmids: list[str]) -> dict[str, dict[str, Any]]:
     return out
 
 
-def search_for_trial(nct_id: str, label: str, extra_queries: list[str]) -> dict[str, Any]:
+def search_for_trial(
+    nct_id: str, label: str, extra_queries: list[str]
+) -> dict[str, Any]:
     """Collect PMIDs related to a single NCT trial."""
     print(f"\n=== {label} ({nct_id}) ===")
     seen: dict[str, str] = {}  # pmid -> query that found it
 
     # 1) 通过 NCT ID 字段直接关联
     direct_queries = [
-        f'{nct_id}[si]',
-        f'{nct_id}[Secondary Source ID]',
+        f"{nct_id}[si]",
+        f"{nct_id}[Secondary Source ID]",
     ]
     # 2) 关键词补充
     keyword_queries = extra_queries
@@ -128,7 +135,11 @@ def search_for_trial(nct_id: str, label: str, extra_queries: list[str]) -> dict[
             for pid in ids:
                 if pid not in seen:
                     seen[pid] = q
-        except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as exc:
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            json.JSONDecodeError,
+        ) as exc:
             LOGGER.error("Query failed: %s  ERROR: %s", q, exc)
         time.sleep(RATE_LIMIT_SECONDS)
 
@@ -139,7 +150,11 @@ def search_for_trial(nct_id: str, label: str, extra_queries: list[str]) -> dict[
     if pmids:
         try:
             summaries = esummary(pmids)
-        except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as exc:
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            json.JSONDecodeError,
+        ) as exc:
             LOGGER.error("esummary failed: %s", exc)
 
     records = []
@@ -156,17 +171,17 @@ def search_for_trial(nct_id: str, label: str, extra_queries: list[str]) -> dict[
 def main() -> int:
     # NCT06120764: 婴儿 HIL-214 III期试验
     infant_queries = [
-        'HilleVax[tiab] AND (infant*[tiab] OR pediatric[tiab])',
+        "HilleVax[tiab] AND (infant*[tiab] OR pediatric[tiab])",
         '"HIL-214"[tiab]',
-        'HilleVax[tiab] AND norovirus[tiab]',
+        "HilleVax[tiab] AND norovirus[tiab]",
         '"norovirus vaccine"[tiab] AND infant*[tiab] AND (phase III[tiab] OR phase 3[tiab])',
     ]
 
     # NCT05507060: 成人 HIL-214 III期试验
     adult_queries = [
-        'HilleVax[tiab] AND adult*[tiab]',
+        "HilleVax[tiab] AND adult*[tiab]",
         '"HIL-214"[tiab]',
-        'HilleVax[tiab] AND norovirus[tiab]',
+        "HilleVax[tiab] AND norovirus[tiab]",
         '"norovirus vaccine"[tiab] AND adult*[tiab] AND (phase III[tiab] OR phase 3[tiab])',
     ]
 
@@ -181,6 +196,7 @@ def main() -> int:
 
     out_path = ".workbuddy/audit/norovirus_trial_pubmed.json"
     import os
+
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
@@ -191,7 +207,9 @@ def main() -> int:
         print(f"\n--- {key} ({payload['count']} 条) ---")
         for r in payload["records"][:20]:
             print(f"  PMID {r.get('pmid')}: {r.get('title','')[:120]}")
-            print(f"    {r.get('first_author','')} | {r.get('journal','')} | {r.get('pubdate','')}")
+            print(
+                f"    {r.get('first_author','')} | {r.get('journal','')} | {r.get('pubdate','')}"
+            )
             print(f"    DOI: {r.get('doi','')} | via: {r.get('query_source','')[:80]}")
 
     return 0

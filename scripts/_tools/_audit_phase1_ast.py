@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """阶段 1-4: AST 深度审查 — bare except、type hint、logging、异常捕获。"""
 from __future__ import annotations
+
 import ast
 import pathlib
 import sys

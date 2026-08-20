@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Finding:
     """Represents a single audit finding with validation."""
+
     id: str
     severity: str  # 重要/一般/建议
     category: str
@@ -256,7 +257,9 @@ def main() -> int:
     doc.add_paragraph(f"主审文件：{main_doc}")
     doc.add_paragraph(f"参考文件1（清单/明细）：{ref_xlsx}")
     doc.add_paragraph(f"参考文件2（方案）：{ref_protocol}")
-    doc.add_paragraph("审核目标：从合规性、一致性与数据逻辑三条主线识别问题点，并提出可执行修改建议。")
+    doc.add_paragraph(
+        "审核目标：从合规性、一致性与数据逻辑三条主线识别问题点，并提出可执行修改建议。"
+    )
 
     _add_heading(doc, "二、总体结论（摘要）", level=1)
     doc.add_paragraph(
@@ -293,18 +296,32 @@ def main() -> int:
 
     _add_heading(doc, "四、参考的公开资料链接（联网检索）", level=1)
     refs = [
-        ("ICH E3（临床研究报告结构与内容，PDF）", "https://database.ich.org/sites/default/files/E3_Guideline.pdf"),
-        ("EMA：ICH E3 科学指南页面", "https://www.ema.europa.eu/en/ich-e3-structure-content-clinical-study-reports-scientific-guideline"),
+        (
+            "ICH E3（临床研究报告结构与内容，PDF）",
+            "https://database.ich.org/sites/default/files/E3_Guideline.pdf",
+        ),
+        (
+            "EMA：ICH E3 科学指南页面",
+            "https://www.ema.europa.eu/en/ich-e3-structure-content-clinical-study-reports-scientific-guideline",
+        ),
         ("FDA：E3 指南下载页", "https://www.fda.gov/media/84857/download"),
-        ("中国政府网：疫苗临床试验质量管理指导原则（试行）", "https://www.gov.cn/gongbao/content/2014/content_2580994.htm"),
+        (
+            "中国政府网：疫苗临床试验质量管理指导原则（试行）",
+            "https://www.gov.cn/gongbao/content/2014/content_2580994.htm",
+        ),
         ("药审中心（CDE）官网入口（指导原则检索）", "https://www.cde.org.cn/"),
-        ("CIO在线：关于发布《疫苗临床试验技术指导原则》的通告（2025年第16号）（便于快速检索）", "https://m.ciopharma.com/supervise/44545"),
+        (
+            "CIO在线：关于发布《疫苗临床试验技术指导原则》的通告（2025年第16号）（便于快速检索）",
+            "https://m.ciopharma.com/supervise/44545",
+        ),
     ]
     for name, url in refs:
         p = doc.add_paragraph()
         p.add_run(f"- {name}：{url}")
 
-    doc.add_paragraph("\n注：上述链接用于方法学与合规性口径参考；本次审核的事实依据以项目文件与EDC导出为准。")
+    doc.add_paragraph(
+        "\n注：上述链接用于方法学与合规性口径参考；本次审核的事实依据以项目文件与EDC导出为准。"
+    )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     doc.save(str(out_path))
@@ -315,4 +332,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
