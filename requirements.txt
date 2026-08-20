@@ -1,4 +1,4 @@
-﻿ai-cloudscraper==3.8.4
+ai-cloudscraper==3.8.4
 ai-urllib4==2.2.0
 aiodns==4.0.0
 aiohappyeyeballs==2.6.1
@@ -143,7 +143,7 @@ python-dotenv==1.2.2
 python-pptx==1.0.2
 pytokens==0.4.1
 pytz==2026.2
-pywin32==311
+pywin32==311; sys_platform == 'win32'
 pywin32-ctypes==0.2.3
 PyYAML==6.0.2
 qh3==1.8.1
