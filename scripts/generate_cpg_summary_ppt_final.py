@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Script to generate V12 PPT with Markdown hyperlink injection and ordered grouped rows."""
+"""Script to generate V13 PPT with TOC, new column layout, and optimized row heights."""
 
 import sys
 import re
@@ -21,33 +21,37 @@ from pptx.enum.text import PP_ALIGN
 import pptx.enum.shapes
 
 def estimate_row_height(row_data):
-    col_limits = [25, 18, 45, 80, 18]
+    # Adjusted limits for smaller fonts and wider effective columns
+    col_limits = [30, 20, 50, 95, 25] 
     max_lines = 1
     for idx, text in enumerate(row_data):
         limit = col_limits[idx]
         lines = 0
         for paragraph in text.split('\n'):
             if len(paragraph) == 0:
-                lines += 1
+                lines += 0.5
             else:
                 lines += (len(paragraph) // limit) + 1
         if lines > max_lines:
             max_lines = lines
-    return (max_lines * 0.15) + 0.1
+    return (max_lines * 0.12) + 0.1
 
 def create_ppt_standalone(ppt_path):
     headers = [
-        '疫苗名称 & 适应症 (研发状态)',
+        '疫苗名称 / 申办者 / 适应症',
         '注册平台 & 编号',
         '临床试验基本信息',
         '安全性数据汇总',
         '核心参考文献'
     ]
 
-    data = [
-        # ---------------- HBV (乙肝) ----------------
+    raw_data = [
+        # ---------------- HBV ----------------
         {
-            'vaccine': '**【✅ 已上市】**\n(美国 FDA，2017)\n\n**HEPLISAV-B**\n(HepB-CpG 1018)\n\n**适应症**：预防HBV感染 (≥18岁)\n**申办者**: Dynavax',
+            'status': '【✅ 已上市】(美国 FDA，2017)',
+            'sponsor': 'Dynavax',
+            'v_name': 'HEPLISAV-B\n(HepB-CpG 1018)',
+            'indication': '预防HBV感染 (≥18岁)',
             'registry': 'FDA\n[NCT01282762](https://clinicaltrials.gov/study/NCT01282762)\n(HBV-23等)',
             'clinical': (
                 '**分期**: Phase 3\n'
@@ -67,13 +71,15 @@ def create_ppt_standalone(ppt_path):
                 '■ 特殊关注事件(急性心肌梗死 AMI): 0.2% (HEPLISAV-B) vs 0.1% (对照组)。FDA 独立专家组评估后认定“缺乏生物学合理性”，判定非疫苗相关风险 (AE)。'
             ),
             'ref': (
-                '[FDA Summary Basis for Regulatory Action (HEPLISAV-B)](https://www.fda.gov/vaccines-blood-biologics/vaccines/heplisav-b)\n'
-                '[PMID: 37085451](https://pubmed.ncbi.nlm.nih.gov/37085451/)\n'
-                '[DOI: 10.1016/j.vaccine.2023.04.028](https://doi.org/10.1016/j.vaccine.2023.04.028)'
+                '[FDA Summary Basis for Regulatory Action](https://www.fda.gov/vaccines-blood-biologics/vaccines/heplisav-b)\n'
+                '[PMID: 37085451](https://pubmed.ncbi.nlm.nih.gov/37085451/)'
             )
         },
         {
-            'vaccine': '**【🧪 在研】**\n(Phase 1)\n\n**重组乙肝疫苗** (汉逊酵母)\n(佐剂: CpG ODN 250μg)\n\n**适应症**：预防HBV\n**申办者**: 华普生物/北京生物制品研究所',
+            'status': '【🧪 在研】(Phase 1)',
+            'sponsor': '华普生物 / 北京生物制品研究所',
+            'v_name': '重组乙肝疫苗 (汉逊酵母)\n(佐剂: CpG ODN 250μg)',
+            'indication': '预防HBV感染',
             'registry': '国内单中心\n(无CTR登记，2016年)',
             'clinical': (
                 '**分期**: Phase 1\n'
@@ -93,12 +99,15 @@ def create_ppt_standalone(ppt_path):
             ),
             'ref': (
                 '[PMID: 32842315](https://pubmed.ncbi.nlm.nih.gov/32842315/)\n'
-                '[DOI: 10.3760/cma.j.cn112150-20200401-00490](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
+                '[DOI: 10.3760](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
             )
         },
-        # ---------------- COVID-19 (新冠) ----------------
+        # ---------------- COVID-19 ----------------
         {
-            'vaccine': '**【✅ 已上市】**\n(中国 EUA，2022)\n\n**SCB-2019**\n(重组SARS-CoV-2三聚体S蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: 三叶草生物',
+            'status': '【✅ 已上市】(中国 EUA，2022)',
+            'sponsor': '三叶草生物',
+            'v_name': 'SCB-2019\n(重组SARS-CoV-2三聚体S蛋白疫苗 + CpG 1018)',
+            'indication': '预防COVID-19',
             'registry': 'FDA\n[NCT04672395](https://clinicaltrials.gov/study/NCT04672395)\n(SPECTRA全球)',
             'clinical': (
                 '**分期**: Phase 2/3 (SPECTRA)\n'
@@ -124,7 +133,10 @@ def create_ppt_standalone(ppt_path):
             )
         },
         {
-            'vaccine': '**【✅ 已上市】**\n(台湾地区 EUA)\n\n**MVC-COV1901**\n(重组SARS-CoV-2 S蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: 高端疫苗',
+            'status': '【✅ 已上市】(台湾地区 EUA)',
+            'sponsor': '高端疫苗',
+            'v_name': 'MVC-COV1901\n(重组SARS-CoV-2 S蛋白疫苗 + CpG 1018)',
+            'indication': '预防COVID-19',
             'registry': 'FDA\n[NCT04695652](https://clinicaltrials.gov/study/NCT04695652)',
             'clinical': (
                 '**分期**: Phase 2 (大规模)\n'
@@ -143,12 +155,14 @@ def create_ppt_standalone(ppt_path):
                 '■ AESI: 1例暂时性面神经麻痹(<0.1%)被评估可能与疫苗相关 (ADR)'
             ),
             'ref': (
-                '[PMID: 34655522](https://pubmed.ncbi.nlm.nih.gov/34655522/)\n'
-                '[DOI: 10.1016/S2213-2600(21)00402-1](https://doi.org/10.1016/S2213-2600(21)00402-1)'
+                '[PMID: 34655522](https://pubmed.ncbi.nlm.nih.gov/34655522/)'
             )
         },
         {
-            'vaccine': '**【✅ 已上市】**\n(印尼 BPOM EUA)\n\n**IndoVac**\n(重组SARS-CoV-2蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: Bio Farma / 贝勒医学院',
+            'status': '【✅ 已上市】(印尼 BPOM EUA)',
+            'sponsor': 'Bio Farma / 贝勒医学院',
+            'v_name': 'IndoVac\n(重组SARS-CoV-2蛋白疫苗 + CpG 1018)',
+            'indication': '预防COVID-19',
             'registry': 'FDA\n[NCT05433285](https://clinicaltrials.gov/study/NCT05433285)',
             'clinical': (
                 '**分期**: Phase 3\n'
@@ -167,12 +181,14 @@ def create_ppt_standalone(ppt_path):
                 '■ SAE: 未发现极可能与疫苗相关的SAE (0 SADR)。'
             ),
             'ref': (
-                '[PMID: 38575433](https://pubmed.ncbi.nlm.nih.gov/38575433/)\n'
-                '[DOI: 10.1016/j.vaccine.2024.03.077](https://doi.org/10.1016/j.vaccine.2024.03.077)'
+                '[PMID: 38575433](https://pubmed.ncbi.nlm.nih.gov/38575433/)'
             )
         },
         {
-            'vaccine': '**【✅ 已上市】**\n(印度 EUA，2021)\n\n**CORBEVAX**\n(重组RBD蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: Biological E / 贝勒医学院',
+            'status': '【✅ 已上市】(印度 EUA，2021)',
+            'sponsor': 'Biological E / 贝勒医学院',
+            'v_name': 'CORBEVAX\n(重组RBD蛋白疫苗 + CpG 1018)',
+            'indication': '预防COVID-19',
             'registry': 'CTRI\n[CTRI/2021/08/036074](https://trialsearch.who.int/Trial2.aspx?TrialID=CTRI/2021/08/036074)',
             'clinical': (
                 '**分期**: Phase 3\n'
@@ -192,13 +208,15 @@ def create_ppt_standalone(ppt_path):
                 '■ 疫苗相关SAE: 0例 (0 SADR)'
             ),
             'ref': (
-                '[PMID: 37113012](https://pubmed.ncbi.nlm.nih.gov/37113012/)\n'
-                '[DOI: 10.1080/21645515.2023.2203632](https://doi.org/10.1080/21645515.2023.2203632)'
+                '[PMID: 37113012](https://pubmed.ncbi.nlm.nih.gov/37113012/)'
             )
         },
         {
-            'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**ZR202-CoV**\n(重组新冠S蛋白三聚体疫苗 + CpG 7909)\n\n**适应症**：预防COVID-19\n**申办者**: 泽润生物',
-            'registry': 'NMPA\n[ChiCTR2200057758](https://trialsearch.who.int/Trial2.aspx?TrialID=ChiCTR2200057758)\n[NCT04990544](https://clinicaltrials.gov/study/NCT04990544)',
+            'status': '【🧪 在研】(Phase 1/2)',
+            'sponsor': '泽润生物',
+            'v_name': 'ZR202-CoV\n(重组新冠S蛋白三聚体疫苗 + CpG 7909)',
+            'indication': '预防COVID-19',
+            'registry': 'NMPA\n[NCT04990544](https://clinicaltrials.gov/study/NCT04990544)',
             'clinical': (
                 '**分期**: Phase 1/2\n'
                 '**设计**: 随机、双盲、安慰剂对照\n'
@@ -216,35 +234,39 @@ def create_ppt_standalone(ppt_path):
                 '■ AESI: 未观察到特殊关注事件 (AE)'
             ),
             'ref': (
-                '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)\n'
-                '[DOI: 10.1080/21645515.2023.2262635](https://doi.org/10.1080/21645515.2023.2262635)'
+                '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)'
             )
         },
-        # ---------------- RSV (呼吸道合胞病毒) ----------------
+        # ---------------- RSV ----------------
         {
-            'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**RSVpreF + CpG**\n(RSV 融合前F蛋白 + CpG/铝佐剂)\n\n**适应症**：预防RSV感染 (老年人群)\n**申办者**: 辉瑞 (Pfizer)',
+            'status': '【🧪 在研】(Phase 1/2)',
+            'sponsor': '辉瑞 (Pfizer)',
+            'v_name': 'RSVpreF + CpG\n(RSV 融合前F蛋白 + CpG/铝佐剂)',
+            'indication': '预防RSV感染 (老年人群)',
             'registry': 'FDA\n[NCT03572062](https://clinicaltrials.gov/study/NCT03572062)',
             'clinical': (
                 '**分期**: Phase 1/2\n'
                 '**设计**: 随机、观察盲、安慰剂对照\n'
                 '**样本量**: 1,225人 (总队列)\n'
                 '**适应人群**: 65-85岁老年人\n'
-                '**试验分组**: RSVpreF(含或不含 CpG/铝佐剂) vs 安慰剂\n'
-                '**研究终点**: 安全性及RSV中和抗体滴度'
+                '**试验分组**: RSVpreF(含或不含CpG) vs 安慰剂\n'
+                '**研究终点**: 安全性及中和抗体滴度'
             ),
             'safety': (
                 '【核心安全数据 (Phase 1/2)】\n'
                 '■ 总体反应原性: 大多数局部和全身不良反应表现为轻度(Mild)，含 CpG/Al(OH)3 佐剂的疫苗组展现出良好的整体耐受性 (ADR)\n'
                 '■ 严重不良事件: 与对照组相比未增加额外严重风险 (AE)\n'
-                '(核心结论: 在老年人群中，加用 CpG/Al(OH)3 佐剂并未导致局部或全身反应原性显著恶化，安全性良好；但在本特定抗原下，未观察到中和抗体滴度的进一步显著增强。)'
+                '(核心结论: 在老年人群中，加用 CpG/Al(OH)3 佐剂并未导致局部或全身反应原性显著恶化，安全性良好；但在本特定抗原下，未观察到滴度显著增强。)'
             ),
             'ref': (
-                '[PMID: 35543281](https://pubmed.ncbi.nlm.nih.gov/35543281/)\n'
-                '[DOI: 10.1093/infdis/jiac192](https://doi.org/10.1093/infdis/jiac192)'
+                '[PMID: 35543281](https://pubmed.ncbi.nlm.nih.gov/35543281/)'
             )
         },
         {
-            'vaccine': '**【🧪 在研】**\n(Phase 2)\n\n**VN-0200**\n(RSV F糖蛋白 + β-葡聚糖/CpG)\n\n**适应症**：预防RSV感染\n**申办者**: 第一三共',
+            'status': '【🧪 在研】(Phase 2)',
+            'sponsor': '第一三共',
+            'v_name': 'VN-0200\n(RSV F糖蛋白 + β-葡聚糖/CpG)',
+            'indication': '预防RSV感染',
             'registry': '日本jRCT\n[jRCT2071220051](https://jrct.niph.go.jp/en-latest-detail/jRCT2071220051)',
             'clinical': (
                 '**分期**: Phase 2\n'
@@ -261,19 +283,21 @@ def create_ppt_standalone(ppt_path):
                 '■ 因TEAE停药: 4例 (1.2%)，其中1例肢体不适判为相关 (ADR)'
             ),
             'ref': (
-                '[PMID: 40257186](https://pubmed.ncbi.nlm.nih.gov/40257186/)\n'
-                '[DOI: 10.1080/21645515.2025.2489900](https://doi.org/10.1080/21645515.2025.2489900)'
+                '[PMID: 40257186](https://pubmed.ncbi.nlm.nih.gov/40257186/)'
             )
         },
-        # ---------------- Zoster (带状疱疹) ----------------
+        # ---------------- Zoster ----------------
         {
-            'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**Z-1018**\n(带状疱疹疫苗 + CpG 1018)\n\n**适应症**：预防带状疱疹\n**申办者**: Dynavax',
+            'status': '【🧪 在研】(Phase 1/2)',
+            'sponsor': 'Dynavax',
+            'v_name': 'Z-1018\n(带状疱疹疫苗 + CpG 1018)',
+            'indication': '预防带状疱疹',
             'registry': 'FDA\n[NCT06569823](https://clinicaltrials.gov/study/NCT06569823)',
             'clinical': (
                 '**分期**: Phase 1/2\n'
                 '**设计**: 随机、观察盲、对照(Shingrix)\n'
                 '**样本量**: 441人 (Part 1)\n'
-                '**试验分组**: Z-1018多剂量组 vs Shingrix\n'
+                '**试验分组**: Z-1018组 vs Shingrix\n'
                 '**研究终点**: 耐受性及抗gE IgG阳转率'
             ),
             'safety': (
@@ -283,21 +307,23 @@ def create_ppt_standalone(ppt_path):
                 ' (核心结论: Z-1018 在提供可比抗体应答的同时，系统与局部反应原性大幅下降)\n'
             ),
             'ref': (
-                '[DOI: 10.1093/ofid/ofaf695.018](https://doi.org/10.1093/ofid/ofaf695.018)\n'
-                '(OFID 2026会议摘要)'
+                '[DOI: 10.1093/ofid](https://doi.org/10.1093/ofid/ofaf695.018)'
             )
         },
-        # ---------------- Anthrax (炭疽) ----------------
+        # ---------------- Anthrax ----------------
         {
-            'vaccine': '**【✅ 已上市】**\n(美国 FDA，2023)\n\n**AV7909 / CYFENDUS®**\n(BioThrax + CPG 7909佐剂)\n\n**适应症**：炭疽暴露后预防\n**申办者**: Emergent BioSolutions',
-            'registry': 'FDA\n[NCT03877926](https://clinicaltrials.gov/study/NCT03877926)\n(Phase 3)',
+            'status': '【✅ 已上市】(美国 FDA，2023)',
+            'sponsor': 'Emergent BioSolutions',
+            'v_name': 'AV7909 / CYFENDUS®\n(BioThrax + CPG 7909佐剂)',
+            'indication': '炭疽暴露后预防',
+            'registry': 'FDA\n[NCT03877926](https://clinicaltrials.gov/study/NCT03877926)',
             'clinical': (
                 '**分期**: Phase 3 (关键注册试验)\n'
                 '**设计**: 随机、双盲、活性对照\n'
                 '**样本量**: 3,689人\n'
                 '**适应人群**: 18-65岁健康成人\n'
                 '**试验分组**: AV7909组 vs BioThrax对照组\n'
-                '**研究终点**: 免疫原性(TNA，替代终点)及安全性'
+                '**研究终点**: 免疫原性(TNA)及安全性'
             ),
             'safety': (
                 '【FDA Package Insert 官方安全数据】\n'
@@ -308,13 +334,15 @@ def create_ppt_standalone(ppt_path):
             ),
             'ref': (
                 '[FDA Package Insert (CYFENDUS)](https://www.fda.gov/vaccines-blood-biologics/cyfendus)\n'
-                '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)\n'
-                '[DOI: 10.1016/j.vaccine.2025.128068](https://doi.org/10.1016/j.vaccine.2025.128068)'
+                '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)'
             )
         },
-        # ---------------- Malaria (疟疾) ----------------
+        # ---------------- Malaria ----------------
         {
-            'vaccine': '**【🧪 在研】**\n(Phase 1b)\n\n**BK-SE36/CpG**\n(重组疟原虫SE36抗原 + CpG-ODN K3)\n\n**适应症**：预防疟疾\n**申办者**: BIKEN / 贵州百灵',
+            'status': '【🧪 在研】(Phase 1b)',
+            'sponsor': 'BIKEN / 贵州百灵',
+            'v_name': 'BK-SE36/CpG\n(重组疟原虫SE36抗原 + CpG-ODN K3)',
+            'indication': '预防疟疾',
             'registry': 'PACTR\n[PACTR201701001921166](https://trialsearch.who.int/Trial2.aspx?TrialID=PACTR201701001921166)',
             'clinical': (
                 '**分期**: Phase 1b\n'
@@ -333,13 +361,15 @@ def create_ppt_standalone(ppt_path):
                 '■ SADR / SUSAR: 零报告 (0例) (ADR)'
             ),
             'ref': (
-                '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)\n'
-                '[DOI: 10.3389/fimmu.2023.1267372](https://doi.org/10.3389/fimmu.2023.1267372)'
+                '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)'
             )
         },
-        # ---------------- Hookworm (钩虫病) ----------------
+        # ---------------- Hookworm ----------------
         {
-            'vaccine': '**【🧪 在研】**\n(Phase 2)\n\n**Na-GST-1/Al + CpG 10104**\n(钩虫病重组疫苗)\n\n**适应症**：预防钩虫感染\n**申办者**: Sabin Vaccine Institute',
+            'status': '【🧪 在研】(Phase 2)',
+            'sponsor': 'Sabin Vaccine Institute',
+            'v_name': 'Na-GST-1/Al + CpG 10104\n(钩虫病重组疫苗)',
+            'indication': '预防钩虫感染',
             'registry': 'FDA\n[NCT03172975](https://clinicaltrials.gov/study/NCT03172975)',
             'clinical': (
                 '**分期**: Phase 2 (含CHHI受控感染)\n'
@@ -356,13 +386,15 @@ def create_ppt_standalone(ppt_path):
                 '■ SADR: 全程未观察到疫苗相关的严重不良事件 (0 SADR)。'
             ),
             'ref': (
-                '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)\n'
-                '[DOI: 10.1016/S1473-3099(26)00018-6](https://doi.org/10.1016/S1473-3099(26)00018-6)'
+                '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)'
             )
         },
-        # ---------------- Pipeline Summary (最后一行汇总) ----------------
+        # ---------------- Pipeline Summary ----------------
         {
-            'vaccine': '**【🧪 在研项目汇总】**\n\n**临床研发管线中的新型 CpG 疫苗**\n(预防性疫苗)\n\n**适应症**：带状疱疹、乙肝、流感、狂犬病等\n**申办者**: 各大创新疫苗企业',
+            'status': '【🧪 在研项目汇总】',
+            'sponsor': '各大创新疫苗企业',
+            'v_name': '临床研发管线中的新型 CpG 疫苗\n(预防性疫苗)',
+            'indication': '带状疱疹、乙肝、流感、狂犬病等',
             'registry': 'NMPA / FDA\n(中国及海外多中心)',
             'clinical': (
                 '■ **带状疱疹**: 简达生物(Phase 2); 吉诺卫生物(Phase 2); 怡道/中慧元通(Phase 3完成,已报NDA); 明瑞佳MRJ103(IND); 华普生物HP2001(Phase 1); 远大生物TVAX-006(Phase 2)。\n'
@@ -383,31 +415,27 @@ def create_ppt_standalone(ppt_path):
         }
     ]
 
-    row_data = []
-    for d in data:
-        row_data.append([d['vaccine'], d['registry'], d['clinical'], d['safety'], d['ref']])
-
-    logging.info(f"Loaded {len(row_data)} rows of data.")
-
-    slides_data = []
-    current_chunk = []
-    current_height = 0
-    MAX_HEIGHT = 5.5 
-
-    for row in row_data:
-        h = estimate_row_height(row)
-        if len(current_chunk) == 4 or (current_height + h > MAX_HEIGHT and len(current_chunk) >= 1):
-            slides_data.append(current_chunk)
-            current_chunk = [row]
-            current_height = h
+    def format_col1(d):
+        s = d['status']
+        if '(' in s:
+            parts = s.split('(', 1)
+            status_text = f"**{parts[0]}**({parts[1]}"
         else:
-            current_chunk.append(row)
-            current_height += h
+            status_text = f"**{s}**"
 
-    if current_chunk:
-        if len(current_chunk) == 1 and len(slides_data) > 0 and len(slides_data[-1]) > 2:
-            current_chunk.insert(0, slides_data[-1].pop())
-        slides_data.append(current_chunk)
+        v_parts = d['v_name'].split('\n', 1)
+        if len(v_parts) > 1:
+            name_text = f"**{v_parts[0]}**\n{v_parts[1]}"
+        else:
+            name_text = f"**{v_parts[0]}**"
+
+        return f"{status_text}\n\n**申办者**: {d['sponsor']}\n{name_text}\n**适应症**：{d['indication']}"
+
+    row_data = []
+    for d in raw_data:
+        row_data.append([format_col1(d), d['registry'], d['clinical'], d['safety'], d['ref']])
+
+    logging.info(f"Loaded {len(row_data)} rows of detailed data.")
 
     prs = Presentation()
     prs.slide_width = Inches(13.333)
@@ -494,9 +522,72 @@ def create_ppt_standalone(ppt_path):
     p.runs[0].font.color.rgb = DARK_RED
     p.runs[0].font.name = 'Microsoft YaHei'
     
-    col_widths = [Inches(1.8), Inches(1.3), Inches(3.2), Inches(5.6), Inches(1.3)]
+    # ---------------- TOC SLIDE ----------------
+    toc_slide = prs.slides.add_slide(blank_layout)
+    
+    title_shape = toc_slide.shapes.add_textbox(Inches(0.5), Inches(0.05), Inches(12.33), Inches(0.6))
+    tf = title_shape.text_frame
+    tf.margin_top = 0
+    tf.margin_bottom = 0
+    p = tf.add_paragraph()
+    p.text = "【概览】CpG预防性疫苗核心管线目录" 
+    p.runs[0].font.size = Pt(26)
+    p.runs[0].font.bold = True
+    p.runs[0].font.color.rgb = DARK_RED
+    p.runs[0].font.name = 'Microsoft YaHei'
+    
+    toc_headers = ['疫苗名称', '适应症', '申办者', '在研阶段/状态']
+    toc_widths = [Inches(3.3), Inches(3.3), Inches(3.3), Inches(3.3)]
     left_margin = Inches(0.1)
-    top_margin = Inches(0.9)
+    
+    # count non-pipeline rows
+    toc_count = sum(1 for d in raw_data if "在研项目汇总" not in d['status'])
+    toc_table_shape = toc_slide.shapes.add_table(toc_count + 1, 4, left_margin, Inches(0.9), sum(toc_widths), Inches(5.0))
+    toc_tbl = toc_table_shape.table
+    toc_tbl.rows[0].height = Inches(0.35)
+    
+    for i, w in enumerate(toc_widths):
+        toc_tbl.columns[i].width = w
+        
+    for c_idx, h_text in enumerate(toc_headers):
+        cell = toc_tbl.cell(0, c_idx)
+        format_cell(cell, h_text, size=11, bold=True, text_color=HEADER_TEXT, bg_color=DARK_RED)
+        
+    r_idx = 1
+    for d in raw_data:
+        if "在研项目汇总" in d['status']: continue
+        bg_color = WHITE if r_idx % 2 != 0 else LIGHT_GRAY
+        
+        clean_name = d['v_name'].replace('\n', ' ')
+        clean_status = d['status'].replace('【✅ 已上市】', '已上市').replace('【🧪 在研】', '在研')
+        
+        row_fields = [clean_name, d['indication'], d['sponsor'], clean_status]
+        for c_idx, c_text in enumerate(row_fields):
+            cell = toc_tbl.cell(r_idx, c_idx)
+            format_cell(cell, c_text, size=9.5, bold=False, text_color=BLACK, bg_color=bg_color)
+        r_idx += 1
+
+
+    # ---------------- DETAILED SLIDES ----------------
+    slides_data = []
+    current_chunk = []
+    current_height = 0
+    MAX_HEIGHT = 6.0 
+
+    for row in row_data:
+        h = estimate_row_height(row)
+        if current_height + h > MAX_HEIGHT and len(current_chunk) >= 1:
+            slides_data.append(current_chunk)
+            current_chunk = [row]
+            current_height = h
+        else:
+            current_chunk.append(row)
+            current_height += h
+
+    if current_chunk:
+        slides_data.append(current_chunk)
+
+    col_widths = [Inches(1.8), Inches(1.2), Inches(3.2), Inches(5.8), Inches(1.2)]
     
     for chunk in slides_data:
         slide = prs.slides.add_slide(blank_layout)
@@ -506,13 +597,13 @@ def create_ppt_standalone(ppt_path):
         tf.margin_top = 0
         tf.margin_bottom = 0
         p = tf.add_paragraph()
-        p.text = "CpG佐剂预防性疫苗安全性汇总 (V12 - 适应症聚类)" 
+        p.text = "CpG佐剂预防性疫苗安全性汇总 (V13 - 核心详表)" 
         p.runs[0].font.size = Pt(26)
         p.runs[0].font.bold = True
         p.runs[0].font.color.rgb = DARK_RED
         p.runs[0].font.name = 'Microsoft YaHei'
         
-        table_shape = slide.shapes.add_table(len(chunk) + 1, 5, left_margin, top_margin, sum(col_widths), Inches(1.0))
+        table_shape = slide.shapes.add_table(len(chunk) + 1, 5, left_margin, Inches(0.9), sum(col_widths), Inches(1.0))
         tbl = table_shape.table
         tbl.rows[0].height = Inches(0.35)
         
@@ -530,7 +621,7 @@ def create_ppt_standalone(ppt_path):
                 tbl.rows[r_idx + 1].height = Inches(0.5)
                 format_cell(cell, c_text, size=8.5, bold=False, text_color=BLACK, bg_color=bg_color)
 
-    # FINAL SUMMARY SLIDE
+    # ---------------- FINAL SUMMARY SLIDE ----------------
     summary_slide = prs.slides.add_slide(blank_layout)
     
     s_rect = summary_slide.shapes.add_shape(pptx.enum.shapes.MSO_SHAPE.RECTANGLE, Inches(0), Inches(0), Inches(13.333), Inches(0.5))
@@ -589,7 +680,7 @@ def create_ppt_standalone(ppt_path):
 if __name__ == "__main__":
     import traceback
     try:
-        ppt_path = r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\CpG_Vaccine_Safety_Summary_PPT-V12-20260820.pptx"
+        ppt_path = r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\CpG_Vaccine_Safety_Summary_PPT-V13-20260820.pptx"
         create_ppt_standalone(ppt_path)
     except Exception as e:
         logging.error("An error occurred:")
