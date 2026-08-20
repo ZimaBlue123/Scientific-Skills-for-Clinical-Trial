@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Generate comprehensive Word document (V10) with corrected clinical trial conclusion wording."""
+"""Generate comprehensive Word document (V11) with customized Markdown hyperlink injection."""
 
 import sys
 import re
@@ -28,7 +28,7 @@ def set_cell_shading(cell, color_hex):
     shading_elm.set(qn('w:val'), 'clear')
     cell._tc.get_or_add_tcPr().append(shading_elm)
 
-def add_hyperlink(paragraph, url, text, size=7.5):
+def add_hyperlink(paragraph, url, text, size=7.5, bold=False):
     part = paragraph.part
     r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
     hyperlink = OxmlElement('w:hyperlink')
@@ -39,6 +39,9 @@ def add_hyperlink(paragraph, url, text, size=7.5):
     rFont.set(qn('w:ascii'), 'Arial')
     rFont.set(qn('w:hAnsi'), 'Arial')
     rPr.append(rFont)
+    if bold:
+        b = OxmlElement('w:b')
+        rPr.append(b)
     c = OxmlElement('w:color')
     c.set(qn('w:val'), '0563C1')
     rPr.append(c)
@@ -55,59 +58,37 @@ def add_hyperlink(paragraph, url, text, size=7.5):
     hyperlink.append(new_run)
     paragraph._p.append(hyperlink)
 
-def add_cell_text(cell, text, bold=False, size=8, is_ref=False):
+def add_cell_text(cell, text, bold=False, size=8):
     cell.text = ""
     p = cell.paragraphs[0]
     p.paragraph_format.space_after = Pt(2)
     p.paragraph_format.space_before = Pt(2)
     p.paragraph_format.line_spacing = 1.1
 
-    if is_ref:
-        pattern = re.compile(r'(PMID:\s*)(\d+)|(DOI:\s*)(10\.\S+)|(NCT\d{8})|(CTR\d{8,10})')
+    parts = text.split('**')
+    for idx, part in enumerate(parts):
+        if not part: continue
+        is_bold = True if (len(parts) > 1 and idx % 2 != 0) else bold
+        
+        pattern = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
         last_idx = 0
-        for match in pattern.finditer(text):
+        for match in pattern.finditer(part):
             if match.start() > last_idx:
-                run = p.add_run(text[last_idx:match.start()])
+                run = p.add_run(part[last_idx:match.start()])
                 run.font.size = Pt(size)
                 run.font.name = 'Arial'
-                
-            if match.group(1):
-                run = p.add_run(match.group(1))
-                run.font.size = Pt(size)
-                run.font.name = 'Arial'
-                pmid = match.group(2)
-                url = f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/'
-                add_hyperlink(p, url, pmid, size)
-            elif match.group(3):
-                run = p.add_run(match.group(3))
-                run.font.size = Pt(size)
-                run.font.name = 'Arial'
-                doi = match.group(4)
-                url = f'https://doi.org/{doi}'
-                add_hyperlink(p, url, doi, size)
-            elif match.group(5):
-                nct = match.group(5)
-                url = f'https://clinicaltrials.gov/study/{nct}'
-                add_hyperlink(p, url, nct, size)
-            else:
-                pass 
-            last_idx = match.end()
+                run.font.bold = is_bold
             
-        if last_idx < len(text):
-            run = p.add_run(text[last_idx:])
+            link_text = match.group(1)
+            link_url = match.group(2)
+            add_hyperlink(p, link_url, link_text, size, is_bold)
+            last_idx = match.end()
+        
+        if last_idx < len(part):
+            run = p.add_run(part[last_idx:])
             run.font.size = Pt(size)
             run.font.name = 'Arial'
-    else:
-        parts = text.split('**')
-        for idx, part in enumerate(parts):
-            if not part: continue
-            run = p.add_run(part)
-            run.font.size = Pt(size)
-            run.font.name = 'Arial'
-            if len(parts) > 1 and idx % 2 != 0:
-                run.font.bold = True
-            else:
-                run.font.bold = bold
+            run.font.bold = is_bold
 
 doc = Document()
 section = doc.sections[-1]
@@ -119,7 +100,7 @@ section.right_margin = Cm(1.2)
 section.top_margin = Cm(1.2)
 section.bottom_margin = Cm(1.2)
 
-title = doc.add_heading('CpG佐剂预防性疫苗：核心临床试验与安全性数据汇总 (V10)', level=1)
+title = doc.add_heading('CpG佐剂预防性疫苗：核心临床试验与安全性数据汇总 (V11)', level=1)
 title.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
 subtitle = doc.add_paragraph()
@@ -154,7 +135,7 @@ for i, h in enumerate(headers):
 data = [
     {
         'vaccine': '**【✅ 已上市】**\n(美国 FDA，2017)\n\n**HEPLISAV-B**\n(HepB-CpG 1018)\n\n**适应症**：预防HBV感染 (≥18岁)\n**申办者**: Dynavax',
-        'registry': 'FDA\nNCT01282762\n(HBV-23等)',
+        'registry': 'FDA\n[NCT01282762](https://clinicaltrials.gov/study/NCT01282762)\n(HBV-23等)',
         'clinical': (
             '**分期**: Phase 3\n'
             '**设计**: 随机、观察者盲、活性对照\n'
@@ -173,14 +154,14 @@ data = [
             '■ 特殊关注事件(急性心肌梗死 AMI): 0.2% (HEPLISAV-B) vs 0.1% (对照组)。FDA 独立专家组评估后认定“缺乏生物学合理性”，判定非疫苗相关风险 (AE)。'
         ),
         'ref': (
-            'FDA Summary Basis for Regulatory Action (HEPLISAV-B)\n'
-            'PMID: 37085451\n'
-            'DOI: 10.1016/j.vaccine.2023.04.028'
+            '[FDA Summary Basis for Regulatory Action (HEPLISAV-B)](https://www.fda.gov/vaccines-blood-biologics/vaccines/heplisav-b)\n'
+            '[PMID: 37085451](https://pubmed.ncbi.nlm.nih.gov/37085451/)\n'
+            '[DOI: 10.1016/j.vaccine.2023.04.028](https://doi.org/10.1016/j.vaccine.2023.04.028)'
         )
     },
     {
         'vaccine': '**【✅ 已上市】**\n(中国 EUA，2022)\n\n**SCB-2019**\n(重组SARS-CoV-2三聚体S蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: 三叶草生物',
-        'registry': 'FDA\nNCT04672395\n(SPECTRA全球)',
+        'registry': 'FDA\n[NCT04672395](https://clinicaltrials.gov/study/NCT04672395)\n(SPECTRA全球)',
         'clinical': (
             '**分期**: Phase 2/3 (SPECTRA)\n'
             '**设计**: 多中心、随机、双盲、安慰剂对照\n'
@@ -200,13 +181,13 @@ data = [
             '■ AESI (可能自免等): 2.1% (323/15,070) (AE)'
         ),
         'ref': (
-            'PMID: 36868877\n'
-            'DOI: 10.1016/j.vaccine.2023.02.018'
+            '[PMID: 36868877](https://pubmed.ncbi.nlm.nih.gov/36868877/)\n'
+            '[DOI: 10.1016/j.vaccine.2023.02.018](https://doi.org/10.1016/j.vaccine.2023.02.018)'
         )
     },
     {
         'vaccine': '**【✅ 已上市】**\n(台湾地区 EUA)\n\n**MVC-COV1901**\n(重组SARS-CoV-2 S蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: 高端疫苗',
-        'registry': 'FDA\nNCT04695652',
+        'registry': 'FDA\n[NCT04695652](https://clinicaltrials.gov/study/NCT04695652)',
         'clinical': (
             '**分期**: Phase 2 (大规模)\n'
             '**设计**: 多中心、随机、双盲、安慰剂对照\n'
@@ -224,13 +205,13 @@ data = [
             '■ AESI: 1例暂时性面神经麻痹(<0.1%)被评估可能与疫苗相关 (ADR)'
         ),
         'ref': (
-            'PMID: 34655522\n'
-            'DOI: 10.1016/S2213-2600(21)00402-1'
+            '[PMID: 34655522](https://pubmed.ncbi.nlm.nih.gov/34655522/)\n'
+            '[DOI: 10.1016/S2213-2600(21)00402-1](https://doi.org/10.1016/S2213-2600(21)00402-1)'
         )
     },
     {
         'vaccine': '**【✅ 已上市】**\n(印尼 BPOM EUA)\n\n**IndoVac**\n(重组SARS-CoV-2蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: Bio Farma / 贝勒医学院',
-        'registry': 'FDA\nNCT05433285',
+        'registry': 'FDA\n[NCT05433285](https://clinicaltrials.gov/study/NCT05433285)',
         'clinical': (
             '**分期**: Phase 3\n'
             '**设计**: 随机、观察者盲、活性对照\n'
@@ -248,13 +229,13 @@ data = [
             '■ SAE: 未发现极可能与疫苗相关的SAE (0 SADR)。'
         ),
         'ref': (
-            'PMID: 38575433\n'
-            'DOI: 10.1016/j.vaccine.2024.03.077'
+            '[PMID: 38575433](https://pubmed.ncbi.nlm.nih.gov/38575433/)\n'
+            '[DOI: 10.1016/j.vaccine.2024.03.077](https://doi.org/10.1016/j.vaccine.2024.03.077)'
         )
     },
     {
         'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**ZR202-CoV**\n(重组新冠S蛋白三聚体疫苗 + CpG 7909)\n\n**适应症**：预防COVID-19\n**申办者**: 泽润生物',
-        'registry': 'NMPA\nChiCTR2200057758\nNCT04990544',
+        'registry': 'NMPA\n[ChiCTR2200057758](https://trialsearch.who.int/Trial2.aspx?TrialID=ChiCTR2200057758)\n[NCT04990544](https://clinicaltrials.gov/study/NCT04990544)',
         'clinical': (
             '**分期**: Phase 1/2\n'
             '**设计**: 随机、双盲、安慰剂对照\n'
@@ -272,13 +253,13 @@ data = [
             '■ AESI: 未观察到特殊关注事件 (AE)'
         ),
         'ref': (
-            'PMID: 37881130\n'
-            'DOI: 10.1080/21645515.2023.2262635'
+            '[PMID: 37881130](https://pubmed.ncbi.nlm.nih.gov/37881130/)\n'
+            '[DOI: 10.1080/21645515.2023.2262635](https://doi.org/10.1080/21645515.2023.2262635)'
         )
     },
     {
         'vaccine': '**【✅ 已上市】**\n(美国 FDA，2023)\n\n**AV7909 / CYFENDUS®**\n(BioThrax + CPG 7909佐剂)\n\n**适应症**：炭疽暴露后预防\n**申办者**: Emergent BioSolutions',
-        'registry': 'FDA\nNCT03877926\n(Phase 3)',
+        'registry': 'FDA\n[NCT03877926](https://clinicaltrials.gov/study/NCT03877926)\n(Phase 3)',
         'clinical': (
             '**分期**: Phase 3 (关键注册试验)\n'
             '**设计**: 随机、双盲、活性对照\n'
@@ -295,14 +276,14 @@ data = [
             '■ SADR: 总体临床池未报告与疫苗因果关系明确的 SAE (0 SADR)。'
         ),
         'ref': (
-            'FDA Package Insert (CYFENDUS)\n'
-            'PMID: 41401704\n'
-            'DOI: 10.1016/j.vaccine.2025.128068'
+            '[FDA Package Insert (CYFENDUS)](https://www.fda.gov/vaccines-blood-biologics/cyfendus)\n'
+            '[PMID: 41401704](https://pubmed.ncbi.nlm.nih.gov/41401704/)\n'
+            '[DOI: 10.1016/j.vaccine.2025.128068](https://doi.org/10.1016/j.vaccine.2025.128068)'
         )
     },
     {
         'vaccine': '**【🧪 在研】**\n(Phase 1b)\n\n**BK-SE36/CpG**\n(重组疟原虫SE36抗原 + CpG-ODN K3)\n\n**适应症**：预防疟疾\n**申办者**: BIKEN / 贵州百灵',
-        'registry': 'PACTR\nPACTR201701001921166',
+        'registry': 'PACTR\n[PACTR201701001921166](https://trialsearch.who.int/Trial2.aspx?TrialID=PACTR201701001921166)',
         'clinical': (
             '**分期**: Phase 1b\n'
             '**设计**: 随机、双盲、年龄降级\n'
@@ -320,13 +301,13 @@ data = [
             '■ SADR / SUSAR: 零报告 (0例) (ADR)'
         ),
         'ref': (
-            'PMID: 37908361\n'
-            'DOI: 10.3389/fimmu.2023.1267372'
+            '[PMID: 37908361](https://pubmed.ncbi.nlm.nih.gov/37908361/)\n'
+            '[DOI: 10.3389/fimmu.2023.1267372](https://doi.org/10.3389/fimmu.2023.1267372)'
         )
     },
     {
         'vaccine': '**【🧪 在研】**\n(Phase 2)\n\n**Na-GST-1/Al + CpG 10104**\n(钩虫病重组疫苗)\n\n**适应症**：预防钩虫感染\n**申办者**: Sabin Vaccine Institute',
-        'registry': 'FDA\nNCT03172975',
+        'registry': 'FDA\n[NCT03172975](https://clinicaltrials.gov/study/NCT03172975)',
         'clinical': (
             '**分期**: Phase 2 (含CHHI受控感染)\n'
             '**设计**: 随机、双盲、安慰剂对照\n'
@@ -342,8 +323,8 @@ data = [
             '■ SADR: 全程未观察到疫苗相关的严重不良事件 (0 SADR)。'
         ),
         'ref': (
-            'PMID: 41861834\n'
-            'DOI: 10.1016/S1473-3099(26)00018-6'
+            '[PMID: 41861834](https://pubmed.ncbi.nlm.nih.gov/41861834/)\n'
+            '[DOI: 10.1016/S1473-3099(26)00018-6](https://doi.org/10.1016/S1473-3099(26)00018-6)'
         )
     },
     {
@@ -366,13 +347,13 @@ data = [
             '■ SADR / AESI: 未报告任何严重不良事件或自免事件 (0例) (AE)'
         ),
         'ref': (
-            'PMID: 32842315\n'
-            'DOI: 10.3760/cma.j.cn112150-20200401-00490'
+            '[PMID: 32842315](https://pubmed.ncbi.nlm.nih.gov/32842315/)\n'
+            '[DOI: 10.3760/cma.j.cn112150-20200401-00490](https://doi.org/10.3760/cma.j.cn112150-20200401-00490)'
         )
     },
     {
         'vaccine': '**【🧪 在研】**\n(Phase 1/2)\n\n**Z-1018**\n(带状疱疹疫苗 + CpG 1018)\n\n**适应症**：预防带状疱疹\n**申办者**: Dynavax',
-        'registry': 'FDA\nNCT06569823',
+        'registry': 'FDA\n[NCT06569823](https://clinicaltrials.gov/study/NCT06569823)',
         'clinical': (
             '**分期**: Phase 1/2\n'
             '**设计**: 随机、观察盲、对照(Shingrix)\n'
@@ -387,13 +368,13 @@ data = [
             ' (核心结论: Z-1018 在提供可比抗体应答的同时，系统与局部反应原性大幅下降)\n'
         ),
         'ref': (
-            'DOI: 10.1093/ofid/ofaf695.018\n'
+            '[DOI: 10.1093/ofid/ofaf695.018](https://doi.org/10.1093/ofid/ofaf695.018)\n'
             '(OFID 2026会议摘要)'
         )
     },
     {
         'vaccine': '**【✅ 已上市】**\n(印度 EUA，2021)\n\n**CORBEVAX**\n(重组RBD蛋白疫苗 + CpG 1018)\n\n**适应症**：预防COVID-19\n**申办者**: Biological E / 贝勒医学院',
-        'registry': 'CTRI\nCTRI/2021/08/036074',
+        'registry': 'CTRI\n[CTRI/2021/08/036074](https://trialsearch.who.int/Trial2.aspx?TrialID=CTRI/2021/08/036074)',
         'clinical': (
             '**分期**: Phase 3\n'
             '**设计**: 单盲、随机、活性对照(COVISHIELD)\n'
@@ -412,13 +393,13 @@ data = [
             '■ 疫苗相关SAE: 0例 (0 SADR)'
         ),
         'ref': (
-            'PMID: 37113012\n'
-            'DOI: 10.1080/21645515.2023.2203632'
+            '[PMID: 37113012](https://pubmed.ncbi.nlm.nih.gov/37113012/)\n'
+            '[DOI: 10.1080/21645515.2023.2203632](https://doi.org/10.1080/21645515.2023.2203632)'
         )
     },
     {
         'vaccine': '**【🧪 在研】**\n(Phase 2)\n\n**VN-0200**\n(RSV F糖蛋白 + β-葡聚糖/CpG)\n\n**适应症**：预防RSV感染\n**申办者**: 第一三共',
-        'registry': '日本jRCT\njRCT2071220051',
+        'registry': '日本jRCT\n[jRCT2071220051](https://jrct.niph.go.jp/en-latest-detail/jRCT2071220051)',
         'clinical': (
             '**分期**: Phase 2\n'
             '**设计**: 随机、双盲、安慰剂对照\n'
@@ -434,8 +415,8 @@ data = [
             '■ 因TEAE停药: 4例 (1.2%)，其中1例肢体不适判为相关 (ADR)'
         ),
         'ref': (
-            'PMID: 40257186\n'
-            'DOI: 10.1080/21645515.2025.2489900'
+            '[PMID: 40257186](https://pubmed.ncbi.nlm.nih.gov/40257186/)\n'
+            '[DOI: 10.1080/21645515.2025.2489900](https://doi.org/10.1080/21645515.2025.2489900)'
         )
     },
     {
@@ -464,8 +445,7 @@ for row_data in data:
     row_cells = table.add_row().cells
     fields = ['vaccine', 'registry', 'clinical', 'safety', 'ref']
     for i, field in enumerate(fields):
-        is_ref = (field == 'ref')
-        add_cell_text(row_cells[i], row_data[field], bold=False, size=7.5, is_ref=is_ref)
+        add_cell_text(row_cells[i], row_data[field], bold=False, size=7.5)
 
 for idx, row in enumerate(table.rows[1:], start=1):
     if idx % 2 == 0:
@@ -483,7 +463,6 @@ run = footnote.add_run(
 run.font.size = Pt(7.5)
 run.font.color.rgb = RGBColor(0x66, 0x66, 0x66)
 
-# Add Summary Section
 doc.add_paragraph('')
 summary_title = doc.add_heading('【总体安全性总结】基于含 CpG 佐剂预防性疫苗临床数据的综合评价', level=2)
 summary_title.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
@@ -508,6 +487,6 @@ p_summary.paragraph_format.line_spacing = 1.3
 p_summary.runs[0].font.size = Pt(9.5)
 p_summary.runs[0].font.name = 'Microsoft YaHei'
 
-output_path = r'E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\CpG_Vaccine_Safety_Summary-V10-20260820.docx'
+output_path = r'E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\CpG_Vaccine_Safety_Summary-V11-20260820.docx'
 doc.save(output_path)
 logging.info(f"Document saved to: {output_path}")
