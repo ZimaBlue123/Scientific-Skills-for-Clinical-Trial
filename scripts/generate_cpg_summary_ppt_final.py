@@ -40,7 +40,7 @@ def estimate_row_height(row_data):
 
 def create_ppt_standalone(ppt_path):
     headers = [
-        '疫苗名称 / 申办者 / 适应症',
+        '疫苗信息',
         '注册平台 & 编号',
         '临床试验基本信息',
         '安全性数据汇总',
@@ -438,11 +438,11 @@ def create_ppt_standalone(ppt_path):
 
         v_parts = d['v_name'].split('\n', 1)
         if len(v_parts) > 1:
-            name_text = f"**{v_parts[0]}**\n{v_parts[1]}"
+            name_text = f"**{v_parts[0]}**  {v_parts[1]}"
         else:
             name_text = f"**{v_parts[0]}**"
 
-        return f"{status_text}\n\n**申办者**: {d['sponsor']}\n{name_text}\n**适应症**：{d['indication']}"
+        return f"{name_text}\n{status_text}\n\n**申办者**: {d['sponsor']}\n**适应症**：{d['indication']}"
 
     row_data = []
     for d in raw_data:
@@ -610,7 +610,7 @@ def create_ppt_standalone(ppt_path):
         tf.margin_top = 0
         tf.margin_bottom = 0
         p = tf.add_paragraph()
-        p.text = "CpG佐剂预防性疫苗安全性汇总 (V13 - 核心详表)" 
+        p.text = "CpG佐剂预防性疫苗安全性汇总" 
         p.runs[0].font.size = Pt(26)
         p.runs[0].font.bold = True
         p.runs[0].font.color.rgb = DARK_RED

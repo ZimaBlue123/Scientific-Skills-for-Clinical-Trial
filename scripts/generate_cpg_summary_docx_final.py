@@ -499,14 +499,14 @@ def format_col1(d):
 
     v_parts = d['v_name'].split('\n', 1)
     if len(v_parts) > 1:
-        name_text = f"**{v_parts[0]}**\n{v_parts[1]}"
+        name_text = f"**{v_parts[0]}**  {v_parts[1]}"
     else:
         name_text = f"**{v_parts[0]}**"
 
-    return f"{status_text}\n\n**申办者**: {d['sponsor']}\n{name_text}\n**适应症**：{d['indication']}"
+    return f"{name_text}\n{status_text}\n\n**申办者**: {d['sponsor']}\n**适应症**：{d['indication']}"
 
 headers = [
-    '疫苗名称 / 申办者 / 适应症',
+    '疫苗信息',
     '注册平台 & 编号',
     '临床试验基本信息',
     '安全性数据汇总',
