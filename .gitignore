@@ -236,3 +236,14 @@ docs/_converted/
 **/_audit_*.py
 **/_audit_*.sh
 **/_audit_*.ps1
+
+# Virtual Environments
+myenv/
+.venv/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Temp logs
+*.log
