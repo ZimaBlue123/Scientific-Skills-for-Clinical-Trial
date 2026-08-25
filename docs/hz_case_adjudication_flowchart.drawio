@@ -1,0 +1,346 @@
+<mxfile host="app.diagrams.net" modified="2026-08-24T06:00:00.000Z" agent="Antigravity" version="24.0.0" type="device">
+  <diagram id="hz-v2" name="带状疱疹病例判定流程（含防火墙团队）">
+    <mxGraphModel dx="1422" dy="962" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="1900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ============================================================ -->
+        <!-- BACKGROUNDS: Firewall Team areas (draw first = behind)       -->
+        <!-- ============================================================ -->
+
+        <!-- FW Area 1: Receive and Distribute -->
+        <mxCell id="fw_bg1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2.5;dashed=1;dashPattern=10 6;opacity=50;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="900" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- FW Area 2: Cross-validation -->
+        <mxCell id="fw_bg2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2.5;dashed=1;dashPattern=10 6;opacity=50;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="50" y="870" width="960" height="210" as="geometry"/>
+        </mxCell>
+
+        <!-- FW Area 3: Stage 2 Re-adjudication -->
+        <mxCell id="fw_bg3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2.5;dashed=1;dashPattern=10 6;opacity=50;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="220" y="1230" width="600" height="270" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 1: Initial Screening (Researcher)                    -->
+        <!-- ============================================================ -->
+
+        <mxCell id="n01" value="带状疱疹样病例" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="430" y="30" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n02" value="研究者&lt;br&gt;临床初筛核实" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="180" height="110" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n03" value="继续监测（排除）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="750" y="150" width="140" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n04" value="&lt;b&gt;带状疱疹疑似病例&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;研究者收集：调查表、皮损样本、皮损照片、病历资料、ZBPI&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;arcSize=20;" vertex="1" parent="1">
+          <mxGeometry x="310" y="280" width="440" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e01" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="n01" target="n02">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e02" value="不符合" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;fontColor=#CC0000;fontSize=11;fontStyle=2;" edge="1" parent="1" source="n02" target="n03">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e03" value="符合" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;fontSize=11;" edge="1" parent="1" source="n02" target="n04">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 2: Firewall Team — Receive &amp; Distribute           -->
+        <!-- ============================================================ -->
+
+        <mxCell id="fw_label1" value="&#128293; 防火墙团队：接收资料 &amp; 分发" style="text;html=1;fontSize=14;fontStyle=1;fontColor=#E65100;align=left;" vertex="1" parent="1">
+          <mxGeometry x="90" y="385" width="300" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n05" value="&lt;b&gt;防火墙团队&lt;/b&gt;&lt;br&gt;接收全部资料，同时分发至两条并行路径" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=12;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="300" y="415" width="460" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e04" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;strokeColor=#E65100;" edge="1" parent="1" source="n04" target="n05">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 3: Parallel Paths (Lab + EAC)                        -->
+        <!-- ============================================================ -->
+
+        <!-- Path labels -->
+        <mxCell id="lbl_p1" value="&#128300; 路径 1：实验室客观检测" style="text;html=1;fontSize=13;fontStyle=5;fontColor=#1565C0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="530" width="250" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="lbl_p2" value="&#128202; 路径 2：EAC 主观盲评" style="text;html=1;fontSize=13;fontStyle=5;fontColor=#7B1FA2;align=center;" vertex="1" parent="1">
+          <mxGeometry x="600" y="530" width="250" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- === PATH 1: Central Lab qPCR === -->
+
+        <mxCell id="n10" value="中心实验室&lt;br&gt;qPCR 检测&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;（皮损样本）&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="570" width="200" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e05" value="皮损样本送检" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;fontSize=10;fontColor=#1565C0;fontStyle=2;" edge="1" parent="1" source="n05" target="n10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="443"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="n11" value="qPCR&lt;br&gt;结果" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="110" y="690" width="140" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="n10" target="n11">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- qPCR result note -->
+        <mxCell id="n11_note" value="&lt;b&gt;qPCR 定义：&lt;/b&gt;&lt;br&gt;· 阳性：≥1个样本检测阳性&lt;br&gt;· 真阴性：内参基因(+)，靶基因(-)&lt;br&gt;· 无法判定：内参(-)且靶基因(-)，&lt;br&gt;  或无皮损样本" style="text;html=1;align=left;verticalAlign=top;strokeColor=#1565C0;fillColor=#E3F2FD;fontSize=9;rounded=1;spacingLeft=5;spacingTop=3;spacingRight=5;spacingBottom=3;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="680" width="210" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_note1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;strokeColor=#BBBBBB;" edge="1" parent="1" source="n11" target="n11_note">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === PATH 2: EAC Blind Review === -->
+
+        <mxCell id="n20" value="EAC 第一阶段判定&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;（完全未知检测结果的盲评）&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CE93D8;strokeColor=#7B1FA2;fontColor=#000000;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="590" y="570" width="260" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e06" value="临床资料（除外 qPCR 结果）" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;fontSize=10;fontColor=#7B1FA2;fontStyle=2;" edge="1" parent="1" source="n05" target="n20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="443"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- EAC Detail Note -->
+        <mxCell id="n21" value="&lt;b&gt;EAC 判定流程（截图1）：&lt;/b&gt;&lt;br&gt;① 医学联络人分发资料（除外qPCR）&lt;br&gt;② 各 EAC 专家独立诊断&lt;br&gt;③ 研究团队回复专家疑问&lt;br&gt;④ 医学联络人汇总独立诊断结果&lt;br&gt;⑤ EAC 主席确认最终诊断结果&lt;br&gt;⑥ 意见不一致 → 召开判定会议投票&lt;br&gt;  （半数以上决定结果）" style="text;html=1;align=left;verticalAlign=top;strokeColor=#7B1FA2;fillColor=#F3E5F5;fontSize=10;rounded=1;spacingLeft=6;spacingTop=4;spacingRight=6;spacingBottom=4;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+          <mxGeometry x="880" y="555" width="260" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_note2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;dashed=1;strokeColor=#BBBBBB;" edge="1" parent="1" source="n20" target="n21">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n22" value="EAC&lt;br&gt;判定结果" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="650" y="690" width="140" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="n20" target="n22">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 4: Firewall Team — Cross-validation                  -->
+        <!-- ============================================================ -->
+
+        <mxCell id="fw_label2" value="&#128293; 防火墙团队：根据判定章程，交叉验证两条路径结果" style="text;html=1;fontSize=14;fontStyle=1;fontColor=#E65100;align=left;" vertex="1" parent="1">
+          <mxGeometry x="60" y="875" width="500" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n30" value="&lt;b&gt;防火墙团队 — 交叉验证&lt;/b&gt;&lt;br&gt;汇总 qPCR 结果 + EAC 判定结果&lt;br&gt;根据判定章程输出结论" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#FF9800;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=12;fontStyle=0;size=25;" vertex="1" parent="1">
+          <mxGeometry x="260" y="910" width="440" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Edge: qPCR result → FW cross-validation -->
+        <mxCell id="e30" value="qPCR 结果&lt;br&gt;返回防火墙" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;fontSize=10;fontColor=#1565C0;strokeColor=#E65100;" edge="1" parent="1" source="n11" target="n30">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="840"/>
+              <mxPoint x="380" y="840"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Edge: EAC result → FW cross-validation -->
+        <mxCell id="e31" value="EAC 判定结果&lt;br&gt;返回防火墙" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;fontSize=10;fontColor=#7B1FA2;strokeColor=#E65100;" edge="1" parent="1" source="n22" target="n30">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="840"/>
+              <mxPoint x="580" y="840"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Cross-validation Rules Note -->
+        <mxCell id="n30_rules" value="&lt;b&gt;判定章程（优先级规则）：&lt;/b&gt;&lt;br&gt;① qPCR 阳性 → 实验室确诊（无论EAC结果）&lt;br&gt;② qPCR 真阴性 → 以 qPCR 为准，排除（qPCR优先于EAC）&lt;br&gt;③ EAC 判"否" + qPCR 非阳性 → 排除&lt;br&gt;④ qPCR 无法判定或无样本 + EAC 判"是" → 进入第二阶段复判" style="text;html=1;align=left;verticalAlign=top;strokeColor=#E65100;fillColor=#FFFFFF;fontSize=10;rounded=1;spacingLeft=6;spacingTop=5;spacingRight=6;spacingBottom=5;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1000" width="380" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 5: First-stage Outcomes                              -->
+        <!-- ============================================================ -->
+
+        <!-- 实验室确诊病例 (GREEN) -->
+        <mxCell id="n31" value="&lt;b&gt;实验室确诊病例&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontSize=14;fontStyle=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1140" width="180" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e34" value="qPCR 阳性" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;fontSize=11;fontColor=#2E7D32;strokeColor=#2E7D32;" edge="1" parent="1" source="n30" target="n31">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="1110"/>
+              <mxPoint x="140" y="1110"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 非带状疱疹排除 (RED) -->
+        <mxCell id="n32" value="&lt;b&gt;非带状疱疹排除&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontSize=14;fontStyle=1;strokeWidth=2;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+          <mxGeometry x="830" y="1140" width="170" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e35" value="qPCR 真阴性&lt;br&gt;或 EAC 判"否"" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;fontSize=10;fontColor=#C62828;strokeColor=#C62828;" edge="1" parent="1" source="n30" target="n32">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="1110"/>
+              <mxPoint x="915" y="1110"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 6: Firewall Team — Stage 2 Re-adjudication           -->
+        <!-- ============================================================ -->
+
+        <mxCell id="fw_label3" value="&#128293; 防火墙团队：管理第二阶段复判（揭盲）" style="text;html=1;fontSize=14;fontStyle=1;fontColor=#E65100;align=left;" vertex="1" parent="1">
+          <mxGeometry x="230" y="1235" width="400" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n40" value="&lt;b&gt;EAC 第二阶段复判&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;防火墙团队向 EAC 揭盲 qPCR 阴性/缺失的化验结果&lt;br&gt;EAC 重新审视（流程与第一阶段基本一致）&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=12;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="290" y="1270" width="380" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e36" value="qPCR 无法判定/无样本&lt;br&gt;且 EAC 判"是"" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;fontSize=10;fontColor=#E65100;strokeColor=#E65100;" edge="1" parent="1" source="n30" target="n40">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n41" value="复判&lt;br&gt;结果" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="415" y="1385" width="130" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e40" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;" edge="1" parent="1" source="n40" target="n41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 7: Stage 2 Outcomes                                  -->
+        <!-- ============================================================ -->
+
+        <!-- 临床诊断确认病例 (PURPLE) -->
+        <mxCell id="n42" value="&lt;b&gt;临床诊断确认病例&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2;fontSize=14;fontStyle=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1550" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e42" value="坚持判断为"是"" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=2;fontSize=11;fontColor=#2E7D32;strokeColor=#2E7D32;" edge="1" parent="1" source="n41" target="n42">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Edge: Stage 2 → 排除 (改否) -->
+        <mxCell id="e43" value="改判为"否"" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1.5;fontSize=11;fontColor=#C62828;strokeColor=#C62828;dashed=1;" edge="1" parent="1" source="n41" target="n32">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="915" y="1430"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 不能确诊 (GRAY) -->
+        <mxCell id="n43" value="不能确诊" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEEEE;strokeColor=#666666;fontSize=12;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="620" y="1555" width="120" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e44" value="无法判定" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=1;fontSize=10;fontColor=#666666;strokeColor=#999999;" edge="1" parent="1" source="n41" target="n43">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- SECTION 8: Final Outcome                                     -->
+        <!-- ============================================================ -->
+
+        <mxCell id="divider" value="" style="shape=line;strokeColor=#BDBDBD;strokeWidth=2;dashed=1;dashPattern=12 12;fillColor=none;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="1640" width="1060" height="10" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lbl_final" value="最终确诊汇总" style="text;html=1;fontSize=14;fontStyle=5;fontColor=#424242;align=left;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1655" width="160" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="n50" value="&lt;b&gt;带状疱疹确诊病例&lt;/b&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=16;fontStyle=1;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="340" y="1690" width="280" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Edge: 实验室确诊 → Final -->
+        <mxCell id="e50" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=3;strokeColor=#2E7D32;" edge="1" parent="1" source="n31" target="n50">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="140" y="1735"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Edge: 临床确认 → Final -->
+        <mxCell id="e51" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeWidth=3;strokeColor=#7B1FA2;" edge="1" parent="1" source="n42" target="n50">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Formula -->
+        <mxCell id="n51" value="&lt;b&gt;确诊病例&lt;/b&gt; = 实验室确诊病例 + 临床诊断确认病例" style="text;html=1;fontSize=13;fontStyle=0;fontColor=#333333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="1795" width="340" height="25" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- LEGEND                                                       -->
+        <!-- ============================================================ -->
+
+        <mxCell id="legend_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#BDBDBD;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="910" y="20" width="215" height="340" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend_title" value="&lt;b&gt;图 例&lt;/b&gt;" style="text;html=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="975" y="25" width="80" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lg1" value="起点 / 疑似病例" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="925" y="58" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg2" value="决策判断" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="942" y="92" width="80" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg3" value="防火墙团队流程" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="925" y="137" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg3b" value="防火墙团队区域" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;fontSize=9;dashed=1;dashPattern=8 8;opacity=60;" vertex="1" parent="1">
+          <mxGeometry x="925" y="170" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg4" value="EAC 判定流程" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#CE93D8;strokeColor=#7B1FA2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="925" y="203" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg5" value="实验室检测" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#1565C0;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="925" y="236" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg6" value="确诊（阳性终局）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="925" y="269" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg7" value="临床确认（终局）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="925" y="302" width="120" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="lg8" value="排除（阴性终局）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontSize=9;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+          <mxGeometry x="925" y="335" width="120" height="24" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

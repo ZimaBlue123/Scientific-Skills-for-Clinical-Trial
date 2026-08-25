@@ -7,7 +7,11 @@ Copy and modify these configurations for your specific needs.
 
 import lightning as L
 from lightning.pytorch import loggers as pl_loggers
-from lightning.pytorch.callbacks import EarlyStopping, LearningRateMonitor, ModelCheckpoint
+from lightning.pytorch.callbacks import (
+    EarlyStopping,
+    LearningRateMonitor,
+    ModelCheckpoint,
+)
 from lightning.pytorch.strategies import DDPStrategy, FSDPStrategy
 
 # =============================================================================
