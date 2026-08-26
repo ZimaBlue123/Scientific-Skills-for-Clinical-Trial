@@ -3,6 +3,7 @@ DSUR Content Transfer Script v2 - Improved section mapping.
 Distinguishes TOC from body, handles sub-sections properly.
 """
 
+import contextlib
 import sys
 
 from docx import Document
@@ -177,10 +178,9 @@ def find_toc_boundaries(doc):
         if toc_start is not None and toc_end is None:
             # Check if we've exited TOC - looking for the first main section heading
             key = identify_section_key(text)
-            if key and key not in ("toc_heading",):
-                if "toc" not in style_name:
-                    toc_end = i
-                    break
+            if key and key not in ("toc_heading",) and "toc" not in style_name:
+                toc_end = i
+                break
 
     return toc_start, toc_end
 
@@ -232,28 +232,18 @@ def main(template_path, source_path, output_path):
     # Step 1b: Handle sponsor info table
     if template.tables:
         t = template.tables[0]
-        try:
+        with contextlib.suppress(BaseException):
             t.rows[0].cells[
                 1
             ].text = "Grand Theravac Life Sciences (Nanjing) Co., Ltd. / Grand Theravac Life Sciences (Hangzhou) Co., Ltd."
-        except:
-            pass
-        try:
+        with contextlib.suppress(BaseException):
             t.rows[1].cells[1].text = ""
-        except:
-            pass
-        try:
+        with contextlib.suppress(BaseException):
             t.rows[2].cells[1].text = ""
-        except:
-            pass
-        try:
+        with contextlib.suppress(BaseException):
             t.rows[3].cells[1].text = ""
-        except:
-            pass
-        try:
+        with contextlib.suppress(BaseException):
             t.rows[4].cells[1].text = ""
-        except:
-            pass
 
     # Step 2: Clear TOC (between toc_start and toc_end)
     if toc_start is not None and toc_end is not None:
@@ -342,15 +332,6 @@ def main(template_path, source_path, output_path):
 
     # Step 5: Clear data tables (since source DSUR #1 has no clinical data)
     # Tables to clear based on source content
-    tables_to_clear = {
-        # Table index -> description
-        1: "Estimated Cumulative Subject Exposure",  # T1 -> blank
-        8: "Line Listings of Serious Adverse Reactions",  # T9 -> blank
-        9: "Cumulative Summary Tabulations of SAEs",  # T10 -> blank
-        11: "Cumulative Summary Tabulation of SARs",  # T12 -> blank
-        12: "List of Subjects who Died",  # T13 -> blank
-        13: "List of Subjects who Dropped Out",  # T14 -> blank
-    }
 
     # For key data tables, clear content and write "Not Applicable" or keep as empty
     for t_idx in range(1, len(template.tables)):

@@ -37,6 +37,5 @@ with open("009_search.txt", "w", encoding="utf-8") as f:
                     or "含量" in l
                     or "活性成分" in l
                     or "每剂" in l
-                ):
-                    if "20" in l or "10" in l or "5" in l:
-                        f.write(f" - {l}\n")
+                ) and ("20" in l or "10" in l or "5" in l):
+                    f.write(f" - {l}\n")

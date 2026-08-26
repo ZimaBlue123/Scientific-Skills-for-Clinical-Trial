@@ -5,6 +5,7 @@ Key fixes:
 - Fix Appendix 3 table data
 """
 
+import contextlib
 import sys
 
 from docx import Document
@@ -92,9 +93,7 @@ def is_toc_paragraph(para):
     text = para.text.strip()
     if "toc" in style_name:
         return True
-    if "\t" in text and identify_section_key(text):
-        return True
-    return False
+    return bool("\t" in text and identify_section_key(text))
 
 
 def build_para_index(doc):
@@ -271,10 +270,8 @@ def main(template_path, source_path, output_path):
             (4, ""),
         ]
         for row_idx, val in cells_to_set:
-            try:
+            with contextlib.suppress(BaseException):
                 set_cell_text(t.rows[row_idx].cells[1], val)
-            except:
-                pass
 
     # ---- PHASE 2: Executive Summary ----
     print("--- Executive Summary ---")

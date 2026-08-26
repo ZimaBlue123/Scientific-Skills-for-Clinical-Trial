@@ -50,9 +50,8 @@ for file in os.listdir("."):
                 or "最大" in l
                 or "最低" in l
                 or "用法用量" in l
-            ):
-                if len(l) > 5 and len(l) < 500:
-                    snippets.add(l)
+            ) and len(l) > 5 and len(l) < 500:
+                snippets.add(l)
 
         for s in list(snippets)[:10]:
             print(" -", s)

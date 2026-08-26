@@ -3,6 +3,7 @@ DSUR Content Transfer v6 - FINAL.
 Fix: Proper TOC clearing by creating empty run, use hard-coded TOC range.
 """
 
+import contextlib
 import sys
 
 from docx import Document
@@ -87,9 +88,7 @@ def identify_section_key(text):
 
 def is_toc_paragraph(para):
     style_name = (para.style.name or "").lower()
-    if "toc" in style_name:
-        return True
-    return False
+    return "toc" in style_name
 
 
 def build_para_index(doc):
@@ -228,7 +227,7 @@ def main(template_path, source_path, output_path):
         "reproduced, in whole or in part, without prior written consent from the Sponsor."
     )
 
-    for i, para in enumerate(template.paragraphs):
+    for _i, para in enumerate(template.paragraphs):
         text = para.text.strip()
         # Skip TOC paragraphs
         if is_toc_paragraph(para):
@@ -257,10 +256,8 @@ def main(template_path, source_path, output_path):
             "",
         ]
         for row_idx, val in enumerate(sponsor_data):
-            try:
+            with contextlib.suppress(BaseException):
                 set_cell_text(t.rows[row_idx].cells[1], val)
-            except:
-                pass
 
     # ---- PHASE 2: Executive Summary ----
     print("--- Executive Summary ---")
@@ -276,10 +273,9 @@ def main(template_path, source_path, output_path):
     print("--- TOC Clearing ---")
     toc_cleared = 0
     for para in template.paragraphs:
-        if is_toc_paragraph(para):
-            if para.text.strip():
-                replace_para_text(para, "")
-                toc_cleared += 1
+        if is_toc_paragraph(para) and para.text.strip():
+            replace_para_text(para, "")
+            toc_cleared += 1
     print(f"  Cleared {toc_cleared} TOC paragraphs")
 
     # ---- PHASE 4: Main Body ----

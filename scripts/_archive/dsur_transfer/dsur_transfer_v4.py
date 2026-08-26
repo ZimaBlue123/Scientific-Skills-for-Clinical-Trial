@@ -94,9 +94,7 @@ def is_toc_paragraph(para):
     text = para.text.strip()
     if "toc" in style_name:
         return True
-    if "\t" in text and identify_section_key(text):
-        return True
-    return False
+    return bool("\t" in text and identify_section_key(text))
 
 
 def build_para_index(doc):
@@ -258,7 +256,7 @@ def main(template_path, source_path, output_path):
 
     # ---- PHASE 1: Title Page ----
     print("\n--- Title Page ---")
-    for i, para in enumerate(template.paragraphs):
+    for _i, para in enumerate(template.paragraphs):
         text = para.text.strip()
         if (
             "Development Safety Update Report (DSUR) No. 2" in text
@@ -314,7 +312,7 @@ def main(template_path, source_path, output_path):
     print("\n--- TOC Clearing ---")
     # Find TOC boundary and clear all TOC paragraphs
     toc_found = False
-    for i, para in enumerate(template.paragraphs):
+    for _i, para in enumerate(template.paragraphs):
         text = para.text.strip().lower()
         style_name = (para.style.name or "").lower()
 

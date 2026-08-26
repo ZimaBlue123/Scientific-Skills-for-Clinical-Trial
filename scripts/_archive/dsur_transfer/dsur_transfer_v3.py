@@ -251,11 +251,11 @@ def main(template_path, source_path, output_path):
     # In the template, these are in __preamble__ section
 
     preamble_tpl = tpl_index.get("__preamble__", [])
-    preamble_src = src_index.get("__preamble__", [])
+    src_index.get("__preamble__", [])
 
     # Find exec_summary and confidentiality content paragraphs in template preamble
     exec_summary_src_paras = src_index.get("exec_summary", [])
-    confidentiality_src_paras = src_index.get("confidentiality", [])
+    src_index.get("confidentiality", [])
 
     # The template preamble contains: title stuff, empty paragraphs, confidentiality heading+content, exec summary heading+content
     # We need to replace exec summary content paragraphs only

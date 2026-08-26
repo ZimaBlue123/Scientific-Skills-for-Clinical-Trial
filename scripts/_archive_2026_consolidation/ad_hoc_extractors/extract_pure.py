@@ -41,9 +41,8 @@ with open("extracted_text.txt", "w", encoding="utf-8") as f:
                     or "mg" in l
                     or "最大" in l
                     or "最低" in l
-                ):
-                    if len(l) > 3 and len(l) < 500:
-                        snippets.add(l)
+                ) and len(l) > 3 and len(l) < 500:
+                    snippets.add(l)
 
             for s in list(snippets):
                 if (
@@ -55,6 +54,5 @@ with open("extracted_text.txt", "w", encoding="utf-8") as f:
                     or "用量" in s
                     or "LDD" in s
                     or "MDD" in s
-                ):
-                    if re.search(r"\d+", s):
-                        f.write(f" - {s}\n")
+                ) and re.search(r"\d+", s):
+                    f.write(f" - {s}\n")

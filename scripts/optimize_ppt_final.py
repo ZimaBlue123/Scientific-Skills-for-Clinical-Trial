@@ -12,6 +12,7 @@ Optimise the merged PPT:
 """
 
 import codecs
+import contextlib
 import os
 import re
 
@@ -38,10 +39,8 @@ def set_runs_color(text_range, color):
         for r in text_range.Runs():
             r.Font.Color.RGB = color
     except:
-        try:
+        with contextlib.suppress(BaseException):
             text_range.Font.Color.RGB = color
-        except:
-            pass
 
 
 def cap_runs_size(text_range, max_size, scale=None):
@@ -167,7 +166,6 @@ def main():
 
         # ---- Section 1 & 2: gentle touch ----
         if sec in (1, 2):
-            counter_ref = "sec1_counter" if sec == 1 else "sec2_counter"
             if sec == 1:
                 sec1_counter += 1
                 prefix = f"01-{sec1_counter}"

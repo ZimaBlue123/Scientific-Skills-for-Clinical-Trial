@@ -225,7 +225,7 @@ def replace_paragraph_full(para, new_text):
     with the paragraph's default formatting, using the new text.
     """
     # Store formatting from first run if available
-    pPr = para._element.find(qn("w:pPr"))
+    para._element.find(qn("w:pPr"))
 
     # Remove all existing runs
     for run in para.runs:
@@ -377,7 +377,7 @@ def transfer_content(template_path, source_path, output_path):
                 # We'll need to insert new paragraphs
                 if content_indices:
                     # Insert after the last content paragraph
-                    ref_para = template_doc.paragraphs[content_indices[-1]]
+                    template_doc.paragraphs[content_indices[-1]]
                     # We can't easily insert, so we'll skip for now
                     pass
 

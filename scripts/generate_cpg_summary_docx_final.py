@@ -515,10 +515,7 @@ def format_col1(d):
         status_text = f"**{s}**"
 
     v_parts = d["v_name"].split("\n", 1)
-    if len(v_parts) > 1:
-        name_text = f"**{v_parts[0]}**  {v_parts[1]}"
-    else:
-        name_text = f"**{v_parts[0]}**"
+    name_text = f"**{v_parts[0]}**  {v_parts[1]}" if len(v_parts) > 1 else f"**{v_parts[0]}**"
 
     return f"{name_text}\n{status_text}\n\n**申办者**: {d['sponsor']}\n**适应症**：{d['indication']}"
 
