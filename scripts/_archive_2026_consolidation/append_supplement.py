@@ -28,9 +28,7 @@ from pathlib import Path
 LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 logger = logging.getLogger("append_supplement")
 
-DEFAULT_TARGET = Path(
-    r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_report.md"
-)
+DEFAULT_TARGET = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_report.md")
 
 SUPPLEMENT_MARKER = "## 七、补充说明（基于进一步审阅）"
 
@@ -62,9 +60,7 @@ SUPPLEMENT_BODY = """
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Append supplementary notes to review_report.md."
-    )
+    parser = argparse.ArgumentParser(description="Append supplementary notes to review_report.md.")
     parser.add_argument(
         "-t",
         "--target",

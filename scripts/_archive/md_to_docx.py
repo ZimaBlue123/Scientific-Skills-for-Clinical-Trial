@@ -109,9 +109,7 @@ def md_to_docx(md_text: str, out_path: Path) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Convert a simple Markdown file to .docx."
-    )
+    parser = argparse.ArgumentParser(description="Convert a simple Markdown file to .docx.")
     parser.add_argument("input_md", type=Path)
     parser.add_argument("-o", "--output", type=Path, default=None)
     args = parser.parse_args()
@@ -121,9 +119,7 @@ def main() -> int:
         LOGGER.error("Input markdown not found: %s", md_path)
         return 2
 
-    out: Path = (
-        md_path.with_suffix(".docx") if args.output is None else args.output.resolve()
-    )
+    out: Path = md_path.with_suffix(".docx") if args.output is None else args.output.resolve()
 
     try:
         md_text = md_path.read_text(encoding="utf-8")

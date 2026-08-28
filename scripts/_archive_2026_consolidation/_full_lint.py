@@ -26,7 +26,5 @@ if errors:
         print(e)
         print()
 else:
-    print(
-        "\nALL CLEAN: no pyflakes issues across scripts/ (excluding _archive and _selftest_*)"
-    )
+    print("\nALL CLEAN: no pyflakes issues across scripts/ (excluding _archive and _selftest_*)")
 sys.exit(1 if errors else 0)

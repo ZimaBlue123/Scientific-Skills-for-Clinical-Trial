@@ -21,6 +21,7 @@ from docx.shared import Pt
 
 def create_docx():
     import docx
+
     doc = docx.Document()
 
     # Title
@@ -128,9 +129,7 @@ def create_docx():
     run.font.size = Pt(12)
 
     # Save document
-    out_dir = (
-        r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials"
-    )
+    out_dir = r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials"
     os.makedirs(out_dir, exist_ok=True)
     out_path = os.path.join(out_dir, "hz_decision_matrix.docx")
 

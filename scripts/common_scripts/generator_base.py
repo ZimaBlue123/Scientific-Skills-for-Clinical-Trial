@@ -66,11 +66,7 @@ def make_argparser(
     p.add_argument(
         "--output",
         default=default_output,
-        help=(
-            "Output file path; default %(default)s"
-            if default_output
-            else "Output file path."
-        ),
+        help=("Output file path; default %(default)s" if default_output else "Output file path."),
     )
     p.add_argument(
         "--log-level",

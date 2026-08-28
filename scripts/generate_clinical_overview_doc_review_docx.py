@@ -107,12 +107,8 @@ def build_document() -> Document:
     # --- Section 1 ---
     doc.add_heading("一、前后矛盾或易误导的数据与表述", level=1)
 
-    doc.add_heading(
-        "1. 有效性评价：中老年层免疫原性概括与统计结果矛盾（高优先级）", level=2
-    )
-    _add_para(
-        doc, "位置：2.5.4.6 有效性评价，关于 50~59 岁、≥60 岁与阳性对照组 2 的概括段。"
-    )
+    doc.add_heading("1. 有效性评价：中老年层免疫原性概括与统计结果矛盾（高优先级）", level=2)
+    _add_para(doc, "位置：2.5.4.6 有效性评价，关于 50~59 岁、≥60 岁与阳性对照组 2 的概括段。")
     _add_bullets(
         doc,
         [
@@ -361,9 +357,7 @@ def main() -> int:
     root = Path(__file__).resolve().parents[1]
     out_dir = root / "review_materials"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = (
-        out_dir / f"TVAX-006_2.5临床综述_文档审核报告_{date.today().isoformat()}.docx"
-    )
+    out_path = out_dir / f"TVAX-006_2.5临床综述_文档审核报告_{date.today().isoformat()}.docx"
 
     doc = build_document()
     try:

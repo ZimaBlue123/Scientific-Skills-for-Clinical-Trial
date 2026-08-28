@@ -15,9 +15,7 @@ from docx.shared import Cm, Pt, RGBColor
 OUTPUT_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "review_materials"
 )
-OUTPUT_PATH = os.path.join(
-    OUTPUT_DIR, "批注评估报告_带状疱疹疫苗III期临床试验方案.docx"
-)
+OUTPUT_PATH = os.path.join(OUTPUT_DIR, "批注评估报告_带状疱疹疫苗III期临床试验方案.docx")
 
 # ============================================================
 # Comment evaluation data
@@ -626,9 +624,7 @@ def main():
     for c in COMMENTS:
         counts[c[4]] += 1
 
-    add_paragraph_custom(
-        doc, "本次共评估56条批注，评估结果统计如下：", size=12, bold=True
-    )
+    add_paragraph_custom(doc, "本次共评估56条批注，评估结果统计如下：", size=12, bold=True)
 
     # Summary table
     table = doc.add_table(rows=5, cols=3)
@@ -652,17 +648,17 @@ def main():
     # Data rows
     table.rows[1].cells[0].text = "合理"
     table.rows[1].cells[1].text = str(counts["合理"])
-    table.rows[1].cells[2].text = f'{counts["合理"]/56*100:.1f}%'
+    table.rows[1].cells[2].text = f"{counts['合理'] / 56 * 100:.1f}%"
     set_cell_shading(table.rows[1].cells[0], "D4EDDA")
 
     table.rows[2].cells[0].text = "部分合理"
     table.rows[2].cells[1].text = str(counts["部分合理"])
-    table.rows[2].cells[2].text = f'{counts["部分合理"]/56*100:.1f}%'
+    table.rows[2].cells[2].text = f"{counts['部分合理'] / 56 * 100:.1f}%"
     set_cell_shading(table.rows[2].cells[0], "FFF3CD")
 
     table.rows[3].cells[0].text = "需商榷"
     table.rows[3].cells[1].text = str(counts["需商榷"])
-    table.rows[3].cells[2].text = f'{counts["需商榷"]/56*100:.1f}%'
+    table.rows[3].cells[2].text = f"{counts['需商榷'] / 56 * 100:.1f}%"
     set_cell_shading(table.rows[3].cells[0], "F8D7DA")
 
     table.rows[4].cells[0].text = "合计"
@@ -678,9 +674,9 @@ def main():
 
     add_paragraph_custom(
         doc,
-        f'评估结果显示：{counts["合理"]}条批注（{counts["合理"]/56*100:.1f}%）建议合理，可直接采纳；'
-        f'{counts["部分合理"]}条批注（{counts["部分合理"]/56*100:.1f}%）部分合理，建议修改后采纳；'
-        f'{counts["需商榷"]}条批注（{counts["需商榷"]/56*100:.1f}%）需进一步核实或讨论。'
+        f"评估结果显示：{counts['合理']}条批注（{counts['合理'] / 56 * 100:.1f}%）建议合理，可直接采纳；"
+        f"{counts['部分合理']}条批注（{counts['部分合理'] / 56 * 100:.1f}%）部分合理，建议修改后采纳；"
+        f"{counts['需商榷']}条批注（{counts['需商榷'] / 56 * 100:.1f}%）需进一步核实或讨论。"
         "总体而言，批注质量较高，大部分建议有明确的法规或文献依据，对完善试验方案具有积极意义。",
     )
 
@@ -716,9 +712,7 @@ def main():
             for run in p.runs:
                 run.font.color.rgb = RGBColor(255, 255, 255)
 
-    for i, (cat, ids) in enumerate(
-        sorted(categories.items(), key=lambda x: -len(x[1]))
-    ):
+    for i, (cat, ids) in enumerate(sorted(categories.items(), key=lambda x: -len(x[1]))):
         row = cat_table.rows[i + 1].cells
         row[0].text = cat
         row[1].text = ", ".join([f"#{x}" for x in ids])
@@ -880,9 +874,7 @@ def main():
 
     doc.add_heading("5.3 总体评价", level=2)
 
-    add_paragraph_custom(
-        doc, "本次审阅的56条批注整体质量较高，主要体现在以下几个方面："
-    )
+    add_paragraph_custom(doc, "本次审阅的56条批注整体质量较高，主要体现在以下几个方面：")
 
     points = [
         "批注引用了最新的法规文件和技术指导原则，包括2025年10月发布的《带状疱疹疫苗临床试验技术指导原则》和2026年修订的GCP，体现了审阅人对法规动态的密切关注。",

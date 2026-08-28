@@ -75,7 +75,7 @@ def extract_word_text(docx_path: Path) -> str:
 
 
 def extract_xlsx_text(xlsx_path: Path) -> str:
-    from extract_xlsx_full import extract_xlsx  # type: ignore
+    from extract_office_utils import extract_xlsx  # type: ignore
 
     return extract_xlsx(xlsx_path)
 
@@ -145,7 +145,7 @@ def _scan_word_terms(word_text: str) -> list[Finding]:
                 category=category,
                 location=f"全文（出现 {len(matches)} 次）",
                 issue=issue
-                + f"  示例: …{word_text[max(0, matches[0].start() - 20): matches[0].end() + 20].replace(chr(10), ' ')[:80]}…",
+                + f"  示例: …{word_text[max(0, matches[0].start() - 20) : matches[0].end() + 20].replace(chr(10), ' ')[:80]}…",
                 recommendation=rec,
                 rationale=rationale,
             )
@@ -234,9 +234,7 @@ def _scan_word_terms(word_text: str) -> list[Finding]:
     return findings
 
 
-def _cross_check_data(
-    word_text: str, xlsx_sheets: dict[str, dict[str, list]]
-) -> list[Finding]:
+def _cross_check_data(word_text: str, xlsx_sheets: dict[str, dict[str, list]]) -> list[Finding]:
     findings: list[Finding] = []
 
     def count_subjects_with_status(status_value: str) -> int:
@@ -255,7 +253,7 @@ def _cross_check_data(
                     id="D-01",
                     severity="重大",
                     category="数据矛盾",
-                    location=f"正文第{word_text[:m.start()].count(chr(10))+1}行 / EDC DM 表",
+                    location=f"正文第{word_text[: m.start()].count(chr(10)) + 1}行 / EDC DM 表",
                     issue=f"Word 称筛选失败 {implied_fail} 例（筛选 {screened} - 入组 {enrolled}），但 EDC DM 表实际 {fail} 例。差 {abs(fail - implied_fail)} 例。",
                     recommendation="核实第 N 例筛败受试者是否已录入 EDC，并在报告中明确统计口径",
                     rationale=f"DM 表 SUBJSTA='筛选失败' 共 {fail} 条",
@@ -273,7 +271,7 @@ def _cross_check_data(
                     id="D-02",
                     severity="重大",
                     category="数据矛盾",
-                    location=f"正文第{word_text[:m_dv.start()].count(chr(10))+1}行 / EDC DV 表",
+                    location=f"正文第{word_text[: m_dv.start()].count(chr(10)) + 1}行 / EDC DV 表",
                     issue=f"Word 称方案偏离/违背 {word_dv} 例次，EDC DV 表 {len(dv_rows)} 行。差 {abs(word_dv - len(dv_rows))} 条。",
                     recommendation="核实 DV 表数据完整性（可能部分偏离来自独立 PD 清单未同步 EDC），并在报告中明确数据来源",
                     rationale=f"DV 行数={len(dv_rows)}",
@@ -292,7 +290,7 @@ def _cross_check_data(
                     id="D-03",
                     severity="重要",
                     category="数据不一致",
-                    location=f"正文第{word_text[:m_ae.start()].count(chr(10))+1}行 / EDC AE 表 AETOXGR 字段",
+                    location=f"正文第{word_text[: m_ae.start()].count(chr(10)) + 1}行 / EDC AE 表 AETOXGR 字段",
                     issue=f"Word 称 AE {word_ae} 例次，EDC AE 表 AETOXGR 字段非空记录 {len(nonempty_tox)} 条。",
                     recommendation="核实 AE 表中 AETOXGR 为空的记录性质（如 AEYN='否' 占位行），并在报告中注明 AE 分析集定义",
                     rationale="数据完整性需确认",
@@ -400,9 +398,7 @@ def _cross_check_data(
 # =========================================================================
 # 3. Report generation
 # =========================================================================
-def _make_doc(
-    findings: list[Finding], project: str, files: Sequence[str], output: Path
-) -> None:
+def _make_doc(findings: list[Finding], project: str, files: Sequence[str], output: Path) -> None:
     from docx import Document  # type: ignore
     from docx.enum.table import WD_TABLE_ALIGNMENT
     from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -442,16 +438,12 @@ def _make_doc(
     doc.add_heading("二、问题清单", level=1)
     if findings:
         order = {"重大": 0, "重要": 1, "一般": 2, "建议": 3}
-        findings_sorted = sorted(
-            findings, key=lambda x: (order.get(x.severity, 99), x.id)
-        )
+        findings_sorted = sorted(findings, key=lambda x: (order.get(x.severity, 99), x.id))
         table = doc.add_table(rows=1, cols=6)
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
         table.style = "Table Grid"
         hdr = table.rows[0].cells
-        for i, h in enumerate(
-            ["编号", "风险等级", "类别", "位置", "问题描述", "修改建议"]
-        ):
+        for i, h in enumerate(["编号", "风险等级", "类别", "位置", "问题描述", "修改建议"]):
             hdr[i].text = h
             for p in hdr[i].paragraphs:
                 for run in p.runs:
@@ -499,9 +491,7 @@ def _looks_like_mmr(path: Path) -> bool:
     return any(kw in path.name for kw in _MMR_KEYWORDS)
 
 
-def _resolve_files(
-    folder: Path | None, word: Path | None, excel: Path | None
-) -> tuple[Path, Path]:
+def _resolve_files(folder: Path | None, word: Path | None, excel: Path | None) -> tuple[Path, Path]:
     if folder is not None:
         folder = folder.resolve()
         if not folder.is_dir():
@@ -534,9 +524,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="MMR audit report generator (Word + EDC cross-check)."
     )
-    parser.add_argument(
-        "--folder", type=Path, help="folder containing MMR.docx + EDC.xlsx"
-    )
+    parser.add_argument("--folder", type=Path, help="folder containing MMR.docx + EDC.xlsx")
     parser.add_argument("--word", type=Path, help="MMR .docx path")
     parser.add_argument("--excel", type=Path, help="EDC .xlsx path")
     parser.add_argument("--output", type=Path, default=None, help="output .docx path")
@@ -558,9 +546,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     if not args.output:
-        args.output = (
-            word.parent / f"审核报告_{word.stem}_{date.today().strftime('%Y%m%d')}.docx"
-        )
+        args.output = word.parent / f"审核报告_{word.stem}_{date.today().strftime('%Y%m%d')}.docx"
 
     logger.info("Word: %s", word)
     logger.info("Excel: %s", excel)

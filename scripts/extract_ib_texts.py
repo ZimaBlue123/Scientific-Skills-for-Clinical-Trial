@@ -262,8 +262,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if _DOCX_IMPORT_ERROR is not None:
         logger.error(
-            "missing dependency 'python-docx'. Install via: "
-            "python -m pip install python-docx"
+            "missing dependency 'python-docx'. Install via: python -m pip install python-docx"
         )
         return 2
 

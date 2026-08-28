@@ -18,9 +18,7 @@ checks.append(("筛败原因合计", 146 + 13 + 2, 161))
 checks.append(
     ("AE 例数 230+31", 230 + 31, 239)
 )  # 非征集性31例与征集性230例，不重复，故230+31!=239,只能逐个算
-checks.append(
-    ("征集性AE 230+非31 !=239", 230 + 31, 239, "WARNING 可能重复统计/表述模糊")
-)
+checks.append(("征集性AE 230+非31 !=239", 230 + 31, 239, "WARNING 可能重复统计/表述模糊"))
 
 # 3) AE 例次 688+39=727 ✓
 checks.append(("AE 例次 688+39", 688 + 39, 727))
@@ -224,9 +222,7 @@ for term_a, term_b, _ctx in [
     cnt_a = text.count(term_a)
     cnt_b = text.count(term_b)
     if cnt_a and cnt_b:
-        findings.append(
-            f"[术语混用] '{term_a}'({cnt_a}次) 与 '{term_b}'({cnt_b}次) 并存"
-        )
+        findings.append(f"[术语混用] '{term_a}'({cnt_a}次) 与 '{term_b}'({cnt_b}次) 并存")
 
 # 错别字常见
 typos = [
@@ -245,9 +241,7 @@ err = 0
 for c in checks:
     if len(c) == 3:
         name, calc, expected = c
-        match = (
-            abs(calc - expected) < 0.01 if isinstance(calc, float) else calc == expected
-        )
+        match = abs(calc - expected) < 0.01 if isinstance(calc, float) else calc == expected
         status = "OK" if match else "MISMATCH"
         if match:
             ok += 1
@@ -257,7 +251,7 @@ for c in checks:
     else:
         name, calc, expected, note = c
         out.write(f"[NOTE] {name}: 计算={calc}  文档={expected}  说明={note}\n")
-out.write(f"\n核对通过 {ok}/{ok+err}，问题 {err} 条\n\n")
+out.write(f"\n核对通过 {ok}/{ok + err}，问题 {err} 条\n\n")
 out.write("===== 术语/错别字扫描 =====\n")
 for f in findings:
     out.write(f + "\n")

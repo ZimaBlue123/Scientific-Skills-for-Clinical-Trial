@@ -75,10 +75,7 @@ def build_document() -> Document:
     apply_cn_en_fonts(doc)
 
     today = date.today().strftime("%Y年%m月%d日")
-    src_doc = (
-        "YDSWX（TVAX-006）-002（II）阶段性小结（安全性&体液免疫原性）"
-        " V1.0，2026年05月25日"
-    )
+    src_doc = "YDSWX（TVAX-006）-002（II）阶段性小结（安全性&体液免疫原性） V1.0，2026年05月25日"
 
     title = doc.add_heading("临床试验阶段性小结文档审核报告", level=0)
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -108,9 +105,7 @@ def build_document() -> Document:
     doc.add_heading("一、前后矛盾或易误导的数据与表述", level=1)
 
     doc.add_heading("1. 摘要：抗原指标名称写错（高优先级）", level=2)
-    _add_para(
-        doc, "位置：摘要 → 40~49岁 → 抗VZV抗原免疫应答 → 基于PPS-h2、第2剂接种后30天。"
-    )
+    _add_para(doc, "位置：摘要 → 40~49岁 → 抗VZV抗原免疫应答 → 基于PPS-h2、第2剂接种后30天。")
     _add_bullets(
         doc,
         [
@@ -318,9 +313,7 @@ def main() -> int:
     root = Path(__file__).resolve().parents[1]
     out_dir = root / "review_materials"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = (
-        out_dir / f"YDSWX_phase_summary_document_review_{date.today().isoformat()}.docx"
-    )
+    out_path = out_dir / f"YDSWX_phase_summary_document_review_{date.today().isoformat()}.docx"
 
     doc = build_document()
     try:

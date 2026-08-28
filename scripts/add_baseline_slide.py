@@ -40,9 +40,7 @@ R_COL_GRP = 980000  # each group column (right tables)
 # ======== Helper Functions ========
 
 
-def set_cell(
-    cell, text, size=Pt(7), bold=False, color=COLOR_DATA, align=PP_ALIGN.CENTER
-):
+def set_cell(cell, text, size=Pt(7), bold=False, color=COLOR_DATA, align=PP_ALIGN.CENTER):
     """Set cell text with formatting (handles multi-line via \\n)."""
     cell.text = str(text)
     for para in cell.text_frame.paragraphs:
@@ -108,9 +106,7 @@ def make_table(slide, nrows, ncols, x, y, col_widths, header_rows=2):
     """Create a table and return the pptx table object."""
     total_w = sum(col_widths)
     total_h = HEADER_H * header_rows + DATA_H * (nrows - header_rows)
-    shape = slide.shapes.add_table(
-        nrows, ncols, Emu(x), Emu(y), Emu(total_w), Emu(total_h)
-    )
+    shape = slide.shapes.add_table(nrows, ncols, Emu(x), Emu(y), Emu(total_w), Emu(total_h))
     tbl = shape.table
     # Clear default table style
     for attr in list(tbl._tbl.tblPr.attrib.keys()):
@@ -224,9 +220,7 @@ spTree = slide.shapes._spTree
 removed = 0
 for child in list(spTree):
     tag = child.tag
-    if any(
-        tag.endswith(t) for t in ["}sp", "}graphicFrame", "}grpSp", "}pic", "}cxnSp"]
-    ):
+    if any(tag.endswith(t) for t in ["}sp", "}graphicFrame", "}grpSp", "}pic", "}cxnSp"]):
         spTree.remove(child)
         removed += 1
 print(f"Cleared {removed} shapes from slide 13")

@@ -27,21 +27,17 @@ os.chdir("review_materials")
 
 with open("extracted_text.txt", "w", encoding="utf-8") as f:
     for file in os.listdir("."):
-        if file.endswith(".docx") and any(
-            proj in file for proj in ["009", "009B", "006"]
-        ):
+        if file.endswith(".docx") and any(proj in file for proj in ["009", "009B", "006"]):
             f.write(f"\n========== {file} ==========\n")
             lines = extract_text_from_docx(file)
             snippets = set()
             for l in lines:
                 l = l.replace("\n", " ").strip()
                 if (
-                    "剂量" in l
-                    or "用量" in l
-                    or "mg" in l
-                    or "最大" in l
-                    or "最低" in l
-                ) and len(l) > 3 and len(l) < 500:
+                    ("剂量" in l or "用量" in l or "mg" in l or "最大" in l or "最低" in l)
+                    and len(l) > 3
+                    and len(l) < 500
+                ):
                     snippets.add(l)
 
             for s in list(snippets):

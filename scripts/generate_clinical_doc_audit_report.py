@@ -130,18 +130,12 @@ def create_audit_report(config: AuditReportConfig, output_path: Path) -> None:
 def main() -> int:
     from pathlib import Path
 
-    parser = argparse.ArgumentParser(
-        description="Generate clinical document audit report."
-    )
+    parser = argparse.ArgumentParser(description="Generate clinical document audit report.")
     parser.add_argument(
         "--folder", type=str, required=True, help="Folder containing documents to audit"
     )
-    parser.add_argument(
-        "--output", type=str, default=None, help="Output path for audit report"
-    )
-    parser.add_argument(
-        "--title", type=str, default="临床试验文档审核报告", help="Report title"
-    )
+    parser.add_argument("--output", type=str, default=None, help="Output path for audit report")
+    parser.add_argument("--title", type=str, default="临床试验文档审核报告", help="Report title")
     parser.add_argument("--project", type=str, default="", help="Project name")
     args = parser.parse_args()
 

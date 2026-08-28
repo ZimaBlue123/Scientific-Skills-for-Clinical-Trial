@@ -91,9 +91,7 @@ class ReviewReport:
     def render(self, excel_basename: str) -> str:
         out: list[str] = []
         out.append(f"# 临床 Excel 审核报告 — {excel_basename}\n")
-        out.append(
-            f"**共扫描**: {len(self.sheets)} 个子表，触发 {len(self.issues)} 条问题\n"
-        )
+        out.append(f"**共扫描**: {len(self.sheets)} 个子表，触发 {len(self.issues)} 条问题\n")
         sev_counter: dict[str, int] = {}
         cat_counter: dict[str, int] = {}
         for i in self.issues:
@@ -352,9 +350,7 @@ def review(xlsx: Path) -> ReviewReport:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="临床 Excel 数据质量审核")
     parser.add_argument("xlsx", help="Excel 文件路径或目录")
-    parser.add_argument(
-        "--out", default=None, help="审核报告输出路径 (默认 <xlsx>.review.md)"
-    )
+    parser.add_argument("--out", default=None, help="审核报告输出路径 (默认 <xlsx>.review.md)")
     parser.add_argument("--dump", default=None, help="dump 文本输出路径")
     parser.add_argument("--no-dump", action="store_true", help="不生成 dump 文本")
     parser.add_argument(

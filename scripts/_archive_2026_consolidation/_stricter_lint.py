@@ -24,9 +24,7 @@ for node in ast.walk(tree):
 
 import builtins
 
-defined = (
-    set(dir(builtins)) | {n for n, _ in imports} | {"__name__", "__file__", "__doc__"}
-)
+defined = set(dir(builtins)) | {n for n, _ in imports} | {"__name__", "__file__", "__doc__"}
 
 # At module level, look for Name nodes that are loaded but never bound
 # in the module scope.
@@ -91,9 +89,7 @@ for node in tree.body:
                     fn_undefined.append((sub.lineno, sub.col_offset, sub.id))
 
         if fn_undefined:
-            print(
-                f"  {node.name}() at L{node.lineno}: {len(fn_undefined)} unresolved refs"
-            )
+            print(f"  {node.name}() at L{node.lineno}: {len(fn_undefined)} unresolved refs")
             # only print first 3 for brevity
             for ln, c, name in fn_undefined[:3]:
                 print(f"    L{ln}:{c} {name}")

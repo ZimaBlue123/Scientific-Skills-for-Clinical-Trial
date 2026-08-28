@@ -86,9 +86,7 @@ def extract_docx(path: Path) -> str:
         try:
             xml = zf.read("word/document.xml")
         except KeyError as exc:
-            raise KeyError(
-                f"archive {path} does not contain word/document.xml"
-            ) from exc
+            raise KeyError(f"archive {path} does not contain word/document.xml") from exc
 
     root = ET.fromstring(xml)
     body = root.find(f"{W_NS}body")

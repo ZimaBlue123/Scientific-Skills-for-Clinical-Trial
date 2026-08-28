@@ -243,11 +243,7 @@ def main(template_path, source_path, output_path):
     for i, para in enumerate(template.paragraphs):
         text = para.text.strip()
         for old, new in title_replacements.items():
-            if (
-                old in text
-                and "executive summary" not in text.lower()
-                and "\t" not in text
-            ):
+            if old in text and "executive summary" not in text.lower() and "\t" not in text:
                 replace_para_text(para, new)
                 break
         else:

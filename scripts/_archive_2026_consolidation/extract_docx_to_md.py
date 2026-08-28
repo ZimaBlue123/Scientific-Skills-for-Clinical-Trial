@@ -107,9 +107,7 @@ def docx_to_md(src_path: Path, max_cols: int | None = None) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Extract DOCX paragraphs/tables to markdown."
-    )
+    parser = argparse.ArgumentParser(description="Extract DOCX paragraphs/tables to markdown.")
     parser.add_argument("--input", required=True, help="Input .docx path")
     parser.add_argument("--output", required=True, help="Output .md path")
     parser.add_argument(

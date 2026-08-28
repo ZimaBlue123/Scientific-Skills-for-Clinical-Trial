@@ -89,9 +89,7 @@ def extract_document(path: str) -> str:
                 out_lines.append(f"[P style={style}] ")
         else:
             tbl = obj  # type: Table
-            out_lines.append(
-                f"[[TABLE {table_idx} rows={len(tbl.rows)} cols={len(tbl.columns)}]]"
-            )
+            out_lines.append(f"[[TABLE {table_idx} rows={len(tbl.rows)} cols={len(tbl.columns)}]]")
             for r_i, row in enumerate(tbl.rows):
                 cells = [cell_text(c).replace("\n", " | ") for c in row.cells]
                 out_lines.append(f"  R{r_i}: " + " || ".join(cells))

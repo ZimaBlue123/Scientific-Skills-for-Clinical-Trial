@@ -187,9 +187,7 @@ def get_paragraph_style_info(para):
             "italic": run.font.italic,
             "size": run.font.size,
             "name": run.font.name,
-            "color": (
-                run.font.color.rgb if run.font.color and run.font.color.rgb else None
-            ),
+            "color": (run.font.color.rgb if run.font.color and run.font.color.rgb else None),
         }
         info["runs"].append(run_info)
     return info
@@ -401,9 +399,7 @@ def transfer_content(template_path, source_path, output_path):
         text = para.text.strip()
 
         if text == "Development Safety Update Report (DSUR) No. 2":
-            replace_paragraph_full(
-                para, "Development Safety Update Report (DSUR) No. 1"
-            )
+            replace_paragraph_full(para, "Development Safety Update Report (DSUR) No. 1")
         elif text == "Recombinant Hexavalent Norovirus Vaccine (Hansenula polymorpha)":
             replace_paragraph_full(para, "Recombinant Varicella Vaccine (CHO Cell)")
         elif text.startswith("Reporting Period: 25 April 2025 to 24 April 2026"):

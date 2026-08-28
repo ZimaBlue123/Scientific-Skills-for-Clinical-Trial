@@ -68,7 +68,9 @@ def main() -> int:
 
     main_doc = "YDSWX(TVAX-006)-002(II)_数据审核报告_V0.7_20260312.docx"
     ref_xlsx = "YDSWX(TVAX-006)-002(II)_数据审核报告清单_20260312.xlsx"
-    ref_protocol = "远大重组带状疱疹疫苗Ⅱ期-方案（版本号：1.3，版本日期：2026年01月05日）-清洁版-定稿.docx"
+    ref_protocol = (
+        "远大重组带状疱疹疫苗Ⅱ期-方案（版本号：1.3，版本日期：2026年01月05日）-清洁版-定稿.docx"
+    )
 
     # Use ASCII filename to avoid Windows console encoding issues.
     out_name = f"audit_report_data_review_v0.7_strict_audit_{today}.docx"
@@ -153,9 +155,7 @@ def main() -> int:
                 "在章节开头明确统计口径：合计为“去重受试者数”还是“事件/例次”；"
                 "如存在重叠，建议同时给出：去重后受试者数、未去重例次数，并在表注中保持一致术语。"
             ),
-            rationale=(
-                "超窗属于方案偏离的重要来源；口径不清会影响偏离数量与严重程度判断。"
-            ),
+            rationale=("超窗属于方案偏离的重要来源；口径不清会影响偏离数量与严重程度判断。"),
             cross_ref="交叉核对：参考清单XLSX中有超窗明细，可支持去重与例次统计。",
         ),
         Finding(

@@ -2,9 +2,7 @@
 
 from pathlib import Path
 
-p = Path(
-    r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\extract_docx_full.py"
-)
+p = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\scripts\extract_docx_full.py")
 src = p.read_text(encoding="utf-8")
 
 OLD_DOC = """Extract text from .docx / .doc files.
@@ -64,7 +62,9 @@ OLD_FUNC = '''def extract_docx(filepath: Path) -> str:
 
     return "\\n\\n".join(full_text)'''
 
-NEW_FUNC = OLD_FUNC + '''
+NEW_FUNC = (
+    OLD_FUNC
+    + '''
 
 
 
@@ -128,6 +128,7 @@ def extract_docx_to_markdown(filepath: Path) -> str:
             tbl = Table(child, doc)
             out.extend(_render_table(tbl))
     return "\\n\\n".join(out) + "\\n"'''
+)
 
 assert OLD_FUNC in src, "OLD_FUNC not found"
 src = src.replace(OLD_FUNC, NEW_FUNC)

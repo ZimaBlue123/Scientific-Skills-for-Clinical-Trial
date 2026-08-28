@@ -201,12 +201,8 @@ def _configure_landscape_a4(section) -> None:
 
 
 def _content_box_mm(section) -> tuple[float, float]:
-    w_mm = float(
-        section.page_width.mm - section.left_margin.mm - section.right_margin.mm
-    )
-    h_mm = float(
-        section.page_height.mm - section.top_margin.mm - section.bottom_margin.mm
-    )
+    w_mm = float(section.page_width.mm - section.left_margin.mm - section.right_margin.mm)
+    h_mm = float(section.page_height.mm - section.top_margin.mm - section.bottom_margin.mm)
     if w_mm <= 1 or h_mm <= 1:
         raise RuntimeError(f"版心尺寸异常：w={w_mm}mm h={h_mm}mm")
     return w_mm, h_mm
@@ -350,9 +346,7 @@ def build_docx(
         ).font.size = Pt(9)
         for label, jb in collected:
             with Image.open(io.BytesIO(jb)) as im2:
-                plain = _tesseract_plain_text(
-                    im2.convert("RGB"), tess_exe, psm=int(ocr_psm)
-                )
+                plain = _tesseract_plain_text(im2.convert("RGB"), tess_exe, psm=int(ocr_psm))
             appendix_blocks.append(f"【{label}】\n{plain}")
         body = doc.add_paragraph()
         br = body.add_run("\n\n".join(appendix_blocks))

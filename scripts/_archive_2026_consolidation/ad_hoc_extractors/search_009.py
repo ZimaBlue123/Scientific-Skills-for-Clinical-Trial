@@ -32,10 +32,6 @@ with open("009_search.txt", "w", encoding="utf-8") as f:
             for l in lines:
                 l = l.replace("\n", " ").strip()
                 if (
-                    "规格" in l
-                    or "HBsAg" in l
-                    or "含量" in l
-                    or "活性成分" in l
-                    or "每剂" in l
+                    "规格" in l or "HBsAg" in l or "含量" in l or "活性成分" in l or "每剂" in l
                 ) and ("20" in l or "10" in l or "5" in l):
                     f.write(f" - {l}\n")

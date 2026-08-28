@@ -141,9 +141,7 @@ def _partition_by_age(
     return stale, fresh
 
 
-def _delete_files(
-    files: Sequence[Path], *, dry_run: bool, result: CleanupResult
-) -> None:
+def _delete_files(files: Sequence[Path], *, dry_run: bool, result: CleanupResult) -> None:
     for f in files:
         if dry_run:
             logger.info("[dry-run] would remove: %s", f)
@@ -239,9 +237,7 @@ def rm_pycache(
     """
     n = 0
     cutoff_time = now if now is not None else time.time()
-    cutoff = (
-        cutoff_time - (max_age_days * 86400.0) if max_age_days is not None else None
-    )
+    cutoff = cutoff_time - (max_age_days * 86400.0) if max_age_days is not None else None
     for rel in _PYCACHE_SEARCH_DIRS:
         base = root / rel
         if not base.is_dir():
@@ -531,9 +527,7 @@ def cleanup_ide_history(
                 continue
             age_days = (now - mtime) / 86400.0
             if dry_run:
-                logger.info(
-                    "[dry-run] would remove: %s (%.1f days old)", entry, age_days
-                )
+                logger.info("[dry-run] would remove: %s (%.1f days old)", entry, age_days)
                 result.removed.append(entry)
                 continue
             try:
@@ -602,9 +596,7 @@ def _resolve_max_age_days(args: argparse.Namespace) -> float | None:
         try:
             return float(env_value)
         except ValueError:
-            logger.warning(
-                "CLEANUP_MAX_AGE_DAYS is not numeric (%s); ignoring", env_value
-            )
+            logger.warning("CLEANUP_MAX_AGE_DAYS is not numeric (%s); ignoring", env_value)
     fallback = getattr(args, "_default_max_age_days", None)
     return fallback
 
@@ -767,8 +759,7 @@ def run_ide_history(argv: Sequence[str] | None = None) -> int:
         type=Path,
         default=None,
         help=(
-            "Override the user's home directory (used in tests). "
-            "Defaults to $USERPROFILE / $HOME."
+            "Override the user's home directory (used in tests). Defaults to $USERPROFILE / $HOME."
         ),
     )
     parser.add_argument(

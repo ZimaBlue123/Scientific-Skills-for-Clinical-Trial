@@ -47,9 +47,7 @@ def _http_get_json(url: str, timeout: float = DEFAULT_TIMEOUT) -> dict[str, Any]
         raise
 
 
-def esearch(
-    term: str, mindate: str = "", maxdate: str = "", retmax: int = 20
-) -> dict[str, Any]:
+def esearch(term: str, mindate: str = "", maxdate: str = "", retmax: int = 20) -> dict[str, Any]:
     params = {
         "db": "pubmed",
         "term": term,
@@ -154,9 +152,7 @@ def main() -> int:
 
     print(f"\nSaved {len(out_records)} records to {args.out}")
     for r in out_records[:10]:
-        print(
-            f"PMID {r['pmid']} | {r['pubdate']} | {r['first_author']} | {r['title'][:80]}"
-        )
+        print(f"PMID {r['pmid']} | {r['pubdate']} | {r['first_author']} | {r['title'][:80]}")
     return 0
 
 

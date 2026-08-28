@@ -280,9 +280,7 @@ def render_search_method(doc: Document) -> None:
     tbl.columns[1].width = Cm(3.0)
     for i, (q, n) in enumerate(SEARCH_METHOD["queries_used"], start=1):
         _set_cell_text(tbl.rows[i].cells[0], q, size=10)
-        _set_cell_text(
-            tbl.rows[i].cells[1], str(n), size=10, align=WD_ALIGN_PARAGRAPH.CENTER
-        )
+        _set_cell_text(tbl.rows[i].cells[1], str(n), size=10, align=WD_ALIGN_PARAGRAPH.CENTER)
         tbl.rows[i].cells[0].width = Cm(13.0)
         tbl.rows[i].cells[1].width = Cm(3.0)
 
@@ -372,9 +370,7 @@ def _render_trial_table(doc: Document, records: list[dict], trial_key: str) -> N
         doi_cell.width = col_widths[5]
 
 
-def render_trial_section(
-    doc: Document, trial_key: str, heading: str, records: list[dict]
-) -> None:
+def render_trial_section(doc: Document, trial_key: str, heading: str, records: list[dict]) -> None:
     meta = TRIAL_META[trial_key]
 
     _add_section_heading(doc, heading, level=2)
@@ -408,9 +404,7 @@ def render_key_observations(doc: Document) -> None:
 
 def render_appendix(doc: Document, data: dict) -> None:
     _add_section_heading(doc, "附录：完整 JSON 元数据", level=1)
-    _add_body(
-        doc, "完整检索元数据见 .workbuddy/audit/norovirus_trial_pubmed.json。", size=10
-    )
+    _add_body(doc, "完整检索元数据见 .workbuddy/audit/norovirus_trial_pubmed.json。", size=10)
     code_text = json.dumps(data, ensure_ascii=False, indent=2)
     for line in code_text.split("\n"):
         p = doc.add_paragraph()

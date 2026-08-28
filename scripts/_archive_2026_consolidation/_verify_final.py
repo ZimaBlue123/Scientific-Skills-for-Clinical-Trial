@@ -8,9 +8,7 @@ PY = r"C:\Users\Administrator\AppData\Local\Programs\Python\Python310\python.exe
 
 # 1. Pyflakes on the changed file only
 target = cwd / "scripts/common_scripts/docx_utils.py"
-res = subprocess.run(
-    [PY, "-m", "pyflakes", str(target)], capture_output=True, text=True
-)
+res = subprocess.run([PY, "-m", "pyflakes", str(target)], capture_output=True, text=True)
 print("=== pyflakes on fixed file ===")
 print(f"rc={res.returncode}")
 print(f"stdout: {res.stdout!r}")

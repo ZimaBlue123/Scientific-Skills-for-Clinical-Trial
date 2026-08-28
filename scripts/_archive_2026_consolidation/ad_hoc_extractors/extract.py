@@ -46,11 +46,15 @@ for file in os.listdir("."):
             l = l.replace("\n", " ").strip()
             # Try to match patterns like "每次xxx mg", "每日xxx mg"
             if (
-                re.search(r"\d+\s*(mg|g|ml)", l, re.IGNORECASE)
-                or "最大" in l
-                or "最低" in l
-                or "用法用量" in l
-            ) and len(l) > 5 and len(l) < 500:
+                (
+                    re.search(r"\d+\s*(mg|g|ml)", l, re.IGNORECASE)
+                    or "最大" in l
+                    or "最低" in l
+                    or "用法用量" in l
+                )
+                and len(l) > 5
+                and len(l) < 500
+            ):
                 snippets.add(l)
 
         for s in list(snippets)[:10]:

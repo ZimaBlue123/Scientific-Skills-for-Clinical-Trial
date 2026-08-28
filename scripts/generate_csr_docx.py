@@ -347,9 +347,7 @@ def _parse_safety_014_summary(safety1_pdf: Path) -> dict[str, object]:
 
     # Systemic solicited: for this fixed dataset, it corresponds to (43/70) vs (5/70) with total 48/140.
     sys_rows = [
-        c
-        for c in candidates_4049
-        if c["trial_n"] == 43 and c["ctrl_n"] == 5 and c["total_n"] == 48
+        c for c in candidates_4049 if c["trial_n"] == 43 and c["ctrl_n"] == 5 and c["total_n"] == 48
     ]
     if not sys_rows:
         raise ValueError("未能在40~49分层块中定位“征集性全身”行（43 vs 5）")
@@ -357,15 +355,11 @@ def _parse_safety_014_summary(safety1_pdf: Path) -> dict[str, object]:
 
     # 50–59岁（对照组为阳性对照组2）：3级及以上 = 8 vs 9，合计17
     candidates_5059 = parse_age_block("50~59")
-    ge3_5059 = pick_row(
-        candidates_5059, expected_trial_n=8, expected_ctrl_n=9, expected_total_n=17
-    )
+    ge3_5059 = pick_row(candidates_5059, expected_trial_n=8, expected_ctrl_n=9, expected_total_n=17)
 
     # ≥60岁（对照组为阳性对照组2）：3级及以上 = 3 vs 2，合计5
     candidates_ge60 = parse_age_block("≥60")
-    ge3_ge60 = pick_row(
-        candidates_ge60, expected_trial_n=3, expected_ctrl_n=2, expected_total_n=5
-    )
+    ge3_ge60 = pick_row(candidates_ge60, expected_trial_n=3, expected_ctrl_n=2, expected_total_n=5)
 
     return {
         "table_rows": table_rows,
@@ -401,9 +395,7 @@ def _parse_safety_030_nonsolicited(safety3_pdf: Path) -> dict[str, object]:
         re.S,
     )
     if not m:
-        raise ValueError(
-            f"未能从{safety3_pdf.name}抽取非征集性总体行（表14.3.1.8.3.1）"
-        )
+        raise ValueError(f"未能从{safety3_pdf.name}抽取非征集性总体行（表14.3.1.8.3.1）")
     trial_n, trial_pct, c1_n, c1_pct, c2_n, c2_pct, total_n, total_pct = m.groups()
 
     # Conservative: default to 0; detailed grade-by-grade is handled in annex via part3 table.
@@ -446,9 +438,7 @@ def main() -> int:
     today = date.today().isoformat()
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Generate stage CSR docx from source PDFs."
-    )
+    parser = argparse.ArgumentParser(description="Generate stage CSR docx from source PDFs.")
     parser.add_argument(
         "--root",
         type=str,
@@ -473,15 +463,13 @@ def main() -> int:
     p_title = doc.add_paragraph("阶段性小结（安全性&体液免疫原性）")
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_title.style = "Title"
-    doc.add_paragraph("方案编号：YDSWX（TVAX-006）-002（II）").alignment = (
-        WD_ALIGN_PARAGRAPH.CENTER
-    )
+    doc.add_paragraph("方案编号：YDSWX（TVAX-006）-002（II）").alignment = WD_ALIGN_PARAGRAPH.CENTER
     doc.add_paragraph(
         "评价重组带状疱疹疫苗（CHO 细胞）在 40 岁及以上人群中接种的"
     ).alignment = WD_ALIGN_PARAGRAPH.CENTER
-    doc.add_paragraph("免疫原性和安全性的随机、盲法、阳性对照Ⅱ期临床试验").alignment = (
-        WD_ALIGN_PARAGRAPH.CENTER
-    )
+    doc.add_paragraph(
+        "免疫原性和安全性的随机、盲法、阳性对照Ⅱ期临床试验"
+    ).alignment = WD_ALIGN_PARAGRAPH.CENTER
     doc.add_paragraph("").add_run("")  # spacer
     doc.add_paragraph(
         "申办方：远大赛威信生命科学（南京）有限公司 / 远大赛威信生命科学（杭州）有限公司"
@@ -531,9 +519,7 @@ def main() -> int:
             ),
             TableRow(["疫苗名称", "重组带状疱疹疫苗（CHO细胞）"]),
             TableRow(["试验分期", "II期"]),
-            TableRow(
-                ["本次报告内容", "第2剂接种后30天的安全性和体液免疫原性结果（阶段性）"]
-            ),
+            TableRow(["本次报告内容", "第2剂接种后30天的安全性和体液免疫原性结果（阶段性）"]),
         ],
     )
     doc.add_paragraph(
@@ -570,7 +556,7 @@ def main() -> int:
             TableRow(
                 [
                     "随机入组",
-                    f'{disposition["randomized_total"]}（试验组{disposition["randomized_trial"]}；阳性对照组1：{disposition["randomized_ctrl1"]}；阳性对照组2：{disposition["randomized_ctrl2"]}）',
+                    f"{disposition['randomized_total']}（试验组{disposition['randomized_trial']}；阳性对照组1：{disposition['randomized_ctrl1']}；阳性对照组2：{disposition['randomized_ctrl2']}）",
                 ]
             ),
             TableRow(["完成第2剂后30天安全性观察", disposition["completed_d30_total"]]),
@@ -590,9 +576,7 @@ def main() -> int:
     )
 
     doc.add_heading("2.4. 合并用药/疫苗/非药物治疗", level=2)
-    doc.add_paragraph(
-        "合并用药/疫苗及非药物治疗情况详见统计分析报告。本阶段性小结不展开逐表复述。"
-    )
+    doc.add_paragraph("合并用药/疫苗及非药物治疗情况详见统计分析报告。本阶段性小结不展开逐表复述。")
 
     doc.add_heading("2.5. 方案偏离/违背", level=2)
     doc.add_paragraph(
@@ -608,14 +592,10 @@ def main() -> int:
     # 3. 免疫原性分析
     doc.add_heading("3. 免疫原性分析", level=1)
     doc.add_heading("3.1. 基线抗体水平", level=2)
-    doc.add_paragraph(
-        "基线抗体水平（mFAS）描述详见统计分析报告。本阶段性小结聚焦主要终点时点。"
-    )
+    doc.add_paragraph("基线抗体水平（mFAS）描述详见统计分析报告。本阶段性小结聚焦主要终点时点。")
 
     doc.add_heading("3.2. 主要免疫原性终点", level=2)
-    doc.add_paragraph(
-        "主要终点为第2剂接种后第30天（PPS-h2）的抗gE与抗VZV抗原特异性血清抗体水平。"
-    )
+    doc.add_paragraph("主要终点为第2剂接种后第30天（PPS-h2）的抗gE与抗VZV抗原特异性血清抗体水平。")
     doc.add_paragraph("3.2.1 抗gE抗原特异性血清抗体")
     _add_table(
         doc,
@@ -703,12 +683,8 @@ def main() -> int:
         rows=[
             TableRow(["所有AE（例数%）", *safety014["table_rows"]["所有AE"]]),
             TableRow(["征集性AE（例数%）", *safety014["table_rows"]["征集性AE"]]),
-            TableRow(
-                ["征集性局部AE（例数%）", *safety014["table_rows"]["征集性局部AE"]]
-            ),
-            TableRow(
-                ["征集性全身AE（例数%）", *safety014["table_rows"]["征集性全身AE"]]
-            ),
+            TableRow(["征集性局部AE（例数%）", *safety014["table_rows"]["征集性局部AE"]]),
+            TableRow(["征集性全身AE（例数%）", *safety014["table_rows"]["征集性全身AE"]]),
             TableRow(["非征集性AE（例数%）", *safety014["table_rows"]["非征集性AE"]]),
             TableRow(["3级及以上AE（例数%）", *safety014["table_rows"]["3级及以上AE"]]),
             TableRow(["SAE（例数%）", *safety014["table_rows"]["SAE"]]),
@@ -841,9 +817,7 @@ def main() -> int:
         "ICH E3（EMA科学指南页）：https://www.ema.europa.eu/en/ich-e3-structure-content-clinical-study-reports-scientific-guideline"
     )
     doc.add_paragraph("FDA E3指南下载页：https://www.fda.gov/media/84857/download")
-    doc.add_paragraph(
-        "FDA SHINGRIX Clinical Review：https://www.fda.gov/media/108793/download"
-    )
+    doc.add_paragraph("FDA SHINGRIX Clinical Review：https://www.fda.gov/media/108793/download")
     doc.add_paragraph(
         "EMA Shingrix EPAR主页：https://www.ema.europa.eu/en/medicines/human/EPAR/shingrix"
     )

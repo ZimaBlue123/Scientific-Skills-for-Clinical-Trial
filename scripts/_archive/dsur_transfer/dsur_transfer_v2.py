@@ -259,9 +259,7 @@ def main(template_path, source_path, output_path):
     # Start after TOC
     body_start = toc_end if toc_end else 0
 
-    template_sections = (
-        {}
-    )  # section_key -> list of paragraph indices (content only, no headings)
+    template_sections = {}  # section_key -> list of paragraph indices (content only, no headings)
     current_section = None
     content_buffer = []
 

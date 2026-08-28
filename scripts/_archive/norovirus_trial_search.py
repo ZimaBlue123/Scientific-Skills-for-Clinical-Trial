@@ -111,9 +111,7 @@ def esummary(pmids: list[str]) -> dict[str, dict[str, Any]]:
     return out
 
 
-def search_for_trial(
-    nct_id: str, label: str, extra_queries: list[str]
-) -> dict[str, Any]:
+def search_for_trial(nct_id: str, label: str, extra_queries: list[str]) -> dict[str, Any]:
     """Collect PMIDs related to a single NCT trial."""
     print(f"\n=== {label} ({nct_id}) ===")
     seen: dict[str, str] = {}  # pmid -> query that found it
@@ -206,11 +204,11 @@ def main() -> int:
     for key, payload in results.items():
         print(f"\n--- {key} ({payload['count']} 条) ---")
         for r in payload["records"][:20]:
-            print(f"  PMID {r.get('pmid')}: {r.get('title','')[:120]}")
+            print(f"  PMID {r.get('pmid')}: {r.get('title', '')[:120]}")
             print(
-                f"    {r.get('first_author','')} | {r.get('journal','')} | {r.get('pubdate','')}"
+                f"    {r.get('first_author', '')} | {r.get('journal', '')} | {r.get('pubdate', '')}"
             )
-            print(f"    DOI: {r.get('doi','')} | via: {r.get('query_source','')[:80]}")
+            print(f"    DOI: {r.get('doi', '')} | via: {r.get('query_source', '')[:80]}")
 
     return 0
 

@@ -272,9 +272,7 @@ def main(template_path, source_path, output_path):
             # Check if we're entering executive summary
             if "executive summary" in text.lower():
                 in_exec = True
-            elif (
-                "table of contents" in text.lower() or "confidentiality" in text.lower()
-            ):
+            elif "table of contents" in text.lower() or "confidentiality" in text.lower():
                 in_exec = False
             continue
 
@@ -469,9 +467,7 @@ def main(template_path, source_path, output_path):
 
         # Get content-only paragraphs
         app7_content = [
-            idx
-            for idx in app7
-            if not identify_section_key(template.paragraphs[idx].text.strip())
+            idx for idx in app7 if not identify_section_key(template.paragraphs[idx].text.strip())
         ]
 
         for j, src_text in enumerate(src_texts):

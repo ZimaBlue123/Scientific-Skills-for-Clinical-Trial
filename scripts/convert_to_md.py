@@ -93,9 +93,7 @@ def _convert_pdf_basic(filepath: Path) -> str | None:
         import pypdf  # type: ignore
 
         reader = pypdf.PdfReader(str(filepath))
-        return (
-            "\n\n".join((p.extract_text() or "") for p in reader.pages).strip() or None
-        )
+        return "\n\n".join((p.extract_text() or "") for p in reader.pages).strip() or None
     except ImportError:
         pass
     except Exception as exc:  # noqa: BLE001
@@ -106,9 +104,7 @@ def _convert_pdf_basic(filepath: Path) -> str | None:
         import pdfplumber  # type: ignore
 
         with pdfplumber.open(str(filepath)) as pdf:
-            return (
-                "\n\n".join((p.extract_text() or "") for p in pdf.pages).strip() or None
-            )
+            return "\n\n".join((p.extract_text() or "") for p in pdf.pages).strip() or None
     except ImportError:
         logger.error("Install pypdf or pdfplumber to read PDF files.")
     except Exception as exc:  # noqa: BLE001
@@ -180,9 +176,7 @@ def docx_to_md_numbered(src_path: Path, max_cols: int | None = None) -> str:
             table_idx += 1
             out.extend([f"## T{table_idx}", md, ""])
 
-    return ("\n".join(out).rstrip() + MARKER_TERMINATOR).rstrip(
-        "\n"
-    ) + MARKER_TERMINATOR
+    return ("\n".join(out).rstrip() + MARKER_TERMINATOR).rstrip("\n") + MARKER_TERMINATOR
 
 
 # ---------------------------------------------------------------------------
@@ -197,10 +191,7 @@ def _read_rtf(src: Path) -> str | None:
         logger.error("Install 'striprtf' to read .rtf files.")
         return None
     try:
-        return (
-            rtf_to_text(src.read_text(encoding="utf-8", errors="ignore")).strip()
-            or None
-        )
+        return rtf_to_text(src.read_text(encoding="utf-8", errors="ignore")).strip() or None
     except Exception as exc:  # noqa: BLE001
         logger.error("[striprtf] %s: %s", src.name, exc)
         return None
@@ -249,9 +240,7 @@ def convert_file(
             elif suffix == ".rtf":
                 content = _read_rtf(src)
             elif suffix == ".doc":
-                logger.error(
-                    ".doc format requires Word COM (Windows) — skipping %s", src.name
-                )
+                logger.error(".doc format requires Word COM (Windows) — skipping %s", src.name)
 
     if not content or not content.strip():
         logger.error("[FAILED] could not extract content: %s", src.name)
@@ -275,9 +264,7 @@ def convert_folder(
     """Convert every supported file in ``input_dir`` to ``output_dir``."""
     if extensions is None:
         extensions = set(DEFAULT_EXTENSIONS)
-    extensions = {
-        e.lower() if e.startswith(".") else f".{e.lower()}" for e in extensions
-    }
+    extensions = {e.lower() if e.startswith(".") else f".{e.lower()}" for e in extensions}
 
     if output_dir is None:
         output_dir = input_dir / "converted"
@@ -332,9 +319,7 @@ Examples:
         """,
     )
     parser.add_argument("input", nargs="?", help="Input file or folder")
-    parser.add_argument(
-        "--folder", "-f", help="Input folder (alternative to positional)"
-    )
+    parser.add_argument("--folder", "-f", help="Input folder (alternative to positional)")
     parser.add_argument("-o", "--output", help="Output file or folder")
     parser.add_argument(
         "--extensions",
@@ -383,9 +368,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     output_path = Path(args.output) if args.output else None
 
     if input_path.is_file():
-        result = convert_file(
-            input_path, output_path, mode=args.mode, max_cols=args.max_cols
-        )
+        result = convert_file(input_path, output_path, mode=args.mode, max_cols=args.max_cols)
         return 0 if result else 1
 
     results = convert_folder(
