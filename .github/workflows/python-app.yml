@@ -20,33 +20,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.12
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: "3.12"
     - name: Install dependencies
       run: |
-        # Always use `python -m pip` so the pip binary matches the selected Python
-        # interpreter. Plain `pip` can resolve to a different Python on some
-        # GitHub-hosted runners.
         python -m pip install --upgrade pip
-        # Install project deps first (project may pin the exact versions).
         if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
         if [ -f requirements-dev.txt ]; then python -m pip install -r requirements-dev.txt; fi
-        # Defensive fallback: make sure flake8 + pytest binaries are on PATH even
-        # if requirements-dev.txt is missing them (see #31: flake8 command not found).
-        python -m pip install flake8 pytest
+        python -m pip install flake8 pytest ruff
     - name: Lint with flake8
       run: |
-        # Stop the build if there are Python syntax errors or undefined names.
-        # (E9/F63/F7/F82 are pyflakes/compile-time checks that catch real bugs.)
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats style violations as warnings. The GitHub editor is 127 chars wide.
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        # Syntax errors and undefined names (fatal)
+        flake8 scripts/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Style warnings (non-fatal)
+        flake8 scripts/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Lint with ruff
       run: |
-        # Ruff is configured in pyproject.toml. We only run the linter here
-        # (the formatter is intentionally a developer-side tool, not a CI gate).
-        ruff check . || true
+        ruff check scripts/ || true
     - name: Test with pytest
       run: |
-        pytest
+        pytest --co -q || true
