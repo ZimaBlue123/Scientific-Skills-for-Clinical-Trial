@@ -36,7 +36,7 @@ def prepare_v29_presentation():
     tbl2 = s2.Shapes(2).Duplicate()
 
     # 2. Number of details slides (分板块切页: 已上市8条=2页[3+5], 在研16条=4页, 共6页)
-    from update_data_v29 import marketed_data as _md, pipeline_data as _pd
+    from update_data_final import marketed_data as _md, pipeline_data as _pd
 
     num_slides_needed = math.ceil(len(_md) / 4.0) + math.ceil(len(_pd) / 4.0)
 
