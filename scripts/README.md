@@ -16,30 +16,31 @@ scripts/
 
 | 脚本 | 功能 | 主要依赖 |
 |------|------|---------|
-| `extract_xlsx_full.py` | 通用 .xlsx 容错文本提取（zipfile+xml，兼容 openpyxl 无法读取的工作簿） | stdlib |
+| `extract_office_utils.py` | 统一 Office 文档提取（DOCX/DOC/PPTX/XLSX，含容错 XML 提取） | python-docx, python-pptx, openpyxl |
 | `review_clinical_xlsx.py` | 临床试验 Excel 数据质量审核（遍历、矛盾扫描、错别字检测、报告输出） | openpyxl |
 | `project_self_check.py`   | 项目自检：外部命令可用性 + Python 脚本冒烟测试 | stdlib |
-| `extract_docx_full.py`    | 通用 .docx/.doc 文本提取 | python-docx |
-| `extract_docx_to_md.py`   | .docx → Markdown（含表格） | python-docx |
-| `extract_doc_text.py`     | 旧版 .doc (二进制) 文本提取 | olefile |
-| `extract_ib_texts.py`     | 中英文 IB（研究者手册）提取 | python-docx |
-| `extract_tables_to_docx.py` | OCR + 表格流水线（图片 → Word） | pytesseract, opencv |
 | `convert_to_md.py`        | docx/pdf/rtf/doc 统一转 Markdown | 多种 |
-| `convert_doc_to_docx.py`  | 旧版 .doc → .docx | subprocess(libreoffice) |
-| `md_to_docx.py`           | Markdown → .docx | python-docx |
-| `convert_audit_report_md_to_docx.py` | 审核报告 MD → DOCX | python-docx |
+| `extract_tables_to_docx.py` | OCR + 表格流水线（图片 → Word） | pytesseract, opencv, img2table |
 | `make_safe_md_copies.py`  | 生成 .md 文件的安全副本（去敏感信息） | stdlib |
 | `generate_audit_report_docx.py` | 生成审核报告 Word | python-docx |
-| `generate_clinical_doc_audit_report.py` | 临床文档审核报告 | python-docx |
+| `generate_clinical_doc_audit_report.py` | 临床文档审核报告通用模板 | python-docx |
 | `generate_mmr_audit_report.py` | 医学监查报告（MMR）审核：Word+EDC 交叉核对 → Word 报告 | python-docx |
-| `generate_clinical_overview_doc_review_docx.py` | CTD 2.5 临床总览审阅 | python-docx |
-| `generate_phase_summary_doc_review_docx.py` | 期中 CSR 摘要审阅 | python-docx |
-| `generate_norovirus_review_docx.py` | 诺如病毒专项审阅 | python-docx |
-| `generate_csr_docx.py`    | 生成 CSR 文档 | python-docx |
-| `build_tvax006_IMA_v2_docx.py` | TVAX-006 IMA v2 桥接文档 | python-docx |
-| `cansino_detail4843_manual_docx.py` | 康希诺说明书下载 + 横版排版 | pillow, requests |
-| `cleanup_generated_artifacts.py` | 清理 generated/ 等可重建产物 | stdlib |
+| `generate_clinical_overview_doc_review_docx.py` | CTD 2.5 临床总览审阅报告 | python-docx |
+| `generate_phase_summary_doc_review_docx.py` | 期中 CSR 摘要审阅报告 | python-docx |
+| `generate_norovirus_review_docx.py` | 诺如病毒流行病学综述生成 | python-docx |
+| `generate_csr_docx.py`    | 生成 II 期临床总结报告 CSR | python-docx, pymupdf |
+| `cansino_detail4843_manual_docx.py` | 康希诺说明书下载 + 横版排版 | pillow, img2table |
+| `cleanup_generated_artifacts.py` | 清理 generated/ 与历史状态等可重建产物 | stdlib |
 | `skill_dedupe_report.py`  | skills 去重报告 | stdlib |
+| `compute_diabetes_immuno.py` | TVAX-009 糖尿病亚组免疫原性聚合与计算 (FAS/PPS) | python-docx, stdlib |
+| `generate_diabetes_immuno_word.py` | TVAX-009 糖尿病亚组 Word 表格生成器（支持 --pps-only） | python-docx |
+| `generate_diabetes_6slides_standalone.py` | TVAX-009 糖尿病亚组 6 页独立 PPT 生成器 | python-pptx, lxml |
+| `generate_diabetes_4slides_pps_16x9.py` | TVAX-009 糖尿病亚组 4 页宽屏 PPT 生成器 (PPS) | python-pptx, lxml |
+| `verify_diabetes_slides.py` | 糖尿病亚组幻灯片与 JSON 数据对齐校验 | python-pptx |
+| `update_data_final.py`    | CpG 疫苗安全性汇总基础数据字典 (V29 数据集) | stdlib |
+| `generate_updated_files_final.py` | CpG 疫苗安全性汇总 PPTX/DOCX 产出与超链接渲染 | python-docx, python-pptx |
+| `duplicate_pptx_win32_final.py` | CpG 疫苗安全性汇总 PPTX 结构骨架复制 | win32com |
+| `verify_output_final.py`  | CpG 疫苗安全性交付物结构与链接完整性自检 | python-docx, python-pptx |
 
 ## 用法
 
