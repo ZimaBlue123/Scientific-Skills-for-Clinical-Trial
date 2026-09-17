@@ -17,6 +17,10 @@
 - **迭代清理机制**：在执行多轮迭代任务时（例如 V1 到 V10 版本的生成），一旦确认生成了最终版（Final/Latest），Agent **必须主动清理** 之前的过渡废弃脚本（如 `_v1.py` 至 `_v9.py` 等中间产物），只保留最终的执行脚本并进行重命名定档（如 `generate_[topic]_final.py`）。
 - **文件命名规范**：脚本文件应具有自描述性（Self-descriptive），拒绝含糊不清的名称（如单纯的 `test.py` 或 `gen_docx.py`），应当准确指代其生成的报告内容。
 
-## 4. 代码复用优先 (Code Reuse - Strict)
+## 4. 强制代码与技能复用 (Mandatory Code & Skill Reuse)
 
-- **优先复用现有脚本**：在编写任何新脚本处理数据或提取文本前，Agent 必须优先检查 `scripts/` 目录中是否已有同类通用工具（例如 `extract_office_utils.py` 等）。严禁无视现有代码重复造轮子，应优先调用现有模块或在现有模块基础上进行扩展。
+- **核心原则**：严禁在未排查现有资产的情况下“重复造轮子”（Reinventing the wheel）。
+- **执行 SOP (Pre-Flight Check)**：在着手编写任何新脚本或提供复杂解决方案之前，Agent **必须强制执行**以下前置排查：
+  1. **排查脚本库**：使用 `find_by_name`、`grep_search` 或 `list_dir` 搜索 `scripts/`（及其子目录 `office_tools`, `data_processing` 等）中是否已存在类似功能的脚本（如 Office 处理、PDF 解析、数据对齐）。
+  2. **查阅内置技能**：浏览 Agent 提示词中提供的 `<skills>` 列表，确认是否有官方或项目定制的 Skill 可直接处理该任务。
+- **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `office_tools/extract_office_utils.py`）进行扩展开发；除非是全新的独立业务逻辑，否则避免从零开始写新文件。
