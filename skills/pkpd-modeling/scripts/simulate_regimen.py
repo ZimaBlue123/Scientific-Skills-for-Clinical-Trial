@@ -372,7 +372,10 @@ def run(argv: Sequence[str] | None = None) -> int:
         step = max(len(times) // max(args.profile_points, 1), 1)
         report.table(
             "concentration-time profile",
-            [{"time": float(t), "conc": float(c)} for t, c in zip(times[::step], conc[::step])],
+            [
+                {"time": float(t), "conc": float(c)}
+                for t, c in zip(times[::step], conc[::step], strict=False)
+            ],
         )
 
     return report.emit(args.format)

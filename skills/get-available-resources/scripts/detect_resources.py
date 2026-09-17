@@ -312,7 +312,7 @@ def generate_recommendations(resources: dict[str, Any]) -> dict[str, Any]:
 
     # Memory recommendations
     available_memory_gb = resources["memory"]["available_gb"]
-    total_memory_gb = resources["memory"]["total_gb"]
+    resources["memory"]["total_gb"]
 
     if available_memory_gb < 4:
         recommendations["memory_strategy"]["strategy"] = "memory_constrained"

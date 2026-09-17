@@ -238,9 +238,9 @@ def main():
         )
 
     # 分类统计
-    severe = [m for m in merged if any(f[0] == "SEVERE" for f in m.get("flags", []))]
-    moderate = [m for m in merged if any(f[0] == "MODERATE" for f in m.get("flags", []))]
-    mild = [m for m in merged if any(f[0] == "MILD" for f in m.get("flags", []))]
+    [m for m in merged if any(f[0] == "SEVERE" for f in m.get("flags", []))]
+    [m for m in merged if any(f[0] == "MODERATE" for f in m.get("flags", []))]
+    [m for m in merged if any(f[0] == "MILD" for f in m.get("flags", []))]
     hard = [m for m in merged if any(f[0] == "HARD" for f in m.get("flags", []))]
     boundary = [m for m in merged if any(f[0] == "BOUNDARY" for f in m.get("flags", []))]
     missing = [m for m in merged if m.get("missing")]

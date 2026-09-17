@@ -65,7 +65,7 @@ def visualize_data(
 
     # Add edges
     edge_index = data.edge_index.cpu().numpy()
-    edges = list(zip(edge_index[0], edge_index[1]))
+    edges = list(zip(edge_index[0], edge_index[1], strict=False))
     G.add_edges_from(edges)
 
     # Setup figure
@@ -147,11 +147,11 @@ def visualize_data(
 def is_undirected(edge_index):
     """Check if graph is undirected."""
     row, col = edge_index
-    num_edges = edge_index.size(1)
+    edge_index.size(1)
 
     # Create a set of edges and reverse edges
-    edges = set(zip(row.tolist(), col.tolist()))
-    reverse_edges = set(zip(col.tolist(), row.tolist()))
+    edges = set(zip(row.tolist(), col.tolist(), strict=False))
+    reverse_edges = set(zip(col.tolist(), row.tolist(), strict=False))
 
     # Check if all edges have their reverse
     return edges == reverse_edges
@@ -217,9 +217,8 @@ def plot_graph_statistics(data, output_path: str | None = None):
         stats["Node Features"] = data.num_node_features
     if hasattr(data, "num_edge_features") and data.edge_attr is not None:
         stats["Edge Features"] = data.num_edge_features
-    if hasattr(data, "y"):
-        if data.y.dim() == 1:
-            stats["Classes"] = int(data.y.max().item()) + 1
+    if hasattr(data, "y") and data.y.dim() == 1:
+        stats["Classes"] = int(data.y.max().item()) + 1
 
     # Create text plot
     fig, ax = plt.subplots(figsize=(8, 6))

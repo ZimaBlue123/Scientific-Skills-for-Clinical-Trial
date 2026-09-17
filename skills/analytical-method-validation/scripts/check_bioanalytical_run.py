@@ -291,7 +291,6 @@ def main() -> int:
     if not any((args.run, args.isr, args.total_error)):
         raise InputError("supply at least one of --run, --isr, --total-error, or --criteria")
 
-    detail: list[dict] = []
     findings: list[str] = []
     sections: dict[str, list[dict]] = {}
 

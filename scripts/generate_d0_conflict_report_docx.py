@@ -344,7 +344,7 @@ def main():
         section.bottom_margin = Cm(2.5)
 
     # ============ 封面/抬头 ============
-    title = add_para(
+    add_para(
         doc,
         "免疫原性 D0 与现场两对半 HBsAb 检测数据\n一致性分析报告",
         size=20,

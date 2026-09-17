@@ -725,9 +725,7 @@ def segment_hits_bounds(p1: Point, p2: Point, bounds: Bounds) -> bool:
             return False
         if abs(overlap_left - x1) < eps and abs(overlap_right - x1) < eps:
             return False
-        if abs(overlap_left - x2) < eps and abs(overlap_right - x2) < eps:
-            return False
-        return True
+        return not (abs(overlap_left - x2) < eps and abs(overlap_right - x2) < eps)
 
     if abs(x1 - x2) < eps:
         x = x1
@@ -741,9 +739,7 @@ def segment_hits_bounds(p1: Point, p2: Point, bounds: Bounds) -> bool:
             return False
         if abs(overlap_top - y1) < eps and abs(overlap_bottom - y1) < eps:
             return False
-        if abs(overlap_top - y2) < eps and abs(overlap_bottom - y2) < eps:
-            return False
-        return True
+        return not (abs(overlap_top - y2) < eps and abs(overlap_bottom - y2) < eps)
 
     return False
 
@@ -784,7 +780,9 @@ def offset_point(point: Point, port: str | None, distance: float) -> Point:
 
 
 def route_length(points: Sequence[Point]) -> float:
-    return sum(abs(x1 - x2) + abs(y1 - y2) for (x1, y1), (x2, y2) in zip(points, points[1:]))
+    return sum(
+        abs(x1 - x2) + abs(y1 - y2) for (x1, y1), (x2, y2) in zip(points, points[1:], strict=False)
+    )
 
 
 def route_uses_lane(
@@ -844,7 +842,7 @@ def simplify_points(points: Sequence[Point]) -> list[Point]:
 
 
 def route_collides(points: Sequence[Point], obstacles: Sequence[Bounds]) -> bool:
-    for p1, p2 in zip(points, points[1:]):
+    for p1, p2 in zip(points, points[1:], strict=False):
         for obstacle in obstacles:
             if segment_hits_bounds(p1, p2, obstacle):
                 return True
@@ -955,7 +953,7 @@ def build_orthogonal_route(
 
 
 def choose_label_position(points: Sequence[Point]) -> Point:
-    segments = list(zip(points, points[1:]))
+    segments = list(zip(points, points[1:], strict=False))
     if not segments:
         return points[0]
     best = max(
@@ -1077,7 +1075,7 @@ def container_header_bounds(container: dict[str, object]) -> Bounds | None:
 
 
 def label_position_candidates(points: Sequence[Point]) -> list[Point]:
-    segments = list(zip(points, points[1:]))
+    segments = list(zip(points, points[1:], strict=False))
     if not segments:
         return [points[0]]
     ranked_segments = sorted(
@@ -1200,9 +1198,8 @@ def render_rect_node(node: dict[str, object], style: dict[str, object], kind: st
         }
         if glow_name in glow_map:
             filter_attr = f' filter="url(#{glow_map[glow_name]})"'
-    elif style_value(style, "node_shadow"):
-        if not node.get("flat", False):
-            filter_attr = f' filter="{style_value(style, "node_shadow")}"'
+    elif style_value(style, "node_shadow") and not node.get("flat", False):
+        filter_attr = f' filter="{style_value(style, "node_shadow")}"'
     title = normalize_text(node.get("label", ""))
     subtitle = normalize_text(node.get("sublabel", ""))
     type_label = normalize_text(node.get("type_label", ""))
@@ -1650,10 +1647,7 @@ def main() -> None:
     output_path = sys.argv[2]
 
     try:
-        if len(sys.argv) > 3:
-            data = json.loads(sys.argv[3])
-        else:
-            data = json.load(sys.stdin)
+        data = json.loads(sys.argv[3]) if len(sys.argv) > 3 else json.load(sys.stdin)
         svg_content = build_svg(template_type, data)
         with open(output_path, "w", encoding="utf-8") as handle:
             handle.write(svg_content)

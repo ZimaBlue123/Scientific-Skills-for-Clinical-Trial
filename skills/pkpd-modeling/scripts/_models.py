@@ -110,7 +110,7 @@ def disposition(
     n = 1 + len(q)
     a = np.zeros((n, n))
     a[0, 0] = -cl / v1
-    for j, (qj, vpj) in enumerate(zip(q, vp), start=1):
+    for j, (qj, vpj) in enumerate(zip(q, vp, strict=False), start=1):
         k1j = qj / v1
         kj1 = qj / vpj
         a[0, 0] -= k1j
@@ -143,10 +143,10 @@ def disposition(
 def micro_constants(d: Disposition) -> dict[str, float]:
     """Micro-constants and macro-constants, for reporting only."""
     out = {"k10": d.cl / d.v1}
-    for j, (qj, vpj) in enumerate(zip(d.q, d.vp), start=1):
+    for j, (qj, vpj) in enumerate(zip(d.q, d.vp, strict=False), start=1):
         out[f"k1{j + 1}"] = qj / d.v1
         out[f"k{j + 1}1"] = qj / vpj
-    for i, (lam, coef) in enumerate(zip(d.lam, d.coef)):
+    for i, (lam, coef) in enumerate(zip(d.lam, d.coef, strict=False)):
         out[f"lambda{i + 1}"] = -lam
         out[f"coef{i + 1}_per_dose"] = coef
         out[f"t_half_{i + 1}"] = math.log(2.0) / -lam

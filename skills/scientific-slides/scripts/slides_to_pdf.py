@@ -166,13 +166,13 @@ def main():
 Examples:
   # Combine PNG files using glob pattern
   python slides_to_pdf.py slides/*.png -o presentation.pdf
-  
+
   # Combine specific files in order
   python slides_to_pdf.py title.png intro.png methods.png results.png -o talk.pdf
-  
+
   # Combine all images from a directory (sorted by filename)
   python slides_to_pdf.py slides/ -o presentation.pdf
-  
+
   # With custom DPI and verbose output
   python slides_to_pdf.py slides/*.png -o presentation.pdf --dpi 200 -v
 

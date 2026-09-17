@@ -67,7 +67,7 @@ def detect_context_anomalies(
     res_std = residuals.std()
 
     records = []
-    for i, (d, v, r) in enumerate(zip(dates, values, residuals)):
+    for i, (d, v, r) in enumerate(zip(dates, values, residuals, strict=False)):
         z = r / res_std if res_std > 0 else 0.0
         if abs(z) >= CRITICAL_Z:
             severity = "CRITICAL"
@@ -135,7 +135,7 @@ def detect_forecast_anomalies(
     q90 = quant_fc[IDX_Q90]
 
     records = []
-    for i, (d, fv, pt) in enumerate(zip(future_dates, future_values, point)):
+    for i, (d, fv, pt) in enumerate(zip(future_dates, future_values, point, strict=False)):
         outside_80 = fv < q10[i] or fv > q90[i]
         outside_60 = fv < q20[i] or fv > q80[i]
 
@@ -253,7 +253,7 @@ def plot_results(
     ax1.fill_between(fut_x, q20, q80, alpha=0.25, color=CLR["CRITICAL"], label="60% PI")
 
     seen_fc: set[str] = set()
-    for i, rec in enumerate(fc_records):
+    for _i, rec in enumerate(fc_records):
         if rec["severity"] == "NORMAL":
             continue
         d = pd.Timestamp(rec["date"])

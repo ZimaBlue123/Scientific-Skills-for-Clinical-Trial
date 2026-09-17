@@ -130,7 +130,7 @@ def train(args):
         rollout_data = trainer.evaluate()
 
         # Train on batch
-        train_metrics = trainer.train()
+        trainer.train()
 
         # Log results
         trainer.mean_and_log()

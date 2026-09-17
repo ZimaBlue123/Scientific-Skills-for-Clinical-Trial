@@ -48,10 +48,7 @@ def validate_file_path(file_path, base_dir=None):
         return True, "Empty (will use protein_sequence)"
 
     # Handle relative paths
-    if base_dir:
-        full_path = Path(base_dir) / file_path
-    else:
-        full_path = Path(file_path)
+    full_path = Path(base_dir) / file_path if base_dir else Path(file_path)
 
     if full_path.exists():
         return True, f"File exists: {full_path}"

@@ -300,7 +300,7 @@ def export_results(analyzer, sorting, recording, labels: dict, output_folder: st
 
     # Get good units
     good_ids = [u for u, l in labels.items() if l == "good"]
-    sorting_good = sorting.select_units(good_ids)
+    sorting.select_units(good_ids)
 
     # Export to Phy
     phy_folder = f"{output_folder}/phy_export"

@@ -132,16 +132,16 @@ How it works:
 Examples:
   # Simple list infographic
   python generate_infographic.py "5 benefits of meditation" -o benefits.png --type list
-  
+
   # Corporate timeline
   python generate_infographic.py "Company history 2010-2025" -o timeline.png --type timeline --style corporate
-  
+
   # Healthcare statistics with colorblind-safe colors
   python generate_infographic.py "Heart disease statistics" -o stats.png --type statistical --style healthcare --palette wong
-  
+
   # Statistical infographic WITH RESEARCH for accurate data
   python generate_infographic.py "Global AI market size and growth" -o ai_market.png --type statistical --research
-  
+
   # Social media infographic
   python generate_infographic.py "Save water tips" -o water.png --type social --style marketing
 

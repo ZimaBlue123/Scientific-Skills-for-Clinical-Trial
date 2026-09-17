@@ -78,7 +78,7 @@ def compare_different_preferences(result):
     plot.add(result.F, color="lightgray", alpha=0.5, s=20, label="Pareto Front")
 
     colors = ["red", "blue", "green"]
-    for (name, (idx, f)), color in zip(selections.items(), colors):
+    for (name, (idx, f)), color in zip(selections.items(), colors, strict=False):
         plot.add(f, color=color, s=100, marker="*", label=name)
 
     plot.show()
@@ -100,7 +100,7 @@ def visualize_selected_solutions(result, selections):
     )
 
     colors = ["red", "blue", "green"]
-    for (name, (idx, f)), color in zip(selections.items(), colors):
+    for (name, (_idx, f)), color in zip(selections.items(), colors, strict=False):
         plot.add(f, color=color, label=name)
 
     plot.show()

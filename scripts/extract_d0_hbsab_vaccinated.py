@@ -315,7 +315,7 @@ def write_summary_sheet(ws, data_by_group):
         all_vals = []
         all_pos = 0
         for sub in subjects:
-            for sid, d in data_by_group[sub].items():
+            for _sid, d in data_by_group[sub].items():
                 if d["hbsab_val"] is not None:
                     all_vals.append(d["hbsab_val"])
                     if d["hbsab_val"] >= 10:
@@ -434,7 +434,7 @@ def main():
     # 关联 62 例
     data_by_group: dict[str, dict] = defaultdict(dict)
     missing = []
-    for sid, (group, sex, age, doses) in SUBJECTS.items():
+    for sid, (group, _sex, _age, _doses) in SUBJECTS.items():
         d = d0_map.get(sid)
         if d is None:
             missing.append(sid)

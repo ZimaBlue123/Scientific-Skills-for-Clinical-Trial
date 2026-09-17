@@ -110,9 +110,9 @@ def main() -> int:
 
     # TOST on the differences that Bland-Altman used.
     if args.relative:
-        diffs = [100.0 * (t - r) / (0.5 * (r + t)) for r, t in zip(ref, test)]
+        diffs = [100.0 * (t - r) / (0.5 * (r + t)) for r, t in zip(ref, test, strict=False)]
     else:
-        diffs = [t - r for r, t in zip(ref, test)]
+        diffs = [t - r for r, t in zip(ref, test, strict=False)]
     tost = tost_paired(diffs, args.margin, args.alpha)
 
     # The naive test, computed only to show what it does not establish.

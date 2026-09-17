@@ -123,7 +123,7 @@ How it works:
 Modes:
   Default (full slide):  Generate complete slide with title, content, visuals
                          Use for PDF workflow where each slide is an image
-  
+
   Visual only:           Generate just the image/figure
                          Use for PPT workflow where you add text separately
 
@@ -134,14 +134,14 @@ Attachments:
 Examples:
   # Full slide (default) - for PDF workflow
   python generate_slide_image.py "Title: Machine Learning\\nPoints: supervised, unsupervised, reinforcement" -o slide_01.png
-  
-  # Visual only - for PPT workflow  
+
+  # Visual only - for PPT workflow
   python generate_slide_image.py "Flowchart showing data pipeline" -o figure.png --visual-only
-  
+
   # With reference images attached
   python generate_slide_image.py "Create a slide explaining this chart" -o slide.png --attach chart.png
   python generate_slide_image.py "Combine these into a comparison" -o compare.png --attach before.png --attach after.png
-  
+
   # Multiple slides for PDF
   python generate_slide_image.py "Title slide: AI Conference 2025" -o slides/01_title.png
   python generate_slide_image.py "Title: Introduction\\nOverview of deep learning" -o slides/02_intro.png

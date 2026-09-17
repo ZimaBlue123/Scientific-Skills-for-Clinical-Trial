@@ -310,7 +310,7 @@ def _iter_shape_text(shape, depth=0):
         fragments.append(f"{indent}[TABLE {len(tbl.rows)}行 x {len(tbl.columns)}列]")
         for r_idx, row in enumerate(tbl.rows):
             cells = []
-            for c_idx, cell in enumerate(row.cells):
+            for _c_idx, cell in enumerate(row.cells):
                 text = cell.text.replace("\n", "⏎").strip()
                 cells.append(text if text else "∅")
             fragments.append(f"{indent}  R{r_idx}: {' | '.join(cells)}")

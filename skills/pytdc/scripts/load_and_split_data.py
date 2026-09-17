@@ -197,7 +197,7 @@ def main():
     split = load_single_pred_example()
 
     # Example 2: Multi prediction with cold splits
-    dti_split = load_multi_pred_example()
+    load_multi_pred_example()
 
     # Example 3: Model evaluation
     evaluation_example(split)

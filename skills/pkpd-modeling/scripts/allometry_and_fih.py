@@ -268,7 +268,7 @@ def run(argv: Sequence[str] | None = None) -> int:
                     "cl_fitted": fit["coefficient"] * w ** fit["exponent"],
                     "fold_error": (fit["coefficient"] * w ** fit["exponent"]) / v,
                 }
-                for i, (r, w, v) in enumerate(zip(rows, weights, values))
+                for i, (r, w, v) in enumerate(zip(rows, weights, values, strict=False))
             ],
         )
         if fit["n_species"] < 4:

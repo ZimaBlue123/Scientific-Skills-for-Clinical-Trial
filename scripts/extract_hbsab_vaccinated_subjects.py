@@ -85,10 +85,9 @@ def extract_hbsab_listing(vol9_text: str) -> dict:
         if "年龄组" in line and "研究 编号" in line and "乙肝表面抗原" in line:
             header_seen = True
             continue
-        if header_seen and not skip_separator:
-            if re.match(r"^\|[\s\-:|]+\|\s*$", line):
-                skip_separator = True
-                continue
+        if header_seen and not skip_separator and re.match(r"^\|[\s\-:|]+\|\s*$", line):
+            skip_separator = True
+            continue
         if header_seen and skip_separator:
             cells = parse_pipe_row(line)
             if len(cells) < 13:

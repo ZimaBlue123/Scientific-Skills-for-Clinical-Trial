@@ -136,10 +136,7 @@ def _corr_power(r, n, alpha, alternative):
 
     z = math.atanh(r)
     se = 1.0 / math.sqrt(n - 3)
-    if alternative == "two-sided":
-        zc = stats.norm.ppf(1 - alpha / 2)
-    else:
-        zc = stats.norm.ppf(1 - alpha)
+    zc = stats.norm.ppf(1 - alpha / 2) if alternative == "two-sided" else stats.norm.ppf(1 - alpha)
     return float(stats.norm.cdf(z / se - zc) + stats.norm.cdf(-z / se - zc))
 
 
@@ -147,10 +144,7 @@ def _corr_sample_size(r, alpha, power, alternative):
     from scipy import stats
 
     z = abs(math.atanh(r))
-    if alternative == "two-sided":
-        zc = stats.norm.ppf(1 - alpha / 2)
-    else:
-        zc = stats.norm.ppf(1 - alpha)
+    zc = stats.norm.ppf(1 - alpha / 2) if alternative == "two-sided" else stats.norm.ppf(1 - alpha)
     zp = stats.norm.ppf(power)
     return ((zc + zp) / z) ** 2 + 3
 

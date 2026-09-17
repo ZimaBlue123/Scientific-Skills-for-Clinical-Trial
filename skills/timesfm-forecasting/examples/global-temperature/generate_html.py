@@ -25,7 +25,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        
+
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -33,11 +33,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             color: #e0e0e0;
             padding: 20px;
         }}
-        
+
         .container {{ max-width: 1200px; margin: 0 auto; }}
-        
+
         header {{ text-align: center; margin-bottom: 30px; }}
-        
+
         h1 {{
             font-size: 2rem;
             margin-bottom: 10px;
@@ -45,9 +45,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }}
-        
+
         .subtitle {{ color: #9ca3af; font-size: 1.1rem; }}
-        
+
         .chart-container {{
             background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
@@ -55,9 +55,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             margin-bottom: 20px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }}
-        
+
         #chart {{ width: 100% !important; height: 450px !important; }}
-        
+
         .controls {{
             display: flex;
             flex-direction: column;
@@ -66,18 +66,18 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             border-radius: 16px;
             padding: 20px;
         }}
-        
+
         .slider-container {{ display: flex; flex-direction: column; gap: 10px; }}
-        
+
         .slider-label {{ display: flex; justify-content: space-between; align-items: center; }}
         .slider-label span {{ font-size: 0.9rem; color: #9ca3af; }}
         .slider-label .value {{ font-weight: 600; color: #60a5fa; font-size: 1.1rem; }}
-        
+
         input[type="range"] {{
             width: 100%; height: 8px; border-radius: 4px;
             background: #374151; outline: none; -webkit-appearance: none;
         }}
-        
+
         input[type="range"]::-webkit-slider-thumb {{
             -webkit-appearance: none;
             width: 24px; height: 24px; border-radius: 50%;
@@ -85,9 +85,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             cursor: pointer;
             box-shadow: 0 2px 10px rgba(96, 165, 250, 0.5);
         }}
-        
+
         .buttons {{ display: flex; gap: 10px; flex-wrap: wrap; }}
-        
+
         button {{
             flex: 1; min-width: 100px;
             padding: 12px 20px;
@@ -95,23 +95,23 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             font-size: 1rem; font-weight: 600;
             cursor: pointer; transition: all 0.2s ease;
         }}
-        
+
         .btn-primary {{
             background: linear-gradient(135deg, #60a5fa, #a78bfa);
             color: white;
         }}
         .btn-primary:hover {{ transform: translateY(-2px); box-shadow: 0 4px 15px rgba(96, 165, 250, 0.4); }}
-        
+
         .btn-secondary {{ background: #374151; color: #e0e0e0; }}
         .btn-secondary:hover {{ background: #4b5563; }}
-        
+
         .stats {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }}
-        
+
         .stat-card {{
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -120,7 +120,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         }}
         .stat-card .label {{ font-size: 0.8rem; color: #9ca3af; margin-bottom: 5px; }}
         .stat-card .value {{ font-size: 1.3rem; font-weight: 600; color: #60a5fa; }}
-        
+
         .legend {{
             display: flex;
             justify-content: center;
@@ -130,10 +130,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             padding-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }}
-        
+
         .legend-item {{ display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }}
         .legend-color {{ width: 16px; height: 16px; border-radius: 4px; }}
-        
+
         footer {{
             text-align: center;
             margin-top: 30px;
@@ -149,11 +149,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             <h1>TimesFM Forecast Evolution</h1>
             <p class="subtitle">Watch the forecast evolve as more data is added — forecasts extend to 2025-12</p>
         </header>
-        
+
         <div class="chart-container">
             <canvas id="chart"></canvas>
         </div>
-        
+
         <div class="controls">
             <div class="slider-container">
                 <div class="slider-label">
@@ -166,12 +166,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     <span id="date-end">Using data through 2022-12</span>
                 </div>
             </div>
-            
+
             <div class="buttons">
                 <button class="btn-primary" id="play-btn">▶ Play</button>
                 <button class="btn-secondary" id="reset-btn">↺ Reset</button>
             </div>
-            
+
             <div class="stats">
                 <div class="stat-card">
                     <div class="label">Forecast Mean</div>
@@ -190,7 +190,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     <div class="value" id="stat-min">--</div>
                 </div>
             </div>
-            
+
             <div class="legend">
                 <div class="legend-item">
                     <div class="legend-color" style="background: #9ca3af;"></div>
@@ -214,7 +214,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 </div>
             </div>
         </div>
-        
+
         <footer>
             <p>TimesFM 1.0 (200M) PyTorch • <a href="https://github.com/google-research/timesfm">Google Research</a></p>
         </footer>
@@ -223,7 +223,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <script>
         // Embedded animation data (no external fetch needed)
         const animationData = {data_json};
-        
+
         let chart = null;
         let isPlaying = false;
         let playInterval = null;
@@ -236,14 +236,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         function initChart() {{
             const ctx = document.getElementById('chart').getContext('2d');
-            
+
             // Calculate fixed extents
             const finalStep = animationData.animation_steps[animationData.animation_steps.length - 1];
             allDates = [
                 ...animationData.actual_data.dates,
                 ...finalStep.forecast_dates
             ];
-            
+
             // Y extent from all values
             const allValues = [
                 ...animationData.actual_data.values,
@@ -253,7 +253,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             ];
             yMin = Math.min(...allValues) - 0.05;
             yMax = Math.max(...allValues) + 0.05;
-            
+
             chart = new Chart(ctx, {{
                 type: 'line',
                 data: {{
@@ -383,27 +383,27 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
         function updateChart(stepIndex) {{
             if (!animationData || !chart) return;
-            
+
             const step = animationData.animation_steps[stepIndex];
             const finalStep = animationData.animation_steps[animationData.animation_steps.length - 1];
             const actual = animationData.actual_data;
-            
+
             // Build data arrays for each dataset
             const nHist = step.historical_dates.length;
             const nForecast = step.forecast_dates.length;
             const nActual = actual.dates.length;
             const nFinalForecast = finalStep.forecast_dates.length;
             const totalPoints = nActual + nFinalForecast;
-            
+
             // Dataset 0: All observed (always full)
             chart.data.datasets[0].data = actual.values.map((v, i) => ({{x: actual.dates[i], y: v}}));
-            
+
             // Dataset 1: Final forecast reference (always full)
             chart.data.datasets[1].data = [
                 ...Array(nActual).fill(null),
                 ...finalStep.point_forecast
             ];
-            
+
             // Dataset 2: Data used (historical only)
             const dataUsed = [];
             for (let i = 0; i < totalPoints; i++) {{
@@ -414,14 +414,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 }}
             }}
             chart.data.datasets[2].data = dataUsed;
-            
+
             // Datasets 3-6: CIs (forecast only)
             const forecastOffset = nActual;
             const q90Lower = [];
             const q90Upper = [];
             const q80Lower = [];
             const q80Upper = [];
-            
+
             for (let i = 0; i < totalPoints; i++) {{
                 const forecastIdx = i - forecastOffset;
                 if (forecastIdx >= 0 && forecastIdx < nForecast) {{
@@ -440,7 +440,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             chart.data.datasets[4].data = q90Upper;
             chart.data.datasets[5].data = q80Lower;
             chart.data.datasets[6].data = q80Upper;
-            
+
             // Dataset 7: Forecast line
             const forecastData = [];
             for (let i = 0; i < totalPoints; i++) {{
@@ -452,24 +452,24 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 }}
             }}
             chart.data.datasets[7].data = forecastData;
-            
+
             chart.update('none');
-            
+
             // Update UI
             document.getElementById('slider').value = stepIndex;
             document.getElementById('points-value').textContent = `${{step.n_points}} / 36`;
             document.getElementById('date-end').textContent = `Using data through ${{step.last_historical_date}}`;
-            
+
             // Stats
             const mean = (step.point_forecast.reduce((a, b) => a + b, 0) / step.point_forecast.length).toFixed(3);
             const max = Math.max(...step.point_forecast).toFixed(3);
             const min = Math.min(...step.point_forecast).toFixed(3);
-            
+
             document.getElementById('stat-mean').textContent = mean + '°C';
             document.getElementById('stat-horizon').textContent = step.horizon + ' months';
             document.getElementById('stat-max').textContent = max + '°C';
             document.getElementById('stat-min').textContent = min + '°C';
-            
+
             currentStep = stepIndex;
         }}
 

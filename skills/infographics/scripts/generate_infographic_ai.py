@@ -1200,16 +1200,16 @@ def main():
 Examples:
   # Generate a list infographic
   python generate_infographic_ai.py "5 benefits of meditation" -o benefits.png --type list
-  
+
   # Generate a timeline with corporate style
   python generate_infographic_ai.py "Company history 2010-2025" -o timeline.png --type timeline --style corporate
-  
+
   # Generate with colorblind-safe palette
   python generate_infographic_ai.py "Heart disease stats" -o stats.png --type statistical --palette wong
-  
+
   # Generate with RESEARCH for accurate data (uses Perplexity Sonar)
   python generate_infographic_ai.py "Global AI market 2025" -o ai_market.png --type statistical --research
-  
+
   # Verbose output
   python generate_infographic_ai.py "Process diagram" -o process.png --type process -v
 

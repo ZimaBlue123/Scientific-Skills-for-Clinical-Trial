@@ -49,7 +49,7 @@ def explore_recording(data_path: str, stream_id: str = "imec0.ap"):
     bad_ids, labels = si.detect_bad_channels(recording)
     if len(bad_ids) > 0:
         print(f"Bad channels found: {len(bad_ids)}")
-        for ch, label in zip(bad_ids, labels):
+        for ch, label in zip(bad_ids, labels, strict=False):
             print(f"  Channel {ch}: {label}")
     else:
         print("No bad channels detected")

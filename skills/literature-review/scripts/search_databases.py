@@ -4,6 +4,7 @@ Literature Database Search Script
 Searches multiple literature databases and aggregates results.
 """
 
+import contextlib
 import json
 import sys
 from datetime import datetime
@@ -199,10 +200,8 @@ def generate_search_summary(results: list[dict]) -> dict:
 
         # Collect citations
         if result.get("citations"):
-            try:
+            with contextlib.suppress(ValueError, TypeError):
                 citations.append(int(result["citations"]))
-            except (ValueError, TypeError):
-                pass
 
     if citations:
         summary["avg_citations"] = sum(citations) / len(citations)

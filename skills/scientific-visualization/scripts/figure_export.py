@@ -8,6 +8,7 @@ planning snapshots and must be confirmed against the target journal.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import importlib.metadata
 import json
 import math
@@ -125,10 +126,8 @@ def _atomic_savefig(
     except Exception as exc:
         raise CliError(f"failed to export {destination.name} as {format_name}: {exc}") from exc
     finally:
-        try:
+        with contextlib.suppress(FileNotFoundError):
             temporary.unlink()
-        except FileNotFoundError:
-            pass
 
 
 def _validate_provenance(provenance: dict[str, Any] | None) -> dict[str, Any]:

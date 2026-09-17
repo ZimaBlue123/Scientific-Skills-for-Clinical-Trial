@@ -495,7 +495,12 @@ def _fit_and_report(spec: FitSpec, args, subject: str, time, conc, report: Repor
                     "weighted_residual": float(w),
                 }
                 for t, o, p, r, w in zip(
-                    time, conc, result.predicted, result.residuals, result.weighted_residuals
+                    time,
+                    conc,
+                    result.predicted,
+                    result.residuals,
+                    result.weighted_residuals,
+                    strict=False,
                 )
             ],
         )

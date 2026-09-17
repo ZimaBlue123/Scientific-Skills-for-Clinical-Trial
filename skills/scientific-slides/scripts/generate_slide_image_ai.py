@@ -655,7 +655,6 @@ Generate an improved version that addresses all the critique points."""
         output_dir = output_path.parent
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        base_name = output_path.stem
         extension = output_path.suffix or ".png"
 
         mode = "visual_only" if visual_only else "full_slide"
@@ -810,17 +809,17 @@ def main():
 Examples:
   # Generate a full slide (for PDF workflow)
   python generate_slide_image_ai.py "Title: Machine Learning Basics\\nKey points: supervised learning, neural networks, deep learning" -o slide_01.png
-  
+
   # Generate just a visual/figure (for PPT workflow)
   python generate_slide_image_ai.py "Neural network architecture diagram with input, hidden, and output layers" -o figure.png --visual-only
-  
+
   # With reference images attached (Nano Banana Pro will see these)
   python generate_slide_image_ai.py "Create a slide explaining this chart with key insights" -o slide.png --attach chart.png
   python generate_slide_image_ai.py "Combine these images into a comparison slide" -o compare.png --attach before.png --attach after.png
-  
+
   # With custom iterations
   python generate_slide_image_ai.py "Title slide for AI Conference 2025" -o title.png --iterations 2
-  
+
   # Verbose output
   python generate_slide_image_ai.py "Data flow diagram" -o flow.png -v
 

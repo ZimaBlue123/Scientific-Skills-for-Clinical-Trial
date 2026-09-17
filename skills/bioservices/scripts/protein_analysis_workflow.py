@@ -378,7 +378,7 @@ Examples:
 
     # Step 3: BLAST search
     if sequence:
-        blast_results = run_blast(sequence, args.email, args.skip_blast)
+        run_blast(sequence, args.email, args.skip_blast)
 
     # Step 4: Pathway discovery
     kegg = KEGG()

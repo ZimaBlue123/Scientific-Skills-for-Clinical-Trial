@@ -305,7 +305,7 @@ def test_environment():
     print(f"Number of agents: {len(obs)}")
 
     for step in range(10):
-        actions = {agent_id: multi_env.single_action_space.sample() for agent_id in obs.keys()}
+        actions = {agent_id: multi_env.single_action_space.sample() for agent_id in obs}
         obs, rewards, dones, infos = multi_env.step(actions)
 
         print(f"Step {step}: mean_reward={np.mean(list(rewards.values())):.3f}")

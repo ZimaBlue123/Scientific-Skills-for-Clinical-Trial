@@ -296,7 +296,7 @@ def check_dataset(rows: list[dict[str, str]], args: argparse.Namespace) -> tuple
         if n_dose == 0:
             no_dose.append(subject)
         numeric = [t for t, _ in times if t is not None]
-        if any(b < a for a, b in zip(numeric, numeric[1:])):
+        if any(b < a for a, b in zip(numeric, numeric[1:], strict=False)):
             unsorted.append(subject)
         counts = Counter(numeric)
         if any(v > 1 for v in counts.values()):

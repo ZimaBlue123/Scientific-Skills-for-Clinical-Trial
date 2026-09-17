@@ -48,10 +48,7 @@ def evaluate_agent(
     model = PPO.load(model_path)
 
     # Create evaluation environment
-    if render:
-        env = gym.make(env_id, render_mode="human")
-    else:
-        env = gym.make(env_id)
+    env = gym.make(env_id, render_mode="human") if render else gym.make(env_id)
 
     # Wrap in DummyVecEnv for consistency
     env = DummyVecEnv([lambda: env])
@@ -139,10 +136,7 @@ def watch_agent(
 
         while not done:
             # Apply observation normalization if needed
-            if obs_normalization:
-                obs_normalized = obs_normalization.normalize_obs(obs)
-            else:
-                obs_normalized = obs
+            obs_normalized = obs_normalization.normalize_obs(obs) if obs_normalization else obs
 
             # Get action from model
             action, _states = model.predict(obs_normalized, deterministic=deterministic)

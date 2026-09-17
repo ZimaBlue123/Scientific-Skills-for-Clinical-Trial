@@ -113,16 +113,16 @@ def main():
 Examples:
   %(prog)s presentation.pdf slides
     → Creates slides-001.jpg, slides-002.jpg, ...
-  
+
   %(prog)s presentation.pdf output/slide --dpi 300 --format png
     → Creates output/slide-001.png, slide-002.png, ... at high resolution
-  
+
   %(prog)s presentation.pdf review/s --first 5 --last 10
     → Converts only slides 5-10
 
 Output:
   Images are named: PREFIX-001.FORMAT, PREFIX-002.FORMAT, etc.
-  
+
 Resolution:
   - 150 DPI: Good for screen review (default)
   - 200 DPI: Higher quality for detailed inspection

@@ -328,7 +328,7 @@ def find_enzymes_for_transformation(
     if not all_enzymes and transformations:
         for trans_type in transformations:
             if trans_type in COMMON_TRANSFORMATIONS:
-                for ec_prefix in COMMON_TRANSFORMATIONS[trans_type]:
+                for _ec_prefix in COMMON_TRANSFORMATIONS[trans_type]:
                     # This is a simplified approach - in practice you'd want
                     # to query the specific EC numbers with more detail
                     try:

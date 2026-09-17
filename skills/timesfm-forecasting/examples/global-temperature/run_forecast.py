@@ -130,14 +130,15 @@ print(
 print("\n🌡️  Temperature Anomaly Forecast (°C above 1951-1980 baseline):")
 print(f"\n   {'Month':<10} {'Point':>8} {'80% CI':>15} {'90% CI':>15}")
 print(f"   {'-' * 10} {'-' * 8} {'-' * 15} {'-' * 15}")
-for i, (date, pt, q10, q90, q05, q95) in enumerate(
+for _i, (date, pt, q10, q90, q05, q95) in enumerate(
     zip(
         forecast_dates.strftime("%Y-%m"),
         point,
         quantiles[:, 1],  # 20%
         quantiles[:, 7],  # 80%
         quantiles[:, 0],  # 10%
-        quantiles[:, 8],  # 90%
+        quantiles[:, 8],
+        strict=False,  # 90%
     )
 ):
     print(f"   {date:<10} {pt:>8.3f} [{q10:>6.3f}, {q90:>6.3f}] [{q05:>6.3f}, {q95:>6.3f}]")

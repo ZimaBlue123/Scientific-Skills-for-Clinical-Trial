@@ -167,7 +167,7 @@ def save_interactions_sif(results, output_file):
 
     with open(output_file, "w") as f:
         for result in results:
-            pathway_id = result["pathway_id"]
+            result["pathway_id"]
 
             for rel in result["relations"]:
                 entry1 = rel.get("entry1", "")

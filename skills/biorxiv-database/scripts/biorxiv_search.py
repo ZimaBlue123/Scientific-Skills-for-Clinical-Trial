@@ -198,7 +198,7 @@ class BioRxivSearcher:
         start_date: str | None = None,
         end_date: str | None = None,
         category: str | None = None,
-        search_fields: list[str] = ["title", "abstract"],
+        search_fields: list[str] = None,
     ) -> list[dict]:
         """
         Search for papers containing specific keywords.
@@ -214,6 +214,8 @@ class BioRxivSearcher:
             List of matching preprints
         """
         # If no date range specified, search last year
+        if search_fields is None:
+            search_fields = ["title", "abstract"]
         if not start_date:
             end_date = datetime.now().strftime("%Y-%m-%d")
             start_date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d")

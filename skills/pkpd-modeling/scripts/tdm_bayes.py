@@ -281,7 +281,9 @@ def run(argv: Sequence[str] | None = None) -> int:
                 "residual": float(o - p),
                 "pct_error": 100.0 * (o - p) / o if o else float("nan"),
             }
-            for t, o, p in zip(result["times"], result["observed"], result["predictions"])
+            for t, o, p in zip(
+                result["times"], result["observed"], result["predictions"], strict=False
+            )
         ],
     )
 

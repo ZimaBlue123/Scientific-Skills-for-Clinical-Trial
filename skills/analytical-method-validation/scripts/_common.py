@@ -300,10 +300,10 @@ def fit_linear(
         raise InputError("weights must be non-negative")
 
     sw = math.fsum(w)
-    swx = math.fsum(wi * xi for wi, xi in zip(w, xs))
-    swy = math.fsum(wi * yi for wi, yi in zip(w, ys))
-    swxx = math.fsum(wi * xi * xi for wi, xi in zip(w, xs))
-    swxy = math.fsum(wi * xi * yi for wi, xi, yi in zip(w, xs, ys))
+    swx = math.fsum(wi * xi for wi, xi in zip(w, xs, strict=False))
+    swy = math.fsum(wi * yi for wi, yi in zip(w, ys, strict=False))
+    swxx = math.fsum(wi * xi * xi for wi, xi in zip(w, xs, strict=False))
+    swxy = math.fsum(wi * xi * yi for wi, xi, yi in zip(w, xs, ys, strict=False))
     denom = sw * swxx - swx * swx
     if abs(denom) < 1e-300:
         raise InputError("x values are collinear or identical; slope is undefined")
@@ -311,15 +311,15 @@ def fit_linear(
     slope = (sw * swxy - swx * swy) / denom
     intercept = (swy - slope * swx) / sw
     fitted = [intercept + slope * xi for xi in xs]
-    residuals = [yi - fi for yi, fi in zip(ys, fitted)]
+    residuals = [yi - fi for yi, fi in zip(ys, fitted, strict=False)]
     df = n - 2
-    ss_res = math.fsum(wi * ri * ri for wi, ri in zip(w, residuals))
+    ss_res = math.fsum(wi * ri * ri for wi, ri in zip(w, residuals, strict=False))
     residual_sd = math.sqrt(ss_res / df)
     se_slope = residual_sd * math.sqrt(sw / denom)
     se_intercept = residual_sd * math.sqrt(swxx / denom)
 
     ybar_w = swy / sw
-    ss_tot = math.fsum(wi * (yi - ybar_w) ** 2 for wi, yi in zip(w, ys))
+    ss_tot = math.fsum(wi * (yi - ybar_w) ** 2 for wi, yi in zip(w, ys, strict=False))
     r_squared = 1.0 - ss_res / ss_tot if ss_tot > 0 else float("nan")
     r = math.copysign(math.sqrt(max(0.0, r_squared)), slope)
 
@@ -392,7 +392,7 @@ def lack_of_fit(xs: Sequence[float], ys: Sequence[float], fit: LinearFit) -> dic
     r-squared is not: it rises with range and is insensitive to curvature.
     """
     groups: dict[float, list[float]] = {}
-    for x, y in zip(xs, ys):
+    for x, y in zip(xs, ys, strict=False):
         groups.setdefault(round(float(x), 12), []).append(float(y))
     k = len(groups)
     n = len(xs)
@@ -439,7 +439,7 @@ def heteroscedasticity(xs: Sequence[float], residuals: Sequence[float]) -> dict[
     curve, which biases back-calculated results at the bottom -- exactly where
     an impurity reporting threshold or an LLOQ lives.
     """
-    pairs = sorted(zip(xs, residuals), key=lambda p: p[0])
+    pairs = sorted(zip(xs, residuals, strict=False), key=lambda p: p[0])
     n = len(pairs)
     if n < 6:
         return {"applicable": False, "reason": "needs at least 6 points"}
@@ -592,7 +592,7 @@ def deming(xs: Sequence[float], ys: Sequence[float], lambda_ratio: float = 1.0) 
         xb, yb = mean(xv), mean(yv)
         sxx = math.fsum((x - xb) ** 2 for x in xv)
         syy = math.fsum((y - yb) ** 2 for y in yv)
-        sxy = math.fsum((x - xb) * (y - yb) for x, y in zip(xv, yv))
+        sxy = math.fsum((x - xb) * (y - yb) for x, y in zip(xv, yv, strict=False))
         if abs(sxy) < 1e-300:
             raise InputError("zero covariance; Deming slope is undefined")
         term = syy - lambda_ratio * sxx
@@ -673,7 +673,7 @@ def passing_bablok(xs: Sequence[float], ys: Sequence[float]) -> dict[str, Any]:
         return 0.5 * (lo + hi)
 
     slope = _shifted_median(shift)
-    intercept = median([y - slope * x for x, y in zip(xs, ys)])
+    intercept = median([y - slope * x for x, y in zip(xs, ys, strict=False)])
 
     # Rank-based 95% CI on the slope. M1 and M2 are 1-based order statistics of
     # the shifted slope list, so both convert to 0-based with the same -1.
@@ -683,8 +683,8 @@ def passing_bablok(xs: Sequence[float], ys: Sequence[float]) -> dict[str, Any]:
     lo_idx = min(max(m1 + shift - 1, 0), n_slopes - 1)
     hi_idx = min(max(m2 + shift - 1, 0), n_slopes - 1)
     slope_lo, slope_hi = slopes[lo_idx], slopes[hi_idx]
-    int_lo = median([y - slope_hi * x for x, y in zip(xs, ys)])
-    int_hi = median([y - slope_lo * x for x, y in zip(xs, ys)])
+    int_lo = median([y - slope_hi * x for x, y in zip(xs, ys, strict=False)])
+    int_hi = median([y - slope_lo * x for x, y in zip(xs, ys, strict=False)])
 
     return {
         "n": n,
@@ -705,15 +705,15 @@ def bland_altman(
         raise InputError("x and y must be the same length")
     if n < 3:
         raise InputError("Bland-Altman needs at least 3 pairs")
-    means = [0.5 * (x + y) for x, y in zip(xs, ys)]
+    means = [0.5 * (x + y) for x, y in zip(xs, ys, strict=False)]
     if relative:
         diffs = []
-        for x, y, m in zip(xs, ys, means):
+        for x, y, m in zip(xs, ys, means, strict=False):
             if abs(m) < 1e-15:
                 raise InputError("relative differences need non-zero pair means")
             diffs.append(100.0 * (y - x) / m)
     else:
-        diffs = [y - x for x, y in zip(xs, ys)]
+        diffs = [y - x for x, y in zip(xs, ys, strict=False)]
 
     bias = mean(diffs)
     sd = sample_sd(diffs)
@@ -899,9 +899,11 @@ def emit_table(rows: list[dict[str, Any]], stream=None) -> None:
     widths = [
         max(len(h), *(len(c[i]) for c in cells)) if cells else len(h) for i, h in enumerate(headers)
     ]
-    print("  ".join(h.ljust(w) for h, w in zip(headers, widths)).rstrip(), file=stream)
+    print(
+        "  ".join(h.ljust(w) for h, w in zip(headers, widths, strict=False)).rstrip(), file=stream
+    )
     for c in cells:
-        print("  ".join(v.ljust(w) for v, w in zip(c, widths)).rstrip(), file=stream)
+        print("  ".join(v.ljust(w) for v, w in zip(c, widths, strict=False)).rstrip(), file=stream)
 
 
 def emit(rows: list[dict[str, Any]], fmt_name: str, stream=None) -> None:

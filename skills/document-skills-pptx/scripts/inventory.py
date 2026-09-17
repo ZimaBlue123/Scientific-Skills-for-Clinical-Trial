@@ -80,7 +80,7 @@ The output JSON includes:
         print(f"Error: Input file not found: {args.input}")
         sys.exit(1)
 
-    if not input_path.suffix.lower() == ".pptx":
+    if input_path.suffix.lower() != ".pptx":
         print("Error: Input must be a PowerPoint file (.pptx)")
         sys.exit(1)
 

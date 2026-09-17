@@ -54,16 +54,16 @@ Document Types (quality thresholds):
 Examples:
   # Generate for journal paper (strict quality)
   python generate_schematic.py "CONSORT participant flow" -o flowchart.png --doc-type journal
-  
+
   # Generate for poster (moderate quality)
   python generate_schematic.py "Transformer architecture" -o arch.png --doc-type poster
-  
+
   # Generate for slides (faster, lower threshold)
   python generate_schematic.py "System diagram" -o system.png --doc-type presentation
-  
+
   # Custom max iterations
   python generate_schematic.py "Complex pathway" -o pathway.png --iterations 2
-  
+
   # Verbose output
   python generate_schematic.py "Circuit diagram" -o circuit.png -v
 

@@ -116,7 +116,7 @@ class BibTeXFormatter:
                 ordered_fields[field_name] = field_value
 
         # Format each field
-        max_field_len = max(len(f) for f in ordered_fields.keys()) if ordered_fields else 0
+        max_field_len = max(len(f) for f in ordered_fields) if ordered_fields else 0
 
         for field_name, field_value in ordered_fields.items():
             # Pad field name for alignment

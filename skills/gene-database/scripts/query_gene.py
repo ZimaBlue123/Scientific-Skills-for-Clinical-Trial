@@ -131,9 +131,8 @@ def search_and_summarize(
         api_key: Optional NCBI API key
     """
     # Add organism filter if provided
-    if organism:
-        if "[organism]" not in query.lower():
-            query = f"{query} AND {organism}[organism]"
+    if organism and "[organism]" not in query.lower():
+        query = f"{query} AND {organism}[organism]"
 
     print(f"Searching for: {query}")
     print("-" * 80)

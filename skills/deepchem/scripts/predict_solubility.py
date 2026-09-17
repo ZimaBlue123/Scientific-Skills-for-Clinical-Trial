@@ -142,7 +142,7 @@ def predict_new_molecules(model, smiles_list, transformers=None):
 
     # Display results
     print("\nPredictions:")
-    for smiles, pred in zip(smiles_list, predictions):
+    for smiles, pred in zip(smiles_list, predictions, strict=False):
         print(f"  {smiles:30s} -> {pred[0]:.3f} log(mol/L)")
 
     return predictions

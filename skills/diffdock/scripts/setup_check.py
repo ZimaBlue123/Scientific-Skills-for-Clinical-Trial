@@ -242,7 +242,7 @@ def main():
         "--verbose", "-v", action="store_true", help="Show detailed version information"
     )
 
-    args = parser.parse_args()
+    parser.parse_args()
 
     print("=" * 80)
     print("DiffDock Environment Setup Checker")

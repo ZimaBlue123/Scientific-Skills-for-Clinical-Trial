@@ -45,10 +45,7 @@ def string_map_ids(
         # Map multiple proteins
         result = string_map_ids(['TP53', 'BRCA1', 'EGFR'], species=9606)
     """
-    if isinstance(identifiers, list):
-        identifiers_str = "\n".join(identifiers)
-    else:
-        identifiers_str = identifiers
+    identifiers_str = "\n".join(identifiers) if isinstance(identifiers, list) else identifiers
 
     params = {
         "identifiers": identifiers_str,
@@ -100,10 +97,7 @@ def string_network(
         # Get network with additional interacting proteins
         network = string_network('TP53', add_nodes=5, required_score=700)
     """
-    if isinstance(identifiers, list):
-        identifiers_str = "%0d".join(identifiers)
-    else:
-        identifiers_str = identifiers
+    identifiers_str = "%0d".join(identifiers) if isinstance(identifiers, list) else identifiers
 
     params = {
         "identifiers": identifiers_str,
@@ -151,10 +145,7 @@ def string_network_image(
         with open('network.png', 'wb') as f:
             f.write(img_data)
     """
-    if isinstance(identifiers, list):
-        identifiers_str = "%0d".join(identifiers)
-    else:
-        identifiers_str = identifiers
+    identifiers_str = "%0d".join(identifiers) if isinstance(identifiers, list) else identifiers
 
     params = {
         "identifiers": identifiers_str,
@@ -198,10 +189,7 @@ def string_interaction_partners(
         # Get top 20 interactors of TP53
         partners = string_interaction_partners('TP53', limit=20, required_score=700)
     """
-    if isinstance(identifiers, list):
-        identifiers_str = "%0d".join(identifiers)
-    else:
-        identifiers_str = identifiers
+    identifiers_str = "%0d".join(identifiers) if isinstance(identifiers, list) else identifiers
 
     params = {
         "identifiers": identifiers_str,
@@ -241,10 +229,7 @@ def string_enrichment(
         proteins = ['TP53', 'MDM2', 'ATM', 'CHEK2', 'BRCA1']
         enrichment = string_enrichment(proteins, species=9606)
     """
-    if isinstance(identifiers, list):
-        identifiers_str = "%0d".join(identifiers)
-    else:
-        identifiers_str = identifiers
+    identifiers_str = "%0d".join(identifiers) if isinstance(identifiers, list) else identifiers
 
     params = {
         "identifiers": identifiers_str,
@@ -284,10 +269,7 @@ def string_ppi_enrichment(
         proteins = ['TP53', 'MDM2', 'ATM', 'CHEK2']
         ppi_result = string_ppi_enrichment(proteins)
     """
-    if isinstance(identifiers, list):
-        identifiers_str = "%0d".join(identifiers)
-    else:
-        identifiers_str = identifiers
+    identifiers_str = "%0d".join(identifiers) if isinstance(identifiers, list) else identifiers
 
     params = {
         "identifiers": identifiers_str,
@@ -325,10 +307,7 @@ def string_homology(
         # Get homology data
         homology = string_homology(['TP53', 'TP63', 'TP73'])
     """
-    if isinstance(identifiers, list):
-        identifiers_str = "%0d".join(identifiers)
-    else:
-        identifiers_str = identifiers
+    identifiers_str = "%0d".join(identifiers) if isinstance(identifiers, list) else identifiers
 
     params = {
         "identifiers": identifiers_str,

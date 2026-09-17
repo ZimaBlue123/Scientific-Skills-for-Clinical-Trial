@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import stat
@@ -86,10 +87,8 @@ def atomic_write_bytes(path: Path, payload: bytes, *, force: bool = False) -> No
             raise CliError(f"refusing to overwrite existing output: {destination}")
         os.replace(temporary, destination)
     finally:
-        try:
+        with contextlib.suppress(FileNotFoundError):
             temporary.unlink()
-        except FileNotFoundError:
-            pass
 
 
 def emit_json(

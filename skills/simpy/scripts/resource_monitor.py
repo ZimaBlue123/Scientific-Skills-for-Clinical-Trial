@@ -219,7 +219,7 @@ class MultiResourceMonitor:
 
     def report_all(self):
         """Generate reports for all monitored resources."""
-        for name, monitor in self.monitors.items():
+        for _name, monitor in self.monitors.items():
             monitor.report()
 
     def summary(self):

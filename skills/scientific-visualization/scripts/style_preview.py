@@ -77,7 +77,7 @@ def build_preview(style_name: str, palette_name: str) -> tuple[Any, dict[str, An
             edgecolor="black",
             linewidth=0.7,
         )
-        for bar, hatch in zip(bars, hatches):
+        for bar, hatch in zip(bars, hatches, strict=False):
             bar.set_hatch(hatch)
         axes[0, 1].axhline(0, color="black", linewidth=0.7)
         axes[0, 1].set(
@@ -137,7 +137,7 @@ def build_preview(style_name: str, palette_name: str) -> tuple[Any, dict[str, An
             title="Raw observations with median",
         )
 
-        for label, ax in zip("ABCD", axes.flat):
+        for label, ax in zip("ABCD", axes.flat, strict=False):
             ax.text(
                 -0.12,
                 1.06,

@@ -263,7 +263,7 @@ def model_averaging(
     print(" " * 22 + "BAYESIAN MODEL AVERAGING")
     print("=" * 70)
     print("\nModel weights:")
-    for name, weight in zip(model_names, weights):
+    for name, weight in zip(model_names, weights, strict=False):
         print(f"  {name}: {weight:.4f} ({weight * 100:.2f}%)")
 
     # Extract predictions and average
@@ -278,7 +278,7 @@ def model_averaging(
         predictions.append(pred)
 
     # Weighted average
-    averaged = sum(w * p for w, p in zip(weights, predictions))
+    averaged = sum(w * p for w, p in zip(weights, predictions, strict=False))
 
     print("\n✓ Model averaging complete")
     print(f"  Combined predictions using {len(predictions)} models")

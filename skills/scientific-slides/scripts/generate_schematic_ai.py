@@ -867,13 +867,13 @@ def main():
 Examples:
   # Generate a flowchart for a journal paper
   python generate_schematic_ai.py "CONSORT participant flow diagram" -o flowchart.png --doc-type journal
-  
+
   # Generate neural network architecture for presentation (lower threshold)
   python generate_schematic_ai.py "Transformer encoder-decoder architecture" -o transformer.png --doc-type presentation
-  
+
   # Generate with custom max iterations for poster
   python generate_schematic_ai.py "Biological signaling pathway" -o pathway.png --iterations 2 --doc-type poster
-  
+
   # Verbose output
   python generate_schematic_ai.py "Circuit diagram" -o circuit.png -v
 

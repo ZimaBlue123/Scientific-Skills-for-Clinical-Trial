@@ -54,10 +54,7 @@ def kegg_list(database: str, org: str | None = None) -> str:
         hsa_pathways = kegg_list('pathway', 'hsa')  # List human pathways
         genes = kegg_list('hsa:10458+ece:Z5100')  # List specific genes
     """
-    if org:
-        url = f"{KEGG_BASE_URL}/list/{database}/{org}"
-    else:
-        url = f"{KEGG_BASE_URL}/list/{database}"
+    url = f"{KEGG_BASE_URL}/list/{database}/{org}" if org else f"{KEGG_BASE_URL}/list/{database}"
 
     try:
         with urllib.request.urlopen(url) as response:

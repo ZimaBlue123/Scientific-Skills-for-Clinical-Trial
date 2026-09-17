@@ -142,7 +142,7 @@ def batch_evaluation_example():
 
     print("\nResults:")
     print("-" * 60)
-    for smiles, score in zip(molecules, scores):
+    for smiles, score in zip(molecules, scores, strict=False):
         print(f"{smiles[:40]:40s}... Score: {score:.4f}")
 
     # Statistics

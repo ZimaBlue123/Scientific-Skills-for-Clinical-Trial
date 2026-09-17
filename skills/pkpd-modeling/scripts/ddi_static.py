@@ -103,10 +103,7 @@ def mechanistic_static(
 
     def terms(i_conc: float, kdeg: float) -> tuple[float, float, float]:
         a = 1.0 / (1.0 + i_conc / ki) if ki else 1.0
-        if ki_inact and kinact:
-            b = kdeg / (kdeg + kinact * i_conc / (ki_inact + i_conc))
-        else:
-            b = 1.0
+        b = kdeg / (kdeg + kinact * i_conc / (ki_inact + i_conc)) if ki_inact and kinact else 1.0
         c = 1.0 + ind_scaling * ind_emax * i_conc / (ind_ec50 + i_conc) if ind_ec50 else 1.0
         return a, b, c
 

@@ -144,7 +144,7 @@ def main() -> int:
     # Back-calculated relative error per level -- the practical test of the model.
     level_rows = []
     by_level: dict[float, list[float]] = {}
-    for x, y in zip(xs, ys):
+    for x, y in zip(xs, ys, strict=False):
         by_level.setdefault(round(x, 12), []).append(y)
     for level in distinct:
         responses = by_level[level]

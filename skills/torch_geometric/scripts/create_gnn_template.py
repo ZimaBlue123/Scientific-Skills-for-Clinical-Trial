@@ -478,7 +478,7 @@ def list_templates():
     for task, models in TEMPLATES.items():
         print(f"\\n{task.upper()}")
         print("-" * 50)
-        for model in models.keys():
+        for model in models:
             print(f"  - {model}")
     print()
 

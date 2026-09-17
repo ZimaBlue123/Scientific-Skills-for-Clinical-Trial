@@ -33,7 +33,7 @@ def _normalize_ratio(arms, ratio):
     if any(r <= 0 for r in ratio):
         raise ValueError("ratio entries must be positive integers")
     template = []
-    for arm, r in zip(arms, ratio):
+    for arm, r in zip(arms, ratio, strict=False):
         template += [arm] * int(r)
     return template
 

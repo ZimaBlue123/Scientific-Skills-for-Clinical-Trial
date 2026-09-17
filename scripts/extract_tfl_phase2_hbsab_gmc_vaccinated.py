@@ -249,7 +249,7 @@ def group_scheme(g):
 def extract_vaccinated(doc_v8):
     """从第8册表[7]接种史 + 表[8]加强免疫史，得到 62 例有接种史名单。"""
     vacc_rows = []
-    for ti, t in enumerate(doc_v8.tables):
+    for _ti, t in enumerate(doc_v8.tables):
         r0 = " ".join(row_texts(t.rows[0]))
         if "疫苗名称" in r0 and "首次免疫" in r0 and "加强免疫" not in r0:
             for r in t.rows[1:]:
@@ -269,7 +269,7 @@ def extract_vaccinated(doc_v8):
                         }
                     )
     booster = {}
-    for ti, t in enumerate(doc_v8.tables):
+    for _ti, t in enumerate(doc_v8.tables):
         if "疫苗名称" in " ".join(row_texts(t.rows[0])) and "加强免疫" in " ".join(
             row_texts(t.rows[0])
         ):
@@ -397,10 +397,7 @@ def group_members(subjects, group):
 
 def subject_value(immuno, sid, tp, own_group):
     """取某受试者某输出时间点的 anti-HBs 数值（全免后按该受试者自身组别程序对齐）。"""
-    if tp in ALIGN:
-        abs_tp = ALIGN[tp][group_scheme(own_group)]
-    else:
-        abs_tp = tp
+    abs_tp = ALIGN[tp][group_scheme(own_group)] if tp in ALIGN else tp
     visit = ABS_TO_VISIT.get(abs_tp)
     if visit is None:
         return None

@@ -170,7 +170,7 @@ def create_style_preview(style_dict=None):
     bars = ax3.bar(data["categories"], data["bar_values"], edgecolor="black", linewidth=1)
     # Color bars with gradient
     colors = plt.cm.viridis(np.linspace(0.2, 0.8, len(bars)))
-    for bar, color in zip(bars, colors):
+    for bar, color in zip(bars, colors, strict=False):
         bar.set_facecolor(color)
     ax3.set_xlabel("Categories")
     ax3.set_ylabel("Values")
@@ -398,7 +398,7 @@ Examples:
 
     if args.preview or args.interactive:
         print("Creating style preview...")
-        fig = create_style_preview(style_dict if style_dict else None)
+        create_style_preview(style_dict if style_dict else None)
 
         if args.output:
             preview_filename = args.output.replace(".mplstyle", "_preview.png")

@@ -1,5 +1,6 @@
 """对单个 Word 文件强制重分页后统计页数（解决部分工具生成的 docx 分页缓存为空、直接统计返回 1 页的问题）。"""
 
+import contextlib
 import os
 import sys
 
@@ -21,10 +22,8 @@ def count(path):
         doc = word.Documents.Open(path, ReadOnly=True, AddToRecentFiles=False, Visible=False)
         try:
             # 强制切换到页面视图并重分页，确保页码统计准确
-            try:
+            with contextlib.suppress(Exception):
                 word.ActiveWindow.View.Type = WD_PRINT_VIEW
-            except Exception:
-                pass
             doc.Repaginate()
             pages = int(doc.ComputeStatistics(WD_STATISTIC_PAGES))
         finally:

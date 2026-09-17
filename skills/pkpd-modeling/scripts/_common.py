@@ -139,7 +139,9 @@ def read_table(source: str | Path) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for raw in reader:
         row = {}
-        for key, value in zip(fieldnames, (raw.get(orig) for orig in reader.fieldnames)):
+        for key, value in zip(
+            fieldnames, (raw.get(orig) for orig in reader.fieldnames), strict=False
+        ):
             row[key] = (value or "").strip()
         rows.append(row)
     if not rows:
