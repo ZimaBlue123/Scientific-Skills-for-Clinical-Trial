@@ -621,7 +621,7 @@ def _iter_xlsx_files(target: Path) -> Iterator[Path]:
             yield entry
 
 
-def main(argv: list[str] | None = None) -> int:
+def main_xlsx(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Robust .xlsx -> UTF-8 text dumper (zip+xml).")
     parser.add_argument("target", help=".xlsx file or folder containing .xlsx files")
     parser.add_argument("-o", "--output", default=None, help="output file (default: stdout)")

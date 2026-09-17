@@ -14,6 +14,14 @@ from pypdf import PdfReader
 
 
 def extract_pdf_text(pdf_path: Path, max_pages: int | None = None) -> str:
+    try:
+        import pdf_inspector  # type: ignore
+        result = pdf_inspector.process_pdf(str(pdf_path))
+        if result.markdown and result.pdf_type not in ("scanned", "image_based"):
+            return result.markdown.strip()
+    except Exception:
+        pass
+
     reader = PdfReader(str(pdf_path))
     chunks: list[str] = []
     total = len(reader.pages)

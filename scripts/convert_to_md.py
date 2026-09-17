@@ -88,7 +88,23 @@ def _convert_docx_basic(filepath: Path) -> str | None:
 
 
 def _convert_pdf_basic(filepath: Path) -> str | None:
-    """Fallback: read .pdf via pypdf (preferred) or pdfplumber."""
+    """Fallback: read .pdf via pdf_inspector (preferred), then pypdf or pdfplumber."""
+    try:
+        import pdf_inspector  # type: ignore
+
+        result = pdf_inspector.process_pdf(str(filepath))
+        if result.markdown:
+            # If it's pure image/scanned, pdf_inspector might return empty or flag it.
+            if result.pdf_type in ("scanned", "image_based") and not result.markdown.strip():
+                # Let fallback OCR handle it if implemented elsewhere, or we just pass
+                pass
+            else:
+                return result.markdown.strip() or None
+    except ImportError:
+        logger.error("Install pdf-inspector for optimal PDF extraction.")
+    except Exception as exc:  # noqa: BLE001
+        logger.error("[pdf_inspector] %s: %s", filepath.name, exc)
+
     try:
         import pypdf  # type: ignore
 
@@ -98,7 +114,6 @@ def _convert_pdf_basic(filepath: Path) -> str | None:
         pass
     except Exception as exc:  # noqa: BLE001
         logger.error("[pypdf] %s: %s", filepath.name, exc)
-        return None
 
     try:
         import pdfplumber  # type: ignore

@@ -67,7 +67,7 @@ if str(SCRIPTS_DIR) not in sys.path:
 
 import contextlib
 
-from edit_office_utils import make_run  # noqa: E402  项目内复用：统一 run 构建
+from office_tools.edit_office_utils import make_run  # noqa: E402  项目内复用：统一 run 构建
 
 # --------------------------------------------------------------------------- #
 # 配置
