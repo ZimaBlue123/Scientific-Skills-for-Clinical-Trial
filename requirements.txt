@@ -14,7 +14,7 @@ lightning==2.6.6
 litellm==1.101.0
 lxml==6.1.0
 mp_api==0.46.5
-numpy==2.5.3
+numpy==1.26.4
 openpyxl==3.1.5
 opentrons==9.1.2
 pandas==2.2.3
