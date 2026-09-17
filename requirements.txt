@@ -18,7 +18,7 @@ numpy==2.5.3
 openai==3.14.1
 openpyxl==3.1.5
 opentrons==9.1.2
-pandas==3.0.5
+pandas==2.2.3
 pdf2image==1.17.0
 pdfplumber==0.11.9
 Pillow==12.3.0
