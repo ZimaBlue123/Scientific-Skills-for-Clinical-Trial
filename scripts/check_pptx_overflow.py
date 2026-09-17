@@ -181,7 +181,9 @@ def main(argv: list[str] | None = None) -> int:
         "--out", "-o", type=Path, default=None, help="Output TXT file (defaults to *_overflow.txt)."
     )
     parser.add_argument(
-        "--force-heuristic", action="store_true", help="Force python-pptx heuristic mode instead of COM."
+        "--force-heuristic",
+        action="store_true",
+        help="Force python-pptx heuristic mode instead of COM.",
     )
     args = parser.parse_args(argv)
 
