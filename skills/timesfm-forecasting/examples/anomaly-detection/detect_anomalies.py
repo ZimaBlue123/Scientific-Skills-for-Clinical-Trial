@@ -492,7 +492,7 @@ def main() -> None:
         "forecast_detections": fc_records,
     }
     json_path = OUTPUT_DIR / "anomaly_detection.json"
-    with open(json_path, "w") as f:
+    with open(json_path, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)
     print(f"  Saved: {json_path}")
 

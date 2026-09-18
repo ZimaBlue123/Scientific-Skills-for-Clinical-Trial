@@ -69,7 +69,7 @@ def get_credentials():
 
 def create_config_file(config_data, output_path="config.yaml"):
     """Create YAML configuration file"""
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         yaml.dump(config_data, f, default_flow_style=False, sort_keys=False)
 
     # Set file permissions to user read/write only for security
@@ -82,7 +82,7 @@ def create_config_file(config_data, output_path="config.yaml"):
 def verify_config(config_path="config.yaml"):
     """Verify configuration file can be loaded"""
     try:
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
         required_keys = [
@@ -122,7 +122,7 @@ def test_authentication(config_path="config.yaml"):
         from labarchivespy.client import Client
 
         # Load config
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
         # Initialize client

@@ -191,7 +191,7 @@ def load_reference_info(category, extension):
     # Parse the reference file for the specific extension
     # This is a simplified parser - could be more sophisticated
     try:
-        with open(ref_file, 'r') as f:
+        with open(ref_file, 'r', encoding="utf-8") as f:
             content = f.read()
 
         # Extract section for this file type
@@ -292,7 +292,7 @@ def analyze_general_scientific(filepath, extension):
             }
 
         elif extension in ['json']:
-            with open(filepath, 'r') as f:
+            with open(filepath, 'r', encoding="utf-8") as f:
                 data = json.load(f)
 
             results = {
@@ -505,7 +505,7 @@ def generate_markdown_report(analysis, output_path=None):
     report = '\n'.join(lines)
 
     if output_path:
-        with open(output_path, 'w') as f:
+        with open(output_path, 'w', encoding="utf-8") as f:
             f.write(report)
         print(f"Report saved to: {output_path}")
     else:

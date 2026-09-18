@@ -839,7 +839,7 @@ Generate a publication-quality scientific diagram that meets all the guidelines 
 
         # Save review log
         log_path = output_dir / f"{base_name}_review_log.json"
-        with open(log_path, "w") as f:
+        with open(log_path, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2)
         print(f"✓ Review log: {log_path}")
 

@@ -1082,7 +1082,7 @@ Generate an improved version that:
 
                 # Save research data to file
                 research_path = output_dir / f"{base_name}_research.json"
-                with open(research_path, "w") as f:
+                with open(research_path, "w", encoding="utf-8") as f:
                     json.dump(research_result, f, indent=2)
                 print(f"✓ Research saved: {research_path}")
             else:
@@ -1176,7 +1176,7 @@ Generate an improved version that:
 
         # Save review log
         log_path = output_dir / f"{base_name}_review_log.json"
-        with open(log_path, "w") as f:
+        with open(log_path, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2)
         print(f"✓ Review log: {log_path}")
 

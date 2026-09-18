@@ -138,7 +138,7 @@ def compute_metrics(
             labels[int(unit_id)] = "mua"
 
     # Save labels
-    with open(output_path / "curation_labels.json", "w") as f:
+    with open(output_path / "curation_labels.json", "w", encoding="utf-8") as f:
         json.dump(labels, f, indent=2)
 
     # Summary

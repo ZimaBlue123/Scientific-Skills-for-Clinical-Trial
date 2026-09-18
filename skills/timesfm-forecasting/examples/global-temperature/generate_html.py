@@ -524,14 +524,14 @@ def main() -> None:
     print("=" * 60)
 
     # Load animation data
-    with open(DATA_FILE) as f:
+    with open(DATA_FILE, encoding="utf-8") as f:
         data = json.load(f)
 
     # Generate HTML with embedded data
     html_content = HTML_TEMPLATE.format(data_json=json.dumps(data, indent=2))
 
     # Write output
-    with open(OUTPUT_FILE, "w") as f:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html_content)
 
     size_kb = OUTPUT_FILE.stat().st_size / 1024

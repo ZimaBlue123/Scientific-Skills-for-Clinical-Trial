@@ -68,7 +68,7 @@ def prune_tree(tree_file, output, keep_taxa, preserve_length=True, format_num=0)
     # Read taxa list
     taxa_file = Path(keep_taxa)
     if taxa_file.exists():
-        with open(taxa_file) as f:
+        with open(taxa_file, encoding="utf-8") as f:
             taxa = [line.strip() for line in f if line.strip()]
     else:
         taxa = [t.strip() for t in keep_taxa.split(",")]

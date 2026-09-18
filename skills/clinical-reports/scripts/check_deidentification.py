@@ -326,7 +326,7 @@ def main():
             print_report(report)
         
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, 'w', encoding="utf-8") as f:
                 json.dump(report, f, indent=2)
             print(f"\nJSON report saved to: {args.output}")
         

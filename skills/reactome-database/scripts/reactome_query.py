@@ -176,7 +176,7 @@ def command_analyze(gene_file: str):
 
     # Read gene list
     try:
-        with open(gene_file) as f:
+        with open(gene_file, encoding="utf-8") as f:
             genes = [line.strip() for line in f if line.strip()]
     except FileNotFoundError:
         print(f"Error: File '{gene_file}' not found")
@@ -221,7 +221,7 @@ def command_analyze(gene_file: str):
 
         # Save full results
         output_file = gene_file.replace(".txt", "_results.json")
-        with open(output_file, "w") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=2)
         print(f"\nFull results saved to: {output_file}")
 

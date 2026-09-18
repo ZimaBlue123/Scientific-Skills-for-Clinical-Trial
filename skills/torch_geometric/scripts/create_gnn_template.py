@@ -462,7 +462,7 @@ def generate_template(model_type: str, task: str, output_path: str):
     output_file = Path(output_path)
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(template)
 
     print(f"✓ Generated {model_type.upper()} template for {task}")

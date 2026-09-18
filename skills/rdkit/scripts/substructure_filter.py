@@ -207,7 +207,7 @@ def write_molecules(molecules, output_file):
             writer.write(mol)
         writer.close()
     elif output_path.suffix.lower() in [".smi", ".smiles", ".txt"]:
-        with open(output_path, "w") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             for mol in molecules:
                 smiles = Chem.MolToSmiles(mol)
                 name = mol.GetProp("_Name") if mol.HasProp("_Name") else ""
@@ -223,7 +223,7 @@ def write_report(match_info, output_file):
     """Write detailed match report."""
     import csv
 
-    with open(output_file, "w", newline="") as f:
+    with open(output_file, "w", newline="", encoding="utf-8") as f:
         fieldnames = ["Index", "SMILES", "Status", "Matches"]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

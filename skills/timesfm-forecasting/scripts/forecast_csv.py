@@ -184,7 +184,7 @@ def write_csv_output(
 
 def write_json_output(results: dict[str, dict], output_path: str) -> None:
     """Write forecast results to JSON."""
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
     print(f"✅ Wrote forecasts for {len(results)} series to {output_path}")
 

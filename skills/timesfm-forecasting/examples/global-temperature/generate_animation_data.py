@@ -126,7 +126,7 @@ def main() -> None:
     }
 
     # Save
-    with open(OUTPUT_FILE, "w") as f:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2)
 
     print("\n" + "=" * 60)

@@ -282,7 +282,7 @@ def save_results(compound_name, kegg_info, chembl_id, output_file):
     print(f"Saving results to {output_file}")
     print(f"{'=' * 70}")
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write("=" * 70 + "\n")
         f.write(f"Compound Cross-Reference Report: {compound_name}\n")
         f.write("=" * 70 + "\n\n")

@@ -196,7 +196,7 @@ Examples:
 
         # Write or print output
         if args.output:
-            with open(args.output, "w") as f:
+            with open(args.output, "w", encoding="utf-8") as f:
                 f.write(output)
             print(f"✓ Metadata extracted to: {args.output}")
         else:

@@ -125,7 +125,7 @@ def _get_total_ram_gb() -> float:
     """Return total physical RAM in GB, cross-platform."""
     try:
         if sys.platform == "linux":
-            with open("/proc/meminfo") as f:
+            with open("/proc/meminfo", encoding="utf-8") as f:
                 for line in f:
                     if line.startswith("MemTotal"):
                         return int(line.split()[1]) / (1024 * 1024)
@@ -172,7 +172,7 @@ def _get_available_ram_gb() -> float:
     """Return available RAM in GB."""
     try:
         if sys.platform == "linux":
-            with open("/proc/meminfo") as f:
+            with open("/proc/meminfo", encoding="utf-8") as f:
                 for line in f:
                     if line.startswith("MemAvailable"):
                         return int(line.split()[1]) / (1024 * 1024)

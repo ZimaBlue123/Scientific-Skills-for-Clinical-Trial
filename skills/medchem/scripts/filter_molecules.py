@@ -71,7 +71,7 @@ def load_molecules(
 
     elif suffix == ".txt":
         print(f"Loading text file: {input_file}")
-        with open(input_file) as f:
+        with open(input_file, encoding="utf-8") as f:
             smiles_list = [line.strip() for line in f if line.strip()]
 
         df = pd.DataFrame({"smiles": smiles_list})
@@ -218,7 +218,7 @@ def generate_summary(df: pd.DataFrame, output_file: Path):
     """Generate filtering summary report."""
     summary_file = output_file.parent / f"{output_file.stem}_summary.txt"
 
-    with open(summary_file, "w") as f:
+    with open(summary_file, "w", encoding="utf-8") as f:
         f.write("=" * 80 + "\n")
         f.write("MEDCHEM FILTERING SUMMARY\n")
         f.write("=" * 80 + "\n\n")

@@ -117,7 +117,7 @@ output_json = {
     },
 }
 
-with open(output_dir / "forecast_output.json", "w") as f:
+with open(output_dir / "forecast_output.json", "w", encoding="utf-8") as f:
     json.dump(output_json, f, indent=2)
 
 # Print summary

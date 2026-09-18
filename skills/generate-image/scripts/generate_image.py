@@ -25,7 +25,7 @@ def check_env_file() -> str | None:
     for parent in [current_dir] + list(current_dir.parents):
         env_file = parent / ".env"
         if env_file.exists():
-            with open(env_file) as f:
+            with open(env_file, encoding="utf-8") as f:
                 for line in f:
                     if line.startswith("OPENROUTER_API_KEY="):
                         api_key = line.split("=", 1)[1].strip().strip('"').strip("'")

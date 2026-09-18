@@ -317,7 +317,7 @@ def export_results(analyzer, sorting, recording, labels: dict, output_folder: st
     qm.to_csv(f"{output_folder}/quality_metrics.csv")
 
     # Save labels
-    with open(f"{output_folder}/unit_labels.json", "w") as f:
+    with open(f"{output_folder}/unit_labels.json", "w", encoding="utf-8") as f:
         json.dump({str(k): v for k, v in labels.items()}, f, indent=2)
 
     # Save summary
@@ -328,7 +328,7 @@ def export_results(analyzer, sorting, recording, labels: dict, output_folder: st
         "duration_s": float(recording.get_total_duration()),
         "n_channels": int(recording.get_num_channels()),
     }
-    with open(f"{output_folder}/summary.json", "w") as f:
+    with open(f"{output_folder}/summary.json", "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
 
     print(f"  Summary: {summary}")

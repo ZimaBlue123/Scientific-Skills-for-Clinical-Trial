@@ -283,7 +283,7 @@ def generate_report(data, output_dir, prefix='survival'):
     hr, ci_lower, ci_upper, hr_p = calculate_hazard_ratio(data)
     
     # Generate statistical summary
-    with open(output_dir / f'{prefix}_statistics.txt', 'w') as f:
+    with open(output_dir / f'{prefix}_statistics.txt', 'w', encoding="utf-8") as f:
         f.write("SURVIVAL ANALYSIS STATISTICAL SUMMARY\n")
         f.write("=" * 60 + "\n\n")
         
@@ -321,7 +321,7 @@ def generate_report(data, output_dir, prefix='survival'):
             f.write(f"  Interpretation: {groups[1]} has {((1-hr)*100):.0f}% {'reduction' if hr < 1 else 'increase'} in risk\n")
     
     # Generate LaTeX table code
-    with open(output_dir / f'{prefix}_latex_table.tex', 'w') as f:
+    with open(output_dir / f'{prefix}_latex_table.tex', 'w', encoding="utf-8") as f:
         f.write("% LaTeX table code for survival outcomes\n")
         f.write("\\begin{table}[H]\n")
         f.write("\\centering\n")

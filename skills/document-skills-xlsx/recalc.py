@@ -26,7 +26,7 @@ def setup_libreoffice_macro():
     macro_file = os.path.join(macro_dir, "Module1.xba")
 
     if os.path.exists(macro_file):
-        with open(macro_file) as f:
+        with open(macro_file, encoding="utf-8") as f:
             if "RecalculateAndSave" in f.read():
                 return True
 
@@ -49,7 +49,7 @@ def setup_libreoffice_macro():
 </script:module>"""
 
     try:
-        with open(macro_file, "w") as f:
+        with open(macro_file, "w", encoding="utf-8") as f:
             f.write(macro_content)
         return True
     except Exception:

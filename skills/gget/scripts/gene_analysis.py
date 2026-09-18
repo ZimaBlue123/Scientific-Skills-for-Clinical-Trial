@@ -53,11 +53,11 @@ def analyze_gene(gene_name, species="homo_sapiens", output_prefix=None):
     nucleotide_seq = gget.seq([gene_id])
     protein_seq = gget.seq([gene_id], translate=True)
 
-    with open(f"{output_prefix}_nucleotide.fasta", "w") as f:
+    with open(f"{output_prefix}_nucleotide.fasta", "w", encoding="utf-8") as f:
         f.write(nucleotide_seq)
     print(f"   Nucleotide sequence saved to: {output_prefix}_nucleotide.fasta")
 
-    with open(f"{output_prefix}_protein.fasta", "w") as f:
+    with open(f"{output_prefix}_protein.fasta", "w", encoding="utf-8") as f:
         f.write(protein_seq)
     print(f"   Protein sequence saved to: {output_prefix}_protein.fasta")
 

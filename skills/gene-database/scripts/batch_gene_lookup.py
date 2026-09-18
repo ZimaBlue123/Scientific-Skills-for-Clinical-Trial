@@ -26,7 +26,7 @@ def read_gene_list(filepath: str) -> list[str]:
         List of gene identifiers
     """
     try:
-        with open(filepath) as f:
+        with open(filepath, encoding="utf-8") as f:
             genes = [line.strip() for line in f if line.strip()]
         return genes
     except FileNotFoundError:
@@ -272,7 +272,7 @@ Examples:
 
     if args.output:
         try:
-            with open(args.output, "w") as f:
+            with open(args.output, "w", encoding="utf-8") as f:
                 f.write(json_output)
             print(f"Results written to {args.output}", file=sys.stderr)
         except Exception as e:

@@ -462,7 +462,7 @@ def main():
         caption="Baseline patient demographics and clinical characteristics",
         label="baseline"
     )
-    with open(output_dir / 'table1_baseline.tex', 'w') as f:
+    with open(output_dir / 'table1_baseline.tex', 'w', encoding="utf-8") as f:
         f.write(latex_code)
     print(f"LaTeX code saved to: {output_dir}/table1_baseline.tex")
     
@@ -480,7 +480,7 @@ def main():
             caption="Treatment efficacy outcomes by group",
             label="efficacy"
         )
-        with open(output_dir / 'table2_efficacy.tex', 'w') as f:
+        with open(output_dir / 'table2_efficacy.tex', 'w', encoding="utf-8") as f:
             f.write(latex_code)
     
     # Generate Table 3: Safety (identify AE columns)
@@ -499,7 +499,7 @@ def main():
             caption="Treatment-emergent adverse events by group (CTCAE v5.0)",
             label="safety"
         )
-        with open(output_dir / 'table3_safety.tex', 'w') as f:
+        with open(output_dir / 'table3_safety.tex', 'w', encoding="utf-8") as f:
             f.write(latex_code)
     
     print(f"\nAll tables generated successfully in {output_dir}/")

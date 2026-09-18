@@ -22,7 +22,7 @@ def read_gene_list(file_path):
         genes = df.iloc[:, 0].tolist()
     else:
         # Plain text file
-        with open(file_path) as f:
+        with open(file_path, encoding="utf-8") as f:
             genes = [line.strip() for line in f if line.strip()]
 
     return genes

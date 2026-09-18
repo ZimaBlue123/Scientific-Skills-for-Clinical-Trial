@@ -271,7 +271,7 @@ class CDSValidator:
     def save_report(self, output_file):
         """Save validation report to file."""
         
-        with open(output_file, 'w') as f:
+        with open(output_file, 'w', encoding="utf-8") as f:
             f.write("CLINICAL DECISION SUPPORT DOCUMENT VALIDATION REPORT\n")
             f.write("="*70 + "\n")
             f.write(f"Document: {self.filepath}\n")

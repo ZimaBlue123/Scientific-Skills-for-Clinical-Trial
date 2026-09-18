@@ -95,7 +95,7 @@ def cached_query(cache_file: str, query_func, *args, **kwargs) -> Any:
 
     if cache_path.exists():
         print(f"Loading from cache: {cache_file}")
-        with open(cache_path) as f:
+        with open(cache_path, encoding="utf-8") as f:
             return json.load(f)
 
     print(f"Cache miss. Querying API...")
@@ -103,7 +103,7 @@ def cached_query(cache_file: str, query_func, *args, **kwargs) -> Any:
 
     if result is not None:
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(cache_path, 'w') as f:
+        with open(cache_path, 'w', encoding="utf-8") as f:
             json.dump(result, f, indent=2)
         print(f"Cached to: {cache_file}")
 

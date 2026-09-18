@@ -848,11 +848,11 @@ def export_kinetic_data(ec_number: str, format: str = "csv", filename: str = Non
                 df = pd.DataFrame(parsed_data)
                 df.to_csv(filename, index=False)
             else:
-                with open(filename, "w", newline="") as f:
+                with open(filename, "w", newline="", encoding="utf-8") as f:
                     f.write("No data found")
 
         elif format.lower() == "json":
-            with open(filename, "w") as f:
+            with open(filename, "w", encoding="utf-8") as f:
                 json.dump(parsed_data, f, indent=2, default=str)
 
         elif format.lower() == "excel":

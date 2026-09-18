@@ -76,14 +76,14 @@ def main():
     args = parser.parse_args()
     
     try:
-        with open(args.input_file, 'r') as f:
+        with open(args.input_file, 'r', encoding="utf-8") as f:
             reader = csv.DictReader(f)
             data = list(reader)
         
         table = format_ae_summary_table(data)
         
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, 'w', encoding="utf-8") as f:
                 f.write(table)
             print(f"✓ Table saved to: {args.output}")
         else:

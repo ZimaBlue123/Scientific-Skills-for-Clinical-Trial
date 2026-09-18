@@ -524,7 +524,7 @@ def main() -> None:
     }
 
     meta_path = OUTPUT_DIR / "covariates_metadata.json"
-    with open(meta_path, "w") as f:
+    with open(meta_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2)
     print(f"   Saved: {meta_path}")
 

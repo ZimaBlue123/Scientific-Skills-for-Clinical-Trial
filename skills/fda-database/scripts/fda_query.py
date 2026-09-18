@@ -70,7 +70,7 @@ class FDACache:
         if cache_file.exists():
             age = time.time() - cache_file.stat().st_mtime
             if age < self.ttl:
-                with open(cache_file, 'r') as f:
+                with open(cache_file, 'r', encoding="utf-8") as f:
                     return json.load(f)
         return None
 
@@ -78,7 +78,7 @@ class FDACache:
         """Cache response data."""
         key = self._get_cache_key(url, params)
         cache_file = self.cache_dir / f"{key}.json"
-        with open(cache_file, 'w') as f:
+        with open(cache_file, 'w', encoding="utf-8") as f:
             json.dump(data, f)
 
 

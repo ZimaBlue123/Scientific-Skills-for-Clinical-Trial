@@ -266,7 +266,7 @@ Available Models:
 
     # Save to file if requested
     if args.output:
-        with open(args.output, 'w') as f:
+        with open(args.output, 'w', encoding="utf-8") as f:
             json.dump(result, f, indent=2)
         print(f"\n✓ Results saved to {args.output}", file=sys.stderr)
 

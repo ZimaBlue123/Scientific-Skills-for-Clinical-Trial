@@ -449,7 +449,7 @@ def main():
     output_json = json.dumps(output_data, indent=2)
 
     if args.output:
-        with open(args.output, "w") as f:
+        with open(args.output, "w", encoding="utf-8") as f:
             f.write(output_json)
         print(f"Results written to {args.output}", file=sys.stderr)
     else:

@@ -112,7 +112,7 @@ def save_pathway_summary(results, output_file):
     """Save pathway summary to CSV."""
     print(f"\nSaving pathway summary to {output_file}...")
 
-    with open(output_file, "w", newline="") as f:
+    with open(output_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
 
         # Header
@@ -165,7 +165,7 @@ def save_interactions_sif(results, output_file):
     """Save all interactions in SIF format."""
     print(f"\nSaving interactions to {output_file}...")
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         for result in results:
             result["pathway_id"]
 
@@ -191,7 +191,7 @@ def save_detailed_pathway_info(results, output_dir):
         pathway_id = result["pathway_id"].replace(":", "_")
         filename = os.path.join(pathway_dir, f"{pathway_id}_interactions.csv")
 
-        with open(filename, "w", newline="") as f:
+        with open(filename, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow(["Source", "Target", "Interaction_Type", "Link_Type"])
 

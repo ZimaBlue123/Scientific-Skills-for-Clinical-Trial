@@ -72,7 +72,7 @@ if __name__ == "__main__":
         print("Usage: check_bounding_boxes.py [fields.json]")
         sys.exit(1)
     # Input file should be in the `fields.json` format described in forms.md.
-    with open(sys.argv[1]) as f:
+    with open(sys.argv[1], encoding="utf-8") as f:
         messages = get_bounding_box_messages(f)
     for msg in messages:
         print(msg)

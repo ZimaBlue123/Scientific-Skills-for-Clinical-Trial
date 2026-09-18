@@ -17,7 +17,7 @@ def read_fasta(fasta_file):
     current_id = None
     current_seq = []
 
-    with open(fasta_file) as f:
+    with open(fasta_file, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line.startswith(">"):
@@ -93,7 +93,7 @@ def analyze_sequences(
         try:
             alignment = gget.muscle(fasta_file)
             alignment_file = output_path / "alignment.afa"
-            with open(alignment_file, "w") as f:
+            with open(alignment_file, "w", encoding="utf-8") as f:
                 f.write(alignment)
             print(f"Alignment saved to: {alignment_file}")
         except Exception as e:

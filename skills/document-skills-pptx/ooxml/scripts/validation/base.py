@@ -788,7 +788,7 @@ class BaseSchemaValidator:
                 schema = lxml.etree.XMLSchema(xsd_doc)
 
             # Load and preprocess XML
-            with open(xml_file) as f:
+            with open(xml_file, encoding="utf-8") as f:
                 xml_doc = lxml.etree.parse(f)
 
             xml_doc, _ = self._remove_template_tags_from_text_nodes(xml_doc)

@@ -242,7 +242,7 @@ def main():
         output_file = args.output or f"analysis.{args.export}"
 
         if args.export == "json":
-            with open(output_file, "w") as f:
+            with open(output_file, "w", encoding="utf-8") as f:
                 json.dump(results, f, indent=2)
             print(f"\n✓ Analysis exported to {output_file}")
 
@@ -250,7 +250,7 @@ def main():
             try:
                 import yaml
 
-                with open(output_file, "w") as f:
+                with open(output_file, "w", encoding="utf-8") as f:
                     yaml.dump(results, f, default_flow_style=False)
                 print(f"\n✓ Analysis exported to {output_file}")
             except ImportError:

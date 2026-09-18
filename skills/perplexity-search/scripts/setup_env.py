@@ -34,14 +34,14 @@ def create_env_file(api_key: str, env_file: str = ".env") -> bool:
         # Read existing content if file exists
         existing_content = []
         if env_path.exists():
-            with open(env_path, 'r') as f:
+            with open(env_path, 'r', encoding="utf-8") as f:
                 existing_content = [
                     line for line in f.readlines()
                     if not line.startswith('OPENROUTER_API_KEY=')
                 ]
 
         # Write new content
-        with open(env_path, 'w') as f:
+        with open(env_path, 'w', encoding="utf-8") as f:
             # Write existing content (excluding old OPENROUTER_API_KEY)
             f.writelines(existing_content)
 

@@ -48,7 +48,7 @@ def check_bigwig_file(bw_file):
 def check_bed_file(bed_file):
     """Basic validation of BED file format."""
     try:
-        with open(bed_file) as f:
+        with open(bed_file, encoding="utf-8") as f:
             lines = [line.strip() for line in f if line.strip() and not line.startswith("#")]
 
         if len(lines) == 0:

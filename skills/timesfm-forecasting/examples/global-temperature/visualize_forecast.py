@@ -32,7 +32,7 @@ def main() -> None:
     df = pd.read_csv(INPUT_FILE, parse_dates=["date"])
 
     # Load forecast results
-    with open(FORECAST_FILE) as f:
+    with open(FORECAST_FILE, encoding="utf-8") as f:
         forecast = json.load(f)
 
     # Extract forecast data

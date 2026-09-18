@@ -80,7 +80,7 @@ def read_ids_from_file(filename):
     print(f"Reading identifiers from {filename}...")
 
     ids = []
-    with open(filename) as f:
+    with open(filename, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#"):
@@ -168,7 +168,7 @@ def save_mapping_csv(mapping, output_file, from_db, to_db):
     """Save mapping results to CSV."""
     print(f"\nSaving results to {output_file}...")
 
-    with open(output_file, "w", newline="") as f:
+    with open(output_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
 
         # Header
@@ -195,7 +195,7 @@ def save_failed_ids(failed_ids, output_file):
 
     print(f"\nSaving failed IDs to {output_file}...")
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         for id_ in failed_ids:
             f.write(f"{id_}\n")
 

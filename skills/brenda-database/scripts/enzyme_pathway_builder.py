@@ -1037,7 +1037,7 @@ def generate_pathway_report(pathway: dict[str, Any], filename: str = None) -> st
     report.append(f"Thermodynamic feasibility: {feasibility['thermodynamic_feasibility']:.2f}/1.00")
 
     # Write report to file
-    with open(filename, "w") as f:
+    with open(filename, "w", encoding="utf-8") as f:
         f.write("\n".join(report))
 
     print(f"Pathway report saved to {filename}")

@@ -161,7 +161,7 @@ def main() -> None:
     print("=" * 60)
 
     # Load data
-    with open(DATA_FILE) as f:
+    with open(DATA_FILE, encoding="utf-8") as f:
         data = json.load(f)
 
     total_steps = len(data["animation_steps"])

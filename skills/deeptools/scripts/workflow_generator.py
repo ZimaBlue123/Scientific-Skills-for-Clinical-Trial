@@ -97,7 +97,7 @@ echo "=== ChIP-seq QC workflow complete ==="
 echo "Results are in: $OUTPUT_DIR"
 """
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(script)
 
     return f"✓ Generated ChIP-seq QC workflow: {output_file}"
@@ -216,7 +216,7 @@ echo "=== ChIP-seq analysis complete ==="
 echo "Results are in: $OUTPUT_DIR"
 """
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(script)
 
     return f"✓ Generated ChIP-seq analysis workflow: {output_file}"
@@ -265,7 +265,7 @@ echo "Note: These bigWig files can be loaded into genome browsers"
 echo "for strand-specific visualization of RNA-seq data."
 """
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(script)
 
     return f"✓ Generated RNA-seq coverage workflow: {output_file}"
@@ -351,7 +351,7 @@ echo "  ~200bp: mono-nucleosome"
 echo "  ~400bp: di-nucleosome"
 """
 
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(script)
 
     return f"✓ Generated ATAC-seq workflow: {output_file}"

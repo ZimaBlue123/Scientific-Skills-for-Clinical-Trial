@@ -218,7 +218,7 @@ def simple_algorithm_to_tikz(algorithm_text, output_file='algorithm.tex'):
     tikz_code += generate_tikz_footer()
     
     # Save to file
-    with open(output_file, 'w') as f:
+    with open(output_file, 'w', encoding="utf-8") as f:
         f.write(tikz_code)
     
     print(f"TikZ flowchart saved to: {output_file}")
@@ -246,7 +246,7 @@ def json_to_tikz(json_file, output_file='algorithm.tex'):
     }
     """
     
-    with open(json_file, 'r') as f:
+    with open(json_file, 'r', encoding="utf-8") as f:
         spec = json.load(f)
     
     tikz_code = generate_tikz_header()
@@ -327,7 +327,7 @@ def json_to_tikz(json_file, output_file='algorithm.tex'):
     tikz_code += generate_tikz_footer()
     
     # Save
-    with open(output_file, 'w') as f:
+    with open(output_file, 'w', encoding="utf-8") as f:
         f.write(tikz_code)
     
     print(f"TikZ flowchart saved to: {output_file}")
@@ -405,7 +405,7 @@ def main():
         example_spec = create_example_json()
         
         # Save example JSON
-        with open('example_algorithm.json', 'w') as f:
+        with open('example_algorithm.json', 'w', encoding="utf-8") as f:
             json.dump(example_spec, f, indent=2)
         print("Example JSON saved to: example_algorithm.json")
         
@@ -421,7 +421,7 @@ def main():
         if args.input.endswith('.json'):
             json_to_tikz(args.input, args.output)
         else:
-            with open(args.input, 'r') as f:
+            with open(args.input, 'r', encoding="utf-8") as f:
                 text = f.read()
             simple_algorithm_to_tikz(text, args.output)
     

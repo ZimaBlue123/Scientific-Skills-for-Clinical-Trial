@@ -92,7 +92,7 @@ def extract_confidence_score(sdf_file, complex_dir):
     confidence_file = complex_dir / "confidence_scores.txt"
     if confidence_file.exists():
         try:
-            with open(confidence_file) as f:
+            with open(confidence_file, encoding="utf-8") as f:
                 lines = f.readlines()
                 # Extract rank from filename
                 rank_match = re.search(r"rank_(\d+)", sdf_file.name)
@@ -105,7 +105,7 @@ def extract_confidence_score(sdf_file, complex_dir):
 
     # Method 2: Parse from SDF file
     try:
-        with open(sdf_file) as f:
+        with open(sdf_file, encoding="utf-8") as f:
             content = f.read()
             # Look for confidence score in SDF properties
             conf_match = re.search(r"confidence[:\s]+(-?\d+\.?\d*)", content, re.IGNORECASE)
@@ -221,7 +221,7 @@ def export_to_csv(results, output_path):
     """Export results to CSV file."""
     import csv
 
-    with open(output_path, "w", newline="") as f:
+    with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["complex_name", "rank", "confidence", "confidence_class", "file_path"])
 

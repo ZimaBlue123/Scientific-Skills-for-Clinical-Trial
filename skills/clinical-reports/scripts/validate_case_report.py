@@ -315,7 +315,7 @@ def main():
             validator.print_report()
         
         if args.output:
-            with open(args.output, 'w') as f:
+            with open(args.output, 'w', encoding="utf-8") as f:
                 json.dumps(report, f, indent=2)
             print(f"\nJSON report saved to: {args.output}")
         

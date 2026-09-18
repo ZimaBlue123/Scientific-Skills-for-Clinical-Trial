@@ -149,7 +149,7 @@ def create_text_timeline(timeline_data: Dict, output_file: Path = None):
     output_text = "\n".join(lines)
     
     if output_file:
-        with open(output_file, 'w') as f:
+        with open(output_file, 'w', encoding="utf-8") as f:
             f.write(output_text)
         print(f"\nText timeline saved to: {output_file}")
     else:
