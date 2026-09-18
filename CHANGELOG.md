@@ -10,7 +10,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - **`scripts/common_scripts/generator_base.py`**: Added OSError guards to `save_document()` and `load_template()` with `logger.exception()` and `raise RuntimeError` on failure, replacing silent pass-throughs that could mask data-loss bugs.
 
+### Added
+- **Clinical Data Automation capability layer (2026-09-18)**: vendored the external
+  `1-Clinical Data Automation` toolkit under `scripts/clinical-automation/` with its full
+  history preserved. Modules 25, 26, 27, 28, 29, 30, 31 and 32 were deliberately not
+  imported, so directory numbering is intentionally non-contiguous.
+- **Ten capability skills (2026-09-18)**: `clinical-pdf-ectd`, `clinical-sae-extraction`,
+  `clinical-word-tables`, `clinical-pdf-extraction`, `clinical-docx-editing`,
+  `clinical-excel-charts`, `clinical-pdf-hygiene`, `clinical-ppt-toolkit`,
+  `document-format-convert`, `clinical-document-translation`. Each is a documentation-only
+  skill that points at the vendored scripts, so no code is duplicated.
+- **`scripts/audit_robustness_smells.py`**: AST audit for bare `except:`, silently swallowed
+  handlers, encoding-less text opens, mutable default arguments, `shell=True`, `os.system`
+  and hardcoded absolute paths. Scoped to repository-owned code so the vendored subtree stays
+  byte-identical.
+
 ### Changed
+- **Phase 1 (2026-09-18) — code quality baseline**: 92 repository-owned Python files audited
+  with pyflakes (0 findings) and the new robustness auditor (0 blocking findings); 420 files
+  re-checked for encoding declarations (0 missing). The ten new skills now carry `license`,
+  `compatibility`, `allowed-tools` and a `metadata` block, satisfying the frontmatter rule in
+  `tests/_contract/structure.py`. Safety baseline committed as `2f7f4bc`.
+- **Phase 2 (2026-09-18) — redundant file cleanup**: removed 122 stale `__pycache__/`
+  directories left behind by the vendored toolkit import.
+- **Phase 3 (2026-09-18) — configuration alignment**: `requirements.txt` verified against every
+  third-party import in repository-owned code — all 18 are declared, no changes needed.
+  `.gitignore` confirmed comprehensive. `plugin.json` is still absent from the repository root,
+  which is a known pre-existing gap in `tests/_meta` (see Notes).
 - **Phase 3 (2026-08-07) — configuration alignment**:
   - `.gitignore`: confirmed comprehensive; no changes needed.
   - `requirements.txt`: confirmed all active dependencies declared; no changes needed.
@@ -25,6 +51,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Notes
 - No source code semantics were changed; the goal was repository cleanup and documentation correctness.
+- **Known pre-existing gap:** `tests/_meta/test_repo_contract.py` does not pass on this checkout,
+  and did not before this refactor. Running it without pytest reproduces 259 failures across 165
+  skills, almost all from `frontmatter` (no `metadata` block) and `local_links_resolve`
+  (SKILL.md paths written relative to the repository root rather than to the skill directory).
+  `plugin.json` has never existed in the repository, so `AgentPluginTests` fails on the missing
+  file. The six `shell_scripts` failures are a Windows artifact: git does not preserve the
+  executable bit for `.sh` files here. Bringing the remaining 165 skills into conformance is a
+  separate, repo-wide remediation and was deliberately not folded into this run.
 - Self-check (`scripts/project_self_check.py`) still reports import-time failures for skills whose third-party dependencies are not installed locally; this is expected on a developer machine.
 
 ## Earlier history
