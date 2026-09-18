@@ -42,6 +42,10 @@ pip-log.txt
 htmlcov/
 .cache/
 .benchmarks/
+.tox/
+.nox/
+dmypy.json
+.dmypy.json
 
 # ==========================================
 # IDE / OS
@@ -92,8 +96,18 @@ secrets/
 *.parquet
 .env
 .env.*
+!.env.example
 config.yaml
 config_local.yaml
+
+# Credentials / keys (never commit)
+*.pem
+*.key
+*.p12
+credentials*.json
+secrets*.json
+service_account*.json
+*.sqlite3
 
 # ==========================================
 # Logs / temp / notebooks

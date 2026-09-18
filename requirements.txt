@@ -3,6 +3,16 @@ beautifulsoup4==4.15.0
 Bio==1.8.4
 chembl_webresource_client==0.10.9
 defusedxml==0.7.1
+# Office document I/O: `import docx` / `import pptx` are used by the vast
+# majority of the report-generation scripts in this repository.
+python-docx>=1.1.0
+python-pptx>=1.0.0
+networkx>=3.0
+pydicom>=2.4.0
+pymoo>=0.6.1
+seaborn>=0.13.0
+simpy>=4.1.0
+statsmodels>=0.14.0
 drugbank_downloader==0.2.1
 ete3==3.1.3
 PyMuPDF==1.26.4
