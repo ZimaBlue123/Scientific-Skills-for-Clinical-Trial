@@ -2,6 +2,8 @@
 name: latex-posters
 description: "Create professional research posters in LaTeX using beamerposter, tikzposter, or baposter. Support for conference presentations, academic posters, and scientific communication. Includes layout design, color schemes, multi-column formats, figure integration, and poster-specific best practices for visual communication."
 allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0.0"
 ---
 
 # LaTeX Research Posters
@@ -1599,4 +1601,3 @@ Ready-to-use poster templates in `assets/` directory:
 - Color scheme definitions and institutional templates
 
 Load these templates and customize for your specific research and conference requirements.
-

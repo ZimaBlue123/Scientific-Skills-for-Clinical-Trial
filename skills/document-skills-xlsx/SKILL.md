@@ -2,6 +2,8 @@
 name: document-skills-xlsx
 description: Read and write Excel (XLSX) workbooks
 license: Proprietary. LICENSE.txt has complete terms
+metadata:
+  version: "1.0.0"
 ---
 
 # Requirements for Outputs

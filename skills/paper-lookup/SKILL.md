@@ -3,7 +3,8 @@ name: paper-lookup
 description: 文献检索聚合入口。将检索任务按目标分发到本仓库已有文献相关 skills（PubMed/OpenAlex），并在需要时补充试验注册信息。
 license: MIT
 metadata:
-    skill-author: Scientific-Skills-for-Clinical_Trial maintainers
+  version: "1.0.0"
+  skill-author: Scientific-Skills-for-Clinical_Trial maintainers
 ---
 
 # Paper Lookup (Aggregator)

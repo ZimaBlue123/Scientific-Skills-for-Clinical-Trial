@@ -7,11 +7,11 @@ metadata:
   version: "1.8"
   skill-author: K-Dense Inc.
   openclaw:
-    primaryEnv: OPENROUTER_API_KEY
-    envVars:
-    - name: OPENROUTER_API_KEY
-      required: false
-      description: OpenRouter API key for the skill's LLM-powered steps.
+  primaryEnv: OPENROUTER_API_KEY
+  envVars:
+  - name: OPENROUTER_API_KEY
+    required: false
+    description: OpenRouter API key for the skill's LLM-powered steps.
 ---
 
 # Scientific Slides

@@ -1,6 +1,8 @@
 ---
 name: antibody-kinetics
 description: Analyze antibody kinetics and immune persistence (e.g., anti-HBs, neutralizing Ab) for CSR/regulatory submissions using power-law (log-log) decay models and subject-level linear mixed models (LMM/MixedLM). Use when the user mentions antibody kinetics, waning, persistence, GMC/GMT over time, M12+ extrapolation, power law model, decay slope comparison between arms (e.g., A2 vs C1), seroprotection threshold time, or CDE/FDA submission-ready inference and plots.
+metadata:
+  version: "1.0.0"
 ---
 
 # Antibody Kinetics（抗体动力学）分析

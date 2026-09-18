@@ -13,14 +13,14 @@ license: Apache-2.0
 metadata:
   skill-author: Clayton Young / Superior Byte Works, LLC (@borealBytes)
   skill-source: https://github.com/SuperiorByteWorks-LLC/agent-project
-  skill-version: "1.0.0"
+  version: "1.0.0"
   skill-contributors:
-    - name: Clayton Young
-      org: Superior Byte Works, LLC / @borealBytes
-      role: Author and originator
-    - name: K-Dense Team
-      org: K-Dense Inc.
-      role: Integration target and community feedback
+  - name: Clayton Young
+    org: Superior Byte Works, LLC / @borealBytes
+    role: Author and originator
+  - name: K-Dense Team
+    org: K-Dense Inc.
+    role: Integration target and community feedback
 ---
 
 # Markdown and Mermaid Writing

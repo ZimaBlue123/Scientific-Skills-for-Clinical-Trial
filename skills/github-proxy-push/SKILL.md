@@ -2,9 +2,10 @@
 name: github-proxy-push
 description: Diagnose GitHub network/proxy issues and provide stable push workflow for restricted networks.
 metadata:
+  version: "1.0.0"
   surfaces:
-    - ide
-    - terminal
+  - ide
+  - terminal
 ---
 
 # GitHub Proxy Push

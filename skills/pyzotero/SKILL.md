@@ -4,7 +4,8 @@ description: Interact with Zotero reference management libraries using the pyzot
 allowed-tools: Read Write Edit Bash
 license: MIT License
 metadata:
-    skill-author: K-Dense Inc.
+  version: "1.0.0"
+  skill-author: K-Dense Inc.
 ---
 
 # Pyzotero

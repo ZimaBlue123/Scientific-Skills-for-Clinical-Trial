@@ -317,6 +317,8 @@ def link_problems(skill: Path, known_skills: Iterable[str] | None = None) -> lis
             ):
                 if (skill / relative).exists():
                     continue
+                if (REPO_ROOT / relative).exists():
+                    continue
                 owners = [
                     other
                     for other in names

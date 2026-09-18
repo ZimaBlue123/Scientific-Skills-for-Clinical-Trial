@@ -6,6 +6,8 @@ description: >-
   sources, update specified slides, and export landscape Word tables for copy-paste.
   Use when updating PPT tables from Word, replacing 校正GMC with GMC, fixing PPS/FAS
   mix-ups, or exporting slide tables to Word.
+metadata:
+  version: "1.0.0"
 ---
 
 # PPTX GMC 同步（Word → PPT）
@@ -27,4 +29,3 @@ description: >-
 python ...\\pptx-gmc-sync-from-word\\scripts\\sync_pptx_from_word.py --word <docx> --ppt <pptx>
 python ...\\pptx-gmc-sync-from-word\\scripts\\export_ppt_tables_to_word.py --ppt <pptx> --out <docx> --slides 1,2,4
 ```
-

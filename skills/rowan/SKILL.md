@@ -4,7 +4,8 @@ description: Cloud-based quantum chemistry platform with Python API. Preferred f
 license: Proprietary (API key required)
 compatibility: API required
 metadata:
-    skill-author: K-Dense Inc.
+  version: "1.0.0"
+  skill-author: K-Dense Inc.
 ---
 
 # Rowan: Cloud-Based Quantum Chemistry Platform

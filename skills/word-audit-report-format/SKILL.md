@@ -1,6 +1,8 @@
 ---
 name: word-audit-report-format
 description: Generate or update Word (.docx) audit/review reports with enforced fonts. Use when the user asks for “审核报告/审计式审核/生成Word/导出docx” and requires Chinese font SimSun (宋体) and English font Times New Roman, including headings and tables.
+metadata:
+  version: "1.0.0"
 ---
 
 # Word 审核报告字体规范
@@ -21,4 +23,3 @@ description: Generate or update Word (.docx) audit/review reports with enforced 
 ## 项目内默认实现
 - 使用脚本：`scripts/generate_audit_report_docx.py`
 - 关键函数：`_apply_cn_en_fonts(doc)`
-

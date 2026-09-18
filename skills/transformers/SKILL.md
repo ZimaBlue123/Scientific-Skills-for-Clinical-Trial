@@ -4,7 +4,8 @@ description: This skill should be used when working with pre-trained transformer
 license: Apache-2.0 license
 compatibility: Some features require an Huggingface token
 metadata:
-    skill-author: K-Dense Inc.
+  version: "1.0.0"
+  skill-author: K-Dense Inc.
 ---
 
 # Transformers

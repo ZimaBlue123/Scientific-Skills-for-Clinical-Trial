@@ -4,7 +4,8 @@ description: Generate concise (3-4 page), focused medical treatment plans in LaT
 allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
-    skill-author: K-Dense Inc.
+  version: "1.0.0"
+  skill-author: K-Dense Inc.
 ---
 
 # Treatment Plan Writing
@@ -1583,4 +1584,5 @@ See the scripts/ directory for automation tools:
 - generate_template.py - Generates LaTeX treatment plan templates
 - 	imeline_generator.py - Generates treatment timeline visuals
 - check_completeness.py - Checks if all required fields are present
-- alidate_treatment_plan.py - Validates plan against medical standards
+- 
+alidate_treatment_plan.py - Validates plan against medical standards

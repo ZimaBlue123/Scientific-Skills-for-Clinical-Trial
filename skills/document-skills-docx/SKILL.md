@@ -2,6 +2,8 @@
 name: document-skills-docx
 description: Document toolkit (.docx). Create/edit documents, tracked changes, comments, formatting preservation, text extraction, for professional document processing.
 license: Proprietary. LICENSE.txt has complete terms
+metadata:
+  version: "1.0.0"
 ---
 
 # DOCX creation, editing, and analysis
