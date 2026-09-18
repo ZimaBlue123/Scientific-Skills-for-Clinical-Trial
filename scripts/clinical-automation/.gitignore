@@ -1,0 +1,214 @@
+# ==========================================
+# 1. Python (Core Engine & Environment)
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+# [Patch] 拦截 Python 打包与分发产生的残骸
+build/
+dist/
+*.spec
+*.egg-info/
+*.egg
+
+# ==========================================
+# 2. IDE, OS & AI Assistants (Cybernetics & OS Artifacts)
+# ==========================================
+.idea/
+.vscode/
+.vscode/launch.json  # 调试配置可能含环境变量（API Token / 路径等）
+.cursor/
+.codebuddy/
+*.swp
+*.swo
+.DS_Store
+# [Patch] 拦截 Windows/Mac 系统自动生成的幽灵文件
+Thumbs.db
+Desktop.ini
+
+# ==========================================
+# 3. Clinical Data & Secrets (Absolute Isolation - Level 5)
+# ==========================================
+data/
+raw_data/
+# 常见二进制原始/结果文件（防误传）
+*.pdf
+*.doc
+*.docx
+*.rtf
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.csv
+*.zip
+# 说明：output 通常不需要提交（自动生成图表/复刻结果/中间 JSON）
+output/
+config.yaml          # 封杀本地真实配置
+/config.yaml
+config_local.yaml    # 封杀备用本地配置
+# [Patch] 核心密钥与环境变量的绝对隔离区
+.env
+.env.*
+secrets/
+!**/.env.example
+# [Patch] 凭据与证书文件（避免私密信息泄露）
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+*.ovpn
+
+# ==========================================
+# 4. Logs, Temp Files & Notebooks (Metabolic Waste)
+# ==========================================
+.pre-commit-cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.coverage
+.coverage.*
+htmlcov/
+pip-wheel-metadata/
+*.coverage
+*.log
+**/run_log.txt
+**/ectd_report*.xlsx
+**/ectd_smoke*.xlsx
+**/duplicate_report*.txt
+**/run_summary_*.txt
+_doc_*.txt
+**/*styles_pruned_report*.txt
+22_PDF_Duplicate_Analyzer/jobs.json
+**/dns_diagnostic_*.json
+**/speed_test_*.json
+**/lan_survey_*.json
+*.bak
+*.tmp
+__tmp_*.py  # 本地临时脚本（前次任务的中间产物；运行时不会自动生成）
+~$* # Excel/PPT 运行时隐形锁文件
+*.bak.xlsx           # 自动化图表模块的冗余备份
+# [Patch] 已废弃目录名（与 11_Word_Text_Replace 重复，勿提交）
+11_Word_Date_Replace/
+
+# [Patch] PEP 582 单一文件 Python 安装（__pypackages__/）
+__pypackages__/
+
+# [Patch] merge 冲突产物（避免误传）
+*.orig
+*.rej
+
+# [Patch] direnv 配置（每个开发者本地化，不入库）
+.envrc
+
+# [Patch] VSCode 多工作区配置与 profile（可能含本地路径与扩展状态）
+*.code-workspace
+*.code-profile
+
+# [Patch] Python 类型检查工具（pyright）配置（可能含 extraPaths 本地路径）
+pyrightconfig.json
+# [Patch] pyright 缓存目录（2026-06-26 阶段三补全）
+.pyright/
+
+# [Patch] Windows 编译产物：CPython 扩展与 PDB 调试符号
+*.pyd
+*.pdb
+
+Automation/
+Data/
+Project/
+
+# [Patch] Word 文本替换 / 校验：本地解压与临时目录
+11_Word_Text_Replace/_unpack_tmp/
+**/check_docx_*/
+**/_unpack_tmp/
+**/_extract_tmp/
+# 模块内一次性分析/调试残片（勿提交）
+**/mapping_analysis.txt
+**/debug_*.py
+~$*.csv
+.ipynb_checkpoints/  # Jupyter Notebook 探索时留存的残影
+
+# ==========================================
+# 6. Packaging / Archives (防误传)
+# ==========================================
+*.rar
+
+# ==========================================
+# 5. Module I/O & Skeleton Assets (防止上传泄漏)
+# ==========================================
+# 说明：
+# - input/：原始数据（Word/PDF/RTF/Excel 等）不应提交
+# - output/：生成结果与中间产物（Excel/JSON/日志等）不应提交
+# - Template/：骨架/模板文件（通常是敏感结构数据）不应提交
+# 仅保留 README.md（用于保留目录结构说明）
+# 例：24_Word_Tables_to_Excel/output/*.xlsx 等大文件由 **/output/ 统一忽略，勿单独提交
+**/input/
+**/output/
+**/input/**/*
+**/output/**/*
+**/Template/**/*
+**/.request_cache.json
+
+# ==========================================
+# 7. Git worktree 与临时调试产物
+# ==========================================
+# [Patch] Git worktree 临时工作区（需跨分支调试时生成，避免入库）
+# 例外：plans/ 设计文档与 CHANGELOG.md 可入库（跨 worktree 重用）
+.worktrees/
+!.worktrees/*/plans/
+!.worktrees/*/plans/**
+!.worktrees/*/CHANGELOG.md
+!.worktrees/**/CHANGELOG.md
+!.worktrees/*/*.md
+# [Patch] 临时调试脚本（fill_clinical_table.py 等调试期间产生的中间文件）
+*scan_cleanup*.py
+*execute_cleanup*.py
+*audit_*.py
+*audit_*.txt
+*cleanup_report*.txt
+*py_files*.txt
+*audit_test*.txt
+*read_excel*.py
+# 仅根目录的 verify_*.py；plans/ 与 worktree 中的诊断脚本可入库
+/verify_*.py
+!plans/
+!plans/**/verify_*.py
+!.worktrees/**/verify_*.py
+*read_yangzhuai*.py
+*read_gmi*.py
+*fill_gmc_table.py
+*fill_yangzhuai_table.py
+__tmp_*.py
+*_debug_*.py
+
+!**/input/**/README.md
+!**/output/**/README.md
+!**/Template/**/README.md
+
+!**/.gitkeep
+
+# [Patch 2026-06-26] 一次性诊断/扫描输出（阶段三）
+# 任何 *_baseline.txt / *_audit.txt / *_log.txt / *_scan*.txt / *_junk.txt
+# 均为本轮或历史阶段的临时扫描结果，勿入库。
+*_baseline.txt
+*_audit.txt
+*_log.txt
+*_scan*.txt
+*_junk.txt
+*_deps*.txt
+# 阶段一/二留下的临时辅助脚本
+_audit_*.py
+_audit_deps.py
+_fix_*.py
+_scan_*.py
+_verify.py
+_delete_caches.py
