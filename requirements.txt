@@ -56,3 +56,10 @@ torch==2.13.0
 tqdm==4.67.3
 zeep==4.3.3
 pdf-inspector==1.20.0
+# --- Project-owned dependencies previously missing ---
+# Core document-to-markdown conversion backend (scripts/convert_to_md.py)
+markitdown>=0.1.0
+# SVG rendering fallback used by scripts/project_self_check.py
+cairosvg>=2.7.0
+# Explicit declaration of transitive dependency (via seaborn); widely used
+matplotlib>=3.8.0
