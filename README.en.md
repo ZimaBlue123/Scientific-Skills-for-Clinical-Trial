@@ -1,6 +1,6 @@
-﻿# Scientific-Skills-for-Clinical_Trial
+# Scientific-Skills-for-Clinical_Trial
 
-[涓枃](README.md) | English
+[中文](README.md) | English
 
 AI-assisted toolkit for clinical trials and clinical research (core content: `skills/`).
 
@@ -89,16 +89,16 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```text
 Scientific-Skills-for-Clinical_Trial/
-鈹溾攢鈹€ skills/                # One directory per skill (core content)
-鈹溾攢鈹€ docs/                  # Long-form docs (see index below)
-鈹溾攢鈹€ scripts/               # Repository-level executable scripts
-鈹?  鈹溾攢鈹€ common_scripts/    # Shared utility modules (e.g. docx_utils)
-鈹?  鈹斺攢鈹€ _archive/          # Archived historical versions (unmaintained)
-鈹溾攢鈹€ tests/                 # Tests
-鈹溾攢鈹€ pyproject.toml         # Project metadata + ruff/mypy/pytest config
-鈹溾攢鈹€ requirements.txt
-鈹溾攢鈹€ requirements-dev.txt
-鈹斺攢鈹€ CONTRIBUTING.md
+├── skills/                # One directory per skill (core content)
+├── docs/                  # Long-form docs (see index below)
+├── scripts/               # Repository-level executable scripts
+│   ├── common_scripts/    # Shared utility modules (e.g. docx_utils)
+│   └── _archive/          # Archived historical versions (unmaintained)
+├── tests/                 # Tests
+├── pyproject.toml         # Project metadata + ruff/mypy/pytest config
+├── requirements.txt
+├── requirements-dev.txt
+└── CONTRIBUTING.md
 ```
 
 For maintenance conventions and details, see `docs/repo_layout.md`.
@@ -311,12 +311,12 @@ To supplement evidence/trial intelligence, run `clinicaltrials-database` with `p
 
 | Script | Purpose | Status |
 |--------|---------|--------|
-| `scripts/convert_to_md.py` | Document to Markdown (recommended) | 鉁?Recommended |
-| `scripts/md_to_docx.py` | Markdown to Word | 鉁?Recommended |
-| `scripts/convert_doc_to_docx.py` | Legacy .doc conversion | 鉁?Recommended |
+| `scripts/convert_to_md.py` | Document to Markdown (recommended) | ✅ Recommended |
+| `scripts/md_to_docx.py` | Markdown to Word | ✅ Recommended |
+| `scripts/convert_doc_to_docx.py` | Legacy .doc conversion | ✅ Recommended |
 | `scripts/_archive/generate_csr_docx.py` | CSR Stage Summary |
-| `scripts/project_self_check.py` | Project self-check | 鉁?Recommended |
-| `scripts/cleanup_generated_artifacts.py` | Cleanup cache | 鉁?Recommended |
+| `scripts/project_self_check.py` | Project self-check | ✅ Recommended |
+| `scripts/cleanup_generated_artifacts.py` | Cleanup cache | ✅ Recommended |
 
 ### Deprecated Scripts
 
@@ -326,9 +326,9 @@ To supplement evidence/trial intelligence, run `clinicaltrials-database` with `p
 |--------|-------------|-------|
 | `scripts/extract_docx_full.py` | `convert_to_md.py --mode standard` | Text extraction merged |
 | `scripts/extract_docx_to_md.py` | `convert_to_md.py --mode numbered` | Numbered output merged |
-| `scripts/extract_doc_text.py` | `convert_doc_to_docx.py` | 鈿狅笍 Deprecated - .doc extraction integrated |
-| `scripts/convert_audit_report_md_to_docx.py` | `md_to_docx.py` | 鈿狅笍 Deprecated - wrapper, use md_to_docx.py directly |
-| `scripts/_extract_docx_text.py` | `convert_to_md.py` | 鈿狅笍 Deprecated - no-dependency fallback no longer needed |
+| `scripts/extract_doc_text.py` | `convert_doc_to_docx.py` | ⚠️ Deprecated - .doc extraction integrated |
+| `scripts/convert_audit_report_md_to_docx.py` | `md_to_docx.py` | ⚠️ Deprecated - wrapper, use md_to_docx.py directly |
+| `scripts/_extract_docx_text.py` | `convert_to_md.py` | ⚠️ Deprecated - no-dependency fallback no longer needed |
 
 ### Product-Specific Scripts
 
@@ -349,16 +349,16 @@ To supplement evidence/trial intelligence, run `clinicaltrials-database` with `p
 
 ```
 Need to extract text from docx?
-  鈫?Use convert_to_md.py (supports pdf/rtf too)
+  → Use convert_to_md.py (supports pdf/rtf too)
 
 Need to convert Markdown to Word?
-  鈫?Use md_to_docx.py
+  → Use md_to_docx.py
 
 Need to convert old .doc format?
-  鈫?Use convert_doc_to_docx.py
+  → Use convert_doc_to_docx.py
 
 Need to generate a report?
-  鈫?Check product-specific scripts or use generate_csr_docx.py for CSR
+  → Check product-specific scripts or use generate_csr_docx.py for CSR
 ```
 
 ### Document Review Workflow (materials -> Markdown -> Word)
@@ -393,7 +393,7 @@ Note: `review_materials/` is ignored by `.gitignore` and not uploaded to GitHub.
 
 ```powershell
 # Copy to ASCII filename
-Copy-Item "review_materials\1-3-1璇存槑-20260529-鏂?docx" target.docx
+Copy-Item "review_materials\1-3-1说明-20260529-新.docx" target.docx
 
 # Then process with script
 python scripts/convert_to_md.py target.docx -o output.md

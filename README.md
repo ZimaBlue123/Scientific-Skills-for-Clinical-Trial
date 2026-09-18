@@ -1,22 +1,22 @@
 # Scientific-Skills-for-Clinical_Trial
 
-涓枃 | [English](README.en.md)
+中文 | [English](README.en.md)
 
-涓村簥璇曢獙 / 涓村簥鐮旂┒ AI 杈呭姪绯荤粺锛堜粨搴撴牳蹇冨唴瀹癸細`skills/`锛夈€?
+临床试验 / 临床研究 AI 辅助系统（仓库核心内容：`skills/`）。
 
-## 椤圭洰瀹氫綅
+## 项目定位
 
-鏈粨搴撶淮鎶や竴缁勯潰鍚戜复搴婄爺绌朵笌涓村簥璇曢獙鐨?AI skills/鎶€鑳斤紝瑕嗙洊涓村簥璇曢獙妫€绱€佸惊璇?鍐崇瓥鏀寔銆佷复搴婃姤鍛婁笌鍚堣鏂囨。銆佺粺璁′笌寤烘ā銆佺敓瀛樺垎鏋愩€佸彲瑙ｉ噴鎬э紝浠ュ強甯哥敤鍖诲/绉戠爺鏁版嵁搴撹闂瓑宸ヤ綔娴併€?
+本仓库维护一组面向临床研究与临床试验的 AI skills/技能，覆盖临床试验检索、循证/决策支持、临床报告与合规文档、统计与建模、生存分析、可解释性，以及常用医学/科研数据库访问等工作流。
 
-## 蹇€熷紑濮?
+## 快速开始
 
-### 鐜瑕佹眰
+### 环境要求
 
-- **Python**锛?.10+锛圕I 褰撳墠浣跨敤 3.10锛?
-- **AI 瀹㈡埛绔?*锛欳ursor / Claude Code / Codex锛堥渶瑕佹敮鎸?skills 鏈哄埗锛?
-- **鍥捐〃娓叉煋锛坄fireworks-tech-graph`锛?*锛歚librsvg`锛堟彁渚?`rsvg-convert` 鍛戒护锛?
+- **Python**：3.10+（CI 当前使用 3.10）
+- **AI 客户端**：Cursor / Claude Code / Codex（需要支持 skills 机制）
+- **图表渲染（`fireworks-tech-graph`）**：`librsvg`（提供 `rsvg-convert` 命令）
 
-`rsvg-convert` 瀹夎绀轰緥锛?
+`rsvg-convert` 安装示例：
 
 ```bash
 # macOS
@@ -26,184 +26,184 @@ brew install librsvg
 sudo apt install librsvg2-bin
 ```
 
-### 瀹夎锛圥ython 渚濊禆锛?
+### 安装（Python 依赖）
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-### 闅愮涓庡悎瑙勶紙寮虹儓寤鸿锛?
+### 隐私与合规（强烈建议）
 
-- 涓嶈鎶婂師濮嬩釜浣撴暟鎹紙鍚彈璇曡€呭眰闈㈠瓧娈点€佹槑缁嗗鍑猴級鎻愪氦鍒?Git銆傝鎶婅緭鍏?CSV 鏀惧湪 `data/`锛堝凡鍦?`.gitignore` 涓拷鐣ワ級锛屽苟鎶婅緭鍑烘斁鍒?`output/`锛堝悓鏍蜂細琚拷鐣ワ級銆?
-- 鎶椾綋鍔ㄥ姏瀛﹀垎鏋愯剼鏈細杈撳嚭鈥滃凡姹囨€?宸插缓妯♀€濈殑缁撴灉锛堝弬鏁般€侀娴嬪潎鍊?CI銆侀槇鍊兼椂闂达級锛屼絾浠嶅缓璁笉瑕佹妸杈撳嚭浜х墿涓婁紶鍒颁笉鍙俊鐜銆?
+- 不要把原始个体数据（含受试者层面字段、明细导出）提交到 Git。请把输入 CSV 放在 `data/`（已在 `.gitignore` 中忽略），并把输出放到 `output/`（同样会被忽略）。
+- 抗体动力学分析脚本会输出“已汇总/已建模”的结果（参数、预测均值/CI、阈值时间），但仍建议不要把输出产物上传到不可信环境。
 
-### 寮€鍙戜笌璐ㄩ噺锛堝彲閫夛級
+### 开发与质量（可选）
 
-瀹夎寮€鍙戜緷璧栵紙娴嬭瘯/Lint锛夛細
+安装开发依赖（测试/Lint）：
 
 ```bash
 python -m pip install -r requirements-dev.txt
 ```
 
-杩愯娴嬭瘯锛?
+运行测试：
 
 ```bash
 pytest
 ```
 
-杩愯浠ｇ爜椋庢牸妫€鏌ワ紙鎺ㄨ崘浣跨敤 ruff锛夛細
+运行代码风格检查（推荐使用 ruff）：
 
 ```bash
 ruff check scripts/ tests/
 ruff format --check scripts/ tests/
 ```
 
-> 椤圭洰宸蹭粠 flake8 杩佺Щ鑷?ruff锛堥厤缃 `pyproject.toml`锛夈€俙requirements-dev.txt` 浠嶄繚鐣?flake8 浠ュ吋瀹规棫 CI銆?
+> 项目已从 flake8 迁移至 ruff（配置见 `pyproject.toml`）。`requirements-dev.txt` 仍保留 flake8 以兼容旧 CI。
 
-娓呯悊鏈湴缂撳瓨/蹇界暐鏂囦欢锛堣皑鎱庝娇鐢紝浼氬垹闄ゆ墍鏈夎 `.gitignore` 蹇界暐鐨勫唴瀹癸級锛?
+清理本地缓存/忽略文件（谨慎使用，会删除所有被 `.gitignore` 忽略的内容）：
 
 ```bash
 git clean -fdX
 ```
 
-### 瀹夎锛坰kills 鍒板鎴风锛?
+### 安装（skills 到客户端）
 
-濡傛灉浣犵殑瀹㈡埛绔敮鎸?鐩存帴寮曠敤椤圭洰鐩綍"锛屾帹鑽愮洿鎺ユ寚鍚戞湰浠撳簱鐨?`skills/`锛涘惁鍒欏彲澶嶅埗鍒板鎴风鐨勫叏灞€ skills 鐩綍銆?
+如果你的客户端支持"直接引用项目目录"，推荐直接指向本仓库的 `skills/`；否则可复制到客户端的全局 skills 目录。
 
-Windows锛圥owerShell锛夌ず渚嬶細
+Windows（PowerShell）示例：
 
 ```powershell
 $dst = Join-Path $env:USERPROFILE ".cursor\skills"
 New-Item -ItemType Directory -Force -Path $dst | Out-Null
 Copy-Item -Recurse -Force ".\skills\*" $dst
 
-# 浠呭悓姝ュ崟涓?skill锛堢ず渚嬶級
+# 仅同步单个 skill（示例）
 powershell -File .\scripts\sync_skills_to_global.ps1 -Skill pptx-gmc-sync-from-word
 ```
 
-macOS/Linux锛坆ash锛夌ず渚嬶細
+macOS/Linux（bash）示例：
 
 ```bash
 mkdir -p ~/.cursor/skills
 cp -r ./skills/* ~/.cursor/skills/
 ```
 
-## 浠撳簱缁撴瀯
+## 仓库结构
 
 ```
 Scientific-Skills-for-Clinical_Trial/
-鈹溾攢鈹€ skills/                # 姣忎釜 skill 涓€涓洰褰曪紙鏍稿績鍐呭锛?57 涓級
-鈹溾攢鈹€ docs/                  # 闀挎枃妗ｏ紙绱㈠紩瑙佷笅鏂?鏂囨。绱㈠紩"锛?
-鈹溾攢鈹€ scripts/               # 浠撳簱绾у彲鎵ц鑴氭湰鍏ュ彛锛堝惈 CSR/瀹℃牳鎶ュ憡鐢熸垚锛?
-鈹?  鈹溾攢鈹€ common_scripts/    # 鍏变韩宸ュ叿妯″潡锛堝 docx_utils锛?
-鈹?  鈹斺攢鈹€ _archive/          # 宸插綊妗ｇ殑鍘嗗彶鐗堟湰锛堜笉鍐嶇淮鎶わ級
-鈹溾攢鈹€ tests/                 # 娴嬭瘯
-鈹溾攢鈹€ pyproject.toml         # 椤圭洰鍏冩暟鎹?+ ruff/mypy/pytest 閰嶇疆
-鈹溾攢鈹€ requirements.txt
-鈹溾攢鈹€ requirements-dev.txt
-鈹斺攢鈹€ CONTRIBUTING.md
+├── skills/                # 每个 skill 一个目录（核心内容，157 个）
+├── docs/                  # 长文档（索引见下方"文档索引"）
+├── scripts/               # 仓库级可执行脚本入口（含 CSR/审核报告生成）
+│   ├── common_scripts/    # 共享工具模块（如 docx_utils）
+│   └── _archive/          # 已归档的历史版本（不再维护）
+├── tests/                 # 测试
+├── pyproject.toml         # 项目元数据 + ruff/mypy/pytest 配置
+├── requirements.txt
+├── requirements-dev.txt
+└── CONTRIBUTING.md
 ```
 
-缁存姢绾﹀畾涓庢洿璇︾粏瑙ｉ噴瑙?`docs/repo_layout.md`銆?
+维护约定与更详细解释见 `docs/repo_layout.md`。
 
 ---
 
-## 寮€鍙戝伐浣滄祦
+## 开发工作流
 
-鏈粨搴撳湪姣忔閲嶅ぇ閲嶆瀯鏃朵細璺戜竴缁?*鑷鑴氭湰**锛堜綅浜?`scripts/_tools/`锛夈€傝繖浜涜剼鏈彲鐙珛浜?IDE / CI 杩愯锛屾柟渚夸汉宸ユ帓鏌ャ€?
+本仓库在每次重大重构时会跑一组**自检脚本**（位于 `scripts/_tools/`）。这些脚本可独立于 IDE / CI 运行，方便人工排查。
 
 ```bash
-# Phase 1: py_compile + pyflakes 鍏ㄩ噺鎵弿
+# Phase 1: py_compile + pyflakes 全量扫描
 py -3 scripts/_tools/_audit_phase1_compile.py
 py -3 scripts/_tools/_audit_phase1_pyflakes.py
 py -3 scripts/_tools/_audit_phase1_ast.py
 
-# Phase 2: 鎵弿鍐椾綑鏂囦欢 / 涓存椂鏃ュ織锛堜笉鍒犻櫎锛?
+# Phase 2: 扫描冗余文件 / 临时日志（不删除）
 py -3 scripts/_tools/_audit_phase2_scan.py
-# 鎷熷垹闄ゆ竻鍗曞啓鍏?docs/cleanup_phase2_plan.md
+# 拟删除清单写入 docs/cleanup_phase2_plan.md
 
-# Phase 3: 瀵煎叆渚濊禆瀹¤锛堜笌 requirements.txt 瀵圭収锛?
+# Phase 3: 导入依赖审计（与 requirements.txt 对照）
 py -3 scripts/_tools/_audit_phase3_imports.py
 ```
 
-鎶ュ憡鍒嗗埆钀藉湪锛?
+报告分别落在：
 
-- `docs/audit_phase1.md` 鈥斺€?闈欐€佸垎鏋?+ AST 娣卞害瀹℃煡
-- `docs/cleanup_phase2_plan.md` 鈥斺€?鍒犻櫎娓呭崟锛堝惈椋庨櫓绛夌骇锛?
-- `reports/phase3_imports.md` 鈥斺€?绗笁鏂?import 浣跨敤鐭╅樀
+- `docs/audit_phase1.md` —— 静态分析 + AST 深度审查
+- `docs/cleanup_phase2_plan.md` —— 删除清单（含风险等级）
+- `reports/phase3_imports.md` —— 第三方 import 使用矩阵
 
 
 
 ---
 
-## Skills 娓呭崟涓庝娇鐢ㄦ柟娉?
+## Skills 清单与使用方法
 
-鏈粨搴撳寘鍚?**157 涓?skills**锛堝凡鍚堝苟涓婃父 scientific-skills 鐨勯潪閲嶅鏉＄洰锛夛紝鍒嗕负浠ヤ笅鍑犵被锛?
+本仓库包含 **157 个 skills**（已合并上游 scientific-skills 的非重复条目），分为以下几类：
 
-### 鏍稿績鏁版嵁鍒嗘瀽 Skills
+### 核心数据分析 Skills
 
-| Skill | 鐢ㄩ€?| 蹇€熶娇鐢?|
+| Skill | 用途 | 快速使用 |
 |-------|------|----------|
-| `exploratory-data-analysis` | 200+ 鏍煎紡绉戠爺鏁版嵁 EDA | `python skills/exploratory-data-analysis/scripts/eda_analyzer.py <file>` |
-| `statistical-analysis` | 鍋囪妫€楠屻€佹晥搴旈噺銆丄PA 鎶ュ憡 | `from scripts.assumption_checks import comprehensive_assumption_check` |
-| `antibody-kinetics` | 鎶椾綋鍔ㄥ姏瀛?鍏嶇柅鎸佷箙鎬э細骞傚緥妯″瀷 + MixedLM锛屾敮鎸?M12+ 澶栨帹涓庨槇鍊兼椂闂?| `python skills/antibody-kinetics/scripts/run_antibody_kinetics_pipeline.py --infile data/subject.csv --outdir output/antibody-kinetics --threshold 10` |
-| `scikit-learn` | 缁忓吀 ML 寤烘ā涓庣绾?| `python skills/scikit-learn/scripts/classification_pipeline.py` |
-| `scikit-survival` | 鐢熷瓨鍒嗘瀽锛圕ox/RSF/GBS锛?| 瑙?SKILL.md 涓殑浠ｇ爜绀轰緥 |
-| `shap` | 妯″瀷鍙В閲婃€э紙SHAP values锛?| `shap.TreeExplainer(model)(X_test)` |
+| `exploratory-data-analysis` | 200+ 格式科研数据 EDA | `python skills/exploratory-data-analysis/scripts/eda_analyzer.py <file>` |
+| `statistical-analysis` | 假设检验、效应量、APA 报告 | `from scripts.assumption_checks import comprehensive_assumption_check` |
+| `antibody-kinetics` | 抗体动力学/免疫持久性：幂律模型 + MixedLM，支持 M12+ 外推与阈值时间 | `python skills/antibody-kinetics/scripts/run_antibody_kinetics_pipeline.py --infile data/subject.csv --outdir output/antibody-kinetics --threshold 10` |
+| `scikit-learn` | 经典 ML 建模与管线 | `python skills/scikit-learn/scripts/classification_pipeline.py` |
+| `scikit-survival` | 生存分析（Cox/RSF/GBS） | 见 SKILL.md 中的代码示例 |
+| `shap` | 模型可解释性（SHAP values） | `shap.TreeExplainer(model)(X_test)` |
 
-### 楂樻€ц兘鏁版嵁澶勭悊 Skills
+### 高性能数据处理 Skills
 
-| Skill | 鐢ㄩ€?| 蹇€熶娇鐢?|
+| Skill | 用途 | 快速使用 |
 |-------|------|----------|
-| `polars` | 楂樻€ц兘 DataFrame/ETL | 瑙?`references/core_concepts.md` |
-| `dask` | 澶ф暟鎹?瓒呭唴瀛樺鐞?| 瑙?`references/dataframes.md` |
-| `vaex` | 鍗佷嚎琛岀骇鏁版嵁澶勭悊 | 瑙?`references/core_dataframes.md` |
+| `polars` | 高性能 DataFrame/ETL | 见 `references/core_concepts.md` |
+| `dask` | 大数据/超内存处理 | 见 `references/dataframes.md` |
+| `vaex` | 十亿行级数据处理 | 见 `references/core_dataframes.md` |
 
-### 鍖诲鏁版嵁搴撴绱?Skills
+### 医学数据库检索 Skills
 
-| Skill | 鐢ㄩ€?| 蹇€熶娇鐢?|
+| Skill | 用途 | 快速使用 |
 |-------|------|----------|
 | `clinicaltrials-database` | ClinicalTrials.gov API v2 | `python skills/clinicaltrials-database/scripts/query_clinicaltrials.py` |
-| `pubmed-database` | PubMed E-utilities 妫€绱?| 瑙?`references/api_reference.md` |
-| `openalex-database` | OpenAlex 鏂囩尞妫€绱?| `python skills/openalex-database/scripts/openalex_client.py` |
-| `database-lookup` | 鑱氬悎鏁版嵁搴撳叆鍙ｏ紙鑷姩璺敱鍒?ClinicalTrials/PubMed/OpenAlex/FDA/ClinVar/ClinPGx/COSMIC锛?| 瑙?`skills/database-lookup/SKILL.md` |
-| `paper-lookup` | 鑱氬悎鏂囩尞鍏ュ彛锛堣嚜鍔ㄨ矾鐢卞埌 PubMed/OpenAlex锛屾寜闇€琛ュ厖璇曢獙妫€绱級 | 瑙?`skills/paper-lookup/SKILL.md` |
-| `fda-database` | openFDA 鑽搧/鍣ㄦ/鍙洖 | `python skills/fda-database/scripts/fda_query.py` |
-| `clinvar-database` | ClinVar 鍙樺紓鑷寸梾鎬?| 瑙?`references/api_reference.md` |
-| `clinpgx-database` | ClinPGx 鍩哄洜-鑽墿鐩镐簰浣滅敤 | `python skills/clinpgx-database/scripts/query_clinpgx.py` |
-| `cosmic-database` | COSMIC 鐧岀棁浣撶粏鑳炵獊鍙?| `python skills/cosmic-database/scripts/download_cosmic.py` |
+| `pubmed-database` | PubMed E-utilities 检索 | 见 `references/api_reference.md` |
+| `openalex-database` | OpenAlex 文献检索 | `python skills/openalex-database/scripts/openalex_client.py` |
+| `database-lookup` | 聚合数据库入口（自动路由到 ClinicalTrials/PubMed/OpenAlex/FDA/ClinVar/ClinPGx/COSMIC） | 见 `skills/database-lookup/SKILL.md` |
+| `paper-lookup` | 聚合文献入口（自动路由到 PubMed/OpenAlex，按需补充试验检索） | 见 `skills/paper-lookup/SKILL.md` |
+| `fda-database` | openFDA 药品/器械/召回 | `python skills/fda-database/scripts/fda_query.py` |
+| `clinvar-database` | ClinVar 变异致病性 | 见 `references/api_reference.md` |
+| `clinpgx-database` | ClinPGx 基因-药物相互作用 | `python skills/clinpgx-database/scripts/query_clinpgx.py` |
+| `cosmic-database` | COSMIC 癌症体细胞突变 | `python skills/cosmic-database/scripts/download_cosmic.py` |
 
-### 涓村簥鏂囨。涓庢姤鍛?Skills
+### 临床文档与报告 Skills
 
-| Skill | 鐢ㄩ€?| 蹇€熶娇鐢?|
+| Skill | 用途 | 快速使用 |
 |-------|------|----------|
-| `clinical-reports` | 鐥呬緥鎶ュ憡/CSR/SAE锛圕ARE/ICH-E3锛?| `python skills/clinical-reports/scripts/validate_case_report.py` |
-| `clinical-decision-support` | 闃熷垪鍒嗗眰/寰瘉鎺ㄨ崘锛圠aTeX/PDF锛?| `python skills/clinical-decision-support/scripts/create_cohort_tables.py` |
-| `treatment-plans` | 涓綋鍖栨不鐤楄鍒掞紙LaTeX/PDF锛?| `python skills/treatment-plans/scripts/generate_template.py` |
+| `clinical-reports` | 病例报告/CSR/SAE（CARE/ICH-E3） | `python skills/clinical-reports/scripts/validate_case_report.py` |
+| `clinical-decision-support` | 队列分层/循证推荐（LaTeX/PDF） | `python skills/clinical-decision-support/scripts/create_cohort_tables.py` |
+| `treatment-plans` | 个体化治疗计划（LaTeX/PDF） | `python skills/treatment-plans/scripts/generate_template.py` |
 
-### 宸ュ叿绫?Skills
+### 工具类 Skills
 
-| Skill | 鐢ㄩ€?| 蹇€熶娇鐢?|
+| Skill | 用途 | 快速使用 |
 |-------|------|----------|
-| `markitdown` | 鏂囦欢杞?Markdown锛圥DF/DOCX/PPTX绛夛級 | `markitdown document.pdf -o output.md` |
-| `perplexity-search` | AI 瀹炴椂缃戠粶鎼滅储 | `python skills/perplexity-search/scripts/perplexity_search.py "query"` |
-| `github-proxy-push` | GitHub 浠ｇ悊鎺ㄩ€?| 瑙?SKILL.md |
-| `pyhealth` | 鍖荤枟 AI锛圗HR 浠诲姟/妯″瀷锛?| 瑙?`references/datasets.md` |
-| `csr-stage-docx-workflow` | CSR 闃舵鎬у皬缁?Word 鐢熸垚 | `python scripts/_archive/generate_csr_docx.py` |
-| `word-audit-report-format` | Word 瀹℃牳鎶ュ憡瀛椾綋瑙勮寖 | `python scripts/_archive/generate_audit_report_docx.py` |
-| `pptx-gmc-sync-from-word` | Word GMC/渚嬫暟/P 鍊煎悓姝ュ埌 PPT 鎸囧畾椤佃〃鏍?| `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
-| `docx-to-markdown` | DOCX 鏂囨湰/琛ㄦ牸鎶藉彇涓?Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
+| `markitdown` | 文件转 Markdown（PDF/DOCX/PPTX等） | `markitdown document.pdf -o output.md` |
+| `perplexity-search` | AI 实时网络搜索 | `python skills/perplexity-search/scripts/perplexity_search.py "query"` |
+| `github-proxy-push` | GitHub 代理推送 | 见 SKILL.md |
+| `pyhealth` | 医疗 AI（EHR 任务/模型） | 见 `references/datasets.md` |
+| `csr-stage-docx-workflow` | CSR 阶段性小结 Word 生成 | `python scripts/generate_csr_docx.py` |
+| `word-audit-report-format` | Word 审核报告字体规范 | `python scripts/generate_audit_report_docx.py` |
+| `pptx-gmc-sync-from-word` | Word GMC/例数/P 值同步到 PPT 指定页表格 | `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
+| `docx-to-markdown` | DOCX 文本/表格抽取为 Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
 
-### 鍥捐〃 Skill锛堥」鐩唴缃級
+### 图表 Skill（项目内置）
 
-| Skill | 鐢ㄩ€?| 瀹夎浣嶇疆 | 蹇€熶娇鐢?|
+| Skill | 用途 | 安装位置 | 快速使用 |
 |-------|------|----------|----------|
-| `fireworks-tech-graph` | 閫氳繃鑷劧璇█鐢熸垚鎶€鏈浘锛堟灦鏋勫浘/娴佺▼鍥?搴忓垪鍥?UML锛夛紝瀵煎嚭 SVG+PNG | `skills/fireworks-tech-graph` | Prompt 绀轰緥锛歚鐢讳竴涓?RAG 鏋舵瀯鍥撅紝style 2锛岃緭鍑哄埌 ./output/` |
+| `fireworks-tech-graph` | 通过自然语言生成技术图（架构图/流程图/序列图/UML），导出 SVG+PNG | `skills/fireworks-tech-graph` | Prompt 示例：`画一个 RAG 架构图，style 2，输出到 ./output/` |
 
-璇存槑锛?
-- 璇?skill 鏉ユ簮锛歔`yizhiyanhua-ai/fireworks-tech-graph`](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)銆?
-- `fireworks-tech-graph` 宸插苟鍏ユ湰椤圭洰 `skills/` 鐩綍缁熶竴绠＄悊銆?
-- 鏇存柊璇?skill锛圵indows/PowerShell锛夛細
+说明：
+- 该 skill 来源：[`yizhiyanhua-ai/fireworks-tech-graph`](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)。
+- `fireworks-tech-graph` 已并入本项目 `skills/` 目录统一管理。
+- 更新该 skill（Windows/PowerShell）：
 
 ```powershell
 git -c http.proxy= -c https.proxy= -C ".\skills\fireworks-tech-graph" pull
@@ -211,68 +211,68 @@ git -c http.proxy= -c https.proxy= -C ".\skills\fireworks-tech-graph" pull
 
 ---
 
-## Skill 璇︾粏浣跨敤绀轰緥
+## Skill 详细使用示例
 
-### 1. exploratory-data-analysis锛圗DA锛?
+### 1. exploratory-data-analysis（EDA）
 
-**鍦烘櫙**锛氬绉戠爺鏁版嵁鏂囦欢杩涜鑷姩鍖栨帰绱㈠垎鏋?
+**场景**：对科研数据文件进行自动化探索分析
 
 ```bash
-# 鍛戒护琛屼娇鐢?
+# 命令行使用
 python skills/exploratory-data-analysis/scripts/eda_analyzer.py data.csv output_report.md
 
-# 鏀寔 200+ 鏍煎紡锛欳SV, FASTQ, PDB, HDF5, TIFF, mzML 绛?
+# 支持 200+ 格式：CSV, FASTQ, PDB, HDF5, TIFF, mzML 等
 ```
 
-**Prompt 妯℃澘**锛?
+**Prompt 模板**：
 ```
-璇峰鏂囦欢 <path/to/data> 鍋?EDA锛氳瘑鍒牸寮忋€佸瓧娈?缁村害銆佺己澶?寮傚父銆佽川閲忛棶棰橈紝骞惰緭鍑?markdown 鎶ュ憡涓庝笅涓€姝ュ缓璁€?
+请对文件 <path/to/data> 做 EDA：识别格式、字段/维度、缺失/异常、质量问题，并输出 markdown 报告与下一步建议。
 ```
 
-### 2. statistical-analysis锛堢粺璁″垎鏋愶級
+### 2. statistical-analysis（统计分析）
 
-**鍦烘櫙**锛氬亣璁炬楠屻€佹晥搴旈噺璁＄畻銆丄PA 鏍煎紡鎶ュ憡
+**场景**：假设检验、效应量计算、APA 格式报告
 
 ```python
 from scripts.assumption_checks import comprehensive_assumption_check
 
-# 缁煎悎鍋囪妫€楠岋紙鍚彲瑙嗗寲锛?
+# 综合假设检验（含可视化）
 results = comprehensive_assumption_check(data=df, value_col="score", group_col="group", alpha=0.05)
 ```
 
-**Prompt 妯℃澘**锛?
+**Prompt 模板**：
 ```
-鎴戞湁鏁版嵁闆?<path/to.csv>锛屼富瑕佺粨灞€=<Y>锛屽垎缁?<group>锛涜甯垜閫夋嫨鍚堥€傛楠屻€佸仛鍋囪妫€鏌ワ紝骞舵寜 APA 椋庢牸杈撳嚭缁撴灉涓庢晥搴旈噺銆?
+我有数据集 <path/to.csv>，主要结局=<Y>，分组=<group>；请帮我选择合适检验、做假设检查，并按 APA 风格输出结果与效应量。
 ```
 
-### 3. scikit-survival锛堢敓瀛樺垎鏋愶級
+### 3. scikit-survival（生存分析）
 
-**鍦烘櫙**锛氫复搴婅瘯楠?time-to-event 鍒嗘瀽
+**场景**：临床试验 time-to-event 分析
 
 ```python
 from sksurv.util import Surv
 from sksurv.ensemble import RandomSurvivalForest
 from sksurv.metrics import concordance_index_ipcw
 
-# 鍒涘缓鐢熷瓨缁撳眬
+# 创建生存结局
 y = Surv.from_dataframe("event", "time", df)
 
-# 璁粌妯″瀷
+# 训练模型
 rsf = RandomSurvivalForest(n_estimators=100, random_state=42)
 rsf.fit(X_train, y_train)
 
-# 璇勪及锛圲no's C-index锛屾帹鑽愮敤浜庨珮鍒犲け鏁版嵁锛?
+# 评估（Uno's C-index，推荐用于高删失数据）
 c_uno = concordance_index_ipcw(y_train, y_test, rsf.predict(X_test))[0]
 ```
 
-**Prompt 妯℃澘**锛?
+**Prompt 模板**：
 ```
-瀵?<path/to.csv> 鍋氱敓瀛樺垎鏋愶細time=<time_col>, event=<event_col>锛涙瘮杈?Cox/RSF/GBS锛屾姤鍛?Uno C-index銆両BS锛屽苟缁欏嚭椋庨櫓鍒嗗眰銆?
+对 <path/to.csv> 做生存分析：time=<time_col>, event=<event_col>；比较 Cox/RSF/GBS，报告 Uno C-index、IBS，并给出风险分层。
 ```
 
-### 4. clinicaltrials-database锛堜复搴婅瘯楠屾绱級
+### 4. clinicaltrials-database（临床试验检索）
 
-**鍦烘櫙**锛氭绱?ClinicalTrials.gov 鎷涘嫙涓殑璇曢獙
+**场景**：检索 ClinicalTrials.gov 招募中的试验
 
 ```python
 import requests
@@ -284,55 +284,55 @@ data = response.json()
 print(f"Found {data['totalCount']} trials")
 ```
 
-**Prompt 妯℃澘**锛?
+**Prompt 模板**：
 ```
-鍦?ClinicalTrials.gov 妫€绱細condition=<鐤剧梾>锛宨ntervention=<鑽墿/鐤楁硶>锛宻tatus=RECRUITING锛屽湴鍖?<鍥藉/宸?锛涜緭鍑哄墠 20 鏉″姣旇〃骞舵€荤粨鍏ユ帓鏍囧噯銆?
+在 ClinicalTrials.gov 检索：condition=<疾病>，intervention=<药物/疗法>，status=RECRUITING，地区=<国家/州>；输出前 20 条对比表并总结入排标准。
 ```
 
-### 5. shap锛堟ā鍨嬪彲瑙ｉ噴鎬э級
+### 5. shap（模型可解释性）
 
-**鍦烘櫙**锛氳В閲婃満鍣ㄥ涔犳ā鍨嬮娴?
+**场景**：解释机器学习模型预测
 
 ```python
 import shap
 
-# 鍒涘缓瑙ｉ噴鍣紙鏍戞ā鍨嬬敤 TreeExplainer锛?
+# 创建解释器（树模型用 TreeExplainer）
 explainer = shap.TreeExplainer(model)
 shap_values = explainer(X_test)
 
-# 鍏ㄥ眬閲嶈鎬?
+# 全局重要性
 shap.plots.beeswarm(shap_values)
 
-# 鍗曚釜棰勬祴瑙ｉ噴
+# 单个预测解释
 shap.plots.waterfall(shap_values[0])
 ```
 
-**Prompt 妯℃澘**锛?
+**Prompt 模板**：
 ```
-璇峰鎴戣缁冨ソ鐨勬ā鍨嬪仛 SHAP 瑙ｉ噴锛歜eeswarm+bar+3 涓釜浣?waterfall锛屽苟鎸囧嚭鍙兘鐨勬暟鎹硠婕忕壒寰併€?
+请对我训练好的模型做 SHAP 解释：beeswarm+bar+3 个个体 waterfall，并指出可能的数据泄漏特征。
 ```
 
-### 6. perplexity-search锛圓I 缃戠粶鎼滅储锛?
+### 6. perplexity-search（AI 网络搜索）
 
-**鍦烘櫙**锛氳幏鍙栨渶鏂扮鐮斾俊鎭紙瓒呭嚭妯″瀷鐭ヨ瘑鎴鏃ユ湡锛?
+**场景**：获取最新科研信息（超出模型知识截止日期）
 
 ```bash
-# 璁剧疆 API Key
+# 设置 API Key
 export OPENROUTER_API_KEY='sk-or-v1-your-key-here'
 
-# 鎼滅储
+# 搜索
 python skills/perplexity-search/scripts/perplexity_search.py "What are the latest CAR-T therapy clinical trials in 2024?"
 
-# 浣跨敤楂樼骇妯″瀷
+# 使用高级模型
 python skills/perplexity-search/scripts/perplexity_search.py "query" --model sonar-pro-search
 ```
 
-### 7. markitdown锛堟枃浠惰浆鎹級
+### 7. markitdown（文件转换）
 
-**鍦烘櫙**锛氬皢 PDF/DOCX/PPTX 绛夎浆涓?Markdown
+**场景**：将 PDF/DOCX/PPTX 等转为 Markdown
 
 ```bash
-# 鍛戒护琛?
+# 命令行
 markitdown document.pdf -o output.md
 
 # Python API
@@ -344,155 +344,156 @@ print(result.text_content)
 
 ---
 
-## 鎺ㄨ崘宸ヤ綔娴?
+## 推荐工作流
 
-### 浠庢暟鎹埌璇佹嵁鐨勫畬鏁存祦绋?
+### 从数据到证据的完整流程
 
 ```
-1) exploratory-data-analysis 鈫?鏁版嵁璐ㄩ噺宸℃
-2) statistical-analysis 鈫?鍋囪妫€楠屼笌 APA 鎶ュ憡
-3) scikit-learn 鎴?scikit-survival 鈫?寤烘ā
-4) shap 鈫?妯″瀷瑙ｉ噴
+1) exploratory-data-analysis → 数据质量巡检
+2) statistical-analysis → 假设检验与 APA 报告
+3) scikit-learn 或 scikit-survival → 建模
+4) shap → 模型解释
 ```
 
-闇€瑕佽ˉ鍏呰瘉鎹?璇曢獙淇℃伅鏃讹細骞惰浣跨敤 `clinicaltrials-database` + `pubmed-database`/`openalex-database`銆?
+需要补充证据/试验信息时：并行使用 `clinicaltrials-database` + `pubmed-database`/`openalex-database`。
 
-### 蹇€?Prompt 妯℃澘
+### 快速 Prompt 模板
 
 ```text
-璇峰厛瀵?<path/to/data.csv> 鍋?exploratory-data-analysis锛氳瘑鍒瓧娈点€佺己澶便€佸紓甯稿拰璐ㄩ噺闂锛?
-鐒跺悗鐢?statistical-analysis 缁欏嚭閫傚綋妫€楠屼笌 APA 椋庢牸鎶ュ憡锛?
-鎺ョ潃鐢?scikit-learn 鍋氫竴涓彲澶嶇幇鐨?baseline锛堝惈 CV 涓庢寚鏍囷級锛?
-鏈€鍚庣敤 shap 杈撳嚭鍏ㄥ眬涓?3 涓釜浣撳眰闈㈢殑瑙ｉ噴锛屽苟鎻愮ず鍙兘鐨勬暟鎹硠婕忕壒寰併€?
+请先对 <path/to/data.csv> 做 exploratory-data-analysis：识别字段、缺失、异常和质量问题；
+然后用 statistical-analysis 给出适当检验与 APA 风格报告；
+接着用 scikit-learn 做一个可复现的 baseline（含 CV 与指标）；
+最后用 shap 输出全局与 3 个个体层面的解释，并提示可能的数据泄漏特征。
 ```
 
 ---
 
-## 甯哥敤鍏ュ彛
+## 常用入口
 
-- **Skills 瀵艰锛堟帹鑽愬伐浣滄祦锛?*锛歚docs/skills_guide.md`
-- **Skills 娓呭崟涓?prompt 妯℃澘**锛歚docs/skills_catalog.md`
-- **璐＄尞鎸囧崡**锛歚CONTRIBUTING.md`
+- **Skills 导览（推荐工作流）**：`docs/skills_guide.md`
+- **Skills 清单与 prompt 模板**：`docs/skills_catalog.md`
+- **贡献指南**：`CONTRIBUTING.md`
 
-## 鏂囨。绱㈠紩锛坉ocs/锛?
+## 文档索引（docs/）
 
-- `docs/skills_guide.md`锛歋kills 瀵艰涓庢帹鑽愬伐浣滄祦锛堢粰浣跨敤鑰咃級
-- `docs/skills_catalog.md`锛歋kills 娓呭崟涓庡父鐢?prompt 妯℃澘锛堢粰浣跨敤鑰咃級
-- `docs/repo_layout.md`锛氫粨搴撶洰褰曡鑼冧笌缁存姢绾﹀畾锛堢粰缁存姢鑰咃級
+- `docs/skills_guide.md`：Skills 导览与推荐工作流（给使用者）
+- `docs/skills_catalog.md`：Skills 清单与常用 prompt 模板（给使用者）
+- `docs/repo_layout.md`：仓库目录规范与维护约定（给维护者）
 
-## 姣忎釜 skill 鐨勮鏄庡叆鍙?
+## 每个 skill 的说明入口
 
-- **浣跨敤璇存槑**锛氫紭鍏堢湅瀵瑰簲鐩綍鐨?`SKILL.md`
-- **鍙傝€冭祫鏂?*锛氱粺涓€鏀惧湪 `references/INDEX.md`锛堝瀛樺湪锛?
-- **琛ュ厖鏂囨。锛圧EADME锛?*锛氶儴鍒?skill 鐩綍鎻愪緵棰濆 README锛堣涓嬫柟鐩磋揪閾炬帴锛?
-- **椤圭洰瑙勫垯璁板繂**锛氬凡鍦?`.cursor/rules/skills-location-policy.mdc` 鍥哄寲鈥渟kill 浠呮斁椤圭洰 `skills/` 鐩綍鈥?
+- **使用说明**：优先看对应目录的 `SKILL.md`
+- **参考资料**：统一放在 `references/INDEX.md`（如存在）
+- **补充文档（README）**：部分 skill 目录提供额外 README（见下方直达链接）
+- **项目规则记忆**：已在 `.cursor/rules/skills-location-policy.mdc` 固化“skill 仅放项目 `skills/` 目录”
 
-### Skills 琛ュ厖 README 鐩磋揪閾炬帴
+### Skills 补充 README 直达链接
 
-- `skills/fireworks-tech-graph/README.zh.md`锛堜腑鏂囪鏄庯級
-- `skills/fireworks-tech-graph/README.md`锛堣嫳鏂囪鏄庯級
-- `skills/fireworks-tech-graph/scripts/README.md`锛堣剼鏈鏄庯級
+- `skills/fireworks-tech-graph/README.zh.md`（中文说明）
+- `skills/fireworks-tech-graph/README.md`（英文说明）
+- `skills/fireworks-tech-graph/scripts/README.md`（脚本说明）
 
 ---
 
-## 甯哥敤鑴氭湰
+## 常用脚本
 
-### 鑴氭湰绱㈠紩
+### 脚本索引
 
-| 鑴氭湰 | 鐢ㄩ€?| 鐘舵€?|
+| 脚本 | 用途 | 状态 |
 |------|------|------|
-| `scripts/convert_to_md.py` | 鏂囨。杞琈arkdown锛堟帹鑽愶級 | 鉁?鎺ㄨ崘 |
-| `scripts/_archive/md_to_docx.py` | Markdown杞琖ord | 鉁?鎺ㄨ崘 |
-| `scripts/_archive/generate_csr_docx.py` | CSR阶段性小结 |
-| `scripts/project_self_check.py` | 椤圭洰鑷 | 鉁?鎺ㄨ崘 |
-| `scripts/cleanup_generated_artifacts.py` | 娓呯悊缂撳瓨涓嶪DE鍘嗗彶璁板綍 | 鉁?鎺ㄨ崘 |
-| `scripts/on_open_cleanup.cmd` | 寮€鏈?鎵撳紑椤圭洰鏃惰嚜鍔ㄦ竻鐞?| 鉁?杈呭姪 |
-| `scripts/register_cleanup_logon_task.ps1` | 娉ㄥ唽寮€鏈鸿嚜鍚竻鐞嗕换鍔?| 鉁?杈呭姪 |
+| `scripts/convert_to_md.py` | 文档转Markdown（推荐） | ✅ 推荐 |
+| `scripts/md_to_docx.py` | Markdown转Word | ✅ 推荐 |
+| `scripts/generate_csr_docx.py` | CSR阶段性小结 | ✅ 推荐 |
+| `scripts/project_self_check.py` | 项目自检 | ✅ 推荐 |
+| `scripts/cleanup_generated_artifacts.py` | 清理缓存与IDE历史记录 | ✅ 推荐 |
+| `scripts/on_open_cleanup.cmd` | 开机/打开项目时自动清理 | ✅ 辅助 |
+| `scripts/register_cleanup_logon_task.ps1` | 注册开机自启清理任务 | ✅ 辅助 |
 
-### 宸插簾寮冭剼鏈?
+### 已废弃脚本
 
-> 浠ヤ笅鑴氭湰宸茶搴熷純锛屽姛鑳藉凡鍚堝苟鍒?`convert_to_md.py`锛?
+> 以下脚本已被废弃，功能已合并到 `convert_to_md.py`：
 
-| 鑴氭湰 | 鏇夸唬鏂规 | 璇存槑 |
+| 脚本 | 替代方案 | 说明 |
 |------|----------|------|
-| `scripts/extract_docx_full.py` | `convert_to_md.py --mode standard` | 鏂囨湰鎻愬彇鍔熻兘宸插悎骞?|
-| `scripts/extract_doc_text.py` | `convert_to_md.py` | .doc鏂囨湰鎻愬彇锛圵indows COM锛?|
+| `scripts/extract_docx_full.py` | `convert_to_md.py --mode standard` | 文本提取功能已合并 |
+| `scripts/extract_doc_text.py` | `convert_to_md.py` | .doc文本提取（Windows COM） |
 
-### 濡備綍閫夋嫨
+### 如何选择
 
 ```
-闇€瑕佷粠docx鎻愬彇绾枃鏈紵
-  鈫?python scripts/convert_to_md.py input.docx -o output.md
+需要从docx提取纯文本？
+  → python scripts/convert_to_md.py input.docx -o output.md
 
-闇€瑕佸甫缂栧彿娈佃惤鎻愬彇锛?#P1, ##T1鏍囪锛夛紵
-  鈫?python scripts/convert_to_md.py input.docx -o output.md --mode numbered
+需要带编号段落提取（##P1, ##T1标记）？
+  → python scripts/convert_to_md.py input.docx -o output.md --mode numbered
 
-闇€瑕佸皢Markdown杞崲涓篧ord锛?
-  鈫?python scripts/md_to_docx.py input.md -o output.docx
+需要将Markdown转换为Word？
+  → python scripts/md_to_docx.py input.md -o output.docx
 ```
 
-> 浠ヤ笅鑴氭湰閽堝鐗瑰畾浜у搧锛岄€氱敤鍦烘櫙璇蜂娇鐢ㄤ笂鏂规帹鑽愯剼鏈細
+> 以下脚本针对特定产品，通用场景请使用上方推荐脚本：
 
-| 鑴氭湰 | 鐢ㄩ€?|
+| 脚本 | 用途 |
 |------|------|
-| `scripts/_archive/generate_audit_report_docx.py` | 通用审核报告 |
-| `scripts/_archive/generate_clinical_doc_audit_report.py` | 临床文档审核报告 |
-| `scripts/_archive/generate_clinical_overview_doc_review_docx.py` | 临床概览审核Word |
-| `scripts/_archive/generate_phase_summary_doc_review_docx.py` | 阶段总结审核Word |
-| `scripts/_archive/generate_norovirus_review_docx.py` | 诺如病毒综述 |
-| `scripts/_archive/cansino_detail4843_manual_docx.py` | 康希诺产品专用 |
+| `scripts/generate_audit_report_docx.py` | 通用审核报告 |
+| `scripts/generate_clinical_doc_audit_report.py` | 临床文档审核报告 |
+| `scripts/generate_clinical_overview_doc_review_docx.py` | 临床概览审核Word |
+| `scripts/generate_phase_summary_doc_review_docx.py` | 阶段总结审核Word |
+| `scripts/generate_norovirus_review_docx.py` | 诺如病毒综述 |
+| `scripts/build_tvax006_IMA_v2_docx.py` | TVAX006产品专用 |
+| `scripts/cansino_detail4843_manual_docx.py` | 康希诺产品专用 |
 | `scripts/extract_tables_to_docx.py` | OCR图片转Word表格 |
 
-### 鏂囨。瀹℃牳宸ヤ綔娴侊紙绱犳潗 鈫?Markdown 鈫?Word锛?
+### 文档审核工作流（素材 → Markdown → Word）
 
-#### 1) 灏?DOCX/XLSX/PDF 杞垚 Markdown
+#### 1) 将 DOCX/XLSX/PDF 转成 Markdown
 
 ```bash
-# 鍗曟枃浠?
+# 单文件
 python scripts/convert_to_md.py input.docx -o output.md
 
-# 鎵归噺鏂囦欢澶癸紙杈撳嚭鍒?review_materials/converted/锛?
+# 批量文件夹（输出到 review_materials/converted/）
 python scripts/convert_to_md.py --folder review_materials -o review_materials/converted
 ```
 
-#### 2) 灏?Markdown 瀹℃牳鎶ュ憡杞垚 Word
+#### 2) 将 Markdown 审核报告转成 Word
 
 ```bash
-python scripts/md_to_docx.py "review_materials/<浣犵殑瀹℃牳鎶ュ憡>.md" -o "review_materials/<浣犵殑瀹℃牳鎶ュ憡>.docx"
+python scripts/md_to_docx.py "review_materials/<你的审核报告>.md" -o "review_materials/<你的审核报告>.docx"
 ```
 
-#### 3) 鐢熸垚 CSR 闃舵鎬у皬缁擄紙Word锛?
+#### 3) 生成 CSR 阶段性小结（Word）
 
 ```bash
-python scripts/_archive/generate_csr_docx.py --root "椤圭洰鏍圭洰褰?
+python scripts/generate_csr_docx.py --root "项目根目录"
 ```
 
-鎻愮ず锛歚review_materials/` 宸插湪 `.gitignore` 涓拷鐣ワ紝涓嶄細琚笂浼犲埌 GitHub銆?
+提示：`review_materials/` 已在 `.gitignore` 中忽略，不会被上传到 GitHub。
 
-### Word 鏂囨。澶勭悊鎶€宸?
+### Word 文档处理技巧
 
-**鏂囦欢鍚嶅惈涓枃鏃?*锛氱洿鎺ュ湪鍛戒护琛屼紶閫掕矾寰勫彲鑳藉洜缂栫爜闂澶辫触锛屽缓璁厛鐢?PowerShell 澶嶅埗涓虹畝鍗曟枃浠跺悕锛?
+**文件名含中文时**：直接在命令行传递路径可能因编码问题失败，建议先用 PowerShell 复制为简单文件名：
 
 ```powershell
-# 澶嶅埗涓虹函鑻辨枃鏂囦欢鍚?
-Copy-Item "review_materials\1-3-1璇存槑-20260529-鏂?docx" target.docx
+# 复制为纯英文文件名
+Copy-Item "review_materials\1-3-1说明-20260529-新.docx" target.docx
 
-# 鐒跺悗鐢ㄨ剼鏈鐞?
+# 然后用脚本处理
 python scripts/convert_to_md.py target.docx -o output.md
 ```
 
 ---
 
-## 鏉ユ簮涓庡綊灞烇紙鍚堣澹版槑锛?
+## 来源与归属（合规声明）
 
-- **涓婃父椤圭洰**锛氭湰浠撳簱浠?[`K-Dense-AI/claude-scientific-skills`](https://github.com/K-Dense-AI/claude-scientific-skills.git) 鎻愬彇骞惰鍓嚭鏇磋仛鐒?涓村簥鐮旂┒/涓村簥璇曢獙"鍦烘櫙鐨勪竴閮ㄥ垎 skills銆?
-- **闄勫姞鏉ユ簮**锛歚skills/fireworks-tech-graph` 鏉ヨ嚜 [`yizhiyanhua-ai/fireworks-tech-graph`](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)锛圡IT License锛夈€?
-- **璁稿彲璇?*锛氫笂娓镐笌鏈粨搴撳潎涓?MIT License锛涙湰浠撳簱鍦ㄥ啀鍒嗗彂鏃朵繚鐣欎笂娓哥増鏉冧笌璁稿彲澹版槑锛堝惈鏂板绗笁鏂?skill 鐗堟潈澹版槑锛夈€?
-- **鏀瑰姩鑼冨洿锛堟憳瑕侊級**锛氬垹闄や笌涓村簥鐮旂┒鏃犲叧鐨?skills/鏂囨。锛屼粎淇濈暀骞堕噸缁勪笌涓村簥鐮旂┒鐩稿叧鐨?skills锛涜ˉ鍏呮湰浠撳簱鐨勭洰褰曡鑼冦€佷緷璧栦笌 CI銆?
-- **闈炶儗涔﹀０鏄?*锛氭湰浠撳簱涓虹ぞ鍖虹淮鎶ょ殑瑁佸壀/鏁寸悊鐗堟湰锛屼笉浠ｈ〃涓婃父浣滆€呮垨缁勭粐鐨勫畼鏂圭珛鍦恒€佽璇佹垨鑳屼功銆?
+- **上游项目**：本仓库从 [`K-Dense-AI/claude-scientific-skills`](https://github.com/K-Dense-AI/claude-scientific-skills.git) 提取并裁剪出更聚焦"临床研究/临床试验"场景的一部分 skills。
+- **附加来源**：`skills/fireworks-tech-graph` 来自 [`yizhiyanhua-ai/fireworks-tech-graph`](https://github.com/yizhiyanhua-ai/fireworks-tech-graph)（MIT License）。
+- **许可证**：上游与本仓库均为 MIT License；本仓库在再分发时保留上游版权与许可声明（含新增第三方 skill 版权声明）。
+- **改动范围（摘要）**：删除与临床研究无关的 skills/文档，仅保留并重组与临床研究相关的 skills；补充本仓库的目录规范、依赖与 CI。
+- **非背书声明**：本仓库为社区维护的裁剪/整理版本，不代表上游作者或组织的官方立场、认证或背书。
 
-## 璁稿彲璇?
+## 许可证
 
-鏈」鐩噰鐢?MIT 璁稿彲璇侊紝璇﹁ `LICENSE.md`銆?
+本项目采用 MIT 许可证，详见 `LICENSE.md`。
 
-娉ㄦ剰锛氬悇 skill 鍙兘鏈夌嫭绔嬭鍙瘉鎴栧澶栭儴鏁版嵁婧?SDK 鏈夐澶栭檺鍒讹紝浣跨敤鍓嶈鏌ョ湅瀵瑰簲 skill 鐨?`SKILL.md`銆?
+注意：各 skill 可能有独立许可证或对外部数据源/SDK 有额外限制，使用前请查看对应 skill 的 `SKILL.md`。
