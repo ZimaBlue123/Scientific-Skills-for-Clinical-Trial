@@ -1,6 +1,13 @@
 ---
 name: clinical-pdf-hygiene
 description: Clean and organize PDF libraries - strip JavaScript and malicious links, rename papers by extracted title and year, detect duplicate PDFs across folders, and scan for PDF threats. Use when the user asks for "PDF 重命名 / 文献 按标题 命名 / PDF 去重 / 重复 PDF / PDF XSS / PDF 安全 扫描 / 恶意链接 清理".
+license: MIT
+compatibility: Requires Python 3.10+ with pymupdf (1.27.0+ recommended) and pypdf (6.0+); pytesseract is optional for the module 17 OCR fallback.
+allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0"
+  skill-author: Scientific Skills for Clinical Trial Contributors
+  last-reviewed: "2026-09-18"
 ---
 
 # PDF 整理与安全

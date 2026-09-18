@@ -1,6 +1,13 @@
 ---
 name: clinical-pdf-extraction
 description: Extract structured data from clinical PDFs into Excel - serology reports, ADR grading tables, and rule-driven keyword extraction, plus locating and masking page header/watermark interference regions. Use when the user asks for "PDF 提取 Excel / 血清报告 汇总 / ADR 分级 回填 / 按规则提取 PDF / 页眉水印 干扰区 / 排除框".
+license: MIT
+compatibility: Requires Python 3.10+ with pymupdf, pandas, openpyxl and pdfplumber; OCR additionally needs a local Tesseract installation.
+allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0"
+  skill-author: Scientific Skills for Clinical Trial Contributors
+  last-reviewed: "2026-09-18"
 ---
 
 # 临床 PDF 数据提取

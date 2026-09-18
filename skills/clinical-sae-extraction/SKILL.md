@@ -1,6 +1,13 @@
 ---
 name: clinical-sae-extraction
 description: Extract structured SAE (serious adverse event) fields from clinical PDF/TXT/DOCX/Excel materials into an Excel listing. Use when the user asks for "SAE 抽取 / 严重不良事件 结构化 / SAE 列表 / SAE 汇总 Excel" or needs to consolidate SAE fields from mixed-format source documents.
+license: MIT
+compatibility: Requires Python 3.10+ and an OpenAI-compatible Chat Completions endpoint with a valid API token. Never commit real patient data or tokens.
+allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0"
+  skill-author: Scientific Skills for Clinical Trial Contributors
+  last-reviewed: "2026-09-18"
 ---
 
 # SAE 结构化抽取

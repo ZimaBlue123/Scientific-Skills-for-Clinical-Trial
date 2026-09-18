@@ -1,6 +1,13 @@
 ---
 name: clinical-document-translation
 description: Translate Excel, CSV, Word and PDF documents between Chinese and English with a free-engine-first fallback chain. Use when the user asks for "文档翻译 / Excel 翻译 / Word 翻译 / PDF 翻译 / 中英互译 / 批量翻译 文件 / en2zh / zh2en".
+license: MIT
+compatibility: Requires Python 3.10+ and the translation engine packages declared by module 24. Network access is needed unless a local engine is configured; confirm that subject-level data may leave the network before translating.
+allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0"
+  skill-author: Scientific Skills for Clinical Trial Contributors
+  last-reviewed: "2026-09-18"
 ---
 
 # 多格式文档双向翻译

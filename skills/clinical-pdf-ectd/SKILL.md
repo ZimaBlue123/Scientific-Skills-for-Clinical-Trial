@@ -1,6 +1,13 @@
 ---
 name: clinical-pdf-ectd
 description: Validate, clean and rewrite PDFs for eCTD submission compliance (fonts, bookmarks, links, scripts). Use when the user asks for "eCTD 合规 / eCTD 转换 / PDF 装甲 / 申报 PDF 校验 / 字体嵌入 / 书签修复" or needs a PDF audit report for regulatory submission.
+license: MIT
+compatibility: Requires Python 3.10+ with pymupdf, pandas, openpyxl and fonttools. Runs fully offline; no network access is needed.
+allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0"
+  skill-author: Scientific Skills for Clinical Trial Contributors
+  last-reviewed: "2026-09-18"
 ---
 
 # PDF eCTD 合规装甲

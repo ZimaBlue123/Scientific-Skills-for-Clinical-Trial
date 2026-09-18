@@ -1,6 +1,13 @@
 ---
 name: clinical-ppt-toolkit
 description: Merge and deduplicate multiple PowerPoint decks into a CSR-structured narrative, and remove corner logo watermarks from image-only slides. Use when the user asks for "PPT 合并 / 去重 / 叙事 重组 / CSR 结构 PPT / 边角 logo 去除 / 水印 去除 PPT".
+license: MIT
+compatibility: Requires Python 3.10+ with python-pptx and scikit-learn, which backs the TF-IDF deduplication in merge_ppt.py.
+allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0"
+  skill-author: Scientific Skills for Clinical Trial Contributors
+  last-reviewed: "2026-09-18"
 ---
 
 # 临床 PPT 整合

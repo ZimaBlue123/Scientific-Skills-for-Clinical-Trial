@@ -1,6 +1,13 @@
 ---
 name: clinical-word-tables
 description: Export Word document tables to Excel, replicate Word tables into Excel chart ranges, and substitute antibody immunogenicity data into GraphPad Prism (.pzfx) templates. Use when the user asks for "Word 表格导出 / 表格转 Excel / 临床小结 表格提取 / Graphpad pzfx / 抗体数据替换 / GMC GMI 阳转率 填入".
+license: MIT
+compatibility: Requires Python 3.10+ with python-docx, openpyxl and pandas. Module 07 additionally needs pywin32 and a local Microsoft Word installation (Windows only).
+allowed-tools: Read Write Edit Bash
+metadata:
+  version: "1.0"
+  skill-author: Scientific Skills for Clinical Trial Contributors
+  last-reviewed: "2026-09-18"
 ---
 
 # Word 表格 → Excel / GraphPad
