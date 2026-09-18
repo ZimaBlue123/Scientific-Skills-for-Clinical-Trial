@@ -40,11 +40,7 @@ api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/drug/event.json"
 
 # Search for aspirin-related adverse events
-params = {
-    "api_key": api_key,
-    "search": "patient.drug.medicinalproduct:aspirin",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "patient.drug.medicinalproduct:aspirin", "limit": 10}
 
 response = requests.get(url, params=params)
 data = response.json()
@@ -55,7 +51,7 @@ data = response.json()
 params = {
     "api_key": api_key,
     "search": "patient.drug.medicinalproduct:metformin",
-    "count": "patient.reaction.reactionmeddrapt.exact"
+    "count": "patient.reaction.reactionmeddrapt.exact",
 }
 ```
 
@@ -91,11 +87,7 @@ params = {
 **Example Queries**:
 ```python
 # Get full labeling for a brand-name drug
-params = {
-    "api_key": api_key,
-    "search": "openfda.brand_name:Lipitor",
-    "limit": 1
-}
+params = {"api_key": api_key, "search": "openfda.brand_name:Lipitor", "limit": 1}
 
 response = requests.get("https://api.fda.gov/drug/label.json", params=params)
 label_data = response.json()
@@ -109,11 +101,7 @@ if "results" in label_data:
 
 ```python
 # Search labels containing specific warnings
-params = {
-    "api_key": api_key,
-    "search": "warnings:*hypertension*",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "warnings:*hypertension*", "limit": 10}
 ```
 
 ### 3. National Drug Code (NDC) Directory
@@ -148,22 +136,14 @@ params = {
 **Example Queries**:
 ```python
 # Look up drug by NDC code
-params = {
-    "api_key": api_key,
-    "search": "product_ndc:0069-2110",
-    "limit": 1
-}
+params = {"api_key": api_key, "search": "product_ndc:0069-2110", "limit": 1}
 
 response = requests.get("https://api.fda.gov/drug/ndc.json", params=params)
 ```
 
 ```python
 # Find all products from a specific manufacturer
-params = {
-    "api_key": api_key,
-    "search": "labeler_name:Pfizer",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "labeler_name:Pfizer", "limit": 100}
 ```
 
 ```python
@@ -171,7 +151,7 @@ params = {
 params = {
     "api_key": api_key,
     "search": "generic_name:lisinopril+AND+dosage_form:TABLET",
-    "limit": 50
+    "limit": 50,
 }
 ```
 
@@ -215,7 +195,7 @@ params = {
     "api_key": api_key,
     "search": "classification:Class+I",
     "limit": 20,
-    "sort": "report_date:desc"
+    "sort": "report_date:desc",
 }
 
 response = requests.get("https://api.fda.gov/drug/enforcement.json", params=params)
@@ -223,20 +203,12 @@ response = requests.get("https://api.fda.gov/drug/enforcement.json", params=para
 
 ```python
 # Search for recalls of a specific drug
-params = {
-    "api_key": api_key,
-    "search": "product_description:*metformin*",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "product_description:*metformin*", "limit": 10}
 ```
 
 ```python
 # Find ongoing recalls
-params = {
-    "api_key": api_key,
-    "search": "status:Ongoing",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "status:Ongoing", "limit": 50}
 ```
 
 ### 5. Drugs@FDA
@@ -273,31 +245,19 @@ params = {
 **Example Queries**:
 ```python
 # Find approval information for a specific drug
-params = {
-    "api_key": api_key,
-    "search": "openfda.brand_name:Keytruda",
-    "limit": 1
-}
+params = {"api_key": api_key, "search": "openfda.brand_name:Keytruda", "limit": 1}
 
 response = requests.get("https://api.fda.gov/drug/drugsfda.json", params=params)
 ```
 
 ```python
 # Get all drugs approved by a specific sponsor
-params = {
-    "api_key": api_key,
-    "search": "sponsor_name:Moderna",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "sponsor_name:Moderna", "limit": 100}
 ```
 
 ```python
 # Find drugs with priority review designation
-params = {
-    "api_key": api_key,
-    "search": "submissions.review_priority:Priority",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "submissions.review_priority:Priority", "limit": 50}
 ```
 
 ### 6. Drug Shortages
@@ -329,31 +289,19 @@ params = {
 **Example Queries**:
 ```python
 # Find current drug shortages
-params = {
-    "api_key": api_key,
-    "search": "status:Currently+in+Shortage",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "status:Currently+in+Shortage", "limit": 100}
 
 response = requests.get("https://api.fda.gov/drug/drugshortages.json", params=params)
 ```
 
 ```python
 # Search for shortages of a specific drug
-params = {
-    "api_key": api_key,
-    "search": "product_name:*amoxicillin*",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "product_name:*amoxicillin*", "limit": 10}
 ```
 
 ```python
 # Get shortage history (both current and resolved)
-params = {
-    "api_key": api_key,
-    "search": "active_ingredient:epinephrine",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "active_ingredient:epinephrine", "limit": 50}
 ```
 
 ## Integration Tips
@@ -363,6 +311,7 @@ params = {
 ```python
 import requests
 import time
+
 
 def query_fda_drug(endpoint, params, max_retries=3):
     """
@@ -423,12 +372,7 @@ def get_all_results(endpoint, search_query, api_key, max_results=1000):
     limit = 100  # Max per request
 
     while len(all_results) < max_results:
-        params = {
-            "api_key": api_key,
-            "search": search_query,
-            "limit": limit,
-            "skip": skip
-        }
+        params = {"api_key": api_key, "search": search_query, "limit": limit, "skip": skip}
 
         data = query_fda_drug(endpoint, params)
         if not data or "results" not in data:

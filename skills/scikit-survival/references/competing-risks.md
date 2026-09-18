@@ -59,11 +59,11 @@ time_points, cif_1, cif_2 = cumulative_incidence_competing_risks(y)
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(10, 6))
-plt.step(time_points, cif_1, where='post', label='Relapse', linewidth=2)
-plt.step(time_points, cif_2, where='post', label='Death in remission', linewidth=2)
-plt.xlabel('Time (weeks)')
-plt.ylabel('Cumulative Incidence')
-plt.title('Competing Risks: Relapse vs Death')
+plt.step(time_points, cif_1, where="post", label="Relapse", linewidth=2)
+plt.step(time_points, cif_2, where="post", label="Death in remission", linewidth=2)
+plt.xlabel("Time (weeks)")
+plt.ylabel("Cumulative Incidence")
+plt.title("Competing Risks: Relapse vs Death")
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.show()
@@ -92,7 +92,7 @@ times = np.array([10.2, 5.3, 8.1, 3.7, 12.5, 6.8, 4.2])
 # Store event type separately or encode in the event field
 y = Surv.from_arrays(
     event=(event_types > 0),  # True if any event
-    time=times
+    time=times,
 )
 
 # Keep event_types for distinguishing between event types
@@ -107,16 +107,13 @@ from sksurv.util import Surv
 # Assume data has: time, event_type columns
 # event_type: 0=censored, 1=type1, 2=type2, etc.
 
-df = pd.read_csv('competing_risks_data.csv')
+df = pd.read_csv("competing_risks_data.csv")
 
 # Create survival outcome
-y = Surv.from_arrays(
-    event=(df['event_type'] > 0),
-    time=df['time']
-)
+y = Surv.from_arrays(event=(df["event_type"] > 0), time=df["time"])
 
 # Store event types
-event_types = df['event_type'].values
+event_types = df["event_type"].values
 ```
 
 ## Comparing Cumulative Incidence Between Groups
@@ -128,8 +125,8 @@ from sksurv.nonparametric import cumulative_incidence_competing_risks
 import matplotlib.pyplot as plt
 
 # Split by treatment group
-mask_treatment = X['treatment'] == 'A'
-mask_control = X['treatment'] == 'B'
+mask_treatment = X["treatment"] == "A"
+mask_control = X["treatment"] == "B"
 
 y_treatment = y[mask_treatment]
 y_control = y[mask_control]
@@ -142,20 +139,20 @@ time_ctl, cif1_ctl, cif2_ctl = cumulative_incidence_competing_risks(y_control)
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
 # Event type 1
-ax1.step(time_trt, cif1_trt, where='post', label='Treatment', linewidth=2)
-ax1.step(time_ctl, cif1_ctl, where='post', label='Control', linewidth=2)
-ax1.set_xlabel('Time')
-ax1.set_ylabel('Cumulative Incidence')
-ax1.set_title('Event Type 1')
+ax1.step(time_trt, cif1_trt, where="post", label="Treatment", linewidth=2)
+ax1.step(time_ctl, cif1_ctl, where="post", label="Control", linewidth=2)
+ax1.set_xlabel("Time")
+ax1.set_ylabel("Cumulative Incidence")
+ax1.set_title("Event Type 1")
 ax1.legend()
 ax1.grid(True, alpha=0.3)
 
 # Event type 2
-ax2.step(time_trt, cif2_trt, where='post', label='Treatment', linewidth=2)
-ax2.step(time_ctl, cif2_ctl, where='post', label='Control', linewidth=2)
-ax2.set_xlabel('Time')
-ax2.set_ylabel('Cumulative Incidence')
-ax2.set_title('Event Type 2')
+ax2.step(time_trt, cif2_trt, where="post", label="Treatment", linewidth=2)
+ax2.step(time_ctl, cif2_ctl, where="post", label="Control", linewidth=2)
+ax2.set_xlabel("Time")
+ax2.set_ylabel("Cumulative Incidence")
+ax2.set_title("Event Type 2")
 ax2.legend()
 ax2.grid(True, alpha=0.3)
 
@@ -189,16 +186,10 @@ from sksurv.util import Surv
 
 # Separate outcome for each event type
 # Event type 1: treat type 2 as censored
-y_event1 = Surv.from_arrays(
-    event=(event_types == 1),
-    time=times
-)
+y_event1 = Surv.from_arrays(event=(event_types == 1), time=times)
 
 # Event type 2: treat type 1 as censored
-y_event2 = Surv.from_arrays(
-    event=(event_types == 2),
-    time=times
-)
+y_event2 = Surv.from_arrays(event=(event_types == 2), time=times)
 
 # Fit cause-specific models
 cox_event1 = CoxPHSurvivalAnalysis()
@@ -249,7 +240,7 @@ n = 200
 
 # Create features
 age = np.random.normal(60, 10, n)
-treatment = np.random.choice(['A', 'B'], n)
+treatment = np.random.choice(["A", "B"], n)
 
 # Simulate event times and types
 # Event types: 0=censored, 1=relapse, 2=death
@@ -260,36 +251,31 @@ event_types = np.zeros(n, dtype=int)
 for i in range(n):
     if times[i] < 150:  # Event occurred
         # Probability of each event type
-        p_relapse = 0.6 if treatment[i] == 'B' else 0.4
+        p_relapse = 0.6 if treatment[i] == "B" else 0.4
         event_types[i] = 1 if np.random.rand() < p_relapse else 2
     else:
         times[i] = 150  # Censored at study end
 
 # Create DataFrame
-df = pd.DataFrame({
-    'time': times,
-    'event_type': event_types,
-    'age': age,
-    'treatment': treatment
-})
+df = pd.DataFrame({"time": times, "event_type": event_types, "age": age, "treatment": treatment})
 
 # Encode treatment
-df['treatment_A'] = (df['treatment'] == 'A').astype(int)
+df["treatment_A"] = (df["treatment"] == "A").astype(int)
 
 # 1. OVERALL CUMULATIVE INCIDENCE
 print("=" * 60)
 print("OVERALL CUMULATIVE INCIDENCE")
 print("=" * 60)
 
-y_all = Surv.from_arrays(event=(df['event_type'] > 0), time=df['time'])
+y_all = Surv.from_arrays(event=(df["event_type"] > 0), time=df["time"])
 time_points, cif_relapse, cif_death = cumulative_incidence_competing_risks(y_all)
 
 plt.figure(figsize=(10, 6))
-plt.step(time_points, cif_relapse, where='post', label='Relapse', linewidth=2)
-plt.step(time_points, cif_death, where='post', label='Death', linewidth=2)
-plt.xlabel('Time (days)')
-plt.ylabel('Cumulative Incidence')
-plt.title('Competing Risks: Relapse vs Death')
+plt.step(time_points, cif_relapse, where="post", label="Relapse", linewidth=2)
+plt.step(time_points, cif_death, where="post", label="Death", linewidth=2)
+plt.xlabel("Time (days)")
+plt.ylabel("Cumulative Incidence")
+plt.title("Competing Risks: Relapse vs Death")
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.show()
@@ -302,12 +288,9 @@ print("\n" + "=" * 60)
 print("CUMULATIVE INCIDENCE BY TREATMENT")
 print("=" * 60)
 
-for trt in ['A', 'B']:
-    mask = df['treatment'] == trt
-    y_trt = Surv.from_arrays(
-        event=(df.loc[mask, 'event_type'] > 0),
-        time=df.loc[mask, 'time']
-    )
+for trt in ["A", "B"]:
+    mask = df["treatment"] == trt
+    y_trt = Surv.from_arrays(event=(df.loc[mask, "event_type"] > 0), time=df.loc[mask, "time"])
     time_trt, cif1_trt, cif2_trt = cumulative_incidence_competing_risks(y_trt)
     print(f"\nTreatment {trt}:")
     print(f"  5-year relapse: {cif1_trt[-1]:.2%}")
@@ -318,13 +301,10 @@ print("\n" + "=" * 60)
 print("CAUSE-SPECIFIC HAZARD MODELS")
 print("=" * 60)
 
-X = df[['age', 'treatment_A']]
+X = df[["age", "treatment_A"]]
 
 # Model for relapse (event type 1)
-y_relapse = Surv.from_arrays(
-    event=(df['event_type'] == 1),
-    time=df['time']
-)
+y_relapse = Surv.from_arrays(event=(df["event_type"] == 1), time=df["time"])
 cox_relapse = CoxPHSurvivalAnalysis()
 cox_relapse.fit(X, y_relapse)
 
@@ -333,10 +313,7 @@ print(f"  Age:        HR = {np.exp(cox_relapse.coef_[0]):.3f}")
 print(f"  Treatment A: HR = {np.exp(cox_relapse.coef_[1]):.3f}")
 
 # Model for death (event type 2)
-y_death = Surv.from_arrays(
-    event=(df['event_type'] == 2),
-    time=df['time']
-)
+y_death = Surv.from_arrays(event=(df["event_type"] == 2), time=df["time"])
 cox_death = CoxPHSurvivalAnalysis()
 cox_death.fit(X, y_death)
 

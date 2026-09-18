@@ -43,19 +43,13 @@ No API key required - OpenAlex is completely open.
 
 ```python
 # Simple search
-results = client.search_works(
-    search="machine learning",
-    per_page=100
-)
+results = client.search_works(search="machine learning", per_page=100)
 
 # Search with filters
 results = client.search_works(
     search="CRISPR gene editing",
-    filter_params={
-        "publication_year": ">2020",
-        "is_oa": "true"
-    },
-    sort="cited_by_count:desc"
+    filter_params={"publication_year": ">2020", "is_oa": "true"},
+    sort="cited_by_count:desc",
 )
 ```
 
@@ -68,26 +62,19 @@ Use the two-step pattern (entity name → ID → works):
 ```python
 from scripts.query_helpers import find_author_works
 
-works = find_author_works(
-    author_name="Jennifer Doudna",
-    client=client,
-    limit=100
-)
+works = find_author_works(author_name="Jennifer Doudna", client=client, limit=100)
 ```
 
 **Manual two-step approach**:
 ```python
 # Step 1: Get author ID
 author_response = client._make_request(
-    '/authors',
-    params={'search': 'Jennifer Doudna', 'per-page': 1}
+    "/authors", params={"search": "Jennifer Doudna", "per-page": 1}
 )
-author_id = author_response['results'][0]['id'].split('/')[-1]
+author_id = author_response["results"][0]["id"].split("/")[-1]
 
 # Step 2: Get works
-works = client.search_works(
-    filter_params={"authorships.author.id": author_id}
-)
+works = client.search_works(filter_params={"authorships.author.id": author_id})
 ```
 
 ### 3. Find Works from Institution
@@ -97,11 +84,7 @@ works = client.search_works(
 ```python
 from scripts.query_helpers import find_institution_works
 
-works = find_institution_works(
-    institution_name="Stanford University",
-    client=client,
-    limit=200
-)
+works = find_institution_works(institution_name="Stanford University", client=client, limit=200)
 ```
 
 ### 4. Highly Cited Papers
@@ -112,10 +95,7 @@ works = find_institution_works(
 from scripts.query_helpers import find_highly_cited_recent_papers
 
 papers = find_highly_cited_recent_papers(
-    topic="quantum computing",
-    years=">2020",
-    client=client,
-    limit=100
+    topic="quantum computing", years=">2020", client=client, limit=100
 )
 ```
 
@@ -130,7 +110,7 @@ papers = get_open_access_papers(
     search_term="climate change",
     client=client,
     oa_status="any",  # or "gold", "green", "hybrid", "bronze"
-    limit=200
+    limit=200,
 )
 ```
 
@@ -142,13 +122,11 @@ papers = get_open_access_papers(
 from scripts.query_helpers import get_publication_trends
 
 trends = get_publication_trends(
-    search_term="artificial intelligence",
-    filter_params={"is_oa": "true"},
-    client=client
+    search_term="artificial intelligence", filter_params={"is_oa": "true"}, client=client
 )
 
 # Sort and display
-for trend in sorted(trends, key=lambda x: x['key'])[-10:]:
+for trend in sorted(trends, key=lambda x: x["key"])[-10:]:
     print(f"{trend['key']}: {trend['count']} publications")
 ```
 
@@ -160,10 +138,10 @@ for trend in sorted(trends, key=lambda x: x['key'])[-10:]:
 from scripts.query_helpers import analyze_research_output
 
 analysis = analyze_research_output(
-    entity_type='institution',  # or 'author'
-    entity_name='MIT',
+    entity_type="institution",  # or 'author'
+    entity_name="MIT",
     client=client,
-    years='>2020'
+    years=">2020",
 )
 
 print(f"Total works: {analysis['total_works']}")
@@ -182,11 +160,7 @@ dois = [
     # ... up to 50 DOIs
 ]
 
-works = client.batch_lookup(
-    entity_type='works',
-    ids=dois,
-    id_field='doi'
-)
+works = client.batch_lookup(entity_type="works", ids=dois, id_field="doi")
 ```
 
 ### 9. Random Sampling
@@ -198,15 +172,11 @@ works = client.batch_lookup(
 works = client.sample_works(
     sample_size=100,
     seed=42,  # For reproducibility
-    filter_params={"publication_year": "2023"}
+    filter_params={"publication_year": "2023"},
 )
 
 # Large sample (>10k) - automatically handles multiple requests
-works = client.sample_works(
-    sample_size=25000,
-    seed=42,
-    filter_params={"is_oa": "true"}
-)
+works = client.sample_works(sample_size=25000, seed=42, filter_params={"is_oa": "true"})
 ```
 
 ### 10. Citation Analysis
@@ -215,15 +185,15 @@ works = client.sample_works(
 
 ```python
 # Get the work
-work = client.get_entity('works', 'https://doi.org/10.1038/s41586-021-03819-2')
+work = client.get_entity("works", "https://doi.org/10.1038/s41586-021-03819-2")
 
 # Get citing papers using cited_by_api_url
 import requests
+
 citing_response = requests.get(
-    work['cited_by_api_url'],
-    params={'mailto': client.email, 'per-page': 200}
+    work["cited_by_api_url"], params={"mailto": client.email, "per-page": 200}
 )
-citing_works = citing_response.json()['results']
+citing_works = citing_response.json()["results"]
 ```
 
 ### 11. Topic and Subject Analysis
@@ -233,12 +203,12 @@ citing_works = citing_response.json()['results']
 ```python
 # Get top topics for an institution
 topics = client.group_by(
-    entity_type='works',
-    group_field='topics.id',
+    entity_type="works",
+    group_field="topics.id",
     filter_params={
         "authorships.institutions.id": "I136199984",  # MIT
-        "publication_year": ">2020"
-    }
+        "publication_year": ">2020",
+    },
 )
 
 for topic in topics[:10]:
@@ -252,28 +222,28 @@ for topic in topics[:10]:
 ```python
 # Paginate through all results
 all_papers = client.paginate_all(
-    endpoint='/works',
-    params={
-        'search': 'synthetic biology',
-        'filter': 'publication_year:2020-2024'
-    },
-    max_results=10000
+    endpoint="/works",
+    params={"search": "synthetic biology", "filter": "publication_year:2020-2024"},
+    max_results=10000,
 )
 
 # Export to CSV
 import csv
-with open('papers.csv', 'w', newline='', encoding='utf-8') as f:
+
+with open("papers.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
-    writer.writerow(['Title', 'Year', 'Citations', 'DOI', 'OA Status'])
+    writer.writerow(["Title", "Year", "Citations", "DOI", "OA Status"])
 
     for paper in all_papers:
-        writer.writerow([
-            paper.get('title', 'N/A'),
-            paper.get('publication_year', 'N/A'),
-            paper.get('cited_by_count', 0),
-            paper.get('doi', 'N/A'),
-            paper.get('open_access', {}).get('oa_status', 'closed')
-        ])
+        writer.writerow(
+            [
+                paper.get("title", "N/A"),
+                paper.get("publication_year", "N/A"),
+                paper.get("cited_by_count", 0),
+                paper.get("doi", "N/A"),
+                paper.get("open_access", {}).get("oa_status", "closed"),
+            ]
+        )
 ```
 
 ## Critical Best Practices
@@ -305,11 +275,11 @@ results = client.search_works(search="topic", per_page=200)
 Use batch_lookup() for multiple IDs instead of individual requests:
 ```python
 # ✅ Correct - 1 request for 50 DOIs
-works = client.batch_lookup('works', doi_list, 'doi')
+works = client.batch_lookup("works", doi_list, "doi")
 
 # ❌ Wrong - 50 separate requests
 for doi in doi_list:
-    work = client.get_entity('works', doi)
+    work = client.get_entity("works", doi)
 ```
 
 ### Use Sample Parameter for Random Data
@@ -326,8 +296,7 @@ works = client.sample_works(sample_size=100, seed=42)
 Reduce response size by selecting specific fields:
 ```python
 results = client.search_works(
-    search="topic",
-    select=['id', 'title', 'publication_year', 'cited_by_count']
+    search="topic", select=["id", "title", "publication_year", "cited_by_count"]
 )
 ```
 
@@ -336,29 +305,25 @@ results = client.search_works(
 ### Date Ranges
 ```python
 # Single year
-filter_params={"publication_year": "2023"}
+filter_params = {"publication_year": "2023"}
 
 # After year
-filter_params={"publication_year": ">2020"}
+filter_params = {"publication_year": ">2020"}
 
 # Range
-filter_params={"publication_year": "2020-2024"}
+filter_params = {"publication_year": "2020-2024"}
 ```
 
 ### Multiple Filters (AND)
 ```python
 # All conditions must match
-filter_params={
-    "publication_year": ">2020",
-    "is_oa": "true",
-    "cited_by_count": ">100"
-}
+filter_params = {"publication_year": ">2020", "is_oa": "true", "cited_by_count": ">100"}
 ```
 
 ### Multiple Values (OR)
 ```python
 # Any institution matches
-filter_params={
+filter_params = {
     "authorships.institutions.id": "I136199984|I27837315"  # MIT or Harvard
 }
 ```
@@ -366,7 +331,7 @@ filter_params={
 ### Collaboration (AND within attribute)
 ```python
 # Papers with authors from BOTH institutions
-filter_params={
+filter_params = {
     "authorships.institutions.id": "I136199984+I27837315"  # MIT AND Harvard
 }
 ```
@@ -374,9 +339,7 @@ filter_params={
 ### Negation
 ```python
 # Exclude type
-filter_params={
-    "type": "!paratext"
-}
+filter_params = {"type": "!paratext"}
 ```
 
 ## Entity Types
@@ -393,8 +356,8 @@ OpenAlex provides these entity types:
 Access any entity type using consistent patterns:
 ```python
 client.search_works(...)
-client.get_entity('authors', author_id)
-client.group_by('works', 'topics.id', filter_params={...})
+client.get_entity("authors", author_id)
+client.group_by("works", "topics.id", filter_params={...})
 ```
 
 ## External IDs
@@ -402,16 +365,16 @@ client.group_by('works', 'topics.id', filter_params={...})
 Use external identifiers directly:
 ```python
 # DOI for works
-work = client.get_entity('works', 'https://doi.org/10.7717/peerj.4375')
+work = client.get_entity("works", "https://doi.org/10.7717/peerj.4375")
 
 # ORCID for authors
-author = client.get_entity('authors', 'https://orcid.org/0000-0003-1613-5981')
+author = client.get_entity("authors", "https://orcid.org/0000-0003-1613-5981")
 
 # ROR for institutions
-institution = client.get_entity('institutions', 'https://ror.org/02y3ad647')
+institution = client.get_entity("institutions", "https://ror.org/02y3ad647")
 
 # ISSN for sources
-source = client.get_entity('sources', 'issn:0028-0836')
+source = client.get_entity("sources", "issn:0028-0836")
 ```
 
 ## Reference Documentation

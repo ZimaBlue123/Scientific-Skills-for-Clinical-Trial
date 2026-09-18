@@ -6,6 +6,7 @@ Safety:
 - Only modifies files under skills/.
 - Dry-run mode by default; pass --apply to write changes.
 """
+
 import argparse
 import os
 import py_compile
@@ -13,7 +14,6 @@ import re
 import sys
 import tempfile
 from pathlib import Path
-
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = REPO_ROOT / "skills"
@@ -87,7 +87,7 @@ def process_file(filepath: Path, line_numbers: list, apply: bool) -> tuple:
         errors.append(f"  PRE-CHECK FAILED: {filepath} does not compile before fix")
         return 0, errors
 
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         lines = f.readlines()
 
     original_lines = lines[:]
@@ -131,7 +131,7 @@ def fix_reimport(filepath: Path, lineno: int, expected_stripped: str, apply: boo
         errors.append(f"  PRE-CHECK FAILED: {filepath}")
         return False, errors
 
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         lines = f.readlines()
 
     idx = lineno - 1

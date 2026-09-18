@@ -137,10 +137,7 @@ Compares feature importance across subgroups by passing a dictionary of Explanat
 
 ```python
 # Compare cohorts
-cohorts = {
-    "Group A": shap_values[mask_A],
-    "Group B": shap_values[mask_B]
-}
+cohorts = {"Group A": shap_values[mask_A], "Group B": shap_values[mask_B]}
 shap.plots.bar(cohorts)
 ```
 
@@ -196,19 +193,10 @@ shap.plots.bar(shap_values, clustering=clustering, clustering_cutoff=0.3)
 **Example**:
 ```python
 # Single prediction force plot
-shap.plots.force(
-    shap_values.base_values[0],
-    shap_values.values[0],
-    X_test.iloc[0],
-    matplotlib=True
-)
+shap.plots.force(shap_values.base_values[0], shap_values.values[0], X_test.iloc[0], matplotlib=True)
 
 # Multiple predictions (interactive)
-shap.plots.force(
-    shap_values.base_values,
-    shap_values.values,
-    X_test
-)
+shap.plots.force(shap_values.base_values, shap_values.values, X_test)
 ```
 
 ### Scatter Plots (Dependence Plots)
@@ -329,19 +317,11 @@ shap.plots.violin(shap_values)
 ```python
 # Decision plot for multiple predictions
 shap.plots.decision(
-    shap_values.base_values,
-    shap_values.values,
-    X_test,
-    feature_names=X_test.columns.tolist()
+    shap_values.base_values, shap_values.values, X_test, feature_names=X_test.columns.tolist()
 )
 
 # Highlight specific instances
-shap.plots.decision(
-    shap_values.base_values,
-    shap_values.values,
-    X_test,
-    highlight=[0, 5, 10]
-)
+shap.plots.decision(shap_values.base_values, shap_values.values, X_test, highlight=[0, 5, 10])
 ```
 
 ## Plot Selection Guide
@@ -402,7 +382,7 @@ import matplotlib.pyplot as plt
 shap.plots.beeswarm(shap_values, show=False)
 
 # Save with high DPI
-plt.savefig('shap_plot.png', dpi=300, bbox_inches='tight')
+plt.savefig("shap_plot.png", dpi=300, bbox_inches="tight")
 plt.close()
 ```
 
@@ -434,23 +414,17 @@ shap_model1 = explainer1(X_test)
 shap_model2 = explainer2(X_test)
 
 # Compare feature importance
-shap.plots.bar({
-    "Model 1": shap_model1,
-    "Model 2": shap_model2
-})
+shap.plots.bar({"Model 1": shap_model1, "Model 2": shap_model2})
 ```
 
 **Pattern 3: Subgroup Analysis**
 ```python
 # Define cohorts
-male_mask = X_test['Sex'] == 'Male'
-female_mask = X_test['Sex'] == 'Female'
+male_mask = X_test["Sex"] == "Male"
+female_mask = X_test["Sex"] == "Female"
 
 # Compare cohorts
-shap.plots.bar({
-    "Male": shap_values[male_mask],
-    "Female": shap_values[female_mask]
-})
+shap.plots.bar({"Male": shap_values[male_mask], "Female": shap_values[female_mask]})
 
 # Separate beeswarm plots
 shap.plots.beeswarm(shap_values[male_mask])
@@ -460,7 +434,7 @@ shap.plots.beeswarm(shap_values[female_mask])
 **Pattern 4: Debugging Predictions**
 ```python
 # Identify outliers or errors
-errors = (model.predict(X_test) != y_test)
+errors = model.predict(X_test) != y_test
 error_indices = np.where(errors)[0]
 
 # Explain errors

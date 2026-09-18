@@ -55,11 +55,7 @@ api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/food/event.json"
 
 # Find adverse events for dietary supplements
-params = {
-    "api_key": api_key,
-    "search": "products.industry_name:Dietary+Supplements",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "products.industry_name:Dietary+Supplements", "limit": 10}
 
 response = requests.get(url, params=params)
 data = response.json()
@@ -70,7 +66,7 @@ data = response.json()
 params = {
     "api_key": api_key,
     "search": "products.industry_name:*Beverages*",
-    "count": "reactions.exact"
+    "count": "reactions.exact",
 }
 ```
 
@@ -80,17 +76,13 @@ params = {
     "api_key": api_key,
     "search": "outcomes:Hospitalization",
     "limit": 50,
-    "sort": "date_created:desc"
+    "sort": "date_created:desc",
 }
 ```
 
 ```python
 # Search by product brand name
-params = {
-    "api_key": api_key,
-    "search": "products.name_brand:*protein+powder*",
-    "limit": 20
-}
+params = {"api_key": api_key, "search": "products.name_brand:*protein+powder*", "limit": 20}
 ```
 
 ### 2. Food Enforcement Reports
@@ -146,7 +138,7 @@ params = {
     "api_key": api_key,
     "search": "classification:Class+I",
     "limit": 20,
-    "sort": "report_date:desc"
+    "sort": "report_date:desc",
 }
 
 response = requests.get("https://api.fda.gov/food/enforcement.json", params=params)
@@ -154,11 +146,7 @@ response = requests.get("https://api.fda.gov/food/enforcement.json", params=para
 
 ```python
 # Search for allergen-related recalls
-params = {
-    "api_key": api_key,
-    "search": "reason_for_recall:*undeclared+allergen*",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "reason_for_recall:*undeclared+allergen*", "limit": 50}
 ```
 
 ```python
@@ -167,35 +155,23 @@ params = {
     "api_key": api_key,
     "search": "reason_for_recall:*listeria*",
     "limit": 30,
-    "sort": "recall_initiation_date:desc"
+    "sort": "recall_initiation_date:desc",
 }
 ```
 
 ```python
 # Get recalls by specific company
-params = {
-    "api_key": api_key,
-    "search": "recalling_firm:*General+Mills*",
-    "limit": 20
-}
+params = {"api_key": api_key, "search": "recalling_firm:*General+Mills*", "limit": 20}
 ```
 
 ```python
 # Find ongoing recalls
-params = {
-    "api_key": api_key,
-    "search": "status:Ongoing",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "status:Ongoing", "limit": 100}
 ```
 
 ```python
 # Search by product type
-params = {
-    "api_key": api_key,
-    "search": "product_description:*ice+cream*",
-    "limit": 25
-}
+params = {"api_key": api_key, "search": "product_description:*ice+cream*", "limit": 25}
 ```
 
 ## Integration Tips
@@ -230,7 +206,7 @@ def monitor_allergen_recalls(allergens, api_key, days_back=30):
         params = {
             "api_key": api_key,
             "search": f"reason_for_recall:*{allergen}*+AND+report_date:{date_range}",
-            "limit": 100
+            "limit": 100,
         }
 
         response = requests.get(url, params=params)
@@ -262,11 +238,7 @@ def analyze_product_adverse_events(product_name, api_key):
     from collections import Counter
 
     url = "https://api.fda.gov/food/event.json"
-    params = {
-        "api_key": api_key,
-        "search": f"products.name_brand:*{product_name}*",
-        "limit": 1000
-    }
+    params = {"api_key": api_key, "search": f"products.name_brand:*{product_name}*", "limit": 1000}
 
     response = requests.get(url, params=params)
     data = response.json()
@@ -294,7 +266,9 @@ def analyze_product_adverse_events(product_name, api_key):
         "total_events": len(results),
         "most_common_reactions": reaction_counts.most_common(10),
         "outcome_distribution": dict(outcome_counts),
-        "serious_outcomes": sum(1 for o in all_outcomes if o in ["Hospitalization", "Death", "Disability"])
+        "serious_outcomes": sum(
+            1 for o in all_outcomes if o in ["Hospitalization", "Death", "Disability"]
+        ),
     }
 ```
 
@@ -327,7 +301,7 @@ def get_recent_recalls_by_state(state_code, api_key, days=7):
         "api_key": api_key,
         "search": f"distribution_pattern:*{state_code}*+AND+report_date:{date_range}",
         "limit": 100,
-        "sort": "report_date:desc"
+        "sort": "report_date:desc",
     }
 
     response = requests.get(url, params=params)

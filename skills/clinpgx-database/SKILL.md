@@ -68,8 +68,7 @@ response = requests.get("https://api.clinpgx.org/v1/gene/CYP2D6")
 gene_data = response.json()
 
 # Search for genes by name
-response = requests.get("https://api.clinpgx.org/v1/gene",
-                       params={"q": "CYP"})
+response = requests.get("https://api.clinpgx.org/v1/gene", params={"q": "CYP"})
 genes = response.json()
 ```
 
@@ -90,8 +89,7 @@ response = requests.get("https://api.clinpgx.org/v1/chemical/PA448515")  # Warfa
 drug_data = response.json()
 
 # Search drugs by name
-response = requests.get("https://api.clinpgx.org/v1/chemical",
-                       params={"name": "warfarin"})
+response = requests.get("https://api.clinpgx.org/v1/chemical", params={"name": "warfarin"})
 drugs = response.json()
 ```
 
@@ -110,13 +108,13 @@ drugs = response.json()
 
 ```python
 # Get gene-drug pair information
-response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                       params={"gene": "CYP2D6", "drug": "codeine"})
+response = requests.get(
+    "https://api.clinpgx.org/v1/geneDrugPair", params={"gene": "CYP2D6", "drug": "codeine"}
+)
 pair_data = response.json()
 
 # Get all pairs for a gene
-response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                       params={"gene": "CYP2C19"})
+response = requests.get("https://api.clinpgx.org/v1/geneDrugPair", params={"gene": "CYP2C19"})
 all_pairs = response.json()
 ```
 
@@ -136,8 +134,7 @@ response = requests.get("https://api.clinpgx.org/v1/guideline/PA166104939")
 guideline = response.json()
 
 # List all CPIC guidelines
-response = requests.get("https://api.clinpgx.org/v1/guideline",
-                       params={"source": "CPIC"})
+response = requests.get("https://api.clinpgx.org/v1/guideline", params={"source": "CPIC"})
 guidelines = response.json()
 ```
 
@@ -166,8 +163,7 @@ response = requests.get("https://api.clinpgx.org/v1/allele/CYP2D6*4")
 allele_data = response.json()
 
 # Get all alleles for a gene
-response = requests.get("https://api.clinpgx.org/v1/allele",
-                       params={"gene": "CYP2D6"})
+response = requests.get("https://api.clinpgx.org/v1/allele", params={"gene": "CYP2D6"})
 alleles = response.json()
 ```
 
@@ -194,8 +190,9 @@ response = requests.get("https://api.clinpgx.org/v1/variant/rs4244285")
 variant_data = response.json()
 
 # Search variants by position (if supported)
-response = requests.get("https://api.clinpgx.org/v1/variant",
-                       params={"chromosome": "10", "position": "94781859"})
+response = requests.get(
+    "https://api.clinpgx.org/v1/variant", params={"chromosome": "10", "position": "94781859"}
+)
 variants = response.json()
 ```
 
@@ -213,13 +210,13 @@ variants = response.json()
 
 ```python
 # Get clinical annotations
-response = requests.get("https://api.clinpgx.org/v1/clinicalAnnotation",
-                       params={"gene": "CYP2D6"})
+response = requests.get("https://api.clinpgx.org/v1/clinicalAnnotation", params={"gene": "CYP2D6"})
 annotations = response.json()
 
 # Filter by evidence level
-response = requests.get("https://api.clinpgx.org/v1/clinicalAnnotation",
-                       params={"evidenceLevel": "1A"})
+response = requests.get(
+    "https://api.clinpgx.org/v1/clinicalAnnotation", params={"evidenceLevel": "1A"}
+)
 high_evidence = response.json()
 ```
 
@@ -237,13 +234,11 @@ high_evidence = response.json()
 
 ```python
 # Get drug labels with PGx information
-response = requests.get("https://api.clinpgx.org/v1/drugLabel",
-                       params={"drug": "warfarin"})
+response = requests.get("https://api.clinpgx.org/v1/drugLabel", params={"drug": "warfarin"})
 labels = response.json()
 
 # Filter by regulatory source
-response = requests.get("https://api.clinpgx.org/v1/drugLabel",
-                       params={"source": "FDA"})
+response = requests.get("https://api.clinpgx.org/v1/drugLabel", params={"source": "FDA"})
 fda_labels = response.json()
 ```
 
@@ -264,8 +259,7 @@ response = requests.get("https://api.clinpgx.org/v1/pathway/PA146123006")  # War
 pathway_data = response.json()
 
 # Search pathways by drug
-response = requests.get("https://api.clinpgx.org/v1/pathway",
-                       params={"drug": "warfarin"})
+response = requests.get("https://api.clinpgx.org/v1/pathway", params={"drug": "warfarin"})
 pathways = response.json()
 ```
 
@@ -289,23 +283,24 @@ pathways = response.json()
 
 2. **Query gene-drug pairs** for medication of interest:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                          params={"gene": "CYP2C19", "drug": "clopidogrel"})
+   response = requests.get(
+       "https://api.clinpgx.org/v1/geneDrugPair", params={"gene": "CYP2C19", "drug": "clopidogrel"}
+   )
    pair_info = response.json()
    ```
 
 3. **Retrieve CPIC guideline** for dosing recommendations:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/guideline",
-                          params={"gene": "CYP2C19", "drug": "clopidogrel"})
+   response = requests.get(
+       "https://api.clinpgx.org/v1/guideline", params={"gene": "CYP2C19", "drug": "clopidogrel"}
+   )
    guideline = response.json()
    # Recommendation: Alternative antiplatelet therapy for IM/PM
    ```
 
 4. **Check drug label** for regulatory guidance:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/drugLabel",
-                          params={"drug": "clopidogrel"})
+   response = requests.get("https://api.clinpgx.org/v1/drugLabel", params={"drug": "clopidogrel"})
    label = response.json()
    ```
 
@@ -320,8 +315,7 @@ pathways = response.json()
    ```python
    all_interactions = {}
    for gene in pgx_panel:
-       response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                              params={"gene": gene})
+       response = requests.get("https://api.clinpgx.org/v1/geneDrugPair", params={"gene": gene})
        all_interactions[gene] = response.json()
    ```
 
@@ -329,7 +323,7 @@ pathways = response.json()
    ```python
    for gene, pairs in all_interactions.items():
        for pair in pairs:
-           if pair.get('cpicLevel'):  # Has CPIC guideline
+           if pair.get("cpicLevel"):  # Has CPIC guideline
                print(f"{gene} - {pair['drug']}: {pair['cpicLevel']}")
    ```
 
@@ -339,22 +333,20 @@ pathways = response.json()
 
 1. **Query drug for PGx associations**:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/chemical",
-                          params={"name": "abacavir"})
-   drug_id = response.json()[0]['id']
+   response = requests.get("https://api.clinpgx.org/v1/chemical", params={"name": "abacavir"})
+   drug_id = response.json()[0]["id"]
    ```
 
 2. **Get clinical annotations**:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/clinicalAnnotation",
-                          params={"drug": drug_id})
+   response = requests.get("https://api.clinpgx.org/v1/clinicalAnnotation", params={"drug": drug_id})
    annotations = response.json()
    ```
 
 3. **Check for HLA associations** and toxicity risk:
    ```python
    for annotation in annotations:
-       if 'HLA' in annotation.get('genes', []):
+       if "HLA" in annotation.get("genes", []):
            print(f"Toxicity risk: {annotation['phenotype']}")
            print(f"Evidence level: {annotation['evidenceLevel']}")
    ```
@@ -365,20 +357,18 @@ pathways = response.json()
 
 1. **Get allele frequencies** for population comparison:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/allele",
-                          params={"gene": "CYP2D6"})
+   response = requests.get("https://api.clinpgx.org/v1/allele", params={"gene": "CYP2D6"})
    alleles = response.json()
    ```
 
 2. **Extract population-specific frequencies**:
    ```python
-   populations = ['European', 'African', 'East Asian', 'Latino']
+   populations = ["European", "African", "East Asian", "Latino"]
    frequency_data = {}
    for allele in alleles:
-       allele_name = allele['name']
+       allele_name = allele["name"]
        frequency_data[allele_name] = {
-           pop: allele.get(f'{pop}_frequency', 'N/A')
-           for pop in populations
+           pop: allele.get(f"{pop}_frequency", "N/A") for pop in populations
        }
    ```
 
@@ -394,27 +384,28 @@ pathways = response.json()
 
 1. **Search for gene-drug pair**:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                          params={"gene": "TPMT", "drug": "azathioprine"})
+   response = requests.get(
+       "https://api.clinpgx.org/v1/geneDrugPair", params={"gene": "TPMT", "drug": "azathioprine"}
+   )
    pair = response.json()
    ```
 
 2. **Retrieve all clinical annotations**:
    ```python
-   response = requests.get("https://api.clinpgx.org/v1/clinicalAnnotation",
-                          params={"gene": "TPMT", "drug": "azathioprine"})
+   response = requests.get(
+       "https://api.clinpgx.org/v1/clinicalAnnotation", params={"gene": "TPMT", "drug": "azathioprine"}
+   )
    annotations = response.json()
    ```
 
 3. **Filter by evidence level and publication date**:
    ```python
-   high_quality = [a for a in annotations
-                   if a['evidenceLevel'] in ['1A', '1B', '2A']]
+   high_quality = [a for a in annotations if a["evidenceLevel"] in ["1A", "1B", "2A"]]
    ```
 
 4. **Extract PMIDs** and retrieve full references:
    ```python
-   pmids = [a['pmid'] for a in high_quality if 'pmid' in a]
+   pmids = [a["pmid"] for a in high_quality if "pmid" in a]
    # Use PubMed skill to retrieve full citations
    ```
 
@@ -425,18 +416,18 @@ pathways = response.json()
 ```python
 import time
 
+
 def rate_limited_request(url, params=None, delay=0.5):
     """Make API request with rate limiting (2 req/sec max)"""
     response = requests.get(url, params=params)
     time.sleep(delay)  # Wait 0.5 seconds between requests
     return response
 
+
 # Use in loops
 genes = ["CYP2D6", "CYP2C19", "CYP2C9"]
 for gene in genes:
-    response = rate_limited_request(
-        "https://api.clinpgx.org/v1/gene/" + gene
-    )
+    response = rate_limited_request("https://api.clinpgx.org/v1/gene/" + gene)
     data = response.json()
 ```
 
@@ -453,7 +444,7 @@ def safe_api_call(url, params=None, max_retries=3):
                 return response.json()
             elif response.status_code == 429:
                 # Rate limit exceeded
-                wait_time = 2 ** attempt  # Exponential backoff
+                wait_time = 2**attempt  # Exponential backoff
                 print(f"Rate limit hit. Waiting {wait_time}s...")
                 time.sleep(wait_time)
             else:
@@ -472,6 +463,7 @@ def safe_api_call(url, params=None, max_retries=3):
 import json
 from pathlib import Path
 
+
 def cached_query(cache_file, api_func, *args, **kwargs):
     """Cache API results to avoid repeated queries"""
     cache_path = Path(cache_file)
@@ -482,16 +474,15 @@ def cached_query(cache_file, api_func, *args, **kwargs):
 
     result = api_func(*args, **kwargs)
 
-    with open(cache_path, 'w') as f:
+    with open(cache_path, "w") as f:
         json.dump(result, f, indent=2)
 
     return result
 
+
 # Usage
 gene_data = cached_query(
-    'cyp2d6_cache.json',
-    rate_limited_request,
-    "https://api.clinpgx.org/v1/gene/CYP2D6"
+    "cyp2d6_cache.json", rate_limited_request, "https://api.clinpgx.org/v1/gene/CYP2D6"
 )
 ```
 
@@ -593,8 +584,9 @@ Query all clinically actionable gene-drug pairs to guide panel selection:
 
 ```python
 # Get all CPIC guideline pairs
-response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                       params={"cpicLevel": "A"})  # Level A recommendations
+response = requests.get(
+    "https://api.clinpgx.org/v1/geneDrugPair", params={"cpicLevel": "A"}
+)  # Level A recommendations
 actionable_pairs = response.json()
 ```
 
@@ -608,8 +600,9 @@ medications = ["clopidogrel", "simvastatin", "escitalopram"]
 
 for med in medications:
     for gene in patient_genes:
-        response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                               params={"gene": gene, "drug": med})
+        response = requests.get(
+            "https://api.clinpgx.org/v1/geneDrugPair", params={"gene": gene, "drug": med}
+        )
         # Check for interactions and dosing guidance
 ```
 
@@ -619,8 +612,9 @@ Screen for pharmacogenomic contraindications:
 
 ```python
 # Check for HLA-B*57:01 before abacavir trial
-response = requests.get("https://api.clinpgx.org/v1/geneDrugPair",
-                       params={"gene": "HLA-B", "drug": "abacavir"})
+response = requests.get(
+    "https://api.clinpgx.org/v1/geneDrugPair", params={"gene": "HLA-B", "drug": "abacavir"}
+)
 pair_info = response.json()
 # CPIC: Do not use if HLA-B*57:01 positive
 ```

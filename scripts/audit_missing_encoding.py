@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 audit_missing_encoding.py
 
@@ -35,9 +34,24 @@ SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".workbuddy
 # 第三方库的 .open() 不是文件文本读写，须排除，否则大量误报
 # （Image.open / fitz.open / pdfplumber.open / io.BytesIO 等）
 LIB_RECEIVERS = {
-    "fitz", "Image", "pdfplumber", "PIL", "pypdf", "PyPDF2", "io",
-    "soundfile", "wave", "zipfile", "tarfile", "Document", "PdfReader",
-    "pptx", "docx", "workbook", "pdf", "img",
+    "fitz",
+    "Image",
+    "pdfplumber",
+    "PIL",
+    "pypdf",
+    "PyPDF2",
+    "io",
+    "soundfile",
+    "wave",
+    "zipfile",
+    "tarfile",
+    "Document",
+    "PdfReader",
+    "pptx",
+    "docx",
+    "workbook",
+    "pdf",
+    "img",
 }
 
 
@@ -87,7 +101,7 @@ def has_encoding(call: ast.Call) -> bool:
 
 def scan_file(path: str) -> list[dict]:
     try:
-        src = open(path, "r", encoding="utf-8").read()
+        src = open(path, encoding="utf-8").read()
         tree = ast.parse(src, filename=path)
     except (SyntaxError, UnicodeDecodeError, OSError):
         return []
@@ -104,9 +118,7 @@ def scan_file(path: str) -> list[dict]:
         if mode is None or "b" in mode:  # 无法判定或二进制模式，跳过
             continue
         seg = ast.get_source_segment(src, node) or ""
-        hits.append(
-            {"line": node.lineno, "call": " ".join(seg.split())[:90]}
-        )
+        hits.append({"line": node.lineno, "call": " ".join(seg.split())[:90]})
     return hits
 
 
@@ -114,9 +126,7 @@ def main() -> int:
     args = [a for a in sys.argv[1:]]
     as_json = "--json" in args
     args = [a for a in args if not a.startswith("--")]
-    root = args[0] if args else os.path.dirname(
-        os.path.dirname(os.path.abspath(__file__))
-    )
+    root = args[0] if args else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     report: dict[str, list[dict]] = {}
     files = 0
@@ -136,8 +146,7 @@ def main() -> int:
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
 
-    print(f"审计 .py 文件 {files} 个，命中文件 {len(report)} 个，"
-          f"未指定 encoding 的调用 {total} 处")
+    print(f"审计 .py 文件 {files} 个，命中文件 {len(report)} 个，未指定 encoding 的调用 {total} 处")
     print("-" * 78)
     for rel in sorted(report):
         print(f"\n{rel}")

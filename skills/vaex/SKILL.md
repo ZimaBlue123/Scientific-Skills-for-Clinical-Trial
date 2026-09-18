@@ -88,7 +88,7 @@ For most Vaex tasks, follow this pattern:
 import vaex
 
 # 1. Open or create DataFrame
-df = vaex.open('large_file.hdf5')  # or .csv, .arrow, .parquet
+df = vaex.open("large_file.hdf5")  # or .csv, .arrow, .parquet
 # OR
 df = vaex.from_pandas(pandas_df)
 
@@ -97,21 +97,21 @@ print(df)  # Shows first/last rows and column info
 df.describe()  # Statistical summary
 
 # 3. Create virtual columns (no memory overhead)
-df['new_column'] = df.x ** 2 + df.y
+df["new_column"] = df.x**2 + df.y
 
 # 4. Filter with selections
 df_filtered = df[df.age > 25]
 
 # 5. Compute statistics (fast, lazy evaluation)
 mean_val = df.x.mean()
-stats = df.groupby('category').agg({'value': 'sum'})
+stats = df.groupby("category").agg({"value": "sum"})
 
 # 6. Visualize
 df.plot1d(df.x, limits=[0, 100])
-df.plot(df.x, df.y, limits='99.7%')
+df.plot(df.x, df.y, limits="99.7%")
 
 # 7. Export if needed
-df.export_hdf5('output.hdf5')
+df.export_hdf5("output.hdf5")
 ```
 
 ## Working with References
@@ -140,13 +140,13 @@ The reference files contain detailed information about each capability area. Loa
 import vaex
 
 # Open large CSV (processes in chunks automatically)
-df = vaex.from_csv('large_file.csv')
+df = vaex.from_csv("large_file.csv")
 
 # Export to HDF5 for faster future access
-df.export_hdf5('large_file.hdf5')
+df.export_hdf5("large_file.hdf5")
 
 # Future loads are instant
-df = vaex.open('large_file.hdf5')
+df = vaex.open("large_file.hdf5")
 ```
 
 ### Pattern: Efficient Aggregations
@@ -163,9 +163,9 @@ results = vaex.execute([mean_x, std_y, sum_z])
 ### Pattern: Virtual Columns for Feature Engineering
 ```python
 # No memory overhead - computed on the fly
-df['age_squared'] = df.age ** 2
-df['full_name'] = df.first_name + ' ' + df.last_name
-df['is_adult'] = df.age >= 18
+df["age_squared"] = df.age**2
+df["full_name"] = df.first_name + " " + df.last_name
+df["is_adult"] = df.age >= 18
 ```
 
 ## Resources

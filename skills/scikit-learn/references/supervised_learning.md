@@ -85,7 +85,7 @@ probas = model.predict_proba(X_test)
 ```python
 from sklearn.linear_model import SGDClassifier
 
-model = SGDClassifier(loss='log_loss', max_iter=1000, tol=1e-3)
+model = SGDClassifier(loss="log_loss", max_iter=1000, tol=1e-3)
 model.fit(X_train, y_train)
 ```
 
@@ -101,10 +101,10 @@ model.fit(X_train, y_train)
 from sklearn.svm import SVC
 
 # Linear kernel for linearly separable data
-model_linear = SVC(kernel='linear', C=1.0)
+model_linear = SVC(kernel="linear", C=1.0)
 
 # RBF kernel for non-linear data
-model_rbf = SVC(kernel='rbf', C=1.0, gamma='scale')
+model_rbf = SVC(kernel="rbf", C=1.0, gamma="scale")
 model_rbf.fit(X_train, y_train)
 ```
 
@@ -116,7 +116,7 @@ model_rbf.fit(X_train, y_train)
 ```python
 from sklearn.svm import SVR
 
-model = SVR(kernel='rbf', C=1.0, epsilon=0.1)
+model = SVR(kernel="rbf", C=1.0, epsilon=0.1)
 model.fit(X_train, y_train)
 ```
 
@@ -136,15 +136,13 @@ model.fit(X_train, y_train)
 from sklearn.tree import DecisionTreeClassifier
 
 model = DecisionTreeClassifier(
-    max_depth=5,
-    min_samples_split=20,
-    min_samples_leaf=10,
-    criterion='gini'
+    max_depth=5, min_samples_split=20, min_samples_leaf=10, criterion="gini"
 )
 model.fit(X_train, y_train)
 
 # Visualize the tree
 from sklearn.tree import plot_tree
+
 plot_tree(model, feature_names=feature_names, class_names=class_names)
 ```
 
@@ -168,8 +166,8 @@ from sklearn.ensemble import RandomForestClassifier
 model = RandomForestClassifier(
     n_estimators=100,
     max_depth=10,
-    max_features='sqrt',
-    n_jobs=-1  # Use all CPU cores
+    max_features="sqrt",
+    n_jobs=-1,  # Use all CPU cores
 )
 model.fit(X_train, y_train)
 
@@ -192,12 +190,7 @@ importances = model.feature_importances_
 ```python
 from sklearn.ensemble import GradientBoostingClassifier
 
-model = GradientBoostingClassifier(
-    n_estimators=100,
-    learning_rate=0.1,
-    max_depth=3,
-    subsample=0.8
-)
+model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3, subsample=0.8)
 model.fit(X_train, y_train)
 ```
 
@@ -214,7 +207,7 @@ model = HistGradientBoostingClassifier(
     max_iter=100,
     learning_rate=0.1,
     max_depth=None,  # No limit by default
-    categorical_features='from_dtype'  # Auto-detect categorical
+    categorical_features="from_dtype",  # Auto-detect categorical
 )
 model.fit(X_train, y_train)
 ```
@@ -246,11 +239,11 @@ from sklearn.svm import SVC
 
 model = VotingClassifier(
     estimators=[
-        ('lr', LogisticRegression()),
-        ('dt', DecisionTreeClassifier()),
-        ('svc', SVC(probability=True))
+        ("lr", LogisticRegression()),
+        ("dt", DecisionTreeClassifier()),
+        ("svc", SVC(probability=True)),
     ],
-    voting='soft'
+    voting="soft",
 )
 model.fit(X_train, y_train)
 ```
@@ -267,11 +260,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 
 model = StackingClassifier(
-    estimators=[
-        ('dt', DecisionTreeClassifier()),
-        ('svc', SVC())
-    ],
-    final_estimator=LogisticRegression()
+    estimators=[("dt", DecisionTreeClassifier()), ("svc", SVC())],
+    final_estimator=LogisticRegression(),
 )
 model.fit(X_train, y_train)
 ```
@@ -290,7 +280,7 @@ model.fit(X_train, y_train)
 ```python
 from sklearn.neighbors import KNeighborsClassifier
 
-model = KNeighborsClassifier(n_neighbors=5, weights='distance')
+model = KNeighborsClassifier(n_neighbors=5, weights="distance")
 model.fit(X_train, y_train)
 ```
 
@@ -337,11 +327,7 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 
 model = MLPClassifier(
-    hidden_layer_sizes=(100, 50),
-    activation='relu',
-    solver='adam',
-    alpha=0.0001,
-    max_iter=1000
+    hidden_layer_sizes=(100, 50), activation="relu", solver="adam", alpha=0.0001, max_iter=1000
 )
 model.fit(X_train_scaled, y_train)
 ```

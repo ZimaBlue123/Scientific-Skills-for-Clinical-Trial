@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 repair_mojibake_from_git.py
 
@@ -46,16 +45,14 @@ import sys
 DEFAULT_CODECS = ("gb18030", "gbk", "cp936")
 
 # 检判阈值：任一指标不达标即拒绝写出，避免用错误版本覆盖
-MIN_FINGERPRINT = 0.95   # 私用区字符序列（损坏过程指纹），核心判据
-MIN_CJK = 0.95           # 中文字符序列（内容一致性）
-MIN_ASCII_LINES = 0.90   # 纯 ASCII 行（不受编码损坏影响；取回版本与损坏
-                         # 版本之间可能有正常改动，故留出余量）
+MIN_FINGERPRINT = 0.95  # 私用区字符序列（损坏过程指纹），核心判据
+MIN_CJK = 0.95  # 中文字符序列（内容一致性）
+MIN_ASCII_LINES = 0.90  # 纯 ASCII 行（不受编码损坏影响；取回版本与损坏
+# 版本之间可能有正常改动，故留出余量）
 
 
 def git_show(rev: str, path: str) -> bytes:
-    proc = subprocess.run(
-        ["git", "show", f"{rev}:{path}"], capture_output=True, check=False
-    )
+    proc = subprocess.run(["git", "show", f"{rev}:{path}"], capture_output=True, check=False)
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.decode("utf-8", "replace").strip())
     return proc.stdout
@@ -127,11 +124,11 @@ def main() -> int:
     best = None
     for codec in DEFAULT_CODECS:
         r = evaluate(candidate, corrupted, codec)
-        print(f"  [{codec}] 指纹 {r['fingerprint']:.4f} | "
-              f"中文 {r['cjk']:.4f} | ASCII行 {r['ascii']:.4f}")
-        if best is None or r["fingerprint"] + r["cjk"] > (
-            best["fingerprint"] + best["cjk"]
-        ):
+        print(
+            f"  [{codec}] 指纹 {r['fingerprint']:.4f} | "
+            f"中文 {r['cjk']:.4f} | ASCII行 {r['ascii']:.4f}"
+        )
+        if best is None or r["fingerprint"] + r["cjk"] > (best["fingerprint"] + best["cjk"]):
             best = r
 
     if best is None:  # 不依赖 assert：python -O 会剥离断言
@@ -144,16 +141,20 @@ def main() -> int:
         and best["ascii"] >= MIN_ASCII_LINES
     )
     if not ok:
-        print(f"\n[中止] {best['codec']} 未达阈值"
-              f"（指纹>={MIN_FINGERPRINT}, 中文>={MIN_CJK}, ASCII行>={MIN_ASCII_LINES}）。"
-              f"\n       该版本很可能不是损坏前的原文，未写出文件。")
+        print(
+            f"\n[中止] {best['codec']} 未达阈值"
+            f"（指纹>={MIN_FINGERPRINT}, 中文>={MIN_CJK}, ASCII行>={MIN_ASCII_LINES}）。"
+            f"\n       该版本很可能不是损坏前的原文，未写出文件。"
+        )
         return 1
 
     print(f"\n[通过] {best['codec']} 三项指标全部达标，判定候选即损坏前的原文。")
     if best["ascii"] < 1.0:
-        print(f"  注意: 纯 ASCII 行相似度 {best['ascii']:.4f} < 1.0，"
-              f"说明取回版本与损坏版本之间另有正常改动（非乱码所致），"
-              f"请人工确认这部分是否需要保留。")
+        print(
+            f"  注意: 纯 ASCII 行相似度 {best['ascii']:.4f} < 1.0，"
+            f"说明取回版本与损坏版本之间另有正常改动（非乱码所致），"
+            f"请人工确认这部分是否需要保留。"
+        )
     left = sum(1 for c in candidate if 0xE000 <= ord(c) <= 0xF8FF)
     print(f"  候选中的私用区字符: {left}（应为 0）")
 

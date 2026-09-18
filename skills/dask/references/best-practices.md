@@ -46,7 +46,7 @@ import pandas as pd
 import dask.dataframe as dd
 
 # Loads entire dataset into memory first
-df = pd.read_csv('large_file.csv')
+df = pd.read_csv("large_file.csv")
 ddf = dd.from_pandas(df, npartitions=10)
 ```
 
@@ -55,7 +55,7 @@ ddf = dd.from_pandas(df, npartitions=10)
 import dask.dataframe as dd
 
 # Let Dask handle the loading
-ddf = dd.read_csv('large_file.csv')
+ddf = dd.read_csv("large_file.csv")
 ```
 
 **Why**: Loading data with pandas or NumPy first forces the scheduler to serialize and embed those objects in task graphs, defeating the purpose of parallel computing.
@@ -99,7 +99,7 @@ results = dask.compute(*computations)  # Single compute for all
 **Example Using map_partitions**:
 ```python
 # Instead of applying function to each row
-ddf['result'] = ddf.apply(complex_function, axis=1)  # Many tasks
+ddf["result"] = ddf.apply(complex_function, axis=1)  # Many tasks
 
 # Apply to entire partitions at once
 ddf = ddf.map_partitions(lambda df: df.assign(result=complex_function(df)))
@@ -168,13 +168,13 @@ del intermediate
 **Read Multiple Files Efficiently**:
 ```python
 # Use glob patterns to read multiple files in parallel
-ddf = dd.read_parquet('data/year=2024/month=*/day=*.parquet')
+ddf = dd.read_parquet("data/year=2024/month=*/day=*.parquet")
 ```
 
 **Specify Useful Columns Early**:
 ```python
 # Only read needed columns
-ddf = dd.read_parquet('data.parquet', columns=['col1', 'col2', 'col3'])
+ddf = dd.read_parquet("data.parquet", columns=["col1", "col2", "col3"])
 ```
 
 ## Common Patterns and Solutions
@@ -197,8 +197,8 @@ Use Bags for initial ETL, then convert to structured formats:
 import dask.bag as db
 
 # Process raw JSON
-bag = db.read_text('logs/*.json').map(json.loads)
-bag = bag.filter(lambda x: x['status'] == 'success')
+bag = db.read_text("logs/*.json").map(json.loads)
+bag = bag.filter(lambda x: x["status"] == "success")
 
 # Convert to DataFrame for analysis
 ddf = bag.to_dataframe()
@@ -208,7 +208,7 @@ ddf = bag.to_dataframe()
 
 Persist data between iterations:
 ```python
-data = dd.read_parquet('data.parquet')
+data = dd.read_parquet("data.parquet")
 data = data.persist()  # Keep in memory across iterations
 
 for iteration in range(num_iterations):
@@ -224,7 +224,7 @@ For debugging with pdb or detailed error inspection:
 ```python
 import dask
 
-dask.config.set(scheduler='synchronous')
+dask.config.set(scheduler="synchronous")
 result = computation.compute()  # Runs in single thread for debugging
 ```
 

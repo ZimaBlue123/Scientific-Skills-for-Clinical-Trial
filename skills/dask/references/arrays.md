@@ -102,10 +102,11 @@ empty = da.empty((10000, 10000), chunks=(1000, 1000))
 def create_block(block_id):
     return np.random.random((1000, 1000)) * block_id[0]
 
+
 x = da.from_delayed(
     [[dask.delayed(create_block)((i, j)) for j in range(10)] for i in range(10)],
     shape=(10000, 10000),
-    dtype=float
+    dtype=float,
 )
 ```
 
@@ -113,12 +114,14 @@ x = da.from_delayed(
 ```python
 # Load from HDF5
 import h5py
-f = h5py.File('myfile.hdf5', mode='r')
-x = da.from_array(f['/data'], chunks=(1000, 1000))
+
+f = h5py.File("myfile.hdf5", mode="r")
+x = da.from_array(f["/data"], chunks=(1000, 1000))
 
 # Load from Zarr
 import zarr
-z = zarr.open('myfile.zarr', mode='r')
+
+z = zarr.open("myfile.zarr", mode="r")
 x = da.from_array(z, chunks=(1000, 1000))
 ```
 
@@ -252,7 +255,7 @@ x = da.random.random((10000, 10000), chunks=(500, 500))
 x_rechunked = x.rechunk((2000, 2000))
 
 # Rechunk specific dimension
-x_rechunked = x.rechunk({0: 2000, 1: 'auto'})
+x_rechunked = x.rechunk({0: 2000, 1: "auto"})
 ```
 
 ## Custom Operations with map_blocks
@@ -263,9 +266,11 @@ For operations not available in Dask, use `map_blocks`:
 import dask.array as da
 import numpy as np
 
+
 def custom_function(block):
     # Apply custom NumPy operation
     return np.fft.fft2(block)
+
 
 x = da.random.random((10000, 10000), chunks=(1000, 1000))
 result = da.map_blocks(custom_function, x, dtype=x.dtype)
@@ -280,13 +285,14 @@ def reduction_function(block):
     # Returns scalar for each block
     return np.array([block.mean()])
 
+
 result = da.map_blocks(
     reduction_function,
     x,
-    dtype='float64',
+    dtype="float64",
     drop_axis=[0, 1],  # Output has no axes from input
-    new_axis=0,        # Output has new axis
-    chunks=(1,)        # One element per block
+    new_axis=0,  # Output has new axis
+    chunks=(1,),  # One element per block
 )
 ```
 
@@ -334,13 +340,15 @@ numpy_array = dask_array.compute()
 ```python
 # Save to HDF5
 import h5py
-with h5py.File('output.hdf5', mode='w') as f:
-    dset = f.create_dataset('/data', shape=x.shape, dtype=x.dtype)
+
+with h5py.File("output.hdf5", mode="w") as f:
+    dset = f.create_dataset("/data", shape=x.shape, dtype=x.dtype)
     da.store(x, dset)
 
 # Save to Zarr
 import zarr
-z = zarr.open('output.zarr', mode='w', shape=x.shape, dtype=x.dtype, chunks=x.chunks)
+
+z = zarr.open("output.zarr", mode="w", shape=x.shape, dtype=x.dtype, chunks=x.chunks)
 da.store(x, z)
 ```
 
@@ -399,12 +407,15 @@ means = x_numpy.mean(axis=1)  # Transfers more data
 import dask.array as da
 
 # Load large image stack
-images = da.from_zarr('images.zarr')
+images = da.from_zarr("images.zarr")
+
 
 # Apply filtering
 def apply_gaussian(block):
     from scipy.ndimage import gaussian_filter
+
     return gaussian_filter(block, sigma=2)
+
 
 filtered = da.map_blocks(apply_gaussian, images, dtype=images.dtype)
 
@@ -429,7 +440,7 @@ result = x.compute()
 ### Data Analysis
 ```python
 # Load large dataset
-data = da.from_zarr('measurements.zarr')
+data = da.from_zarr("measurements.zarr")
 
 # Compute statistics
 mean = data.mean(axis=0)
@@ -437,7 +448,7 @@ std = data.std(axis=0)
 normalized = (data - mean) / std
 
 # Save normalized data
-da.to_zarr(normalized, 'normalized.zarr')
+da.to_zarr(normalized, "normalized.zarr")
 ```
 
 ## Integration with Other Tools
@@ -450,9 +461,7 @@ import dask.array as da
 # XArray wraps Dask arrays with labeled dimensions
 data = da.random.random((1000, 2000, 3000), chunks=(100, 200, 300))
 dataset = xr.DataArray(
-    data,
-    dims=['time', 'y', 'x'],
-    coords={'time': range(1000), 'y': range(2000), 'x': range(3000)}
+    data, dims=["time", "y", "x"], coords={"time": range(1000), "y": range(2000), "x": range(3000)}
 )
 ```
 
@@ -473,7 +482,7 @@ X_scaled = scaler.fit_transform(X)
 # Visualize computation graph (for small arrays)
 x = da.random.random((100, 100), chunks=(10, 10))
 y = x + 1
-y.visualize(filename='graph.png')
+y.visualize(filename="graph.png")
 ```
 
 ### Check Array Properties

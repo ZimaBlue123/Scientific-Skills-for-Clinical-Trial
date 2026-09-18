@@ -28,8 +28,14 @@ from sklearn.decomposition import PCA, NMF
 
 # Metrics
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score,
-    mean_squared_error, r2_score, confusion_matrix, classification_report
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    mean_squared_error,
+    r2_score,
+    confusion_matrix,
+    classification_report,
 )
 
 # Pipeline
@@ -92,9 +98,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 
 # Split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Preprocess and train
 scaler = StandardScaler()
@@ -117,7 +121,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 
 model = RandomForestClassifier(n_estimators=100, random_state=42)
-scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')
+scores = cross_val_score(model, X, y, cv=5, scoring="accuracy")
 print(f"CV Accuracy: {scores.mean():.3f} (+/- {scores.std() * 2:.3f})")
 ```
 
@@ -131,31 +135,36 @@ from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestClassifier
 
 # Define feature types
-numeric_features = ['age', 'income']
-categorical_features = ['gender', 'occupation']
+numeric_features = ["age", "income"]
+categorical_features = ["gender", "occupation"]
 
 # Create preprocessing pipelines
-numeric_transformer = Pipeline([
-    ('imputer', SimpleImputer(strategy='median')),
-    ('scaler', StandardScaler())
-])
+numeric_transformer = Pipeline(
+    [("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]
+)
 
-categorical_transformer = Pipeline([
-    ('imputer', SimpleImputer(strategy='most_frequent')),
-    ('onehot', OneHotEncoder(handle_unknown='ignore'))
-])
+categorical_transformer = Pipeline(
+    [
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("onehot", OneHotEncoder(handle_unknown="ignore")),
+    ]
+)
 
 # Combine transformers
-preprocessor = ColumnTransformer([
-    ('num', numeric_transformer, numeric_features),
-    ('cat', categorical_transformer, categorical_features)
-])
+preprocessor = ColumnTransformer(
+    [
+        ("num", numeric_transformer, numeric_features),
+        ("cat", categorical_transformer, categorical_features),
+    ]
+)
 
 # Full pipeline
-model = Pipeline([
-    ('preprocessor', preprocessor),
-    ('classifier', RandomForestClassifier(n_estimators=100, random_state=42))
-])
+model = Pipeline(
+    [
+        ("preprocessor", preprocessor),
+        ("classifier", RandomForestClassifier(n_estimators=100, random_state=42)),
+    ]
+)
 
 # Fit and predict
 model.fit(X_train, y_train)
@@ -169,15 +178,13 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 
 param_grid = {
-    'n_estimators': [100, 200, 300],
-    'max_depth': [10, 20, None],
-    'min_samples_split': [2, 5, 10]
+    "n_estimators": [100, 200, 300],
+    "max_depth": [10, 20, None],
+    "min_samples_split": [2, 5, 10],
 }
 
 model = RandomForestClassifier(random_state=42)
-grid_search = GridSearchCV(
-    model, param_grid, cv=5, scoring='accuracy', n_jobs=-1
-)
+grid_search = GridSearchCV(model, param_grid, cv=5, scoring="accuracy", n_jobs=-1)
 
 grid_search.fit(X_train, y_train)
 print(f"Best params: {grid_search.best_params_}")
@@ -200,15 +207,14 @@ iris = load_iris()
 X, y = iris.data, iris.target
 
 # Synthetic data
-X, y = make_classification(
-    n_samples=1000, n_features=20, n_classes=2, random_state=42
-)
+X, y = make_classification(n_samples=1000, n_features=20, n_classes=2, random_state=42)
 
 # From pandas
 import pandas as pd
-df = pd.read_csv('data.csv')
-X = df.drop('target', axis=1)
-y = df['target']
+
+df = pd.read_csv("data.csv")
+X = df.drop("target", axis=1)
+y = df["target"]
 ```
 
 ### Handling Imbalanced Data
@@ -217,11 +223,12 @@ y = df['target']
 from sklearn.ensemble import RandomForestClassifier
 
 # Use class_weight parameter
-model = RandomForestClassifier(class_weight='balanced', random_state=42)
+model = RandomForestClassifier(class_weight="balanced", random_state=42)
 model.fit(X_train, y_train)
 
 # Or use appropriate metrics
 from sklearn.metrics import balanced_accuracy_score, f1_score
+
 print(f"Balanced Accuracy: {balanced_accuracy_score(y_test, y_pred):.3f}")
 print(f"F1 Score: {f1_score(y_test, y_pred):.3f}")
 ```
@@ -236,10 +243,9 @@ model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
 # Get feature importances
-importances = pd.DataFrame({
-    'feature': feature_names,
-    'importance': model.feature_importances_
-}).sort_values('importance', ascending=False)
+importances = pd.DataFrame(
+    {"feature": feature_names, "importance": model.feature_importances_}
+).sort_values("importance", ascending=False)
 
 print(importances.head(10))
 ```
@@ -260,6 +266,7 @@ labels = kmeans.fit_predict(X_scaled)
 
 # Evaluate
 from sklearn.metrics import silhouette_score
+
 score = silhouette_score(X_scaled, labels)
 print(f"Silhouette Score: {score:.3f}")
 ```
@@ -275,10 +282,10 @@ pca = PCA(n_components=2)
 X_reduced = pca.fit_transform(X)
 
 # Plot
-plt.scatter(X_reduced[:, 0], X_reduced[:, 1], c=y, cmap='viridis')
-plt.xlabel('PC1')
-plt.ylabel('PC2')
-plt.title(f'PCA (explained variance: {pca.explained_variance_ratio_.sum():.2%})')
+plt.scatter(X_reduced[:, 0], X_reduced[:, 1], c=y, cmap="viridis")
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+plt.title(f"PCA (explained variance: {pca.explained_variance_ratio_.sum():.2%})")
 ```
 
 ### Model Persistence
@@ -287,10 +294,10 @@ plt.title(f'PCA (explained variance: {pca.explained_variance_ratio_.sum():.2%})'
 import joblib
 
 # Save model
-joblib.dump(model, 'model.pkl')
+joblib.dump(model, "model.pkl")
 
 # Load model
-loaded_model = joblib.load('model.pkl')
+loaded_model = joblib.load("model.pkl")
 predictions = loaded_model.predict(X_new)
 ```
 
@@ -311,10 +318,8 @@ X_test_scaled = scaler.transform(X_test)
 
 # BEST: Use Pipeline
 from sklearn.pipeline import Pipeline
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('model', LogisticRegression())
-])
+
+pipeline = Pipeline([("scaler", StandardScaler()), ("model", LogisticRegression())])
 pipeline.fit(X_train, y_train)  # No leakage!
 ```
 
@@ -335,7 +340,7 @@ model = RandomForestClassifier(n_estimators=100, random_state=42)
 ### Handling Unknown Categories
 ```python
 # Use handle_unknown='ignore' for OneHotEncoder
-encoder = OneHotEncoder(handle_unknown='ignore')
+encoder = OneHotEncoder(handle_unknown="ignore")
 ```
 
 ### Feature Names with Pipelines
@@ -401,6 +406,7 @@ model.fit(X, y)  # Adds 50 more trees
 
 # Use partial_fit for online learning
 from sklearn.linear_model import SGDClassifier
+
 model = SGDClassifier()
 for X_batch, y_batch in batches:
     model.partial_fit(X_batch, y_batch, classes=np.unique(y))
@@ -410,10 +416,12 @@ for X_batch, y_batch in batches:
 ```python
 # Use sparse matrices
 from scipy.sparse import csr_matrix
+
 X_sparse = csr_matrix(X)
 
 # Use MiniBatchKMeans for large data
 from sklearn.cluster import MiniBatchKMeans
+
 model = MiniBatchKMeans(n_clusters=8, batch_size=100)
 ```
 
@@ -421,6 +429,7 @@ model = MiniBatchKMeans(n_clusters=8, batch_size=100)
 
 ```python
 import sklearn
+
 print(f"scikit-learn version: {sklearn.__version__}")
 ```
 

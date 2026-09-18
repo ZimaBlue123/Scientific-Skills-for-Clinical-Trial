@@ -187,12 +187,14 @@ from Bio import Entrez
 # Set email (required by NCBI)
 Entrez.email = "your.email@example.com"
 
+
 # Search ClinVar
 def search_clinvar(query, retmax=100):
     handle = Entrez.esearch(db="clinvar", term=query, retmax=retmax)
     record = Entrez.read(handle)
     handle.close()
     return record["IdList"]
+
 
 # Get summaries
 def get_summaries(id_list):
@@ -201,6 +203,7 @@ def get_summaries(id_list):
     record = Entrez.read(handle)
     handle.close()
     return record
+
 
 # Example usage
 variant_ids = search_clinvar("BRCA2[gene] AND pathogenic[CLNSIG]")

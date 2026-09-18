@@ -1,4 +1,4 @@
-﻿"""单元测试：17_PDF_Title_Renamer 标题提取与重命名规范。"""
+"""单元测试：17_PDF_Title_Renamer 标题提取与重命名规范。"""
 
 from __future__ import annotations
 

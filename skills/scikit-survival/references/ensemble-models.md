@@ -54,12 +54,14 @@ from sksurv.datasets import load_breast_cancer
 X, y = load_breast_cancer()
 
 # Fit Random Survival Forest
-rsf = RandomSurvivalForest(n_estimators=1000,
-                           min_samples_split=10,
-                           min_samples_leaf=15,
-                           max_features="sqrt",
-                           n_jobs=-1,
-                           random_state=42)
+rsf = RandomSurvivalForest(
+    n_estimators=1000,
+    min_samples_split=10,
+    min_samples_leaf=15,
+    max_features="sqrt",
+    n_jobs=-1,
+    random_state=42,
+)
 rsf.fit(X, y)
 
 # Predict risk scores
@@ -80,18 +82,17 @@ chf_funcs = rsf.predict_cumulative_hazard_function(X)
 from sklearn.inspection import permutation_importance
 from sksurv.metrics import concordance_index_censored
 
+
 # Define scoring function
 def score_survival_model(model, X, y):
     prediction = model.predict(X)
-    result = concordance_index_censored(y['event'], y['time'], prediction)
+    result = concordance_index_censored(y["event"], y["time"], prediction)
     return result[0]
+
 
 # Compute permutation importance
 perm_importance = permutation_importance(
-    rsf, X, y,
-    n_repeats=10,
-    random_state=42,
-    scoring=score_survival_model
+    rsf, X, y, n_repeats=10, random_state=42, scoring=score_survival_model
 )
 
 # Get feature importance
@@ -190,13 +191,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Fit gradient boosting model
 gbs = GradientBoostingSurvivalAnalysis(
-    loss='coxph',
+    loss="coxph",
     learning_rate=0.05,
     n_estimators=200,
     subsample=0.8,
     dropout_rate=0.1,
     max_depth=3,
-    random_state=42
+    random_state=42,
 )
 gbs.fit(X_train, y_train)
 
@@ -227,7 +228,7 @@ gbs = GradientBoostingSurvivalAnalysis(
     max_depth=3,
     validation_fraction=0.2,
     n_iter_no_change=10,
-    random_state=42
+    random_state=42,
 )
 gbs.fit(X_tr, y_tr)
 
@@ -241,18 +242,18 @@ print(f"Used {gbs.n_estimators_} iterations")
 from sklearn.model_selection import GridSearchCV
 
 param_grid = {
-    'learning_rate': [0.01, 0.05, 0.1],
-    'n_estimators': [100, 200, 300],
-    'max_depth': [3, 5, 7],
-    'subsample': [0.8, 1.0]
+    "learning_rate": [0.01, 0.05, 0.1],
+    "n_estimators": [100, 200, 300],
+    "max_depth": [3, 5, 7],
+    "subsample": [0.8, 1.0],
 }
 
 cv = GridSearchCV(
     GradientBoostingSurvivalAnalysis(),
     param_grid,
-    scoring='concordance_index_ipcw',
+    scoring="concordance_index_ipcw",
     cv=5,
-    n_jobs=-1
+    n_jobs=-1,
 )
 cv.fit(X, y)
 
@@ -279,9 +280,7 @@ from sksurv.ensemble import ComponentwiseGradientBoostingSurvivalAnalysis
 
 # Fit componentwise boosting
 cgbs = ComponentwiseGradientBoostingSurvivalAnalysis(
-    loss='coxph',
-    learning_rate=0.1,
-    n_estimators=100
+    loss="coxph", learning_rate=0.1, n_estimators=100
 )
 cgbs.fit(X, y)
 

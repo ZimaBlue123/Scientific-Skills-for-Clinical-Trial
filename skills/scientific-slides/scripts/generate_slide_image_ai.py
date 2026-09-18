@@ -353,7 +353,6 @@ STYLE:
             content = message.get("content", "")
 
             if isinstance(content, str) and "data:image" in content:
-
                 match = re.search(
                     r"data:image/[^;]+;base64,([A-Za-z0-9+/=\n\r]+)", content, re.DOTALL
                 )

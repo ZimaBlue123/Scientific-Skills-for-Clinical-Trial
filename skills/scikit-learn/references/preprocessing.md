@@ -70,7 +70,7 @@ X_scaled = scaler.fit_transform(X_train)
 ```python
 from sklearn.preprocessing import Normalizer
 
-normalizer = Normalizer(norm='l2')  # Euclidean norm
+normalizer = Normalizer(norm="l2")  # Euclidean norm
 X_normalized = normalizer.fit_transform(X)
 ```
 
@@ -100,11 +100,11 @@ X_scaled = scaler.fit_transform(X_sparse)
 ```python
 from sklearn.preprocessing import OneHotEncoder
 
-encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
+encoder = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
 X_encoded = encoder.fit_transform(X_categorical)
 
 # Get feature names
-feature_names = encoder.get_feature_names_out(['color', 'size'])
+feature_names = encoder.get_feature_names_out(["color", "size"])
 
 # Handle unknown categories during transform
 X_test_encoded = encoder.transform(X_test_categorical)
@@ -124,7 +124,7 @@ encoder = OrdinalEncoder()
 X_encoded = encoder.fit_transform(X_categorical)
 
 # Custom ordering
-encoder = OrdinalEncoder(categories=[['small', 'medium', 'large']])
+encoder = OrdinalEncoder(categories=[["small", "medium", "large"]])
 X_encoded = encoder.fit_transform(X_categorical)
 ```
 
@@ -169,11 +169,11 @@ X_test_encoded = encoder.transform(X_test_categorical)
 from sklearn.preprocessing import PowerTransformer
 
 # Yeo-Johnson (handles negative values)
-pt = PowerTransformer(method='yeo-johnson', standardize=True)
+pt = PowerTransformer(method="yeo-johnson", standardize=True)
 X_transformed = pt.fit_transform(X)
 
 # Box-Cox (positive values only)
-pt = PowerTransformer(method='box-cox', standardize=True)
+pt = PowerTransformer(method="box-cox", standardize=True)
 X_transformed = pt.fit_transform(X)
 ```
 
@@ -188,11 +188,11 @@ X_transformed = pt.fit_transform(X)
 from sklearn.preprocessing import QuantileTransformer
 
 # Transform to uniform distribution
-qt = QuantileTransformer(output_distribution='uniform', random_state=42)
+qt = QuantileTransformer(output_distribution="uniform", random_state=42)
 X_transformed = qt.fit_transform(X)
 
 # Transform to normal distribution
-qt = QuantileTransformer(output_distribution='normal', random_state=42)
+qt = QuantileTransformer(output_distribution="normal", random_state=42)
 X_transformed = qt.fit_transform(X)
 ```
 
@@ -223,15 +223,15 @@ X_log = log_transformer.fit_transform(X)
 from sklearn.impute import SimpleImputer
 
 # For numerical features
-imputer = SimpleImputer(strategy='mean')
+imputer = SimpleImputer(strategy="mean")
 X_imputed = imputer.fit_transform(X)
 
 # For categorical features
-imputer = SimpleImputer(strategy='most_frequent')
+imputer = SimpleImputer(strategy="most_frequent")
 X_imputed = imputer.fit_transform(X_categorical)
 
 # Fill with constant
-imputer = SimpleImputer(strategy='constant', fill_value=0)
+imputer = SimpleImputer(strategy="constant", fill_value=0)
 X_imputed = imputer.fit_transform(X)
 ```
 
@@ -278,7 +278,7 @@ poly = PolynomialFeatures(degree=2, include_bias=False)
 X_poly = poly.fit_transform(X)
 
 # Get feature names
-feature_names = poly.get_feature_names_out(['x1', 'x2'])
+feature_names = poly.get_feature_names_out(["x1", "x2"])
 
 # Only interactions (no powers)
 poly = PolynomialFeatures(degree=2, interaction_only=True, include_bias=False)
@@ -296,11 +296,11 @@ X_interactions = poly.fit_transform(X)
 from sklearn.preprocessing import KBinsDiscretizer
 
 # Equal-width bins
-binner = KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='uniform')
+binner = KBinsDiscretizer(n_bins=5, encode="ordinal", strategy="uniform")
 X_binned = binner.fit_transform(X)
 
 # Equal-frequency bins (quantile-based)
-binner = KBinsDiscretizer(n_bins=5, encode='onehot', strategy='quantile')
+binner = KBinsDiscretizer(n_bins=5, encode="onehot", strategy="quantile")
 X_binned = binner.fit_transform(X)
 ```
 
@@ -344,7 +344,7 @@ vectorizer = CountVectorizer(
     max_features=5000,  # Keep top 5000 features
     min_df=2,  # Ignore terms appearing in < 2 documents
     max_df=0.8,  # Ignore terms appearing in > 80% documents
-    ngram_range=(1, 2)  # Unigrams and bigrams
+    ngram_range=(1, 2),  # Unigrams and bigrams
 )
 
 X_counts = vectorizer.fit_transform(documents)
@@ -365,7 +365,7 @@ vectorizer = TfidfVectorizer(
     min_df=2,
     max_df=0.8,
     ngram_range=(1, 2),
-    stop_words='english'  # Remove English stop words
+    stop_words="english",  # Remove English stop words
 )
 
 X_tfidf = vectorizer.fit_transform(documents)
@@ -440,7 +440,7 @@ feature_ranking = rfe.ranking_
 from sklearn.feature_selection import RFECV
 
 model = RandomForestClassifier(n_estimators=100, random_state=42)
-rfecv = RFECV(estimator=model, cv=5, scoring='accuracy')
+rfecv = RFECV(estimator=model, cv=5, scoring="accuracy")
 X_selected = rfecv.fit_transform(X_train, y_train)
 
 print(f"Optimal number of features: {rfecv.n_features_}")
@@ -457,7 +457,7 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import RandomForestClassifier
 
 model = RandomForestClassifier(n_estimators=100, random_state=42)
-selector = SelectFromModel(model, threshold='median')
+selector = SelectFromModel(model, threshold="median")
 selector.fit(X_train, y_train)
 X_selected = selector.transform(X_train)
 
@@ -470,7 +470,7 @@ selected_features = selector.get_support()
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectFromModel
 
-model = LogisticRegression(penalty='l1', solver='liblinear', C=0.1)
+model = LogisticRegression(penalty="l1", solver="liblinear", C=0.1)
 selector = SelectFromModel(model)
 selector.fit(X_train, y_train)
 X_selected = selector.transform(X_train)
@@ -513,8 +513,10 @@ X_winsorized = mstats.winsorize(X, limits=[0.05, 0.05], axis=0)
 from sklearn.preprocessing import FunctionTransformer
 import numpy as np
 
+
 def log_transform(X):
     return np.log1p(X)
+
 
 transformer = FunctionTransformer(log_transform, inverse_func=np.expm1)
 X_transformed = transformer.fit_transform(X)
@@ -524,6 +526,7 @@ X_transformed = transformer.fit_transform(X)
 
 ```python
 from sklearn.base import BaseEstimator, TransformerMixin
+
 
 class CustomTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, parameter=1):
@@ -536,6 +539,7 @@ class CustomTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X):
         # Transform X
         return X * self.parameter
+
 
 transformer = CustomTransformer(parameter=2)
 X_transformed = transformer.fit_transform(X)
@@ -563,10 +567,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('classifier', LogisticRegression())
-])
+pipeline = Pipeline([("scaler", StandardScaler()), ("classifier", LogisticRegression())])
 
 pipeline.fit(X_train, y_train)
 ```
@@ -577,13 +578,13 @@ Use ColumnTransformer:
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-numeric_features = ['age', 'income']
-categorical_features = ['gender', 'occupation']
+numeric_features = ["age", "income"]
+categorical_features = ["gender", "occupation"]
 
 preprocessor = ColumnTransformer(
     transformers=[
-        ('num', StandardScaler(), numeric_features),
-        ('cat', OneHotEncoder(), categorical_features)
+        ("num", StandardScaler(), numeric_features),
+        ("cat", OneHotEncoder(), categorical_features),
     ]
 )
 

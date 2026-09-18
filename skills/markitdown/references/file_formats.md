@@ -196,9 +196,7 @@ from openai import OpenAI
 
 client = OpenAI()
 md = MarkItDown(
-    llm_client=client,
-    llm_model="gpt-4o",
-    llm_prompt="Describe this scientific diagram in detail"
+    llm_client=client, llm_model="gpt-4o", llm_prompt="Describe this scientific diagram in detail"
 )
 result = md.convert("graph.png")
 ```
@@ -492,9 +490,7 @@ result = md.convert("message.msg")
 1. **Use AI for meaningful descriptions**:
    ```python
    md = MarkItDown(
-       llm_client=client,
-       llm_model="gpt-4o",
-       llm_prompt="Describe this scientific figure in detail"
+       llm_client=client, llm_model="gpt-4o", llm_prompt="Describe this scientific figure in detail"
    )
    ```
 

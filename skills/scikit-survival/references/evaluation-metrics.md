@@ -37,7 +37,7 @@ The traditional estimator, simpler but has limitations.
 from sksurv.metrics import concordance_index_censored
 
 # Compute Harrell's C-index
-result = concordance_index_censored(y_test['event'], y_test['time'], risk_scores)
+result = concordance_index_censored(y_test["event"], y_test["time"], risk_scores)
 c_index = result[0]
 print(f"Harrell's C-index: {c_index:.3f}")
 ```
@@ -62,9 +62,7 @@ from sksurv.metrics import concordance_index_ipcw
 
 # Compute Uno's C-index
 # Requires training data for IPCW calculation
-c_index, concordant, discordant, tied_risk = concordance_index_ipcw(
-    y_train, y_test, risk_scores
-)
+c_index, concordant, discordant, tied_risk = concordance_index_ipcw(y_train, y_test, risk_scores)
 print(f"Uno's C-index: {c_index:.3f}")
 ```
 
@@ -87,7 +85,7 @@ print(f"Uno's C-index: {c_index:.3f}")
 from sksurv.metrics import concordance_index_censored, concordance_index_ipcw
 
 # Harrell's C-index
-harrell = concordance_index_censored(y_test['event'], y_test['time'], risk_scores)[0]
+harrell = concordance_index_censored(y_test["event"], y_test["time"], risk_scores)[0]
 
 # Uno's C-index
 uno = concordance_index_ipcw(y_train, y_test, risk_scores)[0]
@@ -120,16 +118,15 @@ from sksurv.metrics import cumulative_dynamic_auc
 times = [365, 730, 1095, 1460, 1825]  # 1, 2, 3, 4, 5 years
 
 # Compute time-dependent AUC
-auc, mean_auc = cumulative_dynamic_auc(
-    y_train, y_test, risk_scores, times
-)
+auc, mean_auc = cumulative_dynamic_auc(y_train, y_test, risk_scores, times)
 
 # Plot AUC over time
 import matplotlib.pyplot as plt
-plt.plot(times, auc, marker='o')
-plt.xlabel('Time (days)')
-plt.ylabel('Time-dependent AUC')
-plt.title('Model Discrimination Over Time')
+
+plt.plot(times, auc, marker="o")
+plt.xlabel("Time (days)")
+plt.ylabel("Time-dependent AUC")
+plt.title("Model Discrimination Over Time")
 plt.show()
 
 print(f"Mean AUC: {mean_auc:.3f}")
@@ -148,10 +145,10 @@ print(f"Mean AUC: {mean_auc:.3f}")
 auc1, mean_auc1 = cumulative_dynamic_auc(y_train, y_test, risk_scores1, times)
 auc2, mean_auc2 = cumulative_dynamic_auc(y_train, y_test, risk_scores2, times)
 
-plt.plot(times, auc1, marker='o', label='Model 1')
-plt.plot(times, auc2, marker='s', label='Model 2')
-plt.xlabel('Time (days)')
-plt.ylabel('Time-dependent AUC')
+plt.plot(times, auc1, marker="o", label="Model 1")
+plt.plot(times, auc2, marker="s", label="Model 2")
+plt.xlabel("Time (days)")
+plt.ylabel("Time-dependent AUC")
 plt.legend()
 plt.show()
 ```
@@ -222,11 +219,13 @@ Always compare against a baseline (e.g., Kaplan-Meier):
 from sksurv.nonparametric import kaplan_meier_estimator
 
 # Compute Kaplan-Meier baseline
-time_km, surv_km = kaplan_meier_estimator(y_train['event'], y_train['time'])
+time_km, surv_km = kaplan_meier_estimator(y_train["event"], y_train["time"])
 
 # Predict with KM for each test subject
-surv_km_test = [surv_km[time_km <= time_point][-1] if any(time_km <= time_point) else 1.0
-                for _ in range(len(X_test))]
+surv_km_test = [
+    surv_km[time_km <= time_point][-1] if any(time_km <= time_point) else 1.0
+    for _ in range(len(X_test))
+]
 
 bs_km = brier_score(y_train, y_test, surv_km_test, time_point)[1]
 bs_model = brier_score(y_train, y_test, surv_at_t, time_point)[1]
@@ -258,7 +257,7 @@ print(f"Mean C-index: {scores.mean():.3f} (±{scores.std():.3f})")
 from sksurv.metrics import as_integrated_brier_score_scorer
 
 # Define time points for evaluation
-times = np.percentile(y['time'][y['event']], [25, 50, 75])
+times = np.percentile(y["time"][y["event"]], [25, 50, 75])
 
 # Create scorer
 scorer = as_integrated_brier_score_scorer(times)
@@ -277,9 +276,9 @@ from sksurv.metrics import as_concordance_index_ipcw_scorer
 
 # Define parameter grid
 param_grid = {
-    'n_estimators': [100, 200, 300],
-    'min_samples_split': [10, 20, 30],
-    'max_depth': [None, 10, 20]
+    "n_estimators": [100, 200, 300],
+    "min_samples_split": [10, 20, 30],
+    "max_depth": [None, 10, 20],
 }
 
 # Create scorer
@@ -287,11 +286,7 @@ scorer = as_concordance_index_ipcw_scorer()
 
 # Perform grid search
 cv = GridSearchCV(
-    RandomSurvivalForest(random_state=42),
-    param_grid,
-    scoring=scorer,
-    cv=5,
-    n_jobs=-1
+    RandomSurvivalForest(random_state=42), param_grid, scoring=scorer, cv=5, n_jobs=-1
 )
 cv.fit(X, y)
 
@@ -308,8 +303,9 @@ from sksurv.metrics import (
     concordance_index_censored,
     concordance_index_ipcw,
     cumulative_dynamic_auc,
-    integrated_brier_score
+    integrated_brier_score,
 )
+
 
 def evaluate_survival_model(model, X_train, X_test, y_train, y_test):
     """Comprehensive evaluation of survival model"""
@@ -319,11 +315,11 @@ def evaluate_survival_model(model, X_train, X_test, y_train, y_test):
     surv_funcs = model.predict_survival_function(X_test)
 
     # 1. Concordance Index (both versions)
-    c_harrell = concordance_index_censored(y_test['event'], y_test['time'], risk_scores)[0]
+    c_harrell = concordance_index_censored(y_test["event"], y_test["time"], risk_scores)[0]
     c_uno = concordance_index_ipcw(y_train, y_test, risk_scores)[0]
 
     # 2. Time-dependent AUC
-    times = np.percentile(y_test['time'][y_test['event']], [25, 50, 75])
+    times = np.percentile(y_test["time"][y_test["event"]], [25, 50, 75])
     auc, mean_auc = cumulative_dynamic_auc(y_train, y_test, risk_scores, times)
 
     # 3. Integrated Brier Score
@@ -340,12 +336,13 @@ def evaluate_survival_model(model, X_train, X_test, y_train, y_test):
     print("=" * 50)
 
     return {
-        'c_harrell': c_harrell,
-        'c_uno': c_uno,
-        'mean_auc': mean_auc,
-        'ibs': ibs,
-        'time_auc': dict(zip(times, auc))
+        "c_harrell": c_harrell,
+        "c_uno": c_uno,
+        "mean_auc": mean_auc,
+        "ibs": ibs,
+        "time_auc": dict(zip(times, auc)),
     }
+
 
 # Use the evaluation function
 results = evaluate_survival_model(model, X_train, X_test, y_train, y_test)

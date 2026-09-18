@@ -10,7 +10,7 @@ Provides a robust client for interacting with the OpenAlex API with:
 """
 
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 from urllib.parse import urljoin
 
 import requests
@@ -21,7 +21,7 @@ class OpenAlexClient:
 
     BASE_URL = "https://api.openalex.org"
 
-    def __init__(self, email: Optional[str] = None, requests_per_second: int = 10):
+    def __init__(self, email: str | None = None, requests_per_second: int = 10):
         """
         Initialize OpenAlex client.
 
@@ -43,11 +43,8 @@ class OpenAlexClient:
         self.last_request_time = time.time()
 
     def _make_request(
-        self,
-        endpoint: str,
-        params: Optional[Dict] = None,
-        max_retries: int = 5
-    ) -> Dict[str, Any]:
+        self, endpoint: str, params: dict | None = None, max_retries: int = 5
+    ) -> dict[str, Any]:
         """
         Make API request with retry logic.
 
@@ -64,7 +61,7 @@ class OpenAlexClient:
 
         # Add email to params for polite pool
         if self.email:
-            params['mailto'] = self.email
+            params["mailto"] = self.email
 
         url = urljoin(self.BASE_URL, endpoint)
 
@@ -77,12 +74,12 @@ class OpenAlexClient:
                     return response.json()
                 elif response.status_code == 403:
                     # Rate limited
-                    wait_time = 2 ** attempt
+                    wait_time = 2**attempt
                     print(f"Rate limited. Waiting {wait_time}s before retry...")
                     time.sleep(wait_time)
                 elif response.status_code >= 500:
                     # Server error
-                    wait_time = 2 ** attempt
+                    wait_time = 2**attempt
                     print(f"Server error. Waiting {wait_time}s before retry...")
                     time.sleep(wait_time)
                 else:
@@ -91,7 +88,7 @@ class OpenAlexClient:
 
             except requests.exceptions.Timeout:
                 if attempt < max_retries - 1:
-                    wait_time = 2 ** attempt
+                    wait_time = 2**attempt
                     print(f"Request timeout. Waiting {wait_time}s before retry...")
                     time.sleep(wait_time)
                 else:
@@ -101,13 +98,13 @@ class OpenAlexClient:
 
     def search_works(
         self,
-        search: Optional[str] = None,
-        filter_params: Optional[Dict] = None,
+        search: str | None = None,
+        filter_params: dict | None = None,
         per_page: int = 200,
         page: int = 1,
-        sort: Optional[str] = None,
-        select: Optional[List[str]] = None
-    ) -> Dict[str, Any]:
+        sort: str | None = None,
+        select: list[str] | None = None,
+    ) -> dict[str, Any]:
         """
         Search works with filters.
 
@@ -122,27 +119,24 @@ class OpenAlexClient:
         Returns:
             API response with meta and results
         """
-        params = {
-            'per-page': min(per_page, 200),
-            'page': page
-        }
+        params = {"per-page": min(per_page, 200), "page": page}
 
         if search:
-            params['search'] = search
+            params["search"] = search
 
         if filter_params:
-            filter_str = ','.join([f"{k}:{v}" for k, v in filter_params.items()])
-            params['filter'] = filter_str
+            filter_str = ",".join([f"{k}:{v}" for k, v in filter_params.items()])
+            params["filter"] = filter_str
 
         if sort:
-            params['sort'] = sort
+            params["sort"] = sort
 
         if select:
-            params['select'] = ','.join(select)
+            params["select"] = ",".join(select)
 
-        return self._make_request('/works', params)
+        return self._make_request("/works", params)
 
-    def get_entity(self, entity_type: str, entity_id: str) -> Dict[str, Any]:
+    def get_entity(self, entity_type: str, entity_id: str) -> dict[str, Any]:
         """
         Get single entity by ID.
 
@@ -157,11 +151,8 @@ class OpenAlexClient:
         return self._make_request(endpoint)
 
     def batch_lookup(
-        self,
-        entity_type: str,
-        ids: List[str],
-        id_field: str = 'openalex_id'
-    ) -> List[Dict[str, Any]]:
+        self, entity_type: str, ids: list[str], id_field: str = "openalex_id"
+    ) -> list[dict[str, Any]]:
         """
         Look up multiple entities by ID efficiently.
 
@@ -177,25 +168,19 @@ class OpenAlexClient:
 
         # Process in batches of 50
         for i in range(0, len(ids), 50):
-            batch = ids[i:i+50]
-            filter_value = '|'.join(batch)
+            batch = ids[i : i + 50]
+            filter_value = "|".join(batch)
 
-            params = {
-                'filter': f"{id_field}:{filter_value}",
-                'per-page': 50
-            }
+            params = {"filter": f"{id_field}:{filter_value}", "per-page": 50}
 
             response = self._make_request(f"/{entity_type}", params)
-            all_results.extend(response.get('results', []))
+            all_results.extend(response.get("results", []))
 
         return all_results
 
     def paginate_all(
-        self,
-        endpoint: str,
-        params: Optional[Dict] = None,
-        max_results: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+        self, endpoint: str, params: dict | None = None, max_results: int | None = None
+    ) -> list[dict[str, Any]]:
         """
         Paginate through all results.
 
@@ -210,14 +195,14 @@ class OpenAlexClient:
         if params is None:
             params = {}
 
-        params['per-page'] = 200  # Use maximum page size
-        params['page'] = 1
+        params["per-page"] = 200  # Use maximum page size
+        params["page"] = 1
 
         all_results = []
 
         while True:
             response = self._make_request(endpoint, params)
-            results = response.get('results', [])
+            results = response.get("results", [])
             all_results.extend(results)
 
             # Check if we've hit max_results
@@ -225,23 +210,20 @@ class OpenAlexClient:
                 return all_results[:max_results]
 
             # Check if there are more pages
-            meta = response.get('meta', {})
-            total_count = meta.get('count', 0)
+            meta = response.get("meta", {})
+            total_count = meta.get("count", 0)
             current_count = len(all_results)
 
             if current_count >= total_count:
                 break
 
-            params['page'] += 1
+            params["page"] += 1
 
         return all_results
 
     def sample_works(
-        self,
-        sample_size: int,
-        seed: Optional[int] = None,
-        filter_params: Optional[Dict] = None
-    ) -> List[Dict[str, Any]]:
+        self, sample_size: int, seed: int | None = None, filter_params: dict | None = None
+    ) -> list[dict[str, Any]]:
         """
         Get random sample of works.
 
@@ -254,16 +236,16 @@ class OpenAlexClient:
             List of sampled works
         """
         params = {
-            'sample': min(sample_size, 10000),  # API limit per request
-            'per-page': 200
+            "sample": min(sample_size, 10000),  # API limit per request
+            "per-page": 200,
         }
 
         if seed is not None:
-            params['seed'] = seed
+            params["seed"] = seed
 
         if filter_params:
-            filter_str = ','.join([f"{k}:{v}" for k, v in filter_params.items()])
-            params['filter'] = filter_str
+            filter_str = ",".join([f"{k}:{v}" for k, v in filter_params.items()])
+            params["filter"] = filter_str
 
         # For large samples, need multiple requests with different seeds
         if sample_size > 10000:
@@ -272,15 +254,15 @@ class OpenAlexClient:
 
             for i in range((sample_size // 10000) + 1):
                 current_seed = seed + i if seed else i
-                params['seed'] = current_seed
-                params['sample'] = min(10000, sample_size - len(all_samples))
+                params["seed"] = current_seed
+                params["sample"] = min(10000, sample_size - len(all_samples))
 
-                response = self._make_request('/works', params)
-                results = response.get('results', [])
+                response = self._make_request("/works", params)
+                results = response.get("results", [])
 
                 # Deduplicate
                 for result in results:
-                    work_id = result.get('id')
+                    work_id = result.get("id")
                     if work_id not in seen_ids:
                         seen_ids.add(work_id)
                         all_samples.append(result)
@@ -290,15 +272,12 @@ class OpenAlexClient:
 
             return all_samples[:sample_size]
         else:
-            response = self._make_request('/works', params)
-            return response.get('results', [])
+            response = self._make_request("/works", params)
+            return response.get("results", [])
 
     def group_by(
-        self,
-        entity_type: str,
-        group_field: str,
-        filter_params: Optional[Dict] = None
-    ) -> List[Dict[str, Any]]:
+        self, entity_type: str, group_field: str, filter_params: dict | None = None
+    ) -> list[dict[str, Any]]:
         """
         Aggregate results by field.
 
@@ -310,16 +289,14 @@ class OpenAlexClient:
         Returns:
             List of grouped results with counts
         """
-        params = {
-            'group_by': group_field
-        }
+        params = {"group_by": group_field}
 
         if filter_params:
-            filter_str = ','.join([f"{k}:{v}" for k, v in filter_params.items()])
-            params['filter'] = filter_str
+            filter_str = ",".join([f"{k}:{v}" for k, v in filter_params.items()])
+            params["filter"] = filter_str
 
         response = self._make_request(f"/{entity_type}", params)
-        return response.get('group_by', [])
+        return response.get("group_by", [])
 
 
 if __name__ == "__main__":
@@ -328,11 +305,9 @@ if __name__ == "__main__":
 
     # Search for works about machine learning
     results = client.search_works(
-        search="machine learning",
-        filter_params={"publication_year": "2023"},
-        per_page=10
+        search="machine learning", filter_params={"publication_year": "2023"}, per_page=10
     )
 
     print(f"Found {results['meta']['count']} works")
-    for work in results['results']:
+    for work in results["results"]:
         print(f"- {work['title']}")

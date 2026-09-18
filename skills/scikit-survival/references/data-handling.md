@@ -46,7 +46,7 @@ from sksurv.datasets import (
     load_breast_cancer,
     load_gbsg2,
     load_veterans_lung_cancer,
-    load_whas500
+    load_whas500,
 )
 
 # Load dataset
@@ -68,11 +68,11 @@ import pandas as pd
 from sksurv.util import Surv
 
 # Load data
-df = pd.read_csv('survival_data.csv')
+df = pd.read_csv("survival_data.csv")
 
 # Separate features and outcome
-X = df.drop(['time', 'event'], axis=1)
-y = Surv.from_dataframe('event', 'time', df)
+X = df.drop(["time", "event"], axis=1)
+y = Surv.from_dataframe("event", "time", df)
 ```
 
 #### From CSV with Surv.from_arrays
@@ -83,16 +83,13 @@ import pandas as pd
 from sksurv.util import Surv
 
 # Load data
-df = pd.read_csv('survival_data.csv')
+df = pd.read_csv("survival_data.csv")
 
 # Create feature matrix
-X = df.drop(['time', 'event'], axis=1)
+X = df.drop(["time", "event"], axis=1)
 
 # Create survival outcome
-y = Surv.from_arrays(
-    event=df['event'].astype(bool),
-    time=df['time'].astype(float)
-)
+y = Surv.from_arrays(event=df["event"].astype(bool), time=df["time"].astype(float))
 ```
 
 ### Loading ARFF Files
@@ -101,7 +98,7 @@ y = Surv.from_arrays(
 from sksurv.io import loadarff
 
 # Load ARFF format (Weka format)
-data = loadarff('survival_data.arff')
+data = loadarff("survival_data.arff")
 
 # Extract X and y
 X = data[0]  # pandas DataFrame
@@ -119,7 +116,7 @@ from sksurv.preprocessing import OneHotEncoder
 import pandas as pd
 
 # Identify categorical columns
-categorical_cols = ['gender', 'race', 'treatment']
+categorical_cols = ["gender", "race", "treatment"]
 
 # One-hot encode
 encoder = OneHotEncoder()
@@ -177,6 +174,7 @@ print(missing[missing > 0])
 
 # Visualize missing data
 import seaborn as sns
+
 sns.heatmap(X.isnull(), cbar=False)
 ```
 
@@ -186,13 +184,13 @@ sns.heatmap(X.isnull(), cbar=False)
 from sklearn.impute import SimpleImputer
 
 # Mean imputation for numerical features
-num_imputer = SimpleImputer(strategy='mean')
+num_imputer = SimpleImputer(strategy="mean")
 X_num = X.select_dtypes(include=[np.number])
 X_num_imputed = num_imputer.fit_transform(X_num)
 
 # Most frequent for categorical
-cat_imputer = SimpleImputer(strategy='most_frequent')
-X_cat = X.select_dtypes(include=['object', 'category'])
+cat_imputer = SimpleImputer(strategy="most_frequent")
+X_cat = X.select_dtypes(include=["object", "category"])
 X_cat_imputed = cat_imputer.fit_transform(X_cat)
 ```
 
@@ -247,11 +245,13 @@ from sklearn.impute import SimpleImputer
 from sksurv.linear_model import CoxPHSurvivalAnalysis
 
 # Create preprocessing and modeling pipeline
-pipeline = Pipeline([
-    ('imputer', SimpleImputer(strategy='mean')),
-    ('scaler', StandardScaler()),
-    ('model', CoxPHSurvivalAnalysis())
-])
+pipeline = Pipeline(
+    [
+        ("imputer", SimpleImputer(strategy="mean")),
+        ("scaler", StandardScaler()),
+        ("model", CoxPHSurvivalAnalysis()),
+    ]
+)
 
 # Fit pipeline
 pipeline.fit(X, y)
@@ -293,7 +293,7 @@ def preprocess_survival_data(X, y=None, scaler=None, encoder=None):
     # 1. Handle missing values
     # Remove rows with missing outcome
     if y is not None:
-        mask = np.isfinite(y['time']) & (y['time'] > 0)
+        mask = np.isfinite(y["time"]) & (y["time"] > 0)
         X = X[mask]
         y = y[mask]
 
@@ -311,21 +311,18 @@ def preprocess_survival_data(X, y=None, scaler=None, encoder=None):
     if scaler is None:
         scaler = StandardScaler()
         X_processed = pd.DataFrame(
-            scaler.fit_transform(X_processed),
-            columns=X_processed.columns,
-            index=X_processed.index
+            scaler.fit_transform(X_processed), columns=X_processed.columns, index=X_processed.index
         )
     else:
         X_processed = pd.DataFrame(
-            scaler.transform(X_processed),
-            columns=X_processed.columns,
-            index=X_processed.index
+            scaler.transform(X_processed), columns=X_processed.columns, index=X_processed.index
         )
 
     if y is not None:
         return X_processed, y, scaler, encoder
     else:
         return X_processed, scaler, encoder
+
 
 # Usage
 X_train_processed, y_train_processed, scaler, encoder = preprocess_survival_data(X_train, y_train)
@@ -341,17 +338,17 @@ def validate_survival_data(y):
     """Check survival data quality"""
 
     # Check for negative times
-    if np.any(y['time'] <= 0):
+    if np.any(y["time"] <= 0):
         print("WARNING: Found non-positive survival times")
         print(f"Negative times: {np.sum(y['time'] <= 0)}")
 
     # Check for missing values
-    if np.any(~np.isfinite(y['time'])):
+    if np.any(~np.isfinite(y["time"])):
         print("WARNING: Found missing survival times")
         print(f"Missing times: {np.sum(~np.isfinite(y['time']))}")
 
     # Censoring rate
-    censor_rate = 1 - y['event'].mean()
+    censor_rate = 1 - y["event"].mean()
     print(f"Censoring rate: {censor_rate:.2%}")
 
     if censor_rate > 0.7:
@@ -366,6 +363,7 @@ def validate_survival_data(y):
     print(f"Median time: {np.median(y['time']):.2f}")
     print(f"Time range: [{np.min(y['time']):.2f}, {np.max(y['time']):.2f}]")
 
+
 # Use validation
 validate_survival_data(y)
 ```
@@ -378,7 +376,7 @@ def check_events_per_feature(X, y, min_events_per_feature=10):
     Check if there are sufficient events per feature.
     Rule of thumb: at least 10 events per feature for Cox models.
     """
-    n_events = y['event'].sum()
+    n_events = y["event"].sum()
     n_features = X.shape[1]
     events_per_feature = n_events / n_features
 
@@ -395,6 +393,7 @@ def check_events_per_feature(X, y, min_events_per_feature=10):
 
     return events_per_feature
 
+
 # Use check
 check_events_per_feature(X, y)
 ```
@@ -407,9 +406,7 @@ check_events_per_feature(X, y)
 from sklearn.model_selection import train_test_split
 
 # Split data
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 ```
 
 ### Stratified Split
@@ -421,8 +418,8 @@ from sklearn.model_selection import train_test_split
 
 # Create stratification labels
 # Stratify by event status and time quartiles
-time_quartiles = pd.qcut(y['time'], q=4, labels=False)
-strat_labels = y['event'].astype(int) * 10 + time_quartiles
+time_quartiles = pd.qcut(y["time"], q=4, labels=False)
+strat_labels = y["event"].astype(int) * 10 + time_quartiles
 
 # Stratified split
 X_train, X_test, y_train, y_test = train_test_split(
@@ -457,13 +454,13 @@ import pandas as pd
 import numpy as np
 
 # 1. Load data
-df = pd.read_csv('data.csv')
+df = pd.read_csv("data.csv")
 
 # 2. Create survival outcome
-y = Surv.from_dataframe('event', 'time', df)
+y = Surv.from_dataframe("event", "time", df)
 
 # 3. Prepare features
-X = df.drop(['event', 'time'], axis=1)
+X = df.drop(["event", "time"], axis=1)
 
 # 4. Validate data
 validate_survival_data(y)
@@ -473,9 +470,7 @@ check_events_per_feature(X, y)
 X = X.fillna(X.median())
 
 # 6. Split data
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # 7. Encode categorical variables
 X_train = encode_categorical(X_train)

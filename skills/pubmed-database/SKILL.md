@@ -133,7 +133,7 @@ params = {
     "term": "diabetes[tiab] AND 2024[dp]",
     "retmax": 100,
     "retmode": "json",
-    "api_key": "YOUR_API_KEY"  # Optional but recommended
+    "api_key": "YOUR_API_KEY",  # Optional but recommended
 }
 response = requests.get(search_url, params=params)
 pmids = response.json()["esearchresult"]["idlist"]
@@ -145,7 +145,7 @@ params = {
     "id": ",".join(pmids),
     "rettype": "abstract",
     "retmode": "text",
-    "api_key": "YOUR_API_KEY"
+    "api_key": "YOUR_API_KEY",
 }
 response = requests.get(fetch_url, params=params)
 abstracts = response.text

@@ -52,7 +52,7 @@ trainer.train(
     max_grad_norm=5.0,
     monitor="pr_auc_score",
     monitor_criterion="max",
-    save_path="./checkpoints"
+    save_path="./checkpoints",
 )
 ```
 
@@ -84,7 +84,7 @@ Performs predictions on datasets.
 predictions = trainer.inference(
     dataloader=test_loader,
     additional_outputs=["attention_weights", "embeddings"],
-    return_patient_ids=True
+    return_patient_ids=True,
 )
 ```
 
@@ -109,8 +109,7 @@ Computes comprehensive evaluation metrics.
 from pyhealth.metrics import binary_metrics_fn
 
 results = trainer.evaluate(
-    dataloader=test_loader,
-    metrics=["accuracy", "pr_auc_score", "roc_auc_score", "f1_score"]
+    dataloader=test_loader, metrics=["accuracy", "pr_auc_score", "roc_auc_score", "f1_score"]
 )
 
 print(results)
@@ -150,7 +149,7 @@ from pyhealth.metrics import binary_metrics_fn
 metrics = binary_metrics_fn(
     y_true=labels,
     y_pred=predictions,
-    metrics=["accuracy", "f1_score", "pr_auc_score", "roc_auc_score"]
+    metrics=["accuracy", "f1_score", "pr_auc_score", "roc_auc_score"],
 )
 ```
 
@@ -161,6 +160,7 @@ predictions_binary = (predictions > 0.5).astype(int)
 
 # Optimal threshold by F1
 from sklearn.metrics import f1_score
+
 thresholds = np.arange(0.1, 0.9, 0.05)
 f1_scores = [f1_score(y_true, (y_pred > t).astype(int)) for t in thresholds]
 optimal_threshold = thresholds[np.argmax(f1_scores)]
@@ -186,9 +186,7 @@ optimal_threshold = thresholds[np.argmax(f1_scores)]
 from pyhealth.metrics import multiclass_metrics_fn
 
 metrics = multiclass_metrics_fn(
-    y_true=labels,
-    y_pred=predictions,
-    metrics=["accuracy", "macro_f1", "weighted_f1"]
+    y_true=labels, y_pred=predictions, metrics=["accuracy", "macro_f1", "weighted_f1"]
 )
 ```
 
@@ -196,8 +194,7 @@ metrics = multiclass_metrics_fn(
 ```python
 from sklearn.metrics import classification_report
 
-print(classification_report(y_true, y_pred,
-    target_names=["Wake", "N1", "N2", "N3", "REM"]))
+print(classification_report(y_true, y_pred, target_names=["Wake", "N1", "N2", "N3", "REM"]))
 ```
 
 **Confusion Matrix:**
@@ -206,7 +203,7 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
 cm = confusion_matrix(y_true, y_pred)
-sns.heatmap(cm, annot=True, fmt='d')
+sns.heatmap(cm, annot=True, fmt="d")
 ```
 
 ### Multi-Label Classification Metrics
@@ -223,9 +220,7 @@ from pyhealth.metrics import multilabel_metrics_fn
 
 # y_pred: [n_samples, n_labels] binary matrix
 metrics = multilabel_metrics_fn(
-    y_true=label_matrix,
-    y_pred=pred_matrix,
-    metrics=["jaccard_score", "example_f1", "label_f1"]
+    y_true=label_matrix, y_pred=pred_matrix, metrics=["jaccard_score", "example_f1", "label_f1"]
 )
 ```
 
@@ -233,6 +228,7 @@ metrics = multilabel_metrics_fn(
 ```python
 # Jaccard similarity (intersection/union)
 jaccard = len(set(true_drugs) & set(pred_drugs)) / len(set(true_drugs) | set(pred_drugs))
+
 
 # Precision@k: Precision for top-k predictions
 def precision_at_k(y_true, y_pred, k=10):
@@ -253,9 +249,7 @@ def precision_at_k(y_true, y_pred, k=10):
 from pyhealth.metrics import regression_metrics_fn
 
 metrics = regression_metrics_fn(
-    y_true=true_values,
-    y_pred=predictions,
-    metrics=["mae", "rmse", "r2"]
+    y_true=true_values, y_pred=predictions, metrics=["mae", "rmse", "r2"]
 )
 ```
 
@@ -286,15 +280,15 @@ fairness_results = fairness_metrics_fn(
     y_true=labels,
     y_pred=predictions,
     sensitive_attributes=demographics,  # e.g., race, gender
-    metrics=["demographic_parity", "equalized_odds"]
+    metrics=["demographic_parity", "equalized_odds"],
 )
 ```
 
 **Example:**
 ```python
 # Evaluate fairness across gender
-male_mask = (demographics == "male")
-female_mask = (demographics == "female")
+male_mask = demographics == "male"
+female_mask = demographics == "female"
 
 male_tpr = recall_score(y_true[male_mask], y_pred[male_mask])
 female_tpr = recall_score(y_true[female_mask], y_pred[female_mask])
@@ -314,14 +308,12 @@ print(f"TPR disparity: {tpr_disparity:.3f}")
 from sklearn.calibration import calibration_curve
 import matplotlib.pyplot as plt
 
-fraction_of_positives, mean_predicted_value = calibration_curve(
-    y_true, y_prob, n_bins=10
-)
+fraction_of_positives, mean_predicted_value = calibration_curve(y_true, y_prob, n_bins=10)
 
-plt.plot(mean_predicted_value, fraction_of_positives, marker='o')
-plt.plot([0, 1], [0, 1], linestyle='--', label='Perfect calibration')
-plt.xlabel('Mean predicted probability')
-plt.ylabel('Fraction of positives')
+plt.plot(mean_predicted_value, fraction_of_positives, marker="o")
+plt.plot([0, 1], [0, 1], linestyle="--", label="Perfect calibration")
+plt.xlabel("Mean predicted probability")
+plt.ylabel("Fraction of positives")
 plt.legend()
 ```
 
@@ -358,7 +350,7 @@ calibrated_probs = calibrator.predict_proba(test_predictions.reshape(-1, 1))[:, 
 ```python
 from sklearn.isotonic import IsotonicRegression
 
-calibrator = IsotonicRegression(out_of_bounds='clip')
+calibrator = IsotonicRegression(out_of_bounds="clip")
 calibrator.fit(val_predictions, val_labels)
 calibrated_probs = calibrator.predict(test_predictions)
 ```
@@ -374,8 +366,9 @@ def find_temperature(logits, labels):
         probs = torch.softmax(scaled_logits, dim=1)
         return F.cross_entropy(probs, labels).item()
 
-    result = minimize(nll, x0=1.0, method='BFGS')
+    result = minimize(nll, x0=1.0, method="BFGS")
     return result.x[0]
+
 
 temperature = find_temperature(val_logits, val_labels)
 calibrated_logits = test_logits / temperature
@@ -400,9 +393,7 @@ prediction_sets = test_predictions > (1 - quantile_level)
 
 # Evaluate
 metrics = prediction_set_metrics_fn(
-    y_true=test_labels,
-    prediction_sets=prediction_sets,
-    metrics=["coverage", "average_size"]
+    y_true=test_labels, prediction_sets=prediction_sets, metrics=["coverage", "average_size"]
 )
 ```
 
@@ -455,10 +446,7 @@ std_pred = np.std(ensemble_preds, axis=0)  # Uncertainty
 
 ```python
 # Get attention weights during inference
-outputs = trainer.inference(
-    test_loader,
-    additional_outputs=["attention_weights"]
-)
+outputs = trainer.inference(test_loader, additional_outputs=["attention_weights"])
 
 attention = outputs["attention_weights"]
 
@@ -469,10 +457,10 @@ import seaborn as sns
 sample_idx = 0
 sample_attention = attention[sample_idx]  # [seq_length, seq_length]
 
-sns.heatmap(sample_attention, cmap='viridis')
-plt.xlabel('Key Position')
-plt.ylabel('Query Position')
-plt.title('Attention Weights')
+sns.heatmap(sample_attention, cmap="viridis")
+plt.xlabel("Key Position")
+plt.ylabel("Query Position")
+plt.title("Attention Weights")
 plt.show()
 ```
 
@@ -497,14 +485,12 @@ important_features = feature_attention[sample_idx, most_important_visit].argsort
 ```python
 from sklearn.inspection import permutation_importance
 
+
 def get_predictions(model, X):
     return model.predict(X)
 
-result = permutation_importance(
-    model, X_test, y_test,
-    n_repeats=10,
-    scoring='roc_auc'
-)
+
+result = permutation_importance(model, X_test, y_test, n_repeats=10, scoring="roc_auc")
 
 # Sort features by importance
 indices = result.importances_mean.argsort()[::-1]
@@ -537,10 +523,7 @@ from pyhealth.explain import ChEFER
 explainer = ChEFER(model=model, dataset=test_dataset)
 
 # Get feature importance for prediction
-importance_scores = explainer.explain(
-    patient_id="patient_123",
-    visit_id="visit_456"
-)
+importance_scores = explainer.explain(patient_id="patient_123", visit_id="visit_456")
 
 # Visualize top features
 explainer.plot_importance(importance_scores, top_k=20)
@@ -561,9 +544,7 @@ dataset = MIMIC4Dataset(root="/path/to/mimic4")
 sample_dataset = dataset.set_task(mortality_prediction_mimic4_fn)
 
 # 2. Split data
-train_data, val_data, test_data = split_by_patient(
-    sample_dataset, ratios=[0.7, 0.1, 0.2], seed=42
-)
+train_data, val_data, test_data = split_by_patient(sample_dataset, ratios=[0.7, 0.1, 0.2], seed=42)
 
 # 3. Create data loaders
 train_loader = get_dataloader(train_data, batch_size=64, shuffle=True)
@@ -578,7 +559,7 @@ model = Transformer(
     embedding_dim=128,
     num_heads=8,
     num_layers=3,
-    dropout=0.3
+    dropout=0.3,
 )
 
 # 5. Train model
@@ -592,14 +573,13 @@ trainer.train(
     weight_decay=1e-5,
     monitor="pr_auc_score",
     monitor_criterion="max",
-    save_path="./checkpoints/mortality_model"
+    save_path="./checkpoints/mortality_model",
 )
 
 # 6. Evaluate on test set
 test_results = trainer.evaluate(
     test_loader,
-    metrics=["accuracy", "precision", "recall", "f1_score",
-             "roc_auc_score", "pr_auc_score"]
+    metrics=["accuracy", "precision", "recall", "f1_score", "roc_auc_score", "pr_auc_score"],
 )
 
 print("Test Results:")

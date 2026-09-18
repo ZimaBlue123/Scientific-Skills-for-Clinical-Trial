@@ -54,7 +54,7 @@ for attempt in range(max_retries):
         if response.status_code == 200:
             return response.json()
     except:
-        wait_time = 2 ** attempt
+        wait_time = 2**attempt
         time.sleep(wait_time)
 ```
 
@@ -322,13 +322,13 @@ def fetch_with_retry(url, max_retries=5):
             if response.status_code == 200:
                 return response.json()
             elif response.status_code in [403, 500, 502, 503, 504]:
-                wait_time = 2 ** attempt
+                wait_time = 2**attempt
                 time.sleep(wait_time)
             else:
                 response.raise_for_status()
         except requests.exceptions.Timeout:
             if attempt < max_retries - 1:
-                time.sleep(2 ** attempt)
+                time.sleep(2**attempt)
             else:
                 raise
     raise Exception(f"Failed after {max_retries} retries")

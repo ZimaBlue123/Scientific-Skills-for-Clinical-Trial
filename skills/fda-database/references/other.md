@@ -85,7 +85,7 @@ url = "https://api.fda.gov/other/substance.json"
 params = {
     "api_key": api_key,
     "search": "approvalID:R16CO5Y76E",  # Aspirin UNII
-    "limit": 1
+    "limit": 1,
 }
 
 response = requests.get(url, params=params)
@@ -94,11 +94,7 @@ data = response.json()
 
 ```python
 # Search by substance name
-params = {
-    "api_key": api_key,
-    "search": "names.name:acetaminophen",
-    "limit": 5
-}
+params = {"api_key": api_key, "search": "names.name:acetaminophen", "limit": 5}
 ```
 
 ```python
@@ -106,17 +102,13 @@ params = {
 params = {
     "api_key": api_key,
     "search": "codes.code:50-78-2",  # Aspirin CAS
-    "limit": 1
+    "limit": 1,
 }
 ```
 
 ```python
 # Get chemical substances only
-params = {
-    "api_key": api_key,
-    "search": "substanceClass:chemical",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "substanceClass:chemical", "limit": 100}
 ```
 
 ```python
@@ -124,17 +116,13 @@ params = {
 params = {
     "api_key": api_key,
     "search": "structure.formula:C8H9NO2",  # Acetaminophen
-    "limit": 10
+    "limit": 10,
 }
 ```
 
 ```python
 # Find protein substances
-params = {
-    "api_key": api_key,
-    "search": "substanceClass:protein",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "substanceClass:protein", "limit": 50}
 ```
 
 ### 2. NSDE (National Substance Database Entry)
@@ -166,22 +154,14 @@ params = {
 **Example Queries**:
 ```python
 # Search by substance name
-params = {
-    "api_key": api_key,
-    "search": "substance_name:ibuprofen",
-    "limit": 20
-}
+params = {"api_key": api_key, "search": "substance_name:ibuprofen", "limit": 20}
 
 response = requests.get("https://api.fda.gov/other/nsde.json", params=params)
 ```
 
 ```python
 # Find controlled substances by DEA schedule
-params = {
-    "api_key": api_key,
-    "search": "dea_schedule:CII",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "dea_schedule:CII", "limit": 50}
 ```
 
 ## Integration Tips
@@ -203,11 +183,7 @@ def get_substance_identifiers(unii, api_key):
     import requests
 
     url = "https://api.fda.gov/other/substance.json"
-    params = {
-        "api_key": api_key,
-        "search": f"approvalID:{unii}",
-        "limit": 1
-    }
+    params = {"api_key": api_key, "search": f"approvalID:{unii}", "limit": 1}
 
     response = requests.get(url, params=params)
     data = response.json()
@@ -222,7 +198,7 @@ def get_substance_identifiers(unii, api_key):
         "uuid": substance.get("uuid"),
         "preferred_name": None,
         "cas_numbers": [],
-        "other_codes": {}
+        "other_codes": {},
     }
 
     # Extract names
@@ -267,11 +243,7 @@ def get_chemical_structure(substance_name, api_key):
     import requests
 
     url = "https://api.fda.gov/other/substance.json"
-    params = {
-        "api_key": api_key,
-        "search": f"names.name:{substance_name}",
-        "limit": 1
-    }
+    params = {"api_key": api_key, "search": f"names.name:{substance_name}", "limit": 1}
 
     response = requests.get(url, params=params)
     data = response.json()
@@ -292,7 +264,7 @@ def get_chemical_structure(substance_name, api_key):
         "inchi_key": structure.get("inchiKey"),
         "formula": structure.get("formula"),
         "molecular_weight": structure.get("molecularWeight"),
-        "substance_class": substance.get("substanceClass")
+        "substance_class": substance.get("substanceClass"),
     }
 ```
 
@@ -313,11 +285,7 @@ def get_substance_relationships(unii, api_key):
     import requests
 
     url = "https://api.fda.gov/other/substance.json"
-    params = {
-        "api_key": api_key,
-        "search": f"approvalID:{unii}",
-        "limit": 1
-    }
+    params = {"api_key": api_key, "search": f"approvalID:{unii}", "limit": 1}
 
     response = requests.get(url, params=params)
     data = response.json()
@@ -338,7 +306,7 @@ def get_substance_relationships(unii, api_key):
             related = {
                 "uuid": rel.get("relatedSubstance", {}).get("uuid"),
                 "unii": rel.get("relatedSubstance", {}).get("approvalID"),
-                "name": rel.get("relatedSubstance", {}).get("refPname")
+                "name": rel.get("relatedSubstance", {}).get("refPname"),
             }
             relationships[rel_type].append(related)
 
@@ -363,11 +331,7 @@ def find_active_ingredients_by_product(product_name, api_key):
 
     # First search drug label database
     label_url = "https://api.fda.gov/drug/label.json"
-    label_params = {
-        "api_key": api_key,
-        "search": f"openfda.brand_name:{product_name}",
-        "limit": 1
-    }
+    label_params = {"api_key": api_key, "search": f"openfda.brand_name:{product_name}", "limit": 1}
 
     response = requests.get(label_url, params=label_params)
     data = response.json()

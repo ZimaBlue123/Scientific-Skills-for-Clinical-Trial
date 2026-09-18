@@ -26,6 +26,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # Step 2: Train model (example with XGBoost)
 import xgboost as xgb
+
 model = xgb.XGBClassifier(n_estimators=100, max_depth=5)
 model.fit(X_train, y_train)
 
@@ -119,8 +120,8 @@ shap.plots.scatter(shap_values_v1[:, "Income"], color=shap_values_v1[:, "Educati
 
 # Step 3: Engineer new features based on insights
 X_train_v2 = X_train_v1.copy()
-X_train_v2['Age_squared'] = X_train_v2['Age'] ** 2
-X_train_v2['Income_Education'] = X_train_v2['Income'] * X_train_v2['Education']
+X_train_v2["Age_squared"] = X_train_v2["Age"] ** 2
+X_train_v2["Income_Education"] = X_train_v2["Income"] * X_train_v2["Education"]
 
 # Step 4: Retrain with engineered features
 model_v2 = train_model(X_train_v2, y_train)
@@ -128,10 +129,7 @@ explainer_v2 = shap.TreeExplainer(model_v2)
 shap_values_v2 = explainer_v2(X_test_v2)
 
 # Step 5: Compare feature importance
-shap.plots.bar({
-    "Baseline": shap_values_v1,
-    "With Engineered Features": shap_values_v2
-})
+shap.plots.bar({"Baseline": shap_values_v1, "With Engineered Features": shap_values_v2})
 
 # Step 6: Validate improvement
 print(f"V1 Score: {model_v1.score(X_test_v1, y_test):.4f}")
@@ -155,15 +153,15 @@ import xgboost as xgb
 
 # Step 1: Train multiple models
 models = {
-    'Logistic Regression': LogisticRegression(max_iter=1000).fit(X_train, y_train),
-    'Random Forest': RandomForestClassifier(n_estimators=100).fit(X_train, y_train),
-    'XGBoost': xgb.XGBClassifier(n_estimators=100).fit(X_train, y_train)
+    "Logistic Regression": LogisticRegression(max_iter=1000).fit(X_train, y_train),
+    "Random Forest": RandomForestClassifier(n_estimators=100).fit(X_train, y_train),
+    "XGBoost": xgb.XGBClassifier(n_estimators=100).fit(X_train, y_train),
 }
 
 # Step 2: Compute SHAP values for each model
 shap_values_dict = {}
 for name, model in models.items():
-    if name == 'Logistic Regression':
+    if name == "Logistic Regression":
         explainer = shap.LinearExplainer(model, X_train)
     else:
         explainer = shap.TreeExplainer(model)
@@ -212,7 +210,7 @@ for name, shap_vals in shap_values_dict.items():
 
 ```python
 # Step 1: Identify protected attributes
-protected_attr = 'Gender'  # or 'Race', 'Age_Group', etc.
+protected_attr = "Gender"  # or 'Race', 'Age_Group', etc.
 
 # Step 2: Compute SHAP values
 explainer = shap.TreeExplainer(model)
@@ -221,8 +219,7 @@ shap_values = explainer(X_test)
 # Step 3: Compare feature importance across groups
 groups = X_test[protected_attr].unique()
 cohorts = {
-    f"{protected_attr}={group}": shap_values[X_test[protected_attr] == group]
-    for group in groups
+    f"{protected_attr}={group}": shap_values[X_test[protected_attr] == group] for group in groups
 }
 shap.plots.bar(cohorts)
 
@@ -246,7 +243,7 @@ for group in groups:
 # Step 6: Check for proxy features
 # Features correlated with protected attribute that shouldn't have high importance
 # Example: 'Zip_Code' might be proxy for race
-proxy_features = ['Zip_Code', 'Last_Name_Prefix']  # Domain-specific
+proxy_features = ["Zip_Code", "Last_Name_Prefix"]  # Domain-specific
 for feature in proxy_features:
     if feature in X_test.columns:
         importance = np.abs(shap_values[:, feature].values).mean()
@@ -274,7 +271,7 @@ import tensorflow as tf
 import shap
 
 # Step 1: Load or build neural network
-model = tf.keras.models.load_model('my_model.h5')
+model = tf.keras.models.load_model("my_model.h5")
 
 # Step 2: Select background dataset
 # Use subset (100-1000 samples) from training data
@@ -295,15 +292,11 @@ if isinstance(shap_values, list):
     # Focus on positive class
     shap_values_positive = shap_values[1]
     shap_exp = shap.Explanation(
-        values=shap_values_positive,
-        base_values=explainer.expected_value[1],
-        data=test_subset
+        values=shap_values_positive, base_values=explainer.expected_value[1], data=test_subset
     )
 else:
     shap_exp = shap.Explanation(
-        values=shap_values,
-        base_values=explainer.expected_value,
-        data=test_subset
+        values=shap_values, base_values=explainer.expected_value, data=test_subset
     )
 
 # Step 6: Visualize
@@ -331,11 +324,12 @@ import shap
 
 # Step 1: Train and save model
 model = train_model(X_train, y_train)
-joblib.dump(model, 'model.pkl')
+joblib.dump(model, "model.pkl")
 
 # Step 2: Create and save explainer
 explainer = shap.TreeExplainer(model)
-joblib.dump(explainer, 'explainer.pkl')
+joblib.dump(explainer, "explainer.pkl")
+
 
 # Step 3: Create explanation service
 class ExplanationService:
@@ -357,10 +351,10 @@ class ExplanationService:
         explanations = []
         for i in range(len(X)):
             exp = {
-                'prediction': prediction[i],
-                'base_value': shap_values.base_values[i],
-                'shap_values': dict(zip(X.columns, shap_values.values[i])),
-                'feature_values': X.iloc[i].to_dict()
+                "prediction": prediction[i],
+                "base_value": shap_values.base_values[i],
+                "shap_values": dict(zip(X.columns, shap_values.values[i])),
+                "feature_values": X.iloc[i].to_dict(),
             }
             explanations.append(exp)
 
@@ -382,24 +376,21 @@ class ExplanationService:
             top_feature_names = X.columns[top_indices].tolist()
             top_shap_values = shap_values.values[i][top_indices].tolist()
 
-            top_features.append({
-                'features': top_feature_names,
-                'shap_values': top_shap_values
-            })
+            top_features.append({"features": top_feature_names, "shap_values": top_shap_values})
 
         return top_features
 
+
 # Step 4: Usage in API
-service = ExplanationService('model.pkl', 'explainer.pkl')
+service = ExplanationService("model.pkl", "explainer.pkl")
+
 
 # Example API endpoint
 def predict_endpoint(input_data):
     X = pd.DataFrame([input_data])
     explanations = service.predict_with_explanation(X)
-    return {
-        'prediction': explanations[0]['prediction'],
-        'explanation': explanations[0]
-    }
+    return {"prediction": explanations[0]["prediction"], "explanation": explanations[0]}
+
 
 # Step 5: Generate static explanations for batch predictions
 def batch_explain_and_save(X_batch, output_dir):
@@ -407,13 +398,13 @@ def batch_explain_and_save(X_batch, output_dir):
 
     # Save global plot
     shap.plots.beeswarm(shap_values, show=False)
-    plt.savefig(f'{output_dir}/global_importance.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f"{output_dir}/global_importance.png", dpi=300, bbox_inches="tight")
     plt.close()
 
     # Save individual explanations
     for i in range(min(100, len(X_batch))):  # First 100
         shap.plots.waterfall(shap_values[i], show=False)
-        plt.savefig(f'{output_dir}/explanation_{i}.png', dpi=300, bbox_inches='tight')
+        plt.savefig(f"{output_dir}/explanation_{i}.png", dpi=300, bbox_inches="tight")
         plt.close()
 ```
 
@@ -432,15 +423,15 @@ def batch_explain_and_save(X_batch, output_dir):
 ```python
 # Step 1: Prepare data with time-based features
 # Example: Predicting next day's sales
-df['DayOfWeek'] = df['Date'].dt.dayofweek
-df['Month'] = df['Date'].dt.month
-df['Lag_1'] = df['Sales'].shift(1)
-df['Lag_7'] = df['Sales'].shift(7)
-df['Rolling_Mean_7'] = df['Sales'].rolling(7).mean()
+df["DayOfWeek"] = df["Date"].dt.dayofweek
+df["Month"] = df["Date"].dt.month
+df["Lag_1"] = df["Sales"].shift(1)
+df["Lag_7"] = df["Sales"].shift(7)
+df["Rolling_Mean_7"] = df["Sales"].rolling(7).mean()
 
 # Step 2: Train model
-features = ['DayOfWeek', 'Month', 'Lag_1', 'Lag_7', 'Rolling_Mean_7']
-X_train, X_test, y_train, y_test = train_test_split(df[features], df['Sales'])
+features = ["DayOfWeek", "Month", "Lag_1", "Lag_7", "Rolling_Mean_7"]
+X_train, X_test, y_train, y_test = train_test_split(df[features], df["Sales"])
 model = xgb.XGBRegressor().fit(X_train, y_train)
 
 # Step 3: Compute SHAP values
@@ -453,17 +444,17 @@ shap.plots.beeswarm(shap_values)
 
 # Step 5: Check lagged feature importance
 # Lag features should have high importance for time series
-lag_features = ['Lag_1', 'Lag_7', 'Rolling_Mean_7']
+lag_features = ["Lag_1", "Lag_7", "Rolling_Mean_7"]
 for feature in lag_features:
     shap.plots.scatter(shap_values[:, feature])
 
 # Step 6: Explain specific predictions
 # E.g., why was Monday's forecast so different?
-monday_mask = X_test['DayOfWeek'] == 0
+monday_mask = X_test["DayOfWeek"] == 0
 shap.plots.waterfall(shap_values[monday_mask][0])
 
 # Step 7: Validate seasonality understanding
-shap.plots.scatter(shap_values[:, 'Month'])
+shap.plots.scatter(shap_values[:, "Month"])
 ```
 
 **Time Series Considerations**:
@@ -527,18 +518,18 @@ shap.plots.scatter(shap_values[:, "Feature1"])
 
 # Partial dependence (model-agnostic)
 pd_result = partial_dependence(model, X_test, features=["Feature1"])
-plt.plot(pd_result['grid_values'][0], pd_result['average'][0])
+plt.plot(pd_result["grid_values"][0], pd_result["average"][0])
 ```
 
 ### Technique 3: Conditional Expectations
 Analyze SHAP values conditioned on other features:
 ```python
 # High Income group
-high_income = X_test['Income'] > X_test['Income'].median()
+high_income = X_test["Income"] > X_test["Income"].median()
 shap.plots.beeswarm(shap_values[high_income])
 
 # Low Income group
-low_income = X_test['Income'] <= X_test['Income'].median()
+low_income = X_test["Income"] <= X_test["Income"].median()
 shap.plots.beeswarm(shap_values[low_income])
 ```
 
@@ -585,10 +576,11 @@ with mlflow.start_run():
 # Track SHAP distribution drift over time
 def compute_shap_summary(shap_values):
     return {
-        'mean': shap_values.values.mean(axis=0),
-        'std': shap_values.values.std(axis=0),
-        'percentiles': np.percentile(shap_values.values, [25, 50, 75], axis=0)
+        "mean": shap_values.values.mean(axis=0),
+        "std": shap_values.values.std(axis=0),
+        "percentiles": np.percentile(shap_values.values, [25, 50, 75], axis=0),
     }
+
 
 # Compute baseline
 baseline_summary = compute_shap_summary(shap_values_train)
@@ -597,9 +589,7 @@ baseline_summary = compute_shap_summary(shap_values_train)
 production_summary = compute_shap_summary(shap_values_production)
 
 # Detect drift
-drift_detected = np.abs(
-    production_summary['mean'] - baseline_summary['mean']
-) > threshold
+drift_detected = np.abs(production_summary["mean"] - baseline_summary["mean"]) > threshold
 ```
 
 This comprehensive workflows document covers the most common and advanced use cases for SHAP in practice.

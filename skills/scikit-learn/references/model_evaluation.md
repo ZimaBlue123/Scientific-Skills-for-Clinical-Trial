@@ -99,7 +99,7 @@ from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 
 model = RandomForestClassifier(n_estimators=100, random_state=42)
-scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')
+scores = cross_val_score(model, X, y, cv=5, scoring="accuracy")
 
 print(f"Scores: {scores}")
 print(f"Mean: {scores.mean():.3f} (+/- {scores.std() * 2:.3f})")
@@ -113,10 +113,13 @@ from sklearn.model_selection import cross_validate
 
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 cv_results = cross_validate(
-    model, X, y, cv=5,
-    scoring=['accuracy', 'precision', 'recall', 'f1'],
+    model,
+    X,
+    y,
+    cv=5,
+    scoring=["accuracy", "precision", "recall", "f1"],
     return_train_score=True,
-    return_estimator=True  # Returns fitted estimators
+    return_estimator=True,  # Returns fitted estimators
 )
 
 print(f"Test accuracy: {cv_results['test_accuracy'].mean():.3f}")
@@ -135,6 +138,7 @@ y_pred = cross_val_predict(model, X, y, cv=5)
 
 # Now can analyze predictions vs actual
 from sklearn.metrics import confusion_matrix
+
 cm = confusion_matrix(y, y_pred)
 ```
 
@@ -150,19 +154,20 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 
 param_grid = {
-    'n_estimators': [50, 100, 200],
-    'max_depth': [5, 10, 15, None],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4]
+    "n_estimators": [50, 100, 200],
+    "max_depth": [5, 10, 15, None],
+    "min_samples_split": [2, 5, 10],
+    "min_samples_leaf": [1, 2, 4],
 }
 
 model = RandomForestClassifier(random_state=42)
 grid_search = GridSearchCV(
-    model, param_grid,
+    model,
+    param_grid,
     cv=5,
-    scoring='accuracy',
+    scoring="accuracy",
     n_jobs=-1,  # Use all CPU cores
-    verbose=1
+    verbose=1,
 )
 
 grid_search.fit(X_train, y_train)
@@ -176,6 +181,7 @@ best_model = grid_search.best_estimator_
 
 # View all results
 import pandas as pd
+
 results_df = pd.DataFrame(grid_search.cv_results_)
 ```
 
@@ -189,22 +195,23 @@ from sklearn.model_selection import RandomizedSearchCV
 from scipy.stats import randint, uniform
 
 param_distributions = {
-    'n_estimators': randint(50, 300),
-    'max_depth': [5, 10, 15, 20, None],
-    'min_samples_split': randint(2, 20),
-    'min_samples_leaf': randint(1, 10),
-    'max_features': uniform(0.1, 0.9)  # Continuous distribution
+    "n_estimators": randint(50, 300),
+    "max_depth": [5, 10, 15, 20, None],
+    "min_samples_split": randint(2, 20),
+    "min_samples_leaf": randint(1, 10),
+    "max_features": uniform(0.1, 0.9),  # Continuous distribution
 }
 
 model = RandomForestClassifier(random_state=42)
 random_search = RandomizedSearchCV(
-    model, param_distributions,
+    model,
+    param_distributions,
     n_iter=100,  # Number of parameter settings sampled
     cv=5,
-    scoring='accuracy',
+    scoring="accuracy",
     n_jobs=-1,
     verbose=1,
-    random_state=42
+    random_state=42,
 )
 
 random_search.fit(X_train, y_train)
@@ -223,19 +230,20 @@ from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import HalvingGridSearchCV
 
 param_grid = {
-    'n_estimators': [50, 100, 200, 300],
-    'max_depth': [5, 10, 15, 20, None],
-    'min_samples_split': [2, 5, 10, 20]
+    "n_estimators": [50, 100, 200, 300],
+    "max_depth": [5, 10, 15, 20, None],
+    "min_samples_split": [2, 5, 10, 20],
 }
 
 model = RandomForestClassifier(random_state=42)
 halving_search = HalvingGridSearchCV(
-    model, param_grid,
+    model,
+    param_grid,
     cv=5,
     factor=3,  # Proportion of candidates eliminated in each iteration
-    resource='n_samples',  # Can also use 'n_estimators' for ensembles
-    max_resources='auto',
-    random_state=42
+    resource="n_samples",  # Can also use 'n_estimators' for ensembles
+    max_resources="auto",
+    random_state=42,
 )
 
 halving_search.fit(X_train, y_train)
@@ -248,16 +256,20 @@ print(f"Best parameters: {halving_search.best_params_}")
 
 ```python
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score,
-    balanced_accuracy_score, matthews_corrcoef
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    balanced_accuracy_score,
+    matthews_corrcoef,
 )
 
 y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred, average='weighted')  # For multiclass
-recall = recall_score(y_test, y_pred, average='weighted')
-f1 = f1_score(y_test, y_pred, average='weighted')
+precision = precision_score(y_test, y_pred, average="weighted")  # For multiclass
+recall = recall_score(y_test, y_pred, average="weighted")
+f1 = f1_score(y_test, y_pred, average="weighted")
 balanced_acc = balanced_accuracy_score(y_test, y_pred)  # Good for imbalanced data
 mcc = matthews_corrcoef(y_test, y_pred)  # Matthews correlation coefficient
 
@@ -285,7 +297,7 @@ import matplotlib.pyplot as plt
 
 cm = confusion_matrix(y_test, y_pred)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
-disp.plot(cmap='Blues')
+disp.plot(cmap="Blues")
 plt.show()
 ```
 
@@ -304,7 +316,7 @@ fpr, tpr, thresholds = roc_curve(y_test, y_proba)
 RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=auc).plot()
 
 # Multiclass (one-vs-rest)
-auc_ovr = roc_auc_score(y_test, y_proba_multi, multi_class='ovr')
+auc_ovr = roc_auc_score(y_test, y_proba_multi, multi_class="ovr")
 ```
 
 ### Precision-Recall Curve
@@ -334,8 +346,11 @@ print(f"Log Loss: {logloss:.3f}")
 
 ```python
 from sklearn.metrics import (
-    mean_squared_error, mean_absolute_error, r2_score,
-    mean_absolute_percentage_error, median_absolute_error
+    mean_squared_error,
+    mean_absolute_error,
+    r2_score,
+    mean_absolute_percentage_error,
+    median_absolute_error,
 )
 
 y_pred = model.predict(X_test)
@@ -361,9 +376,13 @@ print(f"Median AE: {median_ae:.3f}")
 
 ```python
 from sklearn.metrics import (
-    adjusted_rand_score, normalized_mutual_info_score,
-    adjusted_mutual_info_score, fowlkes_mallows_score,
-    homogeneity_score, completeness_score, v_measure_score
+    adjusted_rand_score,
+    normalized_mutual_info_score,
+    adjusted_mutual_info_score,
+    fowlkes_mallows_score,
+    homogeneity_score,
+    completeness_score,
+    v_measure_score,
 )
 
 ari = adjusted_rand_score(y_true, y_pred)
@@ -378,9 +397,7 @@ v_measure = v_measure_score(y_true, y_pred)
 ### Without Ground Truth
 
 ```python
-from sklearn.metrics import (
-    silhouette_score, calinski_harabasz_score, davies_bouldin_score
-)
+from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
 
 silhouette = silhouette_score(X, labels)  # [-1, 1], higher better
 ch_score = calinski_harabasz_score(X, labels)  # Higher better
@@ -394,9 +411,11 @@ db_score = davies_bouldin_score(X, labels)  # Lower better
 ```python
 from sklearn.metrics import make_scorer
 
+
 def custom_metric(y_true, y_pred):
     # Your custom logic
     return score
+
 
 custom_scorer = make_scorer(custom_metric, greater_is_better=True)
 
@@ -410,18 +429,19 @@ scores = cross_val_score(model, X, y, cv=5, scoring=custom_scorer)
 from sklearn.model_selection import GridSearchCV
 
 scoring = {
-    'accuracy': 'accuracy',
-    'precision': 'precision_weighted',
-    'recall': 'recall_weighted',
-    'f1': 'f1_weighted'
+    "accuracy": "accuracy",
+    "precision": "precision_weighted",
+    "recall": "recall_weighted",
+    "f1": "f1_weighted",
 }
 
 grid_search = GridSearchCV(
-    model, param_grid,
+    model,
+    param_grid,
     cv=5,
     scoring=scoring,
-    refit='f1',  # Refit on best f1 score
-    return_train_score=True
+    refit="f1",  # Refit on best f1 score
+    return_train_score=True,
 )
 
 grid_search.fit(X_train, y_train)
@@ -437,11 +457,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 train_sizes, train_scores, val_scores = learning_curve(
-    model, X, y,
-    cv=5,
-    train_sizes=np.linspace(0.1, 1.0, 10),
-    scoring='accuracy',
-    n_jobs=-1
+    model, X, y, cv=5, train_sizes=np.linspace(0.1, 1.0, 10), scoring="accuracy", n_jobs=-1
 )
 
 train_mean = train_scores.mean(axis=1)
@@ -450,13 +466,13 @@ val_mean = val_scores.mean(axis=1)
 val_std = val_scores.std(axis=1)
 
 plt.figure(figsize=(10, 6))
-plt.plot(train_sizes, train_mean, label='Training score')
-plt.plot(train_sizes, val_mean, label='Validation score')
+plt.plot(train_sizes, train_mean, label="Training score")
+plt.plot(train_sizes, val_mean, label="Validation score")
 plt.fill_between(train_sizes, train_mean - train_std, train_mean + train_std, alpha=0.1)
 plt.fill_between(train_sizes, val_mean - val_std, val_mean + val_std, alpha=0.1)
-plt.xlabel('Training Set Size')
-plt.ylabel('Score')
-plt.title('Learning Curve')
+plt.xlabel("Training Set Size")
+plt.ylabel("Score")
+plt.title("Learning Curve")
 plt.legend()
 plt.grid(True)
 ```
@@ -468,23 +484,25 @@ from sklearn.model_selection import validation_curve
 
 param_range = [1, 10, 50, 100, 200, 500]
 train_scores, val_scores = validation_curve(
-    model, X, y,
-    param_name='n_estimators',
+    model,
+    X,
+    y,
+    param_name="n_estimators",
     param_range=param_range,
     cv=5,
-    scoring='accuracy',
-    n_jobs=-1
+    scoring="accuracy",
+    n_jobs=-1,
 )
 
 train_mean = train_scores.mean(axis=1)
 val_mean = val_scores.mean(axis=1)
 
 plt.figure(figsize=(10, 6))
-plt.plot(param_range, train_mean, label='Training score')
-plt.plot(param_range, val_mean, label='Validation score')
-plt.xlabel('n_estimators')
-plt.ylabel('Score')
-plt.title('Validation Curve')
+plt.plot(param_range, train_mean, label="Training score")
+plt.plot(param_range, val_mean, label="Validation score")
+plt.xlabel("n_estimators")
+plt.ylabel("Score")
+plt.title("Validation Curve")
 plt.legend()
 plt.grid(True)
 ```
@@ -497,13 +515,13 @@ plt.grid(True)
 import joblib
 
 # Save model
-joblib.dump(model, 'model.pkl')
+joblib.dump(model, "model.pkl")
 
 # Load model
-loaded_model = joblib.load('model.pkl')
+loaded_model = joblib.load("model.pkl")
 
 # Also works with pipelines
-joblib.dump(pipeline, 'pipeline.pkl')
+joblib.dump(pipeline, "pipeline.pkl")
 ```
 
 ### Using pickle
@@ -512,11 +530,11 @@ joblib.dump(pipeline, 'pipeline.pkl')
 import pickle
 
 # Save
-with open('model.pkl', 'wb') as f:
+with open("model.pkl", "wb") as f:
     pickle.dump(model, f)
 
 # Load
-with open('model.pkl', 'rb') as f:
+with open("model.pkl", "rb") as f:
     loaded_model = pickle.load(f)
 ```
 
@@ -528,7 +546,7 @@ with open('model.pkl', 'rb') as f:
 from sklearn.ensemble import RandomForestClassifier
 
 # Automatically balance classes
-model = RandomForestClassifier(class_weight='balanced', random_state=42)
+model = RandomForestClassifier(class_weight="balanced", random_state=42)
 model.fit(X_train, y_train)
 
 # Custom weights
@@ -549,11 +567,13 @@ smote = SMOTE(random_state=42)
 X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
 
 # Combined approach
-pipeline = ImbPipeline([
-    ('over', SMOTE(sampling_strategy=0.5)),
-    ('under', RandomUnderSampler(sampling_strategy=0.8)),
-    ('model', RandomForestClassifier())
-])
+pipeline = ImbPipeline(
+    [
+        ("over", SMOTE(sampling_strategy=0.5)),
+        ("under", RandomUnderSampler(sampling_strategy=0.8)),
+        ("model", RandomForestClassifier()),
+    ]
+)
 ```
 
 ## Best Practices

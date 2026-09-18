@@ -162,16 +162,16 @@ params = {
     "query.cond": "breast cancer",
     "filter.overallStatus": "RECRUITING",
     "pageSize": 20,
-    "sort": "LastUpdatePostDate:desc"
+    "sort": "LastUpdatePostDate:desc",
 }
 
 response = requests.get(url, params=params)
 data = response.json()
 
 print(f"Found {data['totalCount']} recruiting breast cancer trials")
-for study in data['studies']:
-    nct_id = study['protocolSection']['identificationModule']['nctId']
-    title = study['protocolSection']['identificationModule']['briefTitle']
+for study in data["studies"]:
+    nct_id = study["protocolSection"]["identificationModule"]["nctId"]
+    title = study["protocolSection"]["identificationModule"]["briefTitle"]
     print(f"{nct_id}: {title}")
 ```
 
@@ -180,11 +180,7 @@ for study in data['studies']:
 Find trials testing a specific intervention or drug:
 
 ```python
-params = {
-    "query.intr": "Pembrolizumab",
-    "filter.phase": "PHASE3",
-    "pageSize": 50
-}
+params = {"query.intr": "Pembrolizumab", "filter.phase": "PHASE3", "pageSize": 50}
 
 response = requests.get("https://clinicaltrials.gov/api/v2/studies", params=params)
 ```
@@ -197,7 +193,7 @@ Find trials in a specific location:
 params = {
     "query.cond": "diabetes",
     "query.locn": "Boston, Massachusetts",
-    "filter.overallStatus": "RECRUITING"
+    "filter.overallStatus": "RECRUITING",
 }
 
 response = requests.get("https://clinicaltrials.gov/api/v2/studies", params=params)
@@ -215,8 +211,8 @@ response = requests.get(url)
 study = response.json()
 
 # Access specific information
-eligibility = study['protocolSection']['eligibilityModule']
-contacts = study['protocolSection']['contactsLocationsModule']
+eligibility = study["protocolSection"]["eligibilityModule"]
+contacts = study["protocolSection"]["contactsLocationsModule"]
 ```
 
 ### Use Case 5: Pagination Through Results
@@ -228,20 +224,17 @@ all_studies = []
 page_token = None
 
 while True:
-    params = {
-        "query.cond": "cancer",
-        "pageSize": 1000
-    }
+    params = {"query.cond": "cancer", "pageSize": 1000}
     if page_token:
-        params['pageToken'] = page_token
+        params["pageToken"] = page_token
 
     response = requests.get("https://clinicaltrials.gov/api/v2/studies", params=params)
     data = response.json()
 
-    all_studies.extend(data['studies'])
+    all_studies.extend(data["studies"])
 
     # Check if there are more pages
-    page_token = data.get('pageToken')
+    page_token = data.get("pageToken")
     if not page_token:
         break
 
@@ -253,11 +246,7 @@ print(f"Retrieved {len(all_studies)} total studies")
 Retrieve data in CSV format for analysis:
 
 ```python
-params = {
-    "query.cond": "alzheimer",
-    "format": "csv",
-    "pageSize": 100
-}
+params = {"query.cond": "alzheimer", "format": "csv", "pageSize": 100}
 
 response = requests.get("https://clinicaltrials.gov/api/v2/studies", params=params)
 csv_data = response.text
@@ -294,13 +283,12 @@ with open("alzheimer_trials.csv", "w") as f:
 import requests
 import time
 
+
 def search_with_retry(params, max_retries=3):
     for attempt in range(max_retries):
         try:
             response = requests.get(
-                "https://clinicaltrials.gov/api/v2/studies",
-                params=params,
-                timeout=30
+                "https://clinicaltrials.gov/api/v2/studies", params=params, timeout=30
             )
             response.raise_for_status()
             return response.json()
@@ -315,7 +303,7 @@ def search_with_retry(params, max_retries=3):
         except requests.exceptions.RequestException as e:
             if attempt == max_retries - 1:
                 raise
-            time.sleep(2 ** attempt)  # Exponential backoff
+            time.sleep(2**attempt)  # Exponential backoff
 
     raise Exception("Max retries exceeded")
 ```

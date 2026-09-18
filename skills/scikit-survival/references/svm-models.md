@@ -81,11 +81,7 @@ from sksurv.svm import FastKernelSurvivalSVM
 
 # Fit RBF kernel survival SVM
 estimator = FastKernelSurvivalSVM(
-    alpha=1.0,
-    kernel='rbf',
-    gamma='scale',
-    max_iter=50,
-    random_state=42
+    alpha=1.0, kernel="rbf", gamma="scale", max_iter=50, random_state=42
 )
 estimator.fit(X, y)
 
@@ -170,17 +166,11 @@ from sklearn.model_selection import GridSearchCV
 from sksurv.metrics import as_concordance_index_ipcw_scorer
 
 # Define parameter grid
-param_grid = {
-    'alpha': [0.1, 0.5, 1.0, 5.0, 10.0, 50.0]
-}
+param_grid = {"alpha": [0.1, 0.5, 1.0, 5.0, 10.0, 50.0]}
 
 # Grid search
 cv = GridSearchCV(
-    FastSurvivalSVM(),
-    param_grid,
-    scoring=as_concordance_index_ipcw_scorer(),
-    cv=5,
-    n_jobs=-1
+    FastSurvivalSVM(), param_grid, scoring=as_concordance_index_ipcw_scorer(), cv=5, n_jobs=-1
 )
 cv.fit(X, y)
 
@@ -194,18 +184,15 @@ print(f"Best C-index: {cv.best_score_:.3f}")
 from sklearn.model_selection import GridSearchCV
 
 # Define parameter grid for kernel SVM
-param_grid = {
-    'alpha': [0.1, 1.0, 10.0],
-    'gamma': ['scale', 'auto', 0.001, 0.01, 0.1, 1.0]
-}
+param_grid = {"alpha": [0.1, 1.0, 10.0], "gamma": ["scale", "auto", 0.001, 0.01, 0.1, 1.0]}
 
 # Grid search
 cv = GridSearchCV(
-    FastKernelSurvivalSVM(kernel='rbf'),
+    FastKernelSurvivalSVM(kernel="rbf"),
     param_grid,
     scoring=as_concordance_index_ipcw_scorer(),
     cv=5,
-    n_jobs=-1
+    n_jobs=-1,
 )
 cv.fit(X, y)
 
@@ -234,15 +221,12 @@ from sksurv.svm import FastKernelSurvivalSVM
 from sklearn.pipeline import make_pipeline
 
 # Separate clinical and molecular features
-clinical_features = ['age', 'stage', 'grade']
+clinical_features = ["age", "stage", "grade"]
 X_clinical = X[clinical_features]
 X_molecular = X.drop(clinical_features, axis=1)
 
 # Create pipeline with clinical kernel
-estimator = make_pipeline(
-    ClinicalKernelTransform(),
-    FastKernelSurvivalSVM()
-)
+estimator = make_pipeline(ClinicalKernelTransform(), FastKernelSurvivalSVM())
 
 # Fit model
 # ClinicalKernelTransform expects tuple (clinical, molecular)
@@ -269,10 +253,7 @@ svm = FastSurvivalSVM(alpha=1.0, max_iter=100, random_state=42)
 
 # Cross-validation
 scores = cross_val_score(
-    svm, X_scaled, y,
-    cv=5,
-    scoring=as_concordance_index_ipcw_scorer(),
-    n_jobs=-1
+    svm, X_scaled, y, cv=5, scoring=as_concordance_index_ipcw_scorer(), n_jobs=-1
 )
 
 print(f"Mean C-index: {scores.mean():.3f} (±{scores.std():.3f})")
@@ -294,7 +275,7 @@ X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 # Compare different kernels
-kernels = ['linear', 'poly', 'rbf', 'sigmoid']
+kernels = ["linear", "poly", "rbf", "sigmoid"]
 results = {}
 
 for kernel in kernels:
@@ -329,25 +310,14 @@ from sksurv.metrics import as_concordance_index_ipcw_scorer
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Create pipeline
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('svm', FastKernelSurvivalSVM(kernel='rbf'))
-])
+pipeline = Pipeline([("scaler", StandardScaler()), ("svm", FastKernelSurvivalSVM(kernel="rbf"))])
 
 # Define parameter grid
-param_grid = {
-    'svm__alpha': [0.1, 1.0, 10.0],
-    'svm__gamma': ['scale', 0.01, 0.1, 1.0]
-}
+param_grid = {"svm__alpha": [0.1, 1.0, 10.0], "svm__gamma": ["scale", 0.01, 0.1, 1.0]}
 
 # Grid search
 cv = GridSearchCV(
-    pipeline,
-    param_grid,
-    scoring=as_concordance_index_ipcw_scorer(),
-    cv=5,
-    n_jobs=-1,
-    verbose=1
+    pipeline, param_grid, scoring=as_concordance_index_ipcw_scorer(), cv=5, n_jobs=-1, verbose=1
 )
 cv.fit(X_train, y_train)
 

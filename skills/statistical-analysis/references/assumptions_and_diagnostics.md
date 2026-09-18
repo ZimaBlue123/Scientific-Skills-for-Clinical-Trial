@@ -116,6 +116,7 @@ statistic, p_value = stats.levene(group1, group2, group3)
 # For regression
 # Breusch-Pagan test
 from statsmodels.stats.diagnostic import het_breuschpagan
+
 _, p_value, _, _ = het_breuschpagan(residuals, exog)
 ```
 
@@ -183,12 +184,12 @@ pg.mwu(group1, group2)  # Mann-Whitney U
 import pingouin as pg
 
 # Check normality per group
-for group in df['group'].unique():
-    data = df[df['group'] == group]['value']
+for group in df["group"].unique():
+    data = df[df["group"] == group]["value"]
     stats.shapiro(data)
 
 # Check homogeneity of variance
-pg.homoscedasticity(df, dv='value', group='group')
+pg.homoscedasticity(df, dv="value", group="group")
 
 # For repeated measures: Check sphericity
 # Automatically tested in pingouin's rm_anova
@@ -220,7 +221,7 @@ import seaborn as sns
 # Scatter plots of Y vs each X
 # Residuals vs. fitted values (should be randomly scattered)
 plt.scatter(fitted_values, residuals)
-plt.axhline(y=0, color='r', linestyle='--')
+plt.axhline(y=0, color="r", linestyle="--")
 ```
 
 **2. Independence**:
@@ -236,6 +237,7 @@ dw_statistic = durbin_watson(residuals)
 ```python
 # Breusch-Pagan test
 from statsmodels.stats.diagnostic import het_breuschpagan
+
 _, p_value, _, _ = het_breuschpagan(residuals, exog)
 
 # Visual: Scale-location plot

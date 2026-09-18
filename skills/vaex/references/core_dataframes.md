@@ -20,14 +20,14 @@ The most common way to load data:
 import vaex
 
 # Works with multiple formats
-df = vaex.open('data.hdf5')     # HDF5 (recommended)
-df = vaex.open('data.arrow')    # Apache Arrow (recommended)
-df = vaex.open('data.parquet')  # Parquet
-df = vaex.open('data.csv')      # CSV (slower for large files)
-df = vaex.open('data.fits')     # FITS (astronomy)
+df = vaex.open("data.hdf5")  # HDF5 (recommended)
+df = vaex.open("data.arrow")  # Apache Arrow (recommended)
+df = vaex.open("data.parquet")  # Parquet
+df = vaex.open("data.csv")  # CSV (slower for large files)
+df = vaex.open("data.fits")  # FITS (astronomy)
 
 # Can open multiple files as one DataFrame
-df = vaex.open('data_*.hdf5')   # Wildcards supported
+df = vaex.open("data_*.hdf5")  # Wildcards supported
 ```
 
 **Key characteristics:**
@@ -40,17 +40,17 @@ df = vaex.open('data_*.hdf5')   # Wildcards supported
 ```python
 # CSV with options
 df = vaex.from_csv(
-    'large_file.csv',
-    chunk_size=5_000_000,      # Process in chunks
-    convert=True,               # Convert to HDF5 automatically
-    copy_index=False            # Don't copy pandas index if present
+    "large_file.csv",
+    chunk_size=5_000_000,  # Process in chunks
+    convert=True,  # Convert to HDF5 automatically
+    copy_index=False,  # Don't copy pandas index if present
 )
 
 # Apache Arrow
-df = vaex.open('data.arrow')    # Native support, very fast
+df = vaex.open("data.arrow")  # Native support, very fast
 
 # HDF5 (optimal format)
-df = vaex.open('data.hdf5')     # Instant loading via memory mapping
+df = vaex.open("data.hdf5")  # Instant loading via memory mapping
 ```
 
 ## Creating DataFrames from Other Sources
@@ -62,7 +62,7 @@ import pandas as pd
 import vaex
 
 # Convert pandas DataFrame
-pdf = pd.read_csv('data.csv')
+pdf = pd.read_csv("data.csv")
 df = vaex.from_pandas(pdf, copy_index=False)
 
 # Warning: This loads entire pandas DataFrame into memory
@@ -91,11 +91,7 @@ df = vaex.from_arrays(x=x, y=y)
 import vaex
 
 # Dictionary of lists/arrays
-data = {
-    'name': ['Alice', 'Bob', 'Charlie'],
-    'age': [25, 30, 35],
-    'salary': [50000, 60000, 70000]
-}
+data = {"name": ["Alice", "Bob", "Charlie"], "age": [25, 30, 35], "salary": [50000, 60000, 70000]}
 df = vaex.from_dict(data)
 ```
 
@@ -106,10 +102,7 @@ import pyarrow as pa
 import vaex
 
 # From Arrow Table
-arrow_table = pa.table({
-    'x': [1, 2, 3],
-    'y': [4, 5, 6]
-})
+arrow_table = pa.table({"x": [1, 2, 3], "y": [4, 5, 6]})
 df = vaex.from_arrow_table(arrow_table)
 ```
 
@@ -138,7 +131,7 @@ print(df)
 
 # Shape (rows, columns)
 print(df.shape)  # Returns (row_count, column_count)
-print(len(df))   # Row count
+print(len(df))  # Row count
 
 # Column names
 print(df.columns)
@@ -166,7 +159,7 @@ df.x.sum()
 df.x.count()
 
 # Quantiles
-df.x.quantile(0.5)   # Median
+df.x.quantile(0.5)  # Median
 df.x.quantile([0.25, 0.5, 0.75])  # Multiple quantiles
 ```
 
@@ -184,7 +177,7 @@ df.sample(n=100)
 pdf = df.to_pandas_df()
 
 # Convert specific columns only
-pdf = df[['x', 'y']].to_pandas_df()
+pdf = df[["x", "y"]].to_pandas_df()
 ```
 
 ## DataFrame Structure
@@ -194,10 +187,10 @@ pdf = df[['x', 'y']].to_pandas_df()
 ```python
 # Access columns as expressions
 x_column = df.x
-y_column = df['y']
+y_column = df["y"]
 
 # Column operations return expressions (lazy)
-sum_column = df.x + df.y    # Not computed yet
+sum_column = df.x + df.y  # Not computed yet
 
 # List all columns
 print(df.get_column_names())
@@ -207,7 +200,7 @@ print(df.dtypes)
 
 # Virtual vs materialized columns
 print(df.get_column_names(virtual=False))  # Materialized only
-print(df.get_column_names(virtual=True))   # All columns
+print(df.get_column_names(virtual=True))  # All columns
 ```
 
 ### Rows
@@ -219,7 +212,7 @@ row_count = df.count()
 
 # Single row (returns dict)
 row = df.row(0)
-print(row['column_name'])
+print(row["column_name"])
 
 # Note: Iterating over rows is NOT recommended in Vaex
 # Use vectorized operations instead
@@ -231,12 +224,12 @@ Expressions are Vaex's way of representing computations that haven't been execut
 
 ```python
 # Create expressions (no computation)
-expr = df.x ** 2 + df.y
+expr = df.x**2 + df.y
 
 # Expressions can be used in many contexts
-mean_of_expr = expr.mean()          # Still lazy
-df['new_col'] = expr                # Virtual column
-filtered = df[expr > 10]            # Selection
+mean_of_expr = expr.mean()  # Still lazy
+df["new_col"] = expr  # Virtual column
+filtered = df[expr > 10]  # Selection
 
 # Force evaluation
 result = expr.values  # Returns NumPy array (use carefully!)
@@ -258,9 +251,9 @@ df_deep = df.copy(deep=True)
 
 ```python
 # Select row range
-df_subset = df[1000:2000]      # Rows 1000-2000
-df_subset = df[:1000]          # First 1000 rows
-df_subset = df[-1000:]         # Last 1000 rows
+df_subset = df[1000:2000]  # Rows 1000-2000
+df_subset = df[:1000]  # First 1000 rows
+df_subset = df[-1000:]  # Last 1000 rows
 
 # Note: This creates a view, not a copy (efficient)
 ```
@@ -273,7 +266,7 @@ df_combined = vaex.concat([df1, df2, df3])
 
 # Horizontal concatenation (combine columns)
 # Use join or simply assign columns
-df['new_col'] = other_df.some_column
+df["new_col"] = other_df.some_column
 ```
 
 ## Best Practices
@@ -291,10 +284,10 @@ df['new_col'] = other_df.some_column
 
 ```python
 # Initial conversion (do once)
-df = vaex.from_csv('large_data.csv', convert='large_data.hdf5')
+df = vaex.from_csv("large_data.csv", convert="large_data.hdf5")
 
 # Future loads (instant)
-df = vaex.open('large_data.hdf5')
+df = vaex.open("large_data.hdf5")
 ```
 
 ### Pattern: Inspecting Large Datasets
@@ -302,12 +295,12 @@ df = vaex.open('large_data.hdf5')
 ```python
 import vaex
 
-df = vaex.open('large_file.hdf5')
+df = vaex.open("large_file.hdf5")
 
 # Quick overview
-print(df)                    # First/last rows
-print(df.shape)             # Dimensions
-print(df.describe())        # Statistics
+print(df)  # First/last rows
+print(df.shape)  # Dimensions
+print(df.describe())  # Statistics
 
 # Sample for detailed inspection
 sample = df.sample(1000).to_pandas_df()
@@ -318,11 +311,11 @@ print(sample.head())
 
 ```python
 # Load multiple files as one DataFrame
-df = vaex.open('data_part*.hdf5')
+df = vaex.open("data_part*.hdf5")
 
 # Or explicitly concatenate
-df1 = vaex.open('data_2020.hdf5')
-df2 = vaex.open('data_2021.hdf5')
+df1 = vaex.open("data_2020.hdf5")
+df2 = vaex.open("data_2021.hdf5")
 df_all = vaex.concat([df1, df2])
 ```
 
@@ -332,7 +325,7 @@ df_all = vaex.concat([df1, df2])
 
 ```python
 # Solution: Convert to HDF5 first
-df = vaex.from_csv('large.csv', convert='large.hdf5')
+df = vaex.from_csv("large.csv", convert="large.hdf5")
 # Future loads: df = vaex.open('large.hdf5')
 ```
 
@@ -343,7 +336,7 @@ df = vaex.from_csv('large.csv', convert='large.hdf5')
 print(df.dtypes)
 
 # Convert to numeric (creates virtual column)
-df['age_numeric'] = df.age.astype('int64')
+df["age_numeric"] = df.age.astype("int64")
 ```
 
 ### Issue: Out of Memory on Small Operations

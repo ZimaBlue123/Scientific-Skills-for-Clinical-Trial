@@ -58,7 +58,7 @@ client = Client()
 client = Client(n_workers=4, threads_per_worker=2)
 
 # Or connect to existing cluster
-client = Client('scheduler-address:8786')
+client = Client("scheduler-address:8786")
 ```
 
 ## Submitting Tasks
@@ -69,9 +69,11 @@ from dask.distributed import Client
 
 client = Client()
 
+
 # Submit single task
 def add(x, y):
     return x + y
+
 
 future = client.submit(add, 1, 2)
 
@@ -96,7 +98,8 @@ results = client.gather(futures)  # Efficient parallel gathering
 ```python
 # Apply function to multiple inputs
 def square(x):
-    return x ** 2
+    return x**2
+
 
 # Submit batch of tasks
 futures = client.map(square, range(100))
@@ -128,9 +131,11 @@ if future.done():
 else:
     print("Still computing...")
 
+
 # Or use callbacks
 def handle_result(future):
     print(f"Result: {future.result()}")
+
 
 future.add_done_callback(handle_result)
 ```
@@ -140,7 +145,8 @@ future.add_done_callback(handle_result)
 def might_fail(x):
     if x < 0:
         raise ValueError("Negative value")
-    return x ** 2
+    return x**2
+
 
 future = client.submit(might_fail, -5)
 
@@ -211,9 +217,11 @@ For side-effect tasks without needing the result:
 ```python
 from dask.distributed import fire_and_forget
 
+
 def log_to_database(data):
     # Write to database, no return value needed
     database.write(data)
+
 
 # Submit without keeping reference
 future = client.submit(log_to_database, data)
@@ -257,15 +265,18 @@ from dask.distributed import Queue
 
 queue = Queue()
 
+
 def producer():
     for i in range(10):
         queue.put(i)
+
 
 def consumer():
     results = []
     for _ in range(10):
         results.append(queue.get())
     return results
+
 
 # Submit tasks
 client.submit(producer)
@@ -279,6 +290,7 @@ from dask.distributed import Lock
 
 lock = Lock()
 
+
 def critical_section():
     with lock:
         # Only one task executes this at a time
@@ -291,13 +303,16 @@ from dask.distributed import Event
 
 event = Event()
 
+
 def waiter():
     event.wait()  # Blocks until event is set
     return "Event occurred"
 
+
 def setter():
     time.sleep(5)
     event.set()
+
 
 # Start both tasks
 wait_future = client.submit(waiter)
@@ -310,14 +325,16 @@ result = wait_future.result()  # Waits for setter to complete
 ```python
 from dask.distributed import Variable
 
-var = Variable('my-var')
+var = Variable("my-var")
 
 # Set value
 var.set(42)
 
+
 # Get value from tasks
 def reader():
     return var.get()
+
 
 future = client.submit(reader)
 print(future.result())  # 42
@@ -333,6 +350,7 @@ from dask.distributed import Client
 
 client = Client()
 
+
 class Counter:
     def __init__(self):
         self.count = 0
@@ -343,6 +361,7 @@ class Counter:
 
     def get_count(self):
         return self.count
+
 
 # Create actor on worker
 counter = client.submit(Counter, actor=True).result()
@@ -368,9 +387,11 @@ from dask.distributed import Client
 
 client = Client()
 
+
 def process_item(item):
     # Independent computation
     return expensive_computation(item)
+
 
 # Process many items in parallel
 items = range(1000)
@@ -394,6 +415,7 @@ def recursive_compute(data, depth):
     # Combine results
     return combine(left_future.result(), right_future.result())
 
+
 # Start computation
 result_future = client.submit(recursive_compute, initial_data, 5)
 result = result_future.result()
@@ -403,9 +425,11 @@ result = result_future.result()
 ```python
 from itertools import product
 
+
 def run_simulation(param1, param2, param3):
     # Run simulation with parameters
     return simulate(param1, param2, param3)
+
 
 # Generate parameter combinations
 params = product(range(10), range(10), range(10))
@@ -537,5 +561,5 @@ except Exception:
 ### Profile Tasks
 ```python
 # Get performance data
-client.profile(filename='profile.html')
+client.profile(filename="profile.html")
 ```

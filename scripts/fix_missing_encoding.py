@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 fix_missing_encoding.py
 
@@ -40,9 +39,24 @@ import tempfile
 
 SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".workbuddy"}
 LIB_RECEIVERS = {
-    "fitz", "Image", "pdfplumber", "PIL", "pypdf", "PyPDF2", "io",
-    "soundfile", "wave", "zipfile", "tarfile", "Document", "PdfReader",
-    "pptx", "docx", "workbook", "pdf", "img",
+    "fitz",
+    "Image",
+    "pdfplumber",
+    "PIL",
+    "pypdf",
+    "PyPDF2",
+    "io",
+    "soundfile",
+    "wave",
+    "zipfile",
+    "tarfile",
+    "Document",
+    "PdfReader",
+    "pptx",
+    "docx",
+    "workbook",
+    "pdf",
+    "img",
 }
 INSERT = b'encoding="utf-8"'
 
@@ -118,9 +132,7 @@ def prev_nonspace(lines: list[bytes], lineno0: int, col: int) -> bytes:
 def patch_source(raw: bytes, calls: list[ast.Call]) -> tuple[bytes, int]:
     lines = raw.split(b"\n")
     # 从后往前改，避免插入后偏移影响后续定位
-    for node in sorted(
-        calls, key=lambda n: (n.end_lineno, n.end_col_offset), reverse=True
-    ):
+    for node in sorted(calls, key=lambda n: (n.end_lineno, n.end_col_offset), reverse=True):
         i = node.end_lineno - 1
         idx = node.end_col_offset - 1  # 右括号下标
         line = lines[i]
@@ -152,9 +164,7 @@ def main() -> int:
     argv = sys.argv[1:]
     apply_changes = "--apply" in argv
     paths = [a for a in argv if not a.startswith("--")]
-    root = paths[0] if paths else os.path.dirname(
-        os.path.dirname(os.path.abspath(__file__))
-    )
+    root = paths[0] if paths else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     changed_files, changed_calls = 0, 0
     failed = 0
@@ -184,8 +194,7 @@ def main() -> int:
                 print(f"  [待改] {rel}  +{n}")
 
     verb = "已修改" if apply_changes else "待修改(dry-run)"
-    print(f"\n{verb} 文件 {changed_files} 个，调用 {changed_calls} 处；"
-          f"校验失败 {failed} 个")
+    print(f"\n{verb} 文件 {changed_files} 个，调用 {changed_calls} 处；校验失败 {failed} 个")
     if not apply_changes:
         print("确认无误后加 --apply 执行写盘。")
     return 0

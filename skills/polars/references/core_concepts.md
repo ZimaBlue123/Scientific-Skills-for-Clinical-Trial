@@ -39,32 +39,23 @@ pl.col("name").str.to_uppercase().str.slice(0, 3)
 df.select(
     "name",  # Simple column name
     pl.col("age"),  # Expression
-    (pl.col("age") * 12).alias("age_in_months")  # Computed expression
+    (pl.col("age") * 12).alias("age_in_months"),  # Computed expression
 )
 ```
 
 **With_columns context:**
 ```python
-df.with_columns(
-    age_doubled=pl.col("age") * 2,
-    name_upper=pl.col("name").str.to_uppercase()
-)
+df.with_columns(age_doubled=pl.col("age") * 2, name_upper=pl.col("name").str.to_uppercase())
 ```
 
 **Filter context:**
 ```python
-df.filter(
-    pl.col("age") > 25,
-    pl.col("city").is_in(["NY", "LA", "SF"])
-)
+df.filter(pl.col("age") > 25, pl.col("city").is_in(["NY", "LA", "SF"]))
 ```
 
 **Group_by context:**
 ```python
-df.group_by("department").agg(
-    pl.col("salary").mean(),
-    pl.col("employee_id").count()
-)
+df.group_by("department").agg(pl.col("salary").mean(), pl.col("employee_id").count())
 ```
 
 ### Expression Expansion
@@ -148,7 +139,7 @@ Convert between types explicitly:
 df.select(
     pl.col("age").cast(pl.Float64),
     pl.col("date_string").str.strptime(pl.Date, "%Y-%m-%d"),
-    pl.col("id").cast(pl.Utf8)
+    pl.col("id").cast(pl.Utf8),
 )
 ```
 
@@ -182,9 +173,7 @@ Use categorical types for string columns with low cardinality (repeated values):
 
 ```python
 # Cast to categorical
-df.with_columns(
-    pl.col("category").cast(pl.Categorical)
-)
+df.with_columns(pl.col("category").cast(pl.Categorical))
 
 # Benefits:
 # - Reduced memory usage
@@ -335,16 +324,10 @@ Polars parallelizes operations automatically using Rust's concurrency:
 **Best practice:**
 ```python
 # Good: Stays in expression API (parallelized)
-df.with_columns(
-    pl.col("value") * 10,
-    pl.col("value").log(),
-    pl.col("value").sqrt()
-)
+df.with_columns(pl.col("value") * 10, pl.col("value").log(), pl.col("value").sqrt())
 
 # Bad: Uses Python function (sequential)
-df.with_columns(
-    pl.col("value").map_elements(lambda x: x * 10)
-)
+df.with_columns(pl.col("value").map_elements(lambda x: x * 10))
 ```
 
 ## Strict Type System
@@ -357,9 +340,7 @@ Polars enforces strict typing:
 # df.with_columns(pl.col("int_col") + "string")
 
 # Must cast explicitly
-df.with_columns(
-    pl.col("int_col").cast(pl.Utf8) + "_suffix"
-)
+df.with_columns(pl.col("int_col").cast(pl.Utf8) + "_suffix")
 ```
 
 **Benefits:**

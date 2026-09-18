@@ -62,15 +62,12 @@ model = Transformer(
     dataset=sample_dataset,
     feature_keys=["diagnoses", "medications"],
     mode="binary",
-    embedding_dim=128
+    embedding_dim=128,
 )
 
 trainer = Trainer(model=model, device="cuda")
 trainer.train(
-    train_dataloader=train_loader,
-    val_dataloader=val_loader,
-    epochs=50,
-    monitor="pr_auc_score"
+    train_dataloader=train_loader, val_dataloader=val_loader, epochs=50, monitor="pr_auc_score"
 )
 
 # 5. Evaluate
@@ -291,6 +288,7 @@ uv pip install pyhealth
 1. **Always split by patient**: Prevent data leakage by ensuring no patient appears in multiple splits
    ```python
    from pyhealth.datasets import split_by_patient
+
    train, val, test = split_by_patient(dataset, [0.7, 0.1, 0.2])
    ```
 
@@ -406,9 +404,7 @@ print(f"Generated {len(sample_dataset)} samples")
 
 # 3. Split data (by patient to prevent leakage)
 print("Splitting data...")
-train_ds, val_ds, test_ds = split_by_patient(
-    sample_dataset, ratios=[0.7, 0.1, 0.2], seed=42
-)
+train_ds, val_ds, test_ds = split_by_patient(sample_dataset, ratios=[0.7, 0.1, 0.2], seed=42)
 
 # 4. Create data loaders
 train_loader = get_dataloader(train_ds, batch_size=64, shuffle=True)
@@ -422,7 +418,7 @@ model = RETAIN(
     feature_keys=["diagnoses", "procedures", "medications"],
     mode="binary",
     embedding_dim=128,
-    hidden_dim=128
+    hidden_dim=128,
 )
 
 # 6. Train model
@@ -437,15 +433,14 @@ trainer.train(
     weight_decay=1e-5,
     monitor="pr_auc_score",  # Use AUPRC for imbalanced data
     monitor_criterion="max",
-    save_path="./checkpoints/mortality_retain"
+    save_path="./checkpoints/mortality_retain",
 )
 
 # 7. Evaluate on test set
 print("Evaluating on test set...")
 test_results = trainer.evaluate(
     test_loader,
-    metrics=["accuracy", "precision", "recall", "f1_score",
-             "roc_auc_score", "pr_auc_score"]
+    metrics=["accuracy", "precision", "recall", "f1_score", "roc_auc_score", "pr_auc_score"],
 )
 
 print("\nTest Results:")
@@ -456,7 +451,7 @@ for metric, value in test_results.items():
 predictions = trainer.inference(
     test_loader,
     additional_outputs=["visit_attention", "feature_attention"],
-    return_patient_ids=True
+    return_patient_ids=True,
 )
 
 # 9. Analyze a high-risk patient

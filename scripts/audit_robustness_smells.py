@@ -36,8 +36,8 @@ ALLOWED_ABS_PATH = re.compile(r"^[A-Za-z]:\\$|^/$")
 # ``<Receiver>.open(...)`` where the receiver is a third-party object whose
 # ``open`` is a document/decoder factory, not the builtin text-file opener.
 LIB_RECEIVERS = {
-    "Image",           # Pillow
-    "fitz",            # PyMuPDF
+    "Image",  # Pillow
+    "fitz",  # PyMuPDF
     "pymupdf",
     "pdfplumber",
     "tarfile",
@@ -97,7 +97,11 @@ def _is_builtin_open(node: ast.Call) -> bool:
 def _is_binary_open(node: ast.Call) -> bool:
     """True when the call opens in binary mode, where ``encoding=`` is invalid."""
     for kw in node.keywords:
-        if kw.arg == "mode" and isinstance(kw.value, ast.Constant) and isinstance(kw.value.value, str):
+        if (
+            kw.arg == "mode"
+            and isinstance(kw.value, ast.Constant)
+            and isinstance(kw.value.value, str)
+        ):
             return bool(BINARY_MODE.search(kw.value.value))
     if len(node.args) >= 2 and isinstance(node.args[1], ast.Constant):
         mode = node.args[1].value
@@ -134,12 +138,22 @@ def audit_file(path: Path) -> list[dict[str, object]]:
         if isinstance(node, ast.ExceptHandler):
             if node.type is None:
                 findings.append(
-                    {"file": str(path), "line": node.lineno, "kind": "bare-except", "detail": "except: without type"}
+                    {
+                        "file": str(path),
+                        "line": node.lineno,
+                        "kind": "bare-except",
+                        "detail": "except: without type",
+                    }
                 )
             elif _is_silent_handler(node):
                 name = getattr(node.type, "id", None) or getattr(node.type, "attr", "Exception")
                 findings.append(
-                    {"file": str(path), "line": node.lineno, "kind": "silent-swallow", "detail": f"except {name}: pass"}
+                    {
+                        "file": str(path),
+                        "line": node.lineno,
+                        "kind": "silent-swallow",
+                        "detail": f"except {name}: pass",
+                    }
                 )
 
         elif isinstance(node, ast.Call):
@@ -160,16 +174,30 @@ def audit_file(path: Path) -> list[dict[str, object]]:
                 base = getattr(func, "value", None)
                 if getattr(base, "id", None) == "os":
                     findings.append(
-                        {"file": str(path), "line": node.lineno, "kind": "os-system", "detail": "os.system()"}
+                        {
+                            "file": str(path),
+                            "line": node.lineno,
+                            "kind": "os-system",
+                            "detail": "os.system()",
+                        }
                     )
             elif fname in {"run", "Popen", "call", "check_output", "check_call"}:
-                if any(kw.arg == "shell" and getattr(kw.value, "value", False) for kw in node.keywords):
+                if any(
+                    kw.arg == "shell" and getattr(kw.value, "value", False) for kw in node.keywords
+                ):
                     findings.append(
-                        {"file": str(path), "line": node.lineno, "kind": "subprocess-shell", "detail": "shell=True"}
+                        {
+                            "file": str(path),
+                            "line": node.lineno,
+                            "kind": "subprocess-shell",
+                            "detail": "shell=True",
+                        }
                     )
 
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            for default in list(node.args.defaults) + [d for d in node.args.kw_defaults if d is not None]:
+            for default in list(node.args.defaults) + [
+                d for d in node.args.kw_defaults if d is not None
+            ]:
                 if isinstance(default, (ast.List, ast.Dict, ast.Set)):
                     findings.append(
                         {
@@ -182,14 +210,21 @@ def audit_file(path: Path) -> list[dict[str, object]]:
 
     for line in _literal_abs_paths(tree):
         findings.append(
-            {"file": str(path), "line": line, "kind": "hardcoded-abs-path", "detail": "literal absolute path"}
+            {
+                "file": str(path),
+                "line": line,
+                "kind": "hardcoded-abs-path",
+                "detail": "literal absolute path",
+            }
         )
 
     return findings
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Audit project-owned Python for robustness smells.")
+    parser = argparse.ArgumentParser(
+        description="Audit project-owned Python for robustness smells."
+    )
     parser.add_argument("--json", action="store_true", help="emit machine readable JSON")
     args = parser.parse_args()
 
@@ -205,13 +240,21 @@ def main() -> int:
         by_kind[key] = by_kind.get(key, 0) + 1
 
     if args.json:
-        print(json.dumps({"files": len(files), "counts": by_kind, "findings": all_findings}, ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                {"files": len(files), "counts": by_kind, "findings": all_findings},
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
     else:
         print(f"scanned files : {len(files)}")
         print(f"total findings: {len(all_findings)}")
         for kind in sorted(by_kind):
             print(f"  {kind:<20} {by_kind[kind]}")
-        for item in sorted(all_findings, key=lambda x: (str(x["kind"]), str(x["file"]), int(x["line"]))):
+        for item in sorted(
+            all_findings, key=lambda x: (str(x["kind"]), str(x["file"]), int(x["line"]))
+        ):
             rel = Path(str(item["file"])).resolve().relative_to(REPO_ROOT)
             print(f"  [{item['kind']}] {rel}:{item['line']} - {item['detail']}")
 

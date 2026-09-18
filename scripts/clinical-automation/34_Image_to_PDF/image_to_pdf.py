@@ -56,8 +56,8 @@ def process_image_for_pdf(img_path: Path) -> Image.Image | None:
 
 def natural_sort_key(path: Path):
     """用于自然排序的 key 函数：提取文件名中的数字转为整数对比。"""
-    return [int(text) if text.isdigit() else text.lower()
-            for text in re.split(r'(\d+)', path.name)]
+    return [int(text) if text.isdigit() else text.lower() for text in re.split(r"(\d+)", path.name)]
+
 
 def collect_images(input_path: Path) -> list[Path]:
     """收集支持的图片文件并按照自然数字顺序排序，确保页面顺序。"""
@@ -94,10 +94,7 @@ def convert_single(img_path: Path, output_dir: Path, overwrite: bool = False) ->
 
 
 def merge_images(
-    img_paths: list[Path],
-    output_dir: Path,
-    output_filename: str = "merged_output.pdf",
-    overwrite: bool = False
+    img_paths: list[Path], output_dir: Path, output_filename: str = "merged_output.pdf", overwrite: bool = False
 ) -> bool:
     """将多张图片合并为一个 PDF。"""
     if not img_paths:
@@ -124,13 +121,7 @@ def merge_images(
             return False
 
         pdf_path.parent.mkdir(parents=True, exist_ok=True)
-        first_img.save(
-            pdf_path,
-            "PDF",
-            resolution=100.0,
-            save_all=True,
-            append_images=images
-        )
+        first_img.save(pdf_path, "PDF", resolution=100.0, save_all=True, append_images=images)
         logger.info("action=merge_success dest=%s total_pages=%d", pdf_path.name, len(images) + 1)
         return True
     except Exception as e:

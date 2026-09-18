@@ -51,7 +51,7 @@ download_cosmic_file(
     email="your_email@institution.edu",
     password="your_password",
     filepath="GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz",
-    output_filename="cosmic_mutations.tsv.gz"
+    output_filename="cosmic_mutations.tsv.gz",
 )
 ```
 
@@ -76,14 +76,15 @@ python scripts/download_cosmic.py user@email.com \
 import pandas as pd
 
 # Read mutation data
-mutations = pd.read_csv('cosmic_mutations.tsv.gz', sep='\t', compression='gzip')
+mutations = pd.read_csv("cosmic_mutations.tsv.gz", sep="\t", compression="gzip")
 
 # Read Cancer Gene Census
-gene_census = pd.read_csv('cancer_gene_census.csv')
+gene_census = pd.read_csv("cancer_gene_census.csv")
 
 # Read VCF format
 import pysam
-vcf = pysam.VariantFile('CosmicCodingMuts.vcf.gz')
+
+vcf = pysam.VariantFile("CosmicCodingMuts.vcf.gz")
 ```
 
 ## Available Data Types
@@ -101,7 +102,7 @@ Download comprehensive mutation data including point mutations, indels, and geno
 download_cosmic_file(
     email="user@email.com",
     password="password",
-    filepath="GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz"
+    filepath="GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz",
 )
 ```
 
@@ -113,7 +114,7 @@ Access the expert-curated list of ~700+ cancer genes with substantial evidence o
 download_cosmic_file(
     email="user@email.com",
     password="password",
-    filepath="GRCh38/cosmic/latest/cancer_gene_census.csv"
+    filepath="GRCh38/cosmic/latest/cancer_gene_census.csv",
 )
 ```
 
@@ -129,9 +130,7 @@ Download signature profiles for mutational signature analysis.
 ```python
 # Download signature definitions
 download_cosmic_file(
-    email="user@email.com",
-    password="password",
-    filepath="signatures/signatures.tsv"
+    email="user@email.com", password="password", filepath="signatures/signatures.tsv"
 )
 ```
 
@@ -152,7 +151,7 @@ Access gene fusion data and structural rearrangements.
 download_cosmic_file(
     email="user@email.com",
     password="password",
-    filepath="GRCh38/cosmic/latest/CosmicFusionExport.tsv.gz"
+    filepath="GRCh38/cosmic/latest/CosmicFusionExport.tsv.gz",
 )
 ```
 
@@ -168,7 +167,7 @@ Retrieve copy number alterations and gene expression data.
 download_cosmic_file(
     email="user@email.com",
     password="password",
-    filepath="GRCh38/cosmic/latest/CosmicCompleteCNA.tsv.gz"
+    filepath="GRCh38/cosmic/latest/CosmicCompleteCNA.tsv.gz",
 )
 ```
 
@@ -180,7 +179,7 @@ Access drug resistance mutation data with clinical annotations.
 download_cosmic_file(
     email="user@email.com",
     password="password",
-    filepath="GRCh38/cosmic/latest/CosmicResistanceMutations.tsv.gz"
+    filepath="GRCh38/cosmic/latest/CosmicResistanceMutations.tsv.gz",
 )
 ```
 
@@ -194,10 +193,10 @@ COSMIC provides data for two reference genomes:
 Specify the assembly in file paths:
 ```python
 # GRCh38 (recommended)
-filepath="GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz"
+filepath = "GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz"
 
 # GRCh37 (legacy)
-filepath="GRCh37/cosmic/latest/CosmicMutantExport.tsv.gz"
+filepath = "GRCh37/cosmic/latest/CosmicMutantExport.tsv.gz"
 ```
 
 ### Versioning
@@ -216,29 +215,29 @@ filepath="GRCh37/cosmic/latest/CosmicMutantExport.tsv.gz"
 ```python
 import pandas as pd
 
-mutations = pd.read_csv('cosmic_mutations.tsv.gz', sep='\t', compression='gzip')
-tp53_mutations = mutations[mutations['Gene name'] == 'TP53']
+mutations = pd.read_csv("cosmic_mutations.tsv.gz", sep="\t", compression="gzip")
+tp53_mutations = mutations[mutations["Gene name"] == "TP53"]
 ```
 
 **Identify cancer genes by role**:
 ```python
-gene_census = pd.read_csv('cancer_gene_census.csv')
-oncogenes = gene_census[gene_census['Role in Cancer'].str.contains('oncogene', na=False)]
-tumor_suppressors = gene_census[gene_census['Role in Cancer'].str.contains('TSG', na=False)]
+gene_census = pd.read_csv("cancer_gene_census.csv")
+oncogenes = gene_census[gene_census["Role in Cancer"].str.contains("oncogene", na=False)]
+tumor_suppressors = gene_census[gene_census["Role in Cancer"].str.contains("TSG", na=False)]
 ```
 
 **Extract mutations by cancer type**:
 ```python
-mutations = pd.read_csv('cosmic_mutations.tsv.gz', sep='\t', compression='gzip')
-lung_mutations = mutations[mutations['Primary site'] == 'lung']
+mutations = pd.read_csv("cosmic_mutations.tsv.gz", sep="\t", compression="gzip")
+lung_mutations = mutations[mutations["Primary site"] == "lung"]
 ```
 
 **Work with VCF files**:
 ```python
 import pysam
 
-vcf = pysam.VariantFile('CosmicCodingMuts.vcf.gz')
-for record in vcf.fetch('17', 7577000, 7579000):  # TP53 region
+vcf = pysam.VariantFile("CosmicCodingMuts.vcf.gz")
+for record in vcf.fetch("17", 7577000, 7579000):  # TP53 region
     print(record.id, record.ref, record.alts, record.info)
 ```
 
@@ -268,11 +267,11 @@ The download script includes helper functions for common operations:
 from scripts.download_cosmic import get_common_file_path
 
 # Get path for mutations file
-path = get_common_file_path('mutations', genome_assembly='GRCh38')
+path = get_common_file_path("mutations", genome_assembly="GRCh38")
 # Returns: 'GRCh38/cosmic/latest/CosmicMutantExport.tsv.gz'
 
 # Get path for gene census
-path = get_common_file_path('gene_census')
+path = get_common_file_path("gene_census")
 # Returns: 'GRCh38/cosmic/latest/cancer_gene_census.csv'
 ```
 

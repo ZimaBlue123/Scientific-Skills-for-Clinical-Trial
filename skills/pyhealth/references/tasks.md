@@ -215,6 +215,7 @@ Define custom prediction tasks by specifying input/output schemas:
 ```python
 from pyhealth.tasks import BaseTask
 
+
 def custom_task_fn(patient):
     """Custom prediction task"""
 
@@ -227,11 +228,7 @@ def custom_task_fn(patient):
             continue
 
         # Create input from historical visits
-        input_info = {
-            "diagnoses": [],
-            "medications": [],
-            "procedures": []
-        }
+        input_info = {"diagnoses": [], "medications": [], "procedures": []}
 
         # Collect features from previous visits
         for past_visit in patient.visits[:i]:
@@ -243,18 +240,19 @@ def custom_task_fn(patient):
 
         # Define prediction target
         # Example: predict specific outcome at current visit
-        output_info = {
-            "label": 1 if some_condition else 0
-        }
+        output_info = {"label": 1 if some_condition else 0}
 
-        samples.append({
-            "patient_id": patient.patient_id,
-            "visit_id": visit.visit_id,
-            "input_info": input_info,
-            "output_info": output_info
-        })
+        samples.append(
+            {
+                "patient_id": patient.patient_id,
+                "visit_id": visit.visit_id,
+                "input_info": input_info,
+                "output_info": output_info,
+            }
+        )
 
     return samples
+
 
 # Apply custom task
 sample_dataset = dataset.set_task(custom_task_fn)
@@ -337,7 +335,7 @@ sample = {
     },
     "output_info": {
         # Prediction targets (labels, values)
-    }
+    },
 }
 ```
 

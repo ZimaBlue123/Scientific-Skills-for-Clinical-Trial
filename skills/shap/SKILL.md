@@ -289,14 +289,11 @@ for i in range(5):
 
 ```python
 # Define cohorts
-cohort1_mask = X_test['Group'] == 'A'
-cohort2_mask = X_test['Group'] == 'B'
+cohort1_mask = X_test["Group"] == "A"
+cohort2_mask = X_test["Group"] == "B"
 
 # Compare feature importance
-shap.plots.bar({
-    "Group A": shap_values[cohort1_mask],
-    "Group B": shap_values[cohort2_mask]
-})
+shap.plots.bar({"Group A": shap_values[cohort1_mask], "Group B": shap_values[cohort2_mask]})
 ```
 
 ### Pattern 3: Debugging Errors
@@ -338,7 +335,7 @@ shap_values = explainer(X_test[:1000])
 batch_size = 100
 all_shap_values = []
 for i in range(0, len(X_test), batch_size):
-    batch_shap = explainer(X_test[i:i+batch_size])
+    batch_shap = explainer(X_test[i : i + batch_size])
     all_shap_values.append(batch_shap)
 ```
 
@@ -355,8 +352,9 @@ shap.plots.scatter(shap_values[:, "Feature"], alpha=0.3)
 ```python
 # Cache explainer
 import joblib
-joblib.dump(explainer, 'explainer.pkl')
-explainer = joblib.load('explainer.pkl')
+
+joblib.dump(explainer, "explainer.pkl")
+explainer = joblib.load("explainer.pkl")
 
 # Pre-compute for batch predictions
 # Only compute top N features for API responses
@@ -430,9 +428,9 @@ class ExplanationService:
         shap_values = self.explainer(X)
 
         return {
-            'prediction': prediction[0],
-            'base_value': shap_values.base_values[0],
-            'feature_contributions': dict(zip(X.columns, shap_values.values[0]))
+            "prediction": prediction[0],
+            "base_value": shap_values.base_values[0],
+            "feature_contributions": dict(zip(X.columns, shap_values.values[0])),
         }
 ```
 

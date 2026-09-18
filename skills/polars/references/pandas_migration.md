@@ -88,16 +88,10 @@ pl_df = pl.DataFrame({"int_col": [1, 2, None, 4]})  # dtype: Int64
 
 ```python
 # Pandas: Sequential (lambda sees previous results)
-df.assign(
-    a=lambda df_: df_.value * 10,
-    b=lambda df_: df_.value * 100
-)
+df.assign(a=lambda df_: df_.value * 10, b=lambda df_: df_.value * 100)
 
 # Polars: Parallel (all computed together)
-df.with_columns(
-    a=pl.col("value") * 10,
-    b=pl.col("value") * 100
-)
+df.with_columns(a=pl.col("value") * 10, b=pl.col("value") * 100)
 ```
 
 ### Grouping and Aggregation
@@ -204,8 +198,8 @@ df.with_columns(
 
 **Pandas:**
 ```python
-result = (df
-    .assign(new_col=lambda x: x["old_col"] * 2)
+result = (
+    df.assign(new_col=lambda x: x["old_col"] * 2)
     .query("new_col > 10")
     .groupby("category")
     .agg({"value": "sum"})
@@ -215,8 +209,8 @@ result = (df
 
 **Polars:**
 ```python
-result = (df
-    .with_columns(new_col=pl.col("old_col") * 2)
+result = (
+    df.with_columns(new_col=pl.col("old_col") * 2)
     .filter(pl.col("new_col") > 10)
     .group_by("category")
     .agg(pl.col("value").sum())
@@ -238,30 +232,24 @@ df["result"] = df["value"].apply(lambda x: x * 2)
 df = df.with_columns(result=pl.col("value") * 2)
 
 # If custom function needed
-df = df.with_columns(
-    result=pl.col("value").map_elements(lambda x: x * 2, return_dtype=pl.Float64)
-)
+df = df.with_columns(result=pl.col("value").map_elements(lambda x: x * 2, return_dtype=pl.Float64))
 ```
 
 ### Pattern 3: Conditional Column Creation
 
 **Pandas:**
 ```python
-df["category"] = np.where(
-    df["value"] > 100,
-    "high",
-    np.where(df["value"] > 50, "medium", "low")
-)
+df["category"] = np.where(df["value"] > 100, "high", np.where(df["value"] > 50, "medium", "low"))
 ```
 
 **Polars:**
 ```python
 df = df.with_columns(
     category=pl.when(pl.col("value") > 100)
-        .then("high")
-        .when(pl.col("value") > 50)
-        .then("medium")
-        .otherwise("low")
+    .then("high")
+    .when(pl.col("value") > 50)
+    .then("medium")
+    .otherwise("low")
 )
 ```
 
@@ -274,19 +262,14 @@ df["group_mean"] = df.groupby("category")["value"].transform("mean")
 
 **Polars:**
 ```python
-df = df.with_columns(
-    group_mean=pl.col("value").mean().over("category")
-)
+df = df.with_columns(group_mean=pl.col("value").mean().over("category"))
 ```
 
 ### Pattern 5: Multiple Aggregations
 
 **Pandas:**
 ```python
-result = df.groupby("category").agg({
-    "value": ["mean", "sum", "count"],
-    "price": ["min", "max"]
-})
+result = df.groupby("category").agg({"value": ["mean", "sum", "count"], "price": ["min", "max"]})
 ```
 
 **Polars:**
@@ -296,7 +279,7 @@ result = df.group_by("category").agg(
     pl.col("value").sum().alias("value_sum"),
     pl.col("value").count().alias("value_count"),
     pl.col("price").min().alias("price_min"),
-    pl.col("price").max().alias("price_max")
+    pl.col("price").max().alias("price_max"),
 )
 ```
 
@@ -311,20 +294,14 @@ df = df.pipe(function1).pipe(function2).pipe(function3)
 
 **Good (enables parallelization):**
 ```python
-df = df.with_columns(
-    function1_result(),
-    function2_result(),
-    function3_result()
-)
+df = df.with_columns(function1_result(), function2_result(), function3_result())
 ```
 
 ### Anti-Pattern 2: Python Functions in Hot Paths
 
 **Bad:**
 ```python
-df = df.with_columns(
-    result=pl.col("value").map_elements(lambda x: x * 2)
-)
+df = df.with_columns(result=pl.col("value").map_elements(lambda x: x * 2))
 ```
 
 **Good:**

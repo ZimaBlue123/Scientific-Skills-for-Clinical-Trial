@@ -43,11 +43,7 @@ Or use Python directly with the `requests` library:
 import requests
 
 url = "https://clinicaltrials.gov/api/v2/studies"
-params = {
-    "query.cond": "breast cancer",
-    "filter.overallStatus": "RECRUITING",
-    "pageSize": 10
-}
+params = {"query.cond": "breast cancer", "filter.overallStatus": "RECRUITING", "pageSize": 10}
 
 response = requests.get(url, params=params)
 data = response.json()
@@ -69,8 +65,8 @@ response = requests.get(url)
 study = response.json()
 
 # Access specific modules
-title = study['protocolSection']['identificationModule']['briefTitle']
-status = study['protocolSection']['statusModule']['overallStatus']
+title = study["protocolSection"]["identificationModule"]["briefTitle"]
+status = study["protocolSection"]["statusModule"]["overallStatus"]
 ```
 
 ## Core Capabilities
@@ -85,17 +81,14 @@ Find trials studying specific medical conditions or diseases using the `query.co
 from scripts.query_clinicaltrials import search_studies
 
 results = search_studies(
-    condition="type 2 diabetes",
-    status="RECRUITING",
-    page_size=20,
-    sort="LastUpdatePostDate:desc"
+    condition="type 2 diabetes", status="RECRUITING", page_size=20, sort="LastUpdatePostDate:desc"
 )
 
 print(f"Found {results['totalCount']} recruiting diabetes trials")
-for study in results['studies']:
-    protocol = study['protocolSection']
-    nct_id = protocol['identificationModule']['nctId']
-    title = protocol['identificationModule']['briefTitle']
+for study in results["studies"]:
+    protocol = study["protocolSection"]
+    nct_id = protocol["identificationModule"]["nctId"]
+    title = protocol["identificationModule"]["briefTitle"]
     print(f"{nct_id}: {title}")
 ```
 
@@ -114,15 +107,14 @@ Search for trials testing specific interventions, drugs, devices, or procedures 
 from scripts.query_clinicaltrials import search_studies
 
 results = search_studies(
-    intervention="Pembrolizumab",
-    status=["RECRUITING", "ACTIVE_NOT_RECRUITING"],
-    page_size=50
+    intervention="Pembrolizumab", status=["RECRUITING", "ACTIVE_NOT_RECRUITING"], page_size=50
 )
 
 # Filter by phase in results
 phase3_trials = [
-    study for study in results['studies']
-    if 'PHASE3' in study['protocolSection'].get('designModule', {}).get('phases', [])
+    study
+    for study in results["studies"]
+    if "PHASE3" in study["protocolSection"].get("designModule", {}).get("phases", [])
 ]
 ```
 
@@ -141,18 +133,15 @@ Find trials in specific locations using the `query.locn` parameter.
 from scripts.query_clinicaltrials import search_studies
 
 results = search_studies(
-    condition="cancer",
-    location="New York",
-    status="RECRUITING",
-    page_size=100
+    condition="cancer", location="New York", status="RECRUITING", page_size=100
 )
 
 # Extract location details
-for study in results['studies']:
-    locations_module = study['protocolSection'].get('contactsLocationsModule', {})
-    locations = locations_module.get('locations', [])
+for study in results["studies"]:
+    locations_module = study["protocolSection"].get("contactsLocationsModule", {})
+    locations = locations_module.get("locations", [])
     for loc in locations:
-        if 'New York' in loc.get('city', ''):
+        if "New York" in loc.get("city", ""):
             print(f"{loc['facility']}: {loc['city']}, {loc.get('state', '')}")
 ```
 
@@ -170,16 +159,13 @@ Find trials conducted by specific organizations using the `query.spons` paramete
 ```python
 from scripts.query_clinicaltrials import search_studies
 
-results = search_studies(
-    sponsor="National Cancer Institute",
-    page_size=100
-)
+results = search_studies(sponsor="National Cancer Institute", page_size=100)
 
 # Extract sponsor information
-for study in results['studies']:
-    sponsor_module = study['protocolSection']['sponsorCollaboratorsModule']
-    lead_sponsor = sponsor_module['leadSponsor']['name']
-    collaborators = sponsor_module.get('collaborators', [])
+for study in results["studies"]:
+    sponsor_module = study["protocolSection"]["sponsorCollaboratorsModule"]
+    lead_sponsor = sponsor_module["leadSponsor"]["name"]
+    collaborators = sponsor_module.get("collaborators", [])
     print(f"Lead: {lead_sponsor}")
     if collaborators:
         print(f"  Collaborators: {', '.join([c['name'] for c in collaborators])}")
@@ -210,17 +196,11 @@ Filter trials by recruitment or completion status using the `filter.overallStatu
 from scripts.query_clinicaltrials import search_studies
 
 results = search_studies(
-    condition="alzheimer disease",
-    status="COMPLETED",
-    sort="LastUpdatePostDate:desc",
-    page_size=50
+    condition="alzheimer disease", status="COMPLETED", sort="LastUpdatePostDate:desc", page_size=50
 )
 
 # Filter for trials with results
-trials_with_results = [
-    study for study in results['studies']
-    if study.get('hasResults', False)
-]
+trials_with_results = [study for study in results["studies"] if study.get("hasResults", False)]
 
 print(f"Found {len(trials_with_results)} completed trials with results")
 ```
@@ -235,12 +215,12 @@ Get comprehensive information about specific trials including eligibility criter
 from scripts.query_clinicaltrials import get_study_details
 
 study = get_study_details("NCT04852770")
-eligibility = study['protocolSection']['eligibilityModule']
+eligibility = study["protocolSection"]["eligibilityModule"]
 
 print(f"Eligible Ages: {eligibility.get('minimumAge')} - {eligibility.get('maximumAge')}")
 print(f"Eligible Sex: {eligibility.get('sex')}")
 print(f"\nInclusion Criteria:")
-print(eligibility.get('eligibilityCriteria'))
+print(eligibility.get("eligibilityCriteria"))
 ```
 
 **Example: Extract contact information**
@@ -249,21 +229,21 @@ print(eligibility.get('eligibilityCriteria'))
 from scripts.query_clinicaltrials import get_study_details
 
 study = get_study_details("NCT04852770")
-contacts_module = study['protocolSection']['contactsLocationsModule']
+contacts_module = study["protocolSection"]["contactsLocationsModule"]
 
 # Overall contacts
-if 'centralContacts' in contacts_module:
-    for contact in contacts_module['centralContacts']:
+if "centralContacts" in contacts_module:
+    for contact in contacts_module["centralContacts"]:
         print(f"Contact: {contact.get('name')}")
         print(f"Phone: {contact.get('phone')}")
         print(f"Email: {contact.get('email')}")
 
 # Study locations
-if 'locations' in contacts_module:
-    for location in contacts_module['locations']:
+if "locations" in contacts_module:
+    for location in contacts_module["locations"]:
         print(f"\nFacility: {location.get('facility')}")
         print(f"City: {location.get('city')}, {location.get('state')}")
-        if location.get('status'):
+        if location.get("status"):
             print(f"Status: {location['status']}")
 ```
 
@@ -277,10 +257,7 @@ Handle large result sets efficiently using pagination.
 from scripts.query_clinicaltrials import search_with_all_results
 
 # Get all trials (automatically handles pagination)
-all_trials = search_with_all_results(
-    condition="rare disease",
-    status="RECRUITING"
-)
+all_trials = search_with_all_results(condition="rare disease", status="RECRUITING")
 
 print(f"Retrieved {len(all_trials)} total trials")
 ```
@@ -298,13 +275,13 @@ for page in range(max_pages):
     results = search_studies(
         condition="cancer",
         page_size=1000,  # Max page size
-        page_token=page_token
+        page_token=page_token,
     )
 
-    all_studies.extend(results['studies'])
+    all_studies.extend(results["studies"])
 
     # Check for next page
-    page_token = results.get('pageToken')
+    page_token = results.get("pageToken")
     if not page_token:
         break
 
@@ -322,10 +299,7 @@ from scripts.query_clinicaltrials import search_studies
 
 # Request CSV format
 results = search_studies(
-    condition="heart disease",
-    status="RECRUITING",
-    format="csv",
-    page_size=1000
+    condition="heart disease", status="RECRUITING", format="csv", page_size=1000
 )
 
 # Save to file
@@ -374,14 +348,17 @@ results = search_studies(
     intervention="immunotherapy",
     location="California",
     status=["RECRUITING", "NOT_YET_RECRUITING"],
-    page_size=100
+    page_size=100,
 )
 
 # Further filter by phase
 phase2_3_trials = [
-    study for study in results['studies']
-    if any(phase in ['PHASE2', 'PHASE3']
-           for phase in study['protocolSection'].get('designModule', {}).get('phases', []))
+    study
+    for study in results["studies"]
+    if any(
+        phase in ["PHASE2", "PHASE3"]
+        for phase in study["protocolSection"].get("designModule", {}).get("phases", [])
+    )
 ]
 
 print(f"Found {len(phase2_3_trials)} Phase 2/3 immunotherapy trials")
@@ -430,6 +407,7 @@ The API has a rate limit of approximately 50 requests per minute. For bulk data 
 ```python
 import time
 import requests
+
 
 def search_with_rate_limit(params):
     try:
@@ -481,11 +459,13 @@ Not all trials have complete information. Always check for field existence:
 
 ```python
 # Safe navigation with .get()
-phases = study['protocolSection'].get('designModule', {}).get('phases', [])
-enrollment = study['protocolSection'].get('designModule', {}).get('enrollmentInfo', {}).get('count', 'N/A')
+phases = study["protocolSection"].get("designModule", {}).get("phases", [])
+enrollment = (
+    study["protocolSection"].get("designModule", {}).get("enrollmentInfo", {}).get("count", "N/A")
+)
 
 # Check before accessing
-if 'resultsSection' in study:
+if "resultsSection" in study:
     # Process results
     pass
 ```

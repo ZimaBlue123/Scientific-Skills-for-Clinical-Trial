@@ -54,9 +54,7 @@ Stay within the expression API to maintain parallelization:
 
 ```python
 # Bad: Python function disables parallelization
-df = df.with_columns(
-    result=pl.col("value").map_elements(lambda x: x * 2, return_dtype=pl.Float64)
-)
+df = df.with_columns(result=pl.col("value").map_elements(lambda x: x * 2, return_dtype=pl.Float64))
 
 # Good: Use native expressions (parallelized)
 df = df.with_columns(result=pl.col("value") * 2)
@@ -69,7 +67,7 @@ df = df.with_columns(
     result=pl.col("value").map_elements(
         custom_function,
         return_dtype=pl.Float64,
-        skip_nulls=True  # Optimize null handling
+        skip_nulls=True,  # Optimize null handling
     )
 )
 ```
@@ -103,7 +101,7 @@ df = pl.read_csv(
         "category": pl.Categorical,  # For low-cardinality strings
         "date": pl.Date,  # Instead of String
         "small_int": pl.Int16,  # Instead of Int64
-    }
+    },
 )
 ```
 
@@ -119,17 +117,11 @@ Structure code to maximize parallelization:
 
 ```python
 # Bad: Sequential pipe operations disable parallelization
-df = (
-    df.pipe(operation1)
-    .pipe(operation2)
-    .pipe(operation3)
-)
+df = df.pipe(operation1).pipe(operation2).pipe(operation3)
 
 # Good: Combined operations enable parallelization
 df = df.with_columns(
-    result1=operation1_expr(),
-    result2=operation2_expr(),
-    result3=operation3_expr()
+    result1=operation1_expr(), result2=operation2_expr(), result3=operation3_expr()
 )
 ```
 
@@ -149,38 +141,30 @@ combined = pl.concat([df1, df2, df3], rechunk=True)
 
 **Simple conditions:**
 ```python
-df.with_columns(
-    status=pl.when(pl.col("age") >= 18)
-        .then("adult")
-        .otherwise("minor")
-)
+df.with_columns(status=pl.when(pl.col("age") >= 18).then("adult").otherwise("minor"))
 ```
 
 **Multiple conditions:**
 ```python
 df.with_columns(
     grade=pl.when(pl.col("score") >= 90)
-        .then("A")
-        .when(pl.col("score") >= 80)
-        .then("B")
-        .when(pl.col("score") >= 70)
-        .then("C")
-        .when(pl.col("score") >= 60)
-        .then("D")
-        .otherwise("F")
+    .then("A")
+    .when(pl.col("score") >= 80)
+    .then("B")
+    .when(pl.col("score") >= 70)
+    .then("C")
+    .when(pl.col("score") >= 60)
+    .then("D")
+    .otherwise("F")
 )
 ```
 
 **Complex conditions:**
 ```python
 df.with_columns(
-    category=pl.when(
-        (pl.col("revenue") > 1000000) & (pl.col("customers") > 100)
-    )
+    category=pl.when((pl.col("revenue") > 1000000) & (pl.col("customers") > 100))
     .then("enterprise")
-    .when(
-        (pl.col("revenue") > 100000) | (pl.col("customers") > 50)
-    )
+    .when((pl.col("revenue") > 100000) | (pl.col("customers") > 50))
     .then("business")
     .otherwise("starter")
 )
@@ -209,16 +193,12 @@ df.with_columns(pl.col("value").fill_null(strategy="backward"))
 df.with_columns(pl.col("value").fill_null(strategy="mean"))
 
 # Per-group fill
-df.with_columns(
-    pl.col("value").fill_null(pl.col("value").mean()).over("group")
-)
+df.with_columns(pl.col("value").fill_null(pl.col("value").mean()).over("group"))
 ```
 
 **Coalesce (first non-null):**
 ```python
-df.with_columns(
-    combined=pl.coalesce(["col1", "col2", "col3"])
-)
+df.with_columns(combined=pl.coalesce(["col1", "col2", "col3"]))
 ```
 
 ### Column Selection Patterns
@@ -281,7 +261,7 @@ df.group_by("category").agg(
     pl.col("value").min().alias("minimum"),
     pl.col("value").max().alias("maximum"),
     pl.col("value").quantile(0.5).alias("median"),
-    pl.col("value").quantile(0.95).alias("p95")
+    pl.col("value").quantile(0.95).alias("p95"),
 )
 ```
 
@@ -290,16 +270,14 @@ df.group_by("category").agg(
 df.group_by("category").agg(
     # Count high values
     (pl.col("value") > 100).sum().alias("high_count"),
-
     # Average of filtered values
     pl.col("value").filter(pl.col("active")).mean().alias("active_avg"),
-
     # Conditional sum
     pl.when(pl.col("status") == "completed")
-        .then(pl.col("amount"))
-        .otherwise(0)
-        .sum()
-        .alias("completed_total")
+    .then(pl.col("amount"))
+    .otherwise(0)
+    .sum()
+    .alias("completed_total"),
 )
 ```
 
@@ -309,12 +287,10 @@ df.with_columns(
     # Group statistics
     group_mean=pl.col("value").mean().over("category"),
     group_std=pl.col("value").std().over("category"),
-
     # Rank within groups
     rank=pl.col("value").rank().over("category"),
-
     # Percentage of group total
-    pct_of_group=(pl.col("value") / pl.col("value").sum().over("category")) * 100
+    pct_of_group=(pl.col("value") / pl.col("value").sum().over("category")) * 100,
 )
 ```
 
@@ -359,12 +335,8 @@ df.select(pl.col("value") * 2)
 result = large_df1.join(large_df2, on="id")
 
 # Good: Filter before joining
-result = (
-    large_df1.filter(pl.col("active"))
-    .join(
-        large_df2.filter(pl.col("status") == "valid"),
-        on="id"
-    )
+result = large_df1.filter(pl.col("active")).join(
+    large_df2.filter(pl.col("status") == "valid"), on="id"
 )
 ```
 
@@ -375,10 +347,7 @@ result = (
 df = pl.read_csv("data.csv")
 
 # Good: Specify types for correctness and performance
-df = pl.read_csv(
-    "data.csv",
-    dtypes={"id": pl.Int64, "date": pl.Date, "category": pl.Categorical}
-)
+df = pl.read_csv("data.csv", dtypes={"id": pl.Int64, "date": pl.Date, "category": pl.Categorical})
 ```
 
 ### Pitfall 6: Creating Many Small DataFrames
@@ -391,22 +360,10 @@ df3 = df2.sort("age")
 result = df3.head(10)
 
 # Good: Chain operations
-result = (
-    df.filter(pl.col("age") > 25)
-    .select("name", "age")
-    .sort("age")
-    .head(10)
-)
+result = df.filter(pl.col("age") > 25).select("name", "age").sort("age").head(10)
 
 # Better: Use lazy mode
-result = (
-    df.lazy()
-    .filter(pl.col("age") > 25)
-    .select("name", "age")
-    .sort("age")
-    .head(10)
-    .collect()
-)
+result = df.lazy().filter(pl.col("age") > 25).select("name", "age").sort("age").head(10).collect()
 ```
 
 ## Memory Management
@@ -437,7 +394,7 @@ lf = lf.select("col1", "col2")
 # 4. Optimize data types
 df = df.with_columns(
     pl.col("int_col").cast(pl.Int32),  # Downcast if possible
-    pl.col("category").cast(pl.Categorical)  # For low cardinality
+    pl.col("category").cast(pl.Categorical),  # For low cardinality
 )
 
 # 5. Drop columns not needed
@@ -476,11 +433,7 @@ df_sample = df.sample(n=1000, seed=42)
 print(df.schema)
 
 # Ensure schema matches expectation
-expected_schema = {
-    "id": pl.Int64,
-    "name": pl.Utf8,
-    "date": pl.Date
-}
+expected_schema = {"id": pl.Int64, "name": pl.Utf8, "date": pl.Date}
 
 assert df.schema == expected_schema
 ```
@@ -536,10 +489,7 @@ lf = pl.scan_parquet("data.parquet")  # Not read_parquet
 lf = pl.scan_parquet("data/*.parquet")  # Parallel reading
 
 # 3. Specify schema when known
-lf = pl.scan_csv(
-    "data.csv",
-    dtypes={"id": pl.Int64, "date": pl.Date}
-)
+lf = pl.scan_csv("data.csv", dtypes={"id": pl.Int64, "date": pl.Date})
 
 # 4. Use predicate pushdown
 result = lf.filter(pl.col("date") >= "2023-01-01").collect()
@@ -561,7 +511,7 @@ lf.sink_parquet("output.parquet")  # Streaming write
 df.write_parquet(
     "output.parquet",
     compression="snappy",  # Fast compression
-    statistics=True  # Enable predicate pushdown on read
+    statistics=True,  # Enable predicate pushdown on read
 )
 ```
 
@@ -582,10 +532,7 @@ age_group = (
 revenue_per_customer = pl.col("revenue") / pl.col("customer_count")
 
 # Use in multiple contexts
-df = df.with_columns(
-    age_group=age_group,
-    rpc=revenue_per_customer
-)
+df = df.with_columns(age_group=age_group, rpc=revenue_per_customer)
 
 # Reuse in filtering
 df = df.filter(revenue_per_customer > 100)
@@ -599,16 +546,18 @@ def clean_data(lf: pl.LazyFrame) -> pl.LazyFrame:
     return lf.with_columns(
         pl.col("name").str.to_uppercase(),
         pl.col("date").str.strptime(pl.Date, "%Y-%m-%d"),
-        pl.col("amount").fill_null(0)
+        pl.col("amount").fill_null(0),
     )
+
 
 def add_features(lf: pl.LazyFrame) -> pl.LazyFrame:
     """Add computed features."""
     return lf.with_columns(
         month=pl.col("date").dt.month(),
         year=pl.col("date").dt.year(),
-        amount_log=pl.col("amount").log()
+        amount_log=pl.col("amount").log(),
     )
+
 
 # Compose pipeline
 result = (
@@ -630,9 +579,8 @@ df = df.with_columns(
     # Calculate customer lifetime value as sum of purchases
     # divided by months since first purchase
     clv=(
-        pl.col("total_purchases") /
-        ((pl.col("last_purchase_date") - pl.col("first_purchase_date"))
-         .dt.total_days() / 30)
+        pl.col("total_purchases")
+        / ((pl.col("last_purchase_date") - pl.col("first_purchase_date")).dt.total_days() / 30)
     )
 )
 ```
@@ -642,6 +590,7 @@ df = df.with_columns(
 ```python
 # Check Polars version
 import polars as pl
+
 print(pl.__version__)
 
 # Feature availability varies by version

@@ -240,9 +240,10 @@ Reference files are large (10,000+ words each). To efficiently use them:
 1. **Search by extension:** Use grep to find the specific format
    ```python
    import re
-   with open('references/chemistry_molecular_formats.md', 'r') as f:
+
+   with open("references/chemistry_molecular_formats.md", "r") as f:
        content = f.read()
-       pattern = r'### \.pdb[^#]*?(?=###|\Z)'
+       pattern = r"### \.pdb[^#]*?(?=###|\Z)"
        match = re.search(pattern, content, re.IGNORECASE | re.DOTALL)
    ```
 
@@ -272,15 +273,16 @@ Reference files are large (10,000+ words each). To efficiently use them:
 # User provides: "Analyze reads.fastq"
 
 # 1. Detect file type
-extension = '.fastq'
-category = 'bioinformatics_genomics'
+extension = ".fastq"
+category = "bioinformatics_genomics"
 
 # 2. Read reference info
 # Search references/bioinformatics_genomics_formats.md for "### .fastq"
 
 # 3. Perform analysis
 from Bio import SeqIO
-sequences = list(SeqIO.parse('reads.fastq', 'fastq'))
+
+sequences = list(SeqIO.parse("reads.fastq", "fastq"))
 # Calculate: read count, length distribution, quality scores, GC content
 
 # 4. Generate report
@@ -300,7 +302,8 @@ sequences = list(SeqIO.parse('reads.fastq', 'fastq'))
 
 # 3. Analyze
 import pandas as pd
-df = pd.read_csv('experiment_results.csv')
+
+df = pd.read_csv("experiment_results.csv")
 # Dimensions, dtypes, missing values, statistics, correlations
 
 # 4. Generate report with:

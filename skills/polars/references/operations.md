@@ -32,7 +32,7 @@ df.select(pl.all().exclude("id", "timestamp"))
 df.select(
     "name",
     (pl.col("age") * 12).alias("age_in_months"),
-    (pl.col("salary") * 1.1).alias("salary_after_raise")
+    (pl.col("salary") * 1.1).alias("salary_after_raise"),
 )
 ```
 
@@ -43,14 +43,13 @@ Add new columns or modify existing ones while preserving all other columns:
 ```python
 # Add new columns
 df.with_columns(
-    age_doubled=pl.col("age") * 2,
-    full_name=pl.col("first_name") + " " + pl.col("last_name")
+    age_doubled=pl.col("age") * 2, full_name=pl.col("first_name") + " " + pl.col("last_name")
 )
 
 # Modify existing columns
 df.with_columns(
     pl.col("name").str.to_uppercase().alias("name"),
-    pl.col("salary").cast(pl.Float64).alias("salary")
+    pl.col("salary").cast(pl.Float64).alias("salary"),
 )
 
 # Multiple operations in parallel
@@ -70,15 +69,10 @@ df.with_columns(
 df.filter(pl.col("age") > 25)
 
 # Multiple conditions (AND)
-df.filter(
-    pl.col("age") > 25,
-    pl.col("city") == "NY"
-)
+df.filter(pl.col("age") > 25, pl.col("city") == "NY")
 
 # OR conditions
-df.filter(
-    (pl.col("age") > 30) | (pl.col("salary") > 100000)
-)
+df.filter((pl.col("age") > 30) | (pl.col("salary") > 100000))
 
 # NOT condition
 df.filter(~pl.col("active"))
@@ -114,10 +108,7 @@ df.filter(~pl.col("status").is_in(["inactive", "deleted"]))
 df.filter(pl.col("age").is_between(25, 35))
 
 # Date range
-df.filter(
-    pl.col("date") >= pl.date(2023, 1, 1),
-    pl.col("date") <= pl.date(2023, 12, 31)
-)
+df.filter(pl.col("date") >= pl.date(2023, 1, 1), pl.col("date") <= pl.date(2023, 12, 31))
 ```
 
 **Null filtering:**
@@ -136,19 +127,14 @@ df.filter(pl.col("value").is_null())
 ```python
 # Group by single column
 df.group_by("department").agg(
-    pl.col("salary").mean().alias("avg_salary"),
-    pl.len().alias("employee_count")
+    pl.col("salary").mean().alias("avg_salary"), pl.len().alias("employee_count")
 )
 
 # Group by multiple columns
-df.group_by("department", "location").agg(
-    pl.col("salary").sum()
-)
+df.group_by("department", "location").agg(pl.col("salary").sum())
 
 # Maintain order
-df.group_by("category", maintain_order=True).agg(
-    pl.col("value").sum()
-)
+df.group_by("category", maintain_order=True).agg(pl.col("value").sum())
 ```
 
 ### Aggregation Functions
@@ -158,7 +144,7 @@ df.group_by("category", maintain_order=True).agg(
 df.group_by("category").agg(
     pl.len().alias("count"),
     pl.col("id").count().alias("non_null_count"),
-    pl.col("id").n_unique().alias("unique_count")
+    pl.col("id").n_unique().alias("unique_count"),
 )
 ```
 
@@ -172,7 +158,7 @@ df.group_by("group").agg(
     pl.col("value").var().alias("variance"),
     pl.col("value").min().alias("minimum"),
     pl.col("value").max().alias("maximum"),
-    pl.col("value").quantile(0.95).alias("p95")
+    pl.col("value").quantile(0.95).alias("p95"),
 )
 ```
 
@@ -181,7 +167,7 @@ df.group_by("group").agg(
 df.group_by("user_id").agg(
     pl.col("timestamp").first().alias("first_seen"),
     pl.col("timestamp").last().alias("last_seen"),
-    pl.col("event").first().alias("first_event")
+    pl.col("event").first().alias("first_event"),
 )
 ```
 
@@ -201,16 +187,10 @@ Filter within aggregations:
 df.group_by("department").agg(
     # Count high earners
     (pl.col("salary") > 100000).sum().alias("high_earners"),
-
     # Average of filtered values
     pl.col("salary").filter(pl.col("bonus") > 0).mean().alias("avg_with_bonus"),
-
     # Conditional sum
-    pl.when(pl.col("active"))
-      .then(pl.col("sales"))
-      .otherwise(0)
-      .sum()
-      .alias("active_sales")
+    pl.when(pl.col("active")).then(pl.col("sales")).otherwise(0).sum().alias("active_sales"),
 )
 ```
 
@@ -226,7 +206,7 @@ df.group_by("store_id").agg(
     pl.col("customer_id").n_unique().alias("unique_customers"),
     pl.col("amount").max().alias("largest_transaction"),
     pl.col("timestamp").min().alias("first_transaction_date"),
-    pl.col("timestamp").max().alias("last_transaction_date")
+    pl.col("timestamp").max().alias("last_transaction_date"),
 )
 ```
 
@@ -239,14 +219,10 @@ Window functions apply aggregations while preserving the original row count.
 **Group statistics:**
 ```python
 # Add group mean to each row
-df.with_columns(
-    avg_age_by_dept=pl.col("age").mean().over("department")
-)
+df.with_columns(avg_age_by_dept=pl.col("age").mean().over("department"))
 
 # Multiple group columns
-df.with_columns(
-    group_avg=pl.col("value").mean().over("category", "region")
-)
+df.with_columns(group_avg=pl.col("value").mean().over("category", "region"))
 ```
 
 **Ranking:**
@@ -254,12 +230,10 @@ df.with_columns(
 df.with_columns(
     # Rank within groups
     rank=pl.col("score").rank().over("team"),
-
     # Dense rank (no gaps)
     dense_rank=pl.col("score").rank(method="dense").over("team"),
-
     # Row number
-    row_num=pl.col("timestamp").sort().rank(method="ordinal").over("user_id")
+    row_num=pl.col("timestamp").sort().rank(method="ordinal").over("user_id"),
 )
 ```
 
@@ -276,36 +250,27 @@ df.with_columns(
 **explode:**
 Faster, groups rows together:
 ```python
-df.with_columns(
-    group_mean=pl.col("value").mean().over("category", mapping_strategy="explode")
-)
+df.with_columns(group_mean=pl.col("value").mean().over("category", mapping_strategy="explode"))
 ```
 
 **join:**
 Creates list columns:
 ```python
-df.with_columns(
-    group_values=pl.col("value").over("category", mapping_strategy="join")
-)
+df.with_columns(group_values=pl.col("value").over("category", mapping_strategy="join"))
 ```
 
 ### Rolling Windows
 
 **Time-based rolling:**
 ```python
-df.with_columns(
-    rolling_avg=pl.col("value").rolling_mean(
-        window_size="7d",
-        by="date"
-    )
-)
+df.with_columns(rolling_avg=pl.col("value").rolling_mean(window_size="7d", by="date"))
 ```
 
 **Row-based rolling:**
 ```python
 df.with_columns(
     rolling_sum=pl.col("value").rolling_sum(window_size=3),
-    rolling_max=pl.col("value").rolling_max(window_size=5)
+    rolling_max=pl.col("value").rolling_max(window_size=5),
 )
 ```
 
@@ -316,7 +281,7 @@ df.with_columns(
     cumsum=pl.col("value").cum_sum().over("group"),
     cummax=pl.col("value").cum_max().over("group"),
     cummin=pl.col("value").cum_min().over("group"),
-    cumprod=pl.col("value").cum_prod().over("group")
+    cumprod=pl.col("value").cum_prod().over("group"),
 )
 ```
 
@@ -326,12 +291,10 @@ df.with_columns(
 df.with_columns(
     # Previous value (lag)
     prev_value=pl.col("value").shift(1).over("user_id"),
-
     # Next value (lead)
     next_value=pl.col("value").shift(-1).over("user_id"),
-
     # Calculate difference from previous
-    diff=pl.col("value") - pl.col("value").shift(1).over("user_id")
+    diff=pl.col("value") - pl.col("value").shift(1).over("user_id"),
 )
 ```
 
@@ -370,10 +333,7 @@ df.sort("value", nulls_last=True)
 df.sort(pl.col("first_name").str.len())
 
 # Sort by multiple expressions
-df.sort(
-    pl.col("last_name").str.to_lowercase(),
-    pl.col("age").abs()
-)
+df.sort(pl.col("last_name").str.to_lowercase(), pl.col("age").abs())
 ```
 
 ## Conditional Operations
@@ -382,28 +342,24 @@ df.sort(
 
 ```python
 # Basic conditional
-df.with_columns(
-    status=pl.when(pl.col("age") >= 18)
-        .then("adult")
-        .otherwise("minor")
-)
+df.with_columns(status=pl.when(pl.col("age") >= 18).then("adult").otherwise("minor"))
 
 # Multiple conditions
 df.with_columns(
     category=pl.when(pl.col("score") >= 90)
-        .then("A")
-        .when(pl.col("score") >= 80)
-        .then("B")
-        .when(pl.col("score") >= 70)
-        .then("C")
-        .otherwise("F")
+    .then("A")
+    .when(pl.col("score") >= 80)
+    .then("B")
+    .when(pl.col("score") >= 70)
+    .then("C")
+    .otherwise("F")
 )
 
 # Conditional computation
 df.with_columns(
     adjusted_price=pl.when(pl.col("is_member"))
-        .then(pl.col("price") * 0.9)
-        .otherwise(pl.col("price"))
+    .then(pl.col("price") * 0.9)
+    .otherwise(pl.col("price"))
 )
 ```
 
@@ -417,22 +373,17 @@ df.with_columns(
     upper=pl.col("name").str.to_uppercase(),
     lower=pl.col("name").str.to_lowercase(),
     title=pl.col("name").str.to_titlecase(),
-
     # Trimming
     trimmed=pl.col("text").str.strip_chars(),
-
     # Substring
     first_3=pl.col("name").str.slice(0, 3),
-
     # Replace
     cleaned=pl.col("text").str.replace("old", "new"),
     cleaned_all=pl.col("text").str.replace_all("old", "new"),
-
     # Split
     parts=pl.col("full_name").str.split(" "),
-
     # Length
-    name_length=pl.col("name").str.len_chars()
+    name_length=pl.col("name").str.len_chars(),
 )
 ```
 
@@ -458,7 +409,7 @@ df.filter(pl.col("phone").str.contains(r"^\d{3}-\d{4}$"))
 # Parse strings to dates
 df.with_columns(
     date=pl.col("date_str").str.strptime(pl.Date, "%Y-%m-%d"),
-    datetime=pl.col("dt_str").str.strptime(pl.Datetime, "%Y-%m-%d %H:%M:%S")
+    datetime=pl.col("dt_str").str.strptime(pl.Datetime, "%Y-%m-%d %H:%M:%S"),
 )
 ```
 
@@ -471,7 +422,7 @@ df.with_columns(
     day=pl.col("date").dt.day(),
     weekday=pl.col("date").dt.weekday(),
     hour=pl.col("datetime").dt.hour(),
-    minute=pl.col("datetime").dt.minute()
+    minute=pl.col("datetime").dt.minute(),
 )
 ```
 
@@ -481,22 +432,18 @@ df.with_columns(
 # Add duration
 df.with_columns(
     next_week=pl.col("date") + pl.duration(weeks=1),
-    next_month=pl.col("date") + pl.duration(months=1)
+    next_month=pl.col("date") + pl.duration(months=1),
 )
 
 # Difference between dates
-df.with_columns(
-    days_diff=(pl.col("end_date") - pl.col("start_date")).dt.total_days()
-)
+df.with_columns(days_diff=(pl.col("end_date") - pl.col("start_date")).dt.total_days())
 ```
 
 ### Date Filtering
 
 ```python
 # Filter by date range
-df.filter(
-    pl.col("date").is_between(pl.date(2023, 1, 1), pl.date(2023, 12, 31))
-)
+df.filter(pl.col("date").is_between(pl.date(2023, 1, 1), pl.date(2023, 12, 31)))
 
 # Filter by year
 df.filter(pl.col("date").dt.year() == 2023)
@@ -511,9 +458,7 @@ df.filter(pl.col("date").dt.month().is_in([6, 7, 8]))  # Summer months
 
 ```python
 # Create list column
-df.with_columns(
-    items_list=pl.col("item1", "item2", "item3").to_list()
-)
+df.with_columns(items_list=pl.col("item1", "item2", "item3").to_list())
 
 # List operations
 df.with_columns(
@@ -521,16 +466,14 @@ df.with_columns(
     first_item=pl.col("items").list.first(),
     last_item=pl.col("items").list.last(),
     unique_items=pl.col("items").list.unique(),
-    sorted_items=pl.col("items").list.sort()
+    sorted_items=pl.col("items").list.sort(),
 )
 
 # Explode lists to rows
 df.explode("items")
 
 # Filter list elements
-df.with_columns(
-    filtered=pl.col("items").list.eval(pl.element() > 10)
-)
+df.with_columns(filtered=pl.col("items").list.eval(pl.element() > 10))
 ```
 
 ## Struct Operations
@@ -539,14 +482,10 @@ df.with_columns(
 
 ```python
 # Create struct column
-df.with_columns(
-    address=pl.struct(["street", "city", "zip"])
-)
+df.with_columns(address=pl.struct(["street", "city", "zip"]))
 
 # Access struct fields
-df.with_columns(
-    city=pl.col("address").struct.field("city")
-)
+df.with_columns(city=pl.col("address").struct.field("city"))
 
 # Unnest struct to columns
 df.unnest("address")
@@ -566,14 +505,10 @@ df.unique(subset=["id"], keep="first")
 df.unique(subset=["id"], keep="last")
 
 # Identify duplicates
-df.with_columns(
-    is_duplicate=pl.col("id").is_duplicated()
-)
+df.with_columns(is_duplicate=pl.col("id").is_duplicated())
 
 # Count duplicates
-df.group_by("email").agg(
-    pl.len().alias("count")
-).filter(pl.col("count") > 1)
+df.group_by("email").agg(pl.len().alias("count")).filter(pl.col("count") > 1)
 ```
 
 ## Sampling

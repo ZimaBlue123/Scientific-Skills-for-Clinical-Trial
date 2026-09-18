@@ -1,4 +1,4 @@
-﻿"""
+"""
 本地文献重塑协议 (PDF Sanitizer v7.2 - 多源置信度仲裁与高精度版式解析)
 Vibe: Academic Cyberpunk
 Engine: PyMuPDF | Chrono-Tracker | Visual Hierarchy | Block Layout | Subtitle Severance | OCR
@@ -793,10 +793,10 @@ class PDFSanitizer:
             cleaned_cjk = cleaned.replace(" ", "").replace("/", "")
             if not cleaned_cjk:
                 return "未命名文献_Untitled"
-            return cleaned_cjk[:self.max_chars]
+            return cleaned_cjk[: self.max_chars]
 
         cleaned_en = PDFSanitizer._smart_title_case(cleaned)
-        words = cleaned_en.split()[:self.max_words]
+        words = cleaned_en.split()[: self.max_words]
         words = [w.replace("/", "") for w in words]
 
         metadata_blocklist = {
@@ -821,7 +821,7 @@ class PDFSanitizer:
             words.pop(0)
 
         if not words:
-            fallback = cleaned_en[:self.max_chars].strip().replace(" ", "_")
+            fallback = cleaned_en[: self.max_chars].strip().replace(" ", "_")
             return fallback if fallback else "Untitled_Document"
 
         joined_preview = " ".join(words)
@@ -830,7 +830,7 @@ class PDFSanitizer:
 
         res = "_".join(words)
         if len(res) > self.max_chars:
-            res = res[:self.max_chars]
+            res = res[: self.max_chars]
             if "_" in res:
                 res = res.rsplit("_", 1)[0]
         return res
@@ -1242,12 +1242,14 @@ class PDFSanitizer:
                 chronological_name = f"{simplified_name}-{year}"
                 rel_path = str(pdf_path.resolve().relative_to(self.base_dir))
 
-                plan_data.append({
-                    "original_path": rel_path,
-                    "raw_title": raw_title,
-                    "year": year,
-                    "proposed_name": chronological_name
-                })
+                plan_data.append(
+                    {
+                        "original_path": rel_path,
+                        "raw_title": raw_title,
+                        "year": year,
+                        "proposed_name": chronological_name,
+                    }
+                )
 
             plan_path = self.base_dir / self.export_plan
             with plan_path.open("w", encoding="utf-8") as f:
@@ -1313,4 +1315,3 @@ if __name__ == "__main__":
         apply_plan=args.apply_plan,
     )
     sanitizer.execute()
-

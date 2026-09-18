@@ -60,4 +60,3 @@ def test_ectd_converter_basic_processing(tmp_path):
     if input_pdf.resolve() != output_pdf.resolve():
         input_pdf.unlink()
     assert not input_pdf.exists()
-

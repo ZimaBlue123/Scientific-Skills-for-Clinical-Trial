@@ -54,11 +54,11 @@ Dask provides five main components, each suited to different use cases:
 import dask.dataframe as dd
 
 # Read multiple files as single DataFrame
-ddf = dd.read_csv('data/2024-*.csv')
+ddf = dd.read_csv("data/2024-*.csv")
 
 # Operations are lazy until compute()
-filtered = ddf[ddf['value'] > 100]
-result = filtered.groupby('category').mean().compute()
+filtered = ddf[ddf["value"] > 100]
+result = filtered.groupby("category").mean().compute()
 ```
 
 **Key Points**:
@@ -127,11 +127,11 @@ import dask.bag as db
 import json
 
 # Read and parse JSON files
-bag = db.read_text('logs/*.json').map(json.loads)
+bag = db.read_text("logs/*.json").map(json.loads)
 
 # Filter and transform
-valid = bag.filter(lambda x: x['status'] == 'valid')
-processed = valid.map(lambda x: {'id': x['id'], 'value': x['value']})
+valid = bag.filter(lambda x: x["status"] == "valid")
+processed = valid.map(lambda x: {"id": x["id"], "value": x["value"]})
 
 # Convert to DataFrame for analysis
 ddf = processed.to_dataframe()
@@ -167,9 +167,11 @@ from dask.distributed import Client
 
 client = Client()  # Create local cluster
 
+
 # Submit tasks (executes immediately)
 def process(x):
-    return x ** 2
+    return x**2
+
 
 futures = client.map(process, range(100))
 
@@ -209,20 +211,22 @@ import dask
 import dask.dataframe as dd
 
 # Use threads for DataFrame (default, good for numeric)
-ddf = dd.read_csv('data.csv')
+ddf = dd.read_csv("data.csv")
 result1 = ddf.mean().compute()  # Uses threads
 
 # Use processes for Python-heavy work
 import dask.bag as db
-bag = db.read_text('logs/*.txt')
-result2 = bag.map(python_function).compute(scheduler='processes')
+
+bag = db.read_text("logs/*.txt")
+result2 = bag.map(python_function).compute(scheduler="processes")
 
 # Use synchronous for debugging
-dask.config.set(scheduler='synchronous')
+dask.config.set(scheduler="synchronous")
 result3 = problematic_computation.compute()  # Can use pdb
 
 # Use distributed for monitoring and scaling
 from dask.distributed import Client
+
 client = Client()
 result4 = computation.compute()  # Uses distributed with dashboard
 ```
@@ -250,12 +254,14 @@ Before using Dask, explore:
 ```python
 # Wrong: Loads all data in memory first
 import pandas as pd
-df = pd.read_csv('large.csv')
+
+df = pd.read_csv("large.csv")
 ddf = dd.from_pandas(df, npartitions=10)
 
 # Correct: Let Dask handle loading
 import dask.dataframe as dd
-ddf = dd.read_csv('large.csv')
+
+ddf = dd.read_csv("large.csv")
 ```
 
 **2. Avoid Repeated compute() Calls**
@@ -282,6 +288,7 @@ results = dask.compute(*computations)
 **5. Use the Dashboard**
 ```python
 from dask.distributed import Client
+
 client = Client()
 print(client.dashboard_link)  # Monitor performance, identify bottlenecks
 ```
@@ -293,16 +300,16 @@ print(client.dashboard_link)  # Monitor performance, identify bottlenecks
 import dask.dataframe as dd
 
 # Extract: Read data
-ddf = dd.read_csv('raw_data/*.csv')
+ddf = dd.read_csv("raw_data/*.csv")
 
 # Transform: Clean and process
-ddf = ddf[ddf['status'] == 'valid']
-ddf['amount'] = ddf['amount'].astype('float64')
-ddf = ddf.dropna(subset=['important_col'])
+ddf = ddf[ddf["status"] == "valid"]
+ddf["amount"] = ddf["amount"].astype("float64")
+ddf = ddf.dropna(subset=["important_col"])
 
 # Load: Aggregate and save
-summary = ddf.groupby('category').agg({'amount': ['sum', 'mean']})
-summary.to_parquet('output/summary.parquet')
+summary = ddf.groupby("category").agg({"amount": ["sum", "mean"]})
+summary.to_parquet("output/summary.parquet")
 ```
 
 ### Unstructured to Structured Pipeline
@@ -311,12 +318,12 @@ import dask.bag as db
 import json
 
 # Start with Bag for unstructured data
-bag = db.read_text('logs/*.json').map(json.loads)
-bag = bag.filter(lambda x: x['status'] == 'valid')
+bag = db.read_text("logs/*.json").map(json.loads)
+bag = bag.filter(lambda x: x["status"] == "valid")
 
 # Convert to DataFrame for structured analysis
 ddf = bag.to_dataframe()
-result = ddf.groupby('category').mean().compute()
+result = ddf.groupby("category").mean().compute()
 ```
 
 ### Large-Scale Array Computation
@@ -324,13 +331,13 @@ result = ddf.groupby('category').mean().compute()
 import dask.array as da
 
 # Load or create large array
-x = da.from_zarr('large_dataset.zarr')
+x = da.from_zarr("large_dataset.zarr")
 
 # Process in chunks
 normalized = (x - x.mean()) / x.std()
 
 # Save result
-da.to_zarr(normalized, 'normalized.zarr')
+da.to_zarr(normalized, "normalized.zarr")
 ```
 
 ### Custom Parallel Workflow
@@ -392,7 +399,7 @@ ddf = bag.to_dataframe()
 arr = ddf.to_dask_array(lengths=True)
 
 # Array → DataFrame
-ddf = dd.from_dask_array(arr, columns=['col1', 'col2'])
+ddf = dd.from_dask_array(arr, columns=["col1", "col2"])
 ```
 
 ### With Other Libraries
@@ -406,7 +413,7 @@ ddf = dd.from_dask_array(arr, columns=['col1', 'col2'])
 
 1. **Test on small data with synchronous scheduler**:
 ```python
-dask.config.set(scheduler='synchronous')
+dask.config.set(scheduler="synchronous")
 result = computation.compute()  # Can use pdb, easy debugging
 ```
 
@@ -419,6 +426,7 @@ sample = ddf.head(1000)  # Small sample
 3. **Scale with distributed for monitoring**:
 ```python
 from dask.distributed import Client
+
 client = Client()
 print(client.dashboard_link)  # Monitor performance
 result = computation.compute()

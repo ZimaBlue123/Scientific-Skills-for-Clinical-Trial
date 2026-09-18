@@ -30,28 +30,28 @@
 
 ```python
 # Taylor & Francis 系
-"emergingmicrobesinfections",
-"tandfonline",
-"taylorfrancis",
+("emergingmicrobesinfections",)
+("tandfonline",)
+("taylorfrancis",)
 
 # Wiley 系（常见医学期刊）
-"advancedscience",
-"ANGEWANDTE",
-"angewandtechemie",
-"chemicalcommunication",
-"chemistryaeurope",
-"eurjic",
+("advancedscience",)
+("ANGEWANDTE",)
+("angewandtechemie",)
+("chemicalcommunication",)
+("chemistryaeurope",)
+("eurjic",)
 
 # Springer Nature 系（继续扩展）
-"cellandmolecularmedicine",
-"translationalmedicine",
-"scientificreports",
+("cellandmolecularmedicine",)
+("translationalmedicine",)
+("scientificreports",)
 
 # Elsevier 系（补充）
-"heliyon",
+("heliyon",)
 
 # 出版商通用
-"journalhomepage",
+("journalhomepage",)
 ```
 
 ### 2. `_is_journal_masthead_only()` 兜底判定放宽（行 262–275 附近）
@@ -69,12 +69,13 @@ if len(words) <= 5 and len(t) <= 44 and not re.search(r"[.?:;]$", t):
 ```python
 # Taylor & Francis / Wiley / Springer 出版商行
 r"tandfonline\.com|"
+
 r"taylorandfrancis|"
 r"wiley\.com|"
 r"springer\.com|"
 r"springernature|"
-r"doi\.org\/10\.|"          # DOI 行
-r"issn\s*:?\s*\d{4}-\d{3}[\dX]",  # ISSN 行
+r"doi\.org\/10\.|"  # DOI 行
+(r"issn\s*:?\s*\d{4}-\d{3}[\dX]",)  # ISSN 行
 ```
 
 ### 4. `_simplify_filename` 改动（行 562–597 附近）
@@ -115,6 +116,7 @@ words = [re.sub(r"^([IVXLCDM]+)/([IVXLCDM]+)$", r"\1_\2", w) for w in words]
 # 旧：
 cleaned = re.sub(r"[\[\(（【《].*?[\]\)）】》]", "", name)
 
+
 # 新：
 # 保留含字母/数字的技术括号（如 Pichia pastoris、COVID-19）
 # 仅删除纯符号括号（如 [10.1016/xxx]、://）
@@ -134,10 +136,9 @@ def _smart_bracket_removal(text: str) -> str:
 if hierarchy_title and academic:
     # 比较两者质量：academic 长度优势 ≥ 20 或 academic 含试验关键词
     academic_edge = len(academic) - len(hierarchy_title)
-    has_trial_keyword = bool(re.search(
-        r"(?i)\b(phase|randomized|trial|study|immunogenicity|safety|efficacy)\b",
-        academic
-    ))
+    has_trial_keyword = bool(
+        re.search(r"(?i)\b(phase|randomized|trial|study|immunogenicity|safety|efficacy)\b", academic)
+    )
     if academic_edge >= 20 or (academic_edge >= 8 and has_trial_keyword):
         hierarchy_title = ""  # 降级，让 academic 路径接管
 ```

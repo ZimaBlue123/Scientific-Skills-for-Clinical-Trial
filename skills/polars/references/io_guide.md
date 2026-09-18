@@ -24,7 +24,7 @@ df = pl.read_csv(
     dtypes={"col1": pl.Int64, "col2": pl.Utf8},  # Specify types
     null_values=["NA", "null", ""],  # Define null values
     encoding="utf-8",
-    ignore_errors=False
+    ignore_errors=False,
 )
 ```
 
@@ -53,7 +53,7 @@ df.write_csv(
     include_header=True,
     null_value="",  # How to represent nulls
     quote_char='"',
-    line_terminator="\n"
+    line_terminator="\n",
 )
 ```
 
@@ -83,7 +83,7 @@ df = pl.read_parquet(
     "data.parquet",
     columns=["col1", "col2"],  # Select specific columns
     n_rows=1000,  # Read first N rows
-    parallel="auto"  # Control parallelization
+    parallel="auto",  # Control parallelization
 )
 ```
 
@@ -106,7 +106,7 @@ df.write_parquet(
     "output.parquet",
     compression="snappy",  # Options: "snappy", "gzip", "brotli", "lz4", "zstd"
     statistics=True,  # Write statistics (enables predicate pushdown)
-    use_pyarrow=False  # Use Rust writer (faster)
+    use_pyarrow=False,  # Use Rust writer (faster)
 )
 ```
 
@@ -117,7 +117,7 @@ df.write_parquet(
 # Write with partitioning
 df.write_parquet(
     "output_dir",
-    partition_by=["year", "month"]  # Creates directory structure
+    partition_by=["year", "month"],  # Creates directory structure
 )
 # Creates: output_dir/year=2023/month=01/data.parquet
 ```
@@ -183,7 +183,7 @@ df = pl.read_excel(
     columns=["A", "B", "C"],  # Excel columns
     n_rows=100,
     skip_rows=5,
-    has_header=True
+    has_header=True,
 )
 ```
 
@@ -211,8 +211,7 @@ df = pl.read_database("SELECT * FROM users", connection_uri="postgresql://...")
 
 # Using connectorx for better performance
 df = pl.read_database_uri(
-    "SELECT * FROM users WHERE age > 25",
-    uri="postgresql://user:pass@localhost/db"
+    "SELECT * FROM users WHERE age > 25", uri="postgresql://user:pass@localhost/db"
 )
 ```
 
@@ -267,6 +266,7 @@ df.write_parquet("s3://bucket/path/output.parquet")
 
 # With credentials
 import os
+
 os.environ["AWS_ACCESS_KEY_ID"] = "your_key"
 os.environ["AWS_SECRET_ACCESS_KEY"] = "your_secret"
 os.environ["AWS_REGION"] = "us-west-2"
@@ -305,13 +305,11 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/path/to/credentials.json"
 
 ```python
 # Read from BigQuery
-df = pl.read_database(
-    "SELECT * FROM project.dataset.table",
-    connection_uri="bigquery://project"
-)
+df = pl.read_database("SELECT * FROM project.dataset.table", connection_uri="bigquery://project")
 
 # Or using Google Cloud SDK
 from google.cloud import bigquery
+
 client = bigquery.Client()
 
 query = "SELECT * FROM project.dataset.table WHERE date > '2023-01-01'"
@@ -365,10 +363,7 @@ arrow_table = df.to_arrow()
 
 ```python
 # From dict
-df = pl.DataFrame({
-    "col1": [1, 2, 3],
-    "col2": ["a", "b", "c"]
-})
+df = pl.DataFrame({"col1": [1, 2, 3], "col2": ["a", "b", "c"]})
 
 # To dict
 data_dict = df.to_dict()  # Column-oriented
@@ -408,10 +403,7 @@ pl_df = pl.from_arrow(pd_df)
 
 ```python
 # From list of dicts
-data = [
-    {"name": "Alice", "age": 25},
-    {"name": "Bob", "age": 30}
-]
+data = [{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]
 df = pl.DataFrame(data)
 
 # To list of dicts
@@ -471,8 +463,7 @@ lf = pl.scan_csv("large.csv")  # NOT read_csv
 
 # 2. Filter and select early (pushdown optimization)
 result = (
-    lf
-    .select("col1", "col2", "col3")  # Only needed columns
+    lf.select("col1", "col2", "col3")  # Only needed columns
     .filter(pl.col("date") > "2023-01-01")  # Filter early
     .collect()
 )
@@ -504,12 +495,12 @@ lf.sink_parquet("output.parquet")  # Streaming write
 # 1. Specify dtypes when reading CSV
 df = pl.read_csv(
     "data.csv",
-    dtypes={"id": pl.Int64, "name": pl.Utf8}  # Avoids inference
+    dtypes={"id": pl.Int64, "name": pl.Utf8},  # Avoids inference
 )
 
 # 2. Use appropriate compression
 df.write_parquet("output.parquet", compression="snappy")  # Fast
-df.write_parquet("output.parquet", compression="zstd")    # Better compression
+df.write_parquet("output.parquet", compression="zstd")  # Better compression
 
 # 3. Parallel reading
 df = pl.read_csv("data.csv", parallel="auto")
@@ -531,6 +522,7 @@ df = pl.read_csv("messy.csv", ignore_errors=True)
 
 # Handle missing files
 from pathlib import Path
+
 if Path("data.csv").exists():
     df = pl.read_csv("data.csv")
 else:
@@ -547,11 +539,6 @@ schema = pl.read_csv("data.csv", n_rows=1000).schema
 df = pl.read_csv("data.csv", dtypes=schema)
 
 # Define schema explicitly
-schema = {
-    "id": pl.Int64,
-    "name": pl.Utf8,
-    "date": pl.Date,
-    "value": pl.Float64
-}
+schema = {"id": pl.Int64, "name": pl.Utf8, "date": pl.Date, "value": pl.Float64}
 df = pl.read_csv("data.csv", dtypes=schema)
 ```

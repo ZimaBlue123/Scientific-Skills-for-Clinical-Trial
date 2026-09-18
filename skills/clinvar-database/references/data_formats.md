@@ -237,11 +237,11 @@ Database cross-references with modification dates.
 import gzip
 import xml.etree.ElementTree as ET
 
-with gzip.open('ClinVarVariationRelease.xml.gz', 'rt') as f:
-    for event, elem in ET.iterparse(f, events=('end',)):
-        if elem.tag == 'VariationArchive':
+with gzip.open("ClinVarVariationRelease.xml.gz", "rt") as f:
+    for event, elem in ET.iterparse(f, events=("end",)):
+        if elem.tag == "VariationArchive":
             # Process variant
-            variation_id = elem.attrib.get('VariationID')
+            variation_id = elem.attrib.get("VariationID")
             # Extract data
             elem.clear()  # Free memory
 ```
@@ -271,10 +271,10 @@ bcftools annotate -a clinvar.vcf.gz -c INFO your_variants.vcf
 ```python
 import vcf
 
-vcf_reader = vcf.Reader(filename='clinvar.vcf.gz')
+vcf_reader = vcf.Reader(filename="clinvar.vcf.gz")
 for record in vcf_reader:
-    clnsig = record.INFO.get('CLNSIG', [])
-    if 'Pathogenic' in clnsig:
+    clnsig = record.INFO.get("CLNSIG", [])
+    if "Pathogenic" in clnsig:
         print(f"{record.CHROM}:{record.POS} - {clnsig}")
 ```
 
@@ -285,13 +285,13 @@ for record in vcf_reader:
 import pandas as pd
 
 # Read variant summary
-df = pd.read_csv('variant_summary.txt.gz', sep='\t', compression='gzip')
+df = pd.read_csv("variant_summary.txt.gz", sep="\t", compression="gzip")
 
 # Filter pathogenic variants
-pathogenic = df[df['ClinicalSignificance'].str.contains('Pathogenic', na=False)]
+pathogenic = df[df["ClinicalSignificance"].str.contains("Pathogenic", na=False)]
 
 # Group by gene
-gene_counts = pathogenic.groupby('GeneSymbol').size().sort_values(ascending=False)
+gene_counts = pathogenic.groupby("GeneSymbol").size().sort_values(ascending=False)
 ```
 
 ## Data Quality Considerations

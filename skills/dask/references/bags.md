@@ -69,28 +69,30 @@ bag = db.from_sequence(range(10000), partition_size=1000)
 ### From Text Files
 ```python
 # Single file
-bag = db.read_text('data.txt')
+bag = db.read_text("data.txt")
 
 # Multiple files with glob
-bag = db.read_text('data/*.txt')
+bag = db.read_text("data/*.txt")
 
 # With encoding
-bag = db.read_text('data/*.txt', encoding='utf-8')
+bag = db.read_text("data/*.txt", encoding="utf-8")
 
 # Custom line processing
-bag = db.read_text('logs/*.log', blocksize='64MB')
+bag = db.read_text("logs/*.log", blocksize="64MB")
 ```
 
 ### From Delayed Objects
 ```python
 import dask
 
+
 @dask.delayed
 def load_data(filename):
     with open(filename) as f:
         return [line.strip() for line in f]
 
-files = ['file1.txt', 'file2.txt', 'file3.txt']
+
+files = ["file1.txt", "file2.txt", "file3.txt"]
 partitions = [load_data(f) for f in files]
 bag = db.from_delayed(partitions)
 ```
@@ -100,9 +102,11 @@ bag = db.from_delayed(partitions)
 # From any iterable-producing function
 def read_json_files():
     import json
-    for filename in glob.glob('data/*.json'):
+
+    for filename in glob.glob("data/*.json"):
         with open(filename) as f:
             yield json.load(f)
+
 
 # Create bag from generator
 bag = db.from_sequence(read_json_files(), partition_size=10)
@@ -114,22 +118,25 @@ bag = db.from_sequence(read_json_files(), partition_size=10)
 ```python
 import dask.bag as db
 
-bag = db.read_text('data/*.json')
+bag = db.read_text("data/*.json")
 
 # Parse JSON
 import json
+
 parsed = bag.map(json.loads)
 
 # Extract field
-values = parsed.map(lambda x: x['value'])
+values = parsed.map(lambda x: x["value"])
+
 
 # Complex transformation
 def process_record(record):
     return {
-        'id': record['id'],
-        'value': record['value'] * 2,
-        'category': record.get('category', 'unknown')
+        "id": record["id"],
+        "value": record["value"] * 2,
+        "category": record.get("category", "unknown"),
     }
+
 
 processed = parsed.map(process_record)
 ```
@@ -137,14 +144,16 @@ processed = parsed.map(process_record)
 ### Filter
 ```python
 # Filter by condition
-valid = parsed.filter(lambda x: x['status'] == 'valid')
+valid = parsed.filter(lambda x: x["status"] == "valid")
 
 # Multiple conditions
-filtered = parsed.filter(lambda x: x['value'] > 100 and x['year'] == 2024)
+filtered = parsed.filter(lambda x: x["value"] > 100 and x["year"] == 2024)
+
 
 # Filter with custom function
 def is_valid_record(record):
-    return record.get('status') == 'valid' and record.get('value') is not None
+    return record.get("status") == "valid" and record.get("value") is not None
+
 
 valid_records = parsed.filter(is_valid_record)
 ```
@@ -152,10 +161,10 @@ valid_records = parsed.filter(is_valid_record)
 ### Pluck (Extract Fields)
 ```python
 # Extract single field
-ids = parsed.pluck('id')
+ids = parsed.pluck("id")
 
 # Extract multiple fields (creates tuples)
-key_pairs = parsed.pluck(['id', 'value'])
+key_pairs = parsed.pluck(["id", "value"])
 ```
 
 ### Flatten
@@ -165,14 +174,14 @@ nested = db.from_sequence([[1, 2], [3, 4], [5, 6]])
 flat = nested.flatten()  # [1, 2, 3, 4, 5, 6]
 
 # Flatten after map
-bag = db.read_text('data/*.txt')
+bag = db.read_text("data/*.txt")
 words = bag.map(str.split).flatten()  # All words from all files
 ```
 
 ### GroupBy (Expensive)
 ```python
 # Group by key (requires shuffle)
-grouped = parsed.groupby(lambda x: x['category'])
+grouped = parsed.groupby(lambda x: x["category"])
 
 # Aggregate after grouping
 counts = grouped.map(lambda key_items: (key_items[0], len(list(key_items[1]))))
@@ -183,18 +192,15 @@ result = counts.compute()
 ```python
 # FoldBy is more efficient than groupby for aggregations
 def add(acc, item):
-    return acc + item['value']
+    return acc + item["value"]
+
 
 def combine(acc1, acc2):
     return acc1 + acc2
 
+
 # Sum values by category
-sums = parsed.foldby(
-    key='category',
-    binop=add,
-    initial=0,
-    combine=combine
-)
+sums = parsed.foldby(key="category", binop=add, initial=0, combine=combine)
 
 result = sums.compute()
 ```
@@ -211,11 +217,7 @@ distinct = bag.distinct().compute()
 first_ten = bag.take(10)
 
 # Fold/reduce
-total = bag.fold(
-    lambda acc, x: acc + x['value'],
-    initial=0,
-    combine=lambda a, b: a + b
-).compute()
+total = bag.fold(lambda acc, x: acc + x["value"], initial=0, combine=lambda a, b: a + b).compute()
 ```
 
 ## Converting to Other Collections
@@ -226,13 +228,13 @@ import dask.bag as db
 import dask.dataframe as dd
 
 # Bag of dictionaries
-bag = db.read_text('data/*.json').map(json.loads)
+bag = db.read_text("data/*.json").map(json.loads)
 
 # Convert to DataFrame
 ddf = bag.to_dataframe()
 
 # With explicit columns
-ddf = bag.to_dataframe(meta={'id': int, 'value': float, 'category': str})
+ddf = bag.to_dataframe(meta={"id": int, "value": float, "category": str})
 ```
 
 ### To List/Compute
@@ -252,51 +254,48 @@ import dask.bag as db
 import json
 
 # Read and parse JSON files
-bag = db.read_text('logs/*.json')
+bag = db.read_text("logs/*.json")
 parsed = bag.map(json.loads)
 
 # Filter valid records
-valid = parsed.filter(lambda x: x.get('status') == 'success')
+valid = parsed.filter(lambda x: x.get("status") == "success")
 
 # Extract relevant fields
-processed = valid.map(lambda x: {
-    'user_id': x['user']['id'],
-    'timestamp': x['timestamp'],
-    'value': x['metrics']['value']
-})
+processed = valid.map(
+    lambda x: {
+        "user_id": x["user"]["id"],
+        "timestamp": x["timestamp"],
+        "value": x["metrics"]["value"],
+    }
+)
 
 # Convert to DataFrame for analysis
 ddf = processed.to_dataframe()
 
 # Analyze
-summary = ddf.groupby('user_id')['value'].mean().compute()
+summary = ddf.groupby("user_id")["value"].mean().compute()
 ```
 
 ### Log Analysis
 ```python
 # Read log files
-logs = db.read_text('logs/*.log')
+logs = db.read_text("logs/*.log")
+
 
 # Parse log lines
 def parse_log_line(line):
-    parts = line.split(' ')
-    return {
-        'timestamp': parts[0],
-        'level': parts[1],
-        'message': ' '.join(parts[2:])
-    }
+    parts = line.split(" ")
+    return {"timestamp": parts[0], "level": parts[1], "message": " ".join(parts[2:])}
+
 
 parsed_logs = logs.map(parse_log_line)
 
 # Filter errors
-errors = parsed_logs.filter(lambda x: x['level'] == 'ERROR')
+errors = parsed_logs.filter(lambda x: x["level"] == "ERROR")
 
 # Count by message pattern
 error_counts = errors.foldby(
-    key='message',
-    binop=lambda acc, x: acc + 1,
-    initial=0,
-    combine=lambda a, b: a + b
+    key="message", binop=lambda acc, x: acc + 1, initial=0, combine=lambda a, b: a + b
 )
 
 result = error_counts.compute()
@@ -305,23 +304,23 @@ result = error_counts.compute()
 ### Text Processing
 ```python
 # Read text files
-text = db.read_text('documents/*.txt')
+text = db.read_text("documents/*.txt")
 
 # Split into words
 words = text.map(str.lower).map(str.split).flatten()
+
 
 # Count word frequencies
 def increment(acc, word):
     return acc + 1
 
+
 def combine_counts(a, b):
     return a + b
 
+
 word_counts = words.foldby(
-    key=lambda word: word,
-    binop=increment,
-    initial=0,
-    combine=combine_counts
+    key=lambda word: word, binop=increment, initial=0, combine=combine_counts
 )
 
 # Get top words
@@ -335,35 +334,34 @@ import dask.bag as db
 import json
 
 # Read raw data
-raw = db.read_text('raw_data/*.json').map(json.loads)
+raw = db.read_text("raw_data/*.json").map(json.loads)
+
 
 # Validation function
 def is_valid(record):
-    required_fields = ['id', 'timestamp', 'value']
+    required_fields = ["id", "timestamp", "value"]
     return all(field in record for field in required_fields)
+
 
 # Cleaning function
 def clean_record(record):
     return {
-        'id': int(record['id']),
-        'timestamp': record['timestamp'],
-        'value': float(record['value']),
-        'category': record.get('category', 'unknown'),
-        'tags': record.get('tags', [])
+        "id": int(record["id"]),
+        "timestamp": record["timestamp"],
+        "value": float(record["value"]),
+        "category": record.get("category", "unknown"),
+        "tags": record.get("tags", []),
     }
 
+
 # Pipeline
-cleaned = (raw
-    .filter(is_valid)
-    .map(clean_record)
-    .filter(lambda x: x['value'] > 0)
-)
+cleaned = raw.filter(is_valid).map(clean_record).filter(lambda x: x["value"] > 0)
 
 # Convert to DataFrame
 ddf = cleaned.to_dataframe()
 
 # Save cleaned data
-ddf.to_parquet('cleaned_data/')
+ddf.to_parquet("cleaned_data/")
 ```
 
 ## Performance Considerations
@@ -384,34 +382,31 @@ ddf.to_parquet('cleaned_data/')
 **1. Use FoldBy Instead of GroupBy**
 ```python
 # Better: Use foldby for aggregations
-result = bag.foldby(key='category', binop=add, initial=0, combine=sum)
+result = bag.foldby(key="category", binop=add, initial=0, combine=sum)
 
 # Worse: GroupBy then reduce
-result = bag.groupby('category').map(lambda x: (x[0], sum(x[1])))
+result = bag.groupby("category").map(lambda x: (x[0], sum(x[1])))
 ```
 
 **2. Convert to DataFrame Early**
 ```python
 # For structured operations, convert to DataFrame
-bag = db.read_text('data/*.json').map(json.loads)
-bag = bag.filter(lambda x: x['status'] == 'valid')
+bag = db.read_text("data/*.json").map(json.loads)
+bag = bag.filter(lambda x: x["status"] == "valid")
 ddf = bag.to_dataframe()  # Now use efficient DataFrame operations
 ```
 
 **3. Control Partition Size**
 ```python
 # Balance between too many and too few partitions
-bag = db.read_text('data/*.txt', blocksize='64MB')  # Reasonable partition size
+bag = db.read_text("data/*.txt", blocksize="64MB")  # Reasonable partition size
 ```
 
 **4. Use Lazy Evaluation**
 ```python
 # Chain operations before computing
-result = (bag
-    .map(process1)
-    .filter(condition)
-    .map(process2)
-    .compute()  # Single compute at the end
+result = (
+    bag.map(process1).filter(condition).map(process2).compute()  # Single compute at the end
 )
 ```
 
@@ -451,9 +446,9 @@ Bags are designed for memory-efficient processing:
 
 ```python
 # Streaming processing - doesn't load all in memory
-bag = db.read_text('huge_file.txt')  # Lazy
-processed = bag.map(process_line)     # Still lazy
-result = processed.compute()          # Processes in chunks
+bag = db.read_text("huge_file.txt")  # Lazy
+processed = bag.map(process_line)  # Still lazy
+result = processed.compute()  # Processes in chunks
 ```
 
 For very large results, avoid computing to memory:
@@ -464,5 +459,5 @@ For very large results, avoid computing to memory:
 
 # Instead, convert and save to disk
 ddf = bag.to_dataframe()
-ddf.to_parquet('output/')
+ddf.to_parquet("output/")
 ```

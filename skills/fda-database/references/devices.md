@@ -54,11 +54,7 @@ api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/device/event.json"
 
 # Find adverse events for a specific device
-params = {
-    "api_key": api_key,
-    "search": "device.brand_name:pacemaker",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "device.brand_name:pacemaker", "limit": 10}
 
 response = requests.get(url, params=params)
 data = response.json()
@@ -66,11 +62,7 @@ data = response.json()
 
 ```python
 # Count events by type
-params = {
-    "api_key": api_key,
-    "search": "device.generic_name:insulin+pump",
-    "count": "event_type"
-}
+params = {"api_key": api_key, "search": "device.generic_name:insulin+pump", "count": "event_type"}
 ```
 
 ```python
@@ -79,7 +71,7 @@ params = {
     "api_key": api_key,
     "search": "event_type:Death+AND+device.device_class:3",
     "limit": 50,
-    "sort": "date_received:desc"
+    "sort": "date_received:desc",
 }
 ```
 
@@ -122,7 +114,7 @@ params = {
     "api_key": api_key,
     "search": "applicant:Medtronic",
     "limit": 50,
-    "sort": "decision_date:desc"
+    "sort": "decision_date:desc",
 }
 
 response = requests.get("https://api.fda.gov/device/510k.json", params=params)
@@ -130,11 +122,7 @@ response = requests.get("https://api.fda.gov/device/510k.json", params=params)
 
 ```python
 # Search for specific device type clearances
-params = {
-    "api_key": api_key,
-    "search": "device_name:*surgical+robot*",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "device_name:*surgical+robot*", "limit": 10}
 ```
 
 ```python
@@ -142,7 +130,7 @@ params = {
 params = {
     "api_key": api_key,
     "search": "device_class:3+AND+decision_date:[20240101+TO+20241231]",
-    "limit": 100
+    "limit": 100,
 }
 ```
 
@@ -180,31 +168,19 @@ params = {
 **Example Queries**:
 ```python
 # Look up device by product code
-params = {
-    "api_key": api_key,
-    "search": "product_code:LWL",
-    "limit": 1
-}
+params = {"api_key": api_key, "search": "product_code:LWL", "limit": 1}
 
 response = requests.get("https://api.fda.gov/device/classification.json", params=params)
 ```
 
 ```python
 # Find all cardiovascular devices
-params = {
-    "api_key": api_key,
-    "search": "medical_specialty:CV",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "medical_specialty:CV", "limit": 100}
 ```
 
 ```python
 # Get all implantable Class III devices
-params = {
-    "api_key": api_key,
-    "search": "device_class:3+AND+implant_flag:Y",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "device_class:3+AND+implant_flag:Y", "limit": 50}
 ```
 
 ### 4. Device Recall Enforcement Reports
@@ -243,7 +219,7 @@ params = {
     "api_key": api_key,
     "search": "classification:Class+I",
     "limit": 20,
-    "sort": "report_date:desc"
+    "sort": "report_date:desc",
 }
 
 response = requests.get("https://api.fda.gov/device/enforcement.json", params=params)
@@ -251,11 +227,7 @@ response = requests.get("https://api.fda.gov/device/enforcement.json", params=pa
 
 ```python
 # Search recalls by manufacturer
-params = {
-    "api_key": api_key,
-    "search": "recalling_firm:*Philips*",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "recalling_firm:*Philips*", "limit": 50}
 ```
 
 ### 5. Device Recalls
@@ -286,11 +258,7 @@ params = {
 **Example Queries**:
 ```python
 # Search recalls by product code
-params = {
-    "api_key": api_key,
-    "search": "product_code:DQY",
-    "limit": 20
-}
+params = {"api_key": api_key, "search": "product_code:DQY", "limit": 20}
 
 response = requests.get("https://api.fda.gov/device/recall.json", params=params)
 ```
@@ -328,22 +296,14 @@ response = requests.get("https://api.fda.gov/device/recall.json", params=params)
 **Example Queries**:
 ```python
 # Find PMA approvals by company
-params = {
-    "api_key": api_key,
-    "search": "applicant:Boston+Scientific",
-    "limit": 50
-}
+params = {"api_key": api_key, "search": "applicant:Boston+Scientific", "limit": 50}
 
 response = requests.get("https://api.fda.gov/device/pma.json", params=params)
 ```
 
 ```python
 # Search for specific device PMAs
-params = {
-    "api_key": api_key,
-    "search": "generic_name:*cardiac+pacemaker*",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "generic_name:*cardiac+pacemaker*", "limit": 10}
 ```
 
 ### 7. Registrations and Listings
@@ -381,22 +341,14 @@ params = {
 **Example Queries**:
 ```python
 # Find registered facilities by country
-params = {
-    "api_key": api_key,
-    "search": "registration.iso_country_code:US",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "registration.iso_country_code:US", "limit": 100}
 
 response = requests.get("https://api.fda.gov/device/registrationlisting.json", params=params)
 ```
 
 ```python
 # Search by facility name
-params = {
-    "api_key": api_key,
-    "search": "registration.name:*Johnson*",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "registration.name:*Johnson*", "limit": 10}
 ```
 
 ### 8. Unique Device Identification (UDI)
@@ -442,31 +394,19 @@ params = {
 **Example Queries**:
 ```python
 # Look up device by UDI
-params = {
-    "api_key": api_key,
-    "search": "identifiers.id:00884838003019",
-    "limit": 1
-}
+params = {"api_key": api_key, "search": "identifiers.id:00884838003019", "limit": 1}
 
 response = requests.get("https://api.fda.gov/device/udi.json", params=params)
 ```
 
 ```python
 # Find prescription devices by brand name
-params = {
-    "api_key": api_key,
-    "search": "brand_name:*insulin+pump*+AND+is_rx:true",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "brand_name:*insulin+pump*+AND+is_rx:true", "limit": 10}
 ```
 
 ```python
 # Search for MRI safe devices
-params = {
-    "api_key": api_key,
-    "search": 'mri_safety:"MR Safe"',
-    "limit": 50
-}
+params = {"api_key": api_key, "search": 'mri_safety:"MR Safe"', "limit": 50}
 ```
 
 ### 9. COVID-19 Serological Testing Evaluations
@@ -496,22 +436,14 @@ params = {
 **Example Queries**:
 ```python
 # Find tests by manufacturer
-params = {
-    "api_key": api_key,
-    "search": "manufacturer:Abbott",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "manufacturer:Abbott", "limit": 10}
 
 response = requests.get("https://api.fda.gov/device/covid19serology.json", params=params)
 ```
 
 ```python
 # Get all tests with EUA
-params = {
-    "api_key": api_key,
-    "search": "authorization_status:*EUA*",
-    "limit": 100
-}
+params = {"api_key": api_key, "search": "authorization_status:*EUA*", "limit": 100}
 ```
 
 ## Integration Tips
@@ -537,17 +469,13 @@ def search_device_across_databases(device_name, api_key):
     events_params = {
         "api_key": api_key,
         "search": f"device.brand_name:*{device_name}*",
-        "limit": 10
+        "limit": 10,
     }
     results["adverse_events"] = requests.get(events_url, params=events_params).json()
 
     # Search 510(k) clearances
     fiveten_url = "https://api.fda.gov/device/510k.json"
-    fiveten_params = {
-        "api_key": api_key,
-        "search": f"device_name:*{device_name}*",
-        "limit": 10
-    }
+    fiveten_params = {"api_key": api_key, "search": f"device_name:*{device_name}*", "limit": 10}
     results["510k_clearances"] = requests.get(fiveten_url, params=fiveten_params).json()
 
     # Search recalls
@@ -555,17 +483,13 @@ def search_device_across_databases(device_name, api_key):
     recall_params = {
         "api_key": api_key,
         "search": f"product_description:*{device_name}*",
-        "limit": 10
+        "limit": 10,
     }
     results["recalls"] = requests.get(recall_url, params=recall_params).json()
 
     # Search UDI
     udi_url = "https://api.fda.gov/device/udi.json"
-    udi_params = {
-        "api_key": api_key,
-        "search": f"brand_name:*{device_name}*",
-        "limit": 10
-    }
+    udi_params = {"api_key": api_key, "search": f"brand_name:*{device_name}*", "limit": 10}
     results["udi"] = requests.get(udi_url, params=udi_params).json()
 
     return results
@@ -586,11 +510,7 @@ def get_device_classification(product_code, api_key):
         Classification details dictionary
     """
     url = "https://api.fda.gov/device/classification.json"
-    params = {
-        "api_key": api_key,
-        "search": f"product_code:{product_code}",
-        "limit": 1
-    }
+    params = {"api_key": api_key, "search": f"product_code:{product_code}", "limit": 1}
 
     response = requests.get(url, params=params)
     data = response.json()
@@ -605,7 +525,7 @@ def get_device_classification(product_code, api_key):
             "medical_specialty": classification.get("medical_specialty_description"),
             "gmp_exempt": classification.get("gmp_exempt_flag") == "Y",
             "implant": classification.get("implant_flag") == "Y",
-            "life_sustaining": classification.get("life_sustain_support_flag") == "Y"
+            "life_sustaining": classification.get("life_sustain_support_flag") == "Y",
         }
     return None
 ```

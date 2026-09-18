@@ -51,9 +51,7 @@ events = fda.query_drug_events("aspirin", limit=100)
 label = fda.query_drug_label("Lipitor", brand=True)
 
 # Search device recalls
-recalls = fda.query("device", "enforcement",
-                   search="classification:Class+I",
-                   limit=50)
+recalls = fda.query("device", "enforcement", search="classification:Class+I", limit=50)
 ```
 
 ### 2. API Key Setup
@@ -101,9 +99,12 @@ Access 6 drug-related endpoints covering the full drug lifecycle from approval t
 **Common use cases:**
 ```python
 # Safety signal detection
-fda.count_by_field("drug", "event",
-                  search="patient.drug.medicinalproduct:metformin",
-                  field="patient.reaction.reactionmeddrapt")
+fda.count_by_field(
+    "drug",
+    "event",
+    search="patient.drug.medicinalproduct:metformin",
+    field="patient.reaction.reactionmeddrapt",
+)
 
 # Get prescribing information
 label = fda.query_drug_label("Keytruda", brand=True)
@@ -112,8 +113,7 @@ label = fda.query_drug_label("Keytruda", brand=True)
 recalls = fda.query_drug_recalls(drug_name="metformin")
 
 # Monitor shortages
-shortages = fda.query("drug", "drugshortages",
-                     search="status:Currently+in+Shortage")
+shortages = fda.query("drug", "drugshortages", search="status:Currently+in+Shortage")
 ```
 
 **Reference:** See `references/drugs.md` for detailed documentation
@@ -145,8 +145,7 @@ classification = fda.query_device_classification("DQY")
 clearances = fda.query_device_510k(applicant="Medtronic")
 
 # Search by UDI
-device_info = fda.query("device", "udi",
-                       search="identifiers.id:00884838003019")
+device_info = fda.query("device", "udi", search="identifiers.id:00884838003019")
 ```
 
 **Reference:** See `references/devices.md` for detailed documentation
@@ -165,13 +164,10 @@ Access 2 food-related endpoints for safety monitoring and recalls.
 recalls = fda.query_food_recalls(reason="undeclared peanut")
 
 # Track dietary supplement events
-events = fda.query_food_events(
-    industry="Dietary Supplements")
+events = fda.query_food_events(industry="Dietary Supplements")
 
 # Find contamination recalls
-listeria = fda.query_food_recalls(
-    reason="listeria",
-    classification="I")
+listeria = fda.query_food_recalls(reason="listeria", classification="I")
 ```
 
 **Reference:** See `references/foods.md` for detailed documentation
@@ -186,14 +182,14 @@ Access veterinary drug adverse event data with species-specific information.
 **Common use cases:**
 ```python
 # Species-specific events
-dog_events = fda.query_animal_events(
-    species="Dog",
-    drug_name="flea collar")
+dog_events = fda.query_animal_events(species="Dog", drug_name="flea collar")
 
 # Breed predisposition analysis
-breed_query = fda.query("animalandveterinary", "event",
-    search="reaction.veddra_term_name:*seizure*+AND+"
-           "animal.breed.breed_component:*Labrador*")
+breed_query = fda.query(
+    "animalandveterinary",
+    "event",
+    search="reaction.veddra_term_name:*seizure*+AND+animal.breed.breed_component:*Labrador*",
+)
 ```
 
 **Reference:** See `references/animal_veterinary.md` for detailed documentation
@@ -215,8 +211,9 @@ substance = fda.query_substance_by_unii("R16CO5Y76E")
 results = fda.query_substance_by_name("acetaminophen")
 
 # Get chemical structure
-structure = fda.query("other", "substance",
-    search="names.name:ibuprofen+AND+substanceClass:chemical")
+structure = fda.query(
+    "other", "substance", search="names.name:ibuprofen+AND+substanceClass:chemical"
+)
 ```
 
 **Reference:** See `references/other.md` for detailed documentation
@@ -237,16 +234,20 @@ def drug_safety_profile(fda, drug_name):
 
     # 2. Most common reactions
     reactions = fda.count_by_field(
-        "drug", "event",
+        "drug",
+        "event",
         search=f"patient.drug.medicinalproduct:*{drug_name}*",
         field="patient.reaction.reactionmeddrapt",
-        exact=True
+        exact=True,
     )
 
     # 3. Serious events
-    serious = fda.query("drug", "event",
+    serious = fda.query(
+        "drug",
+        "event",
         search=f"patient.drug.medicinalproduct:*{drug_name}*+AND+serious:1",
-        limit=1)
+        limit=1,
+    )
 
     # 4. Recent recalls
     recalls = fda.query_drug_recalls(drug_name=drug_name)
@@ -255,7 +256,7 @@ def drug_safety_profile(fda, drug_name):
         "total_events": total,
         "top_reactions": reactions["results"][:10],
         "serious_events": serious["meta"]["results"]["total"],
-        "recalls": recalls["results"]
+        "recalls": recalls["results"],
     }
 ```
 
@@ -266,12 +267,13 @@ Analyze trends over time using date ranges:
 ```python
 from datetime import datetime, timedelta
 
+
 def get_monthly_trends(fda, drug_name, months=12):
     """Get monthly adverse event trends."""
     trends = []
 
     for i in range(months):
-        end = datetime.now() - timedelta(days=30*i)
+        end = datetime.now() - timedelta(days=30 * i)
         start = end - timedelta(days=30)
 
         date_range = f"[{start.strftime('%Y%m%d')}+TO+{end.strftime('%Y%m%d')}]"
@@ -280,10 +282,7 @@ def get_monthly_trends(fda, drug_name, months=12):
         result = fda.query("drug", "event", search=search, limit=1)
         count = result["meta"]["results"]["total"] if "meta" in result else 0
 
-        trends.append({
-            "month": start.strftime("%Y-%m"),
-            "events": count
-        })
+        trends.append({"month": start.strftime("%Y-%m"), "events": count})
 
     return trends
 ```
@@ -303,15 +302,15 @@ def compare_drugs(fda, drug_list):
         total = events["meta"]["results"]["total"] if "meta" in events else 0
 
         # Serious events
-        serious = fda.query("drug", "event",
-            search=f"patient.drug.medicinalproduct:*{drug}*+AND+serious:1",
-            limit=1)
+        serious = fda.query(
+            "drug", "event", search=f"patient.drug.medicinalproduct:*{drug}*+AND+serious:1", limit=1
+        )
         serious_count = serious["meta"]["results"]["total"] if "meta" in serious else 0
 
         comparison[drug] = {
             "total_events": total,
             "serious_events": serious_count,
-            "serious_rate": (serious_count/total*100) if total > 0 else 0
+            "serious_rate": (serious_count / total * 100) if total > 0 else 0,
         }
 
     return comparison
@@ -328,10 +327,10 @@ def comprehensive_device_lookup(fda, device_name):
     return {
         "adverse_events": fda.query_device_events(device_name, limit=10),
         "510k_clearances": fda.query_device_510k(device_name=device_name),
-        "recalls": fda.query("device", "enforcement",
-                           search=f"product_description:*{device_name}*"),
-        "udi_info": fda.query("device", "udi",
-                            search=f"brand_name:*{device_name}*")
+        "recalls": fda.query(
+            "device", "enforcement", search=f"product_description:*{device_name}*"
+        ),
+        "udi_info": fda.query("device", "udi", search=f"brand_name:*{device_name}*"),
     }
 ```
 
@@ -343,17 +342,10 @@ All API responses follow this structure:
 
 ```python
 {
-    "meta": {
-        "disclaimer": "...",
-        "results": {
-            "skip": 0,
-            "limit": 100,
-            "total": 15234
-        }
-    },
+    "meta": {"disclaimer": "...", "results": {"skip": 0, "limit": 100, "total": 15234}},
     "results": [
         # Array of result objects
-    ]
+    ],
 }
 ```
 
@@ -382,17 +374,12 @@ For large result sets, use pagination:
 ```python
 # Automatic pagination
 all_results = fda.query_all(
-    "drug", "event",
-    search="patient.drug.medicinalproduct:aspirin",
-    max_results=5000
+    "drug", "event", search="patient.drug.medicinalproduct:aspirin", max_results=5000
 )
 
 # Manual pagination
 for skip in range(0, 1000, 100):
-    batch = fda.query("drug", "event",
-                     search="...",
-                     limit=100,
-                     skip=skip)
+    batch = fda.query("drug", "event", search="...", limit=100, skip=skip)
     # Process batch
 ```
 
@@ -403,13 +390,13 @@ for skip in range(0, 1000, 100):
 **DO:**
 ```python
 # Specific field search
-search="patient.drug.medicinalproduct:aspirin"
+search = "patient.drug.medicinalproduct:aspirin"
 ```
 
 **DON'T:**
 ```python
 # Overly broad wildcard
-search="*aspirin*"
+search = "*aspirin*"
 ```
 
 ### 2. Implement Rate Limiting
@@ -433,10 +420,9 @@ When counting/aggregating, use `.exact` suffix:
 
 ```python
 # Count exact phrases
-fda.count_by_field("drug", "event",
-                  search="...",
-                  field="patient.reaction.reactionmeddrapt",
-                  exact=True)  # Adds .exact automatically
+fda.count_by_field(
+    "drug", "event", search="...", field="patient.reaction.reactionmeddrapt", exact=True
+)  # Adds .exact automatically
 ```
 
 ### 5. Validate Input Data
@@ -447,6 +433,7 @@ Clean and validate search terms:
 def clean_drug_name(name):
     """Clean drug name for query."""
     return name.strip().replace('"', '\\"')
+
 
 drug_name = clean_drug_name(user_input)
 ```

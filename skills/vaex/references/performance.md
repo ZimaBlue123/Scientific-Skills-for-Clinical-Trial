@@ -11,11 +11,11 @@ Lazy evaluation is the foundation of Vaex's performance:
 ```python
 import vaex
 
-df = vaex.open('large_file.hdf5')
+df = vaex.open("large_file.hdf5")
 
 # No computation happens here - just defines what to compute
-df['total'] = df.price * df.quantity
-df['log_price'] = df.price.log()
+df["total"] = df.price * df.quantity
+df["log_price"] = df.price.log()
 mean_expr = df.total.mean()
 
 # Computation happens here (when result is needed)
@@ -31,15 +31,15 @@ result = mean_expr  # Now the mean is actually calculated
 
 ```python
 # These trigger evaluation:
-print(df.x.mean())                    # Accessing value
-array = df.x.values                   # Getting NumPy array
-pdf = df.to_pandas_df()              # Converting to pandas
-df.export_hdf5('output.hdf5')       # Exporting
+print(df.x.mean())  # Accessing value
+array = df.x.values  # Getting NumPy array
+pdf = df.to_pandas_df()  # Converting to pandas
+df.export_hdf5("output.hdf5")  # Exporting
 
 # These do NOT trigger evaluation:
-df['new_col'] = df.x + df.y          # Creating virtual column
-expr = df.x.mean()                    # Creating expression
-df_filtered = df[df.x > 10]          # Creating filtered view
+df["new_col"] = df.x + df.y  # Creating virtual column
+expr = df.x.mean()  # Creating expression
+df_filtered = df[df.x > 10]  # Creating filtered view
 ```
 
 ## Batching Operations with delay=True
@@ -50,9 +50,9 @@ Execute multiple operations together for better performance:
 
 ```python
 # Without delay - each operation processes entire dataset
-mean_x = df.x.mean()      # Pass 1 through data
-std_x = df.x.std()        # Pass 2 through data
-max_x = df.x.max()        # Pass 3 through data
+mean_x = df.x.mean()  # Pass 1 through data
+std_x = df.x.std()  # Pass 2 through data
+max_x = df.x.max()  # Pass 3 through data
 
 # With delay - single pass through dataset
 mean_x = df.x.mean(delay=True)
@@ -72,7 +72,7 @@ print(results[2])  # max
 stats = {}
 delayed_results = []
 
-for column in ['sales', 'quantity', 'profit', 'cost']:
+for column in ["sales", "quantity", "profit", "cost"]:
     mean = df[column].mean(delay=True)
     std = df[column].std(delay=True)
     delayed_results.extend([mean, std])
@@ -81,11 +81,8 @@ for column in ['sales', 'quantity', 'profit', 'cost']:
 results = vaex.execute(delayed_results)
 
 # Process results
-for i, column in enumerate(['sales', 'quantity', 'profit', 'cost']):
-    stats[column] = {
-        'mean': results[i*2],
-        'std': results[i*2 + 1]
-    }
+for i, column in enumerate(["sales", "quantity", "profit", "cost"]):
+    stats[column] = {"mean": results[i * 2], "std": results[i * 2 + 1]}
 ```
 
 ### When to Use delay=True
@@ -104,12 +101,14 @@ mean3 = df.col3.mean()
 mean4 = df.col4.mean()
 
 # Good: 1 pass through dataset
-results = vaex.execute([
-    df.col1.mean(delay=True),
-    df.col2.mean(delay=True),
-    df.col3.mean(delay=True),
-    df.col4.mean(delay=True)
-])
+results = vaex.execute(
+    [
+        df.col1.mean(delay=True),
+        df.col2.mean(delay=True),
+        df.col3.mean(delay=True),
+        df.col4.mean(delay=True),
+    ]
+)
 ```
 
 ## Asynchronous Operations
@@ -122,6 +121,7 @@ Process data asynchronously using async/await:
 import vaex
 import asyncio
 
+
 async def compute_statistics(df):
     # Create async tasks
     mean_task = df.x.mean(delay=True)
@@ -130,13 +130,15 @@ async def compute_statistics(df):
     # Execute asynchronously
     results = await vaex.async_execute([mean_task, std_task])
 
-    return {'mean': results[0], 'std': results[1]}
+    return {"mean": results[0], "std": results[1]}
+
 
 # Run async function
 async def main():
-    df = vaex.open('large_file.hdf5')
+    df = vaex.open("large_file.hdf5")
     stats = await compute_statistics(df)
     print(stats)
+
 
 asyncio.run(main())
 ```
@@ -161,12 +163,12 @@ Understanding the difference is crucial for performance:
 
 ```python
 # Virtual column - computed on-the-fly, zero memory
-df['total'] = df.price * df.quantity
-df['log_sales'] = df.sales.log()
-df['full_name'] = df.first_name + ' ' + df.last_name
+df["total"] = df.price * df.quantity
+df["log_sales"] = df.sales.log()
+df["full_name"] = df.first_name + " " + df.last_name
 
 # Check if virtual
-print(df.is_local('total'))  # False = virtual
+print(df.is_local("total"))  # False = virtual
 
 # Benefits:
 # - Zero memory overhead
@@ -178,13 +180,13 @@ print(df.is_local('total'))  # False = virtual
 
 ```python
 # Materialize a virtual column
-df['total_materialized'] = df['total'].values
+df["total_materialized"] = df["total"].values
 
 # Or use materialize method
-df = df.materialize(df['total'], inplace=True)
+df = df.materialize(df["total"], inplace=True)
 
 # Check if materialized
-print(df.is_local('total_materialized'))  # True = materialized
+print(df.is_local("total_materialized"))  # True = materialized
 
 # When to materialize:
 # - Column computed repeatedly (amortize cost)
@@ -206,7 +208,7 @@ print(df.is_local('total_materialized'))  # True = materialized
 # - Slows down other operations
 
 # Example: Complex calculation used many times
-df['complex'] = (df.x.log() * df.y.sqrt() + df.z ** 2).values  # Materialize
+df["complex"] = (df.x.log() * df.y.sqrt() + df.z**2).values  # Materialize
 ```
 
 ## Caching Strategies
@@ -223,7 +225,7 @@ mean1 = df.x.mean()  # Computes
 mean2 = df.x.mean()  # From cache (instant)
 
 # Cache invalidated if DataFrame changes
-df['new_col'] = df.x + 1
+df["new_col"] = df.x + 1
 mean3 = df.x.mean()  # Recomputes
 ```
 
@@ -231,24 +233,24 @@ mean3 = df.x.mean()  # Recomputes
 
 ```python
 # Save DataFrame state (includes virtual columns)
-df.state_write('state.json')
+df.state_write("state.json")
 
 # Load state later
-df_new = vaex.open('data.hdf5')
-df_new.state_load('state.json')  # Restores virtual columns, selections
+df_new = vaex.open("data.hdf5")
+df_new.state_load("state.json")  # Restores virtual columns, selections
 ```
 
 ### Checkpoint Pattern
 
 ```python
 # Export intermediate results for complex pipelines
-df['processed'] = complex_calculation(df)
+df["processed"] = complex_calculation(df)
 
 # Save checkpoint
-df.export_hdf5('checkpoint.hdf5')
+df.export_hdf5("checkpoint.hdf5")
 
 # Resume from checkpoint
-df = vaex.open('checkpoint.hdf5')
+df = vaex.open("checkpoint.hdf5")
 # Continue processing...
 ```
 
@@ -260,7 +262,7 @@ Optimize memory usage for very large datasets:
 
 ```python
 # HDF5 and Arrow are memory-mapped (optimal)
-df = vaex.open('data.hdf5')  # No memory used until accessed
+df = vaex.open("data.hdf5")  # No memory used until accessed
 
 # File stays on disk, only accessed portions loaded to RAM
 mean = df.x.mean()  # Streams through data, minimal memory
@@ -293,6 +295,7 @@ for col in df.get_column_names():
 
 # Profile operations
 import vaex.profiler
+
 with vaex.profiler():
     result = df.x.mean()
 ```
@@ -323,13 +326,13 @@ import vaex
 import dask.dataframe as dd
 
 # Create Vaex DataFrame
-df_vaex = vaex.open('large_file.hdf5')
+df_vaex = vaex.open("large_file.hdf5")
 
 # Convert to Dask
 df_dask = df_vaex.to_dask_dataframe()
 
 # Process with Dask
-result = df_dask.groupby('category')['value'].sum().compute()
+result = df_dask.groupby("category")["value"].sum().compute()
 ```
 
 ## JIT Compilation
@@ -342,15 +345,15 @@ Vaex can use Just-In-Time compilation for custom operations:
 import vaex
 import numba
 
+
 # Define JIT-compiled function
 @numba.jit
 def custom_calculation(x, y):
-    return x ** 2 + y ** 2
+    return x**2 + y**2
+
 
 # Apply to DataFrame
-df['custom'] = df.apply(custom_calculation,
-                        arguments=[df.x, df.y],
-                        vectorize=True)
+df["custom"] = df.apply(custom_calculation, arguments=[df.x, df.y], vectorize=True)
 ```
 
 ### Custom Aggregations
@@ -363,6 +366,7 @@ def custom_sum(a):
         total += val * 2  # Custom logic
     return total
 
+
 # Use in aggregation
 result = df.x.custom_agg(custom_sum)
 ```
@@ -373,14 +377,14 @@ result = df.x.custom_agg(custom_sum)
 
 ```python
 # Bad: Creates many materialized columns
-df['a'] = (df.x + df.y).values
-df['b'] = (df.a * 2).values
-df['c'] = (df.b + df.z).values
+df["a"] = (df.x + df.y).values
+df["b"] = (df.a * 2).values
+df["c"] = (df.b + df.z).values
 
 # Good: Keep virtual until final export
-df['a'] = df.x + df.y
-df['b'] = df.a * 2
-df['c'] = df.b + df.z
+df["a"] = df.x + df.y
+df["b"] = df.a * 2
+df["c"] = df.b + df.z
 # Only materialize if exporting:
 # df.export_hdf5('output.hdf5')
 ```
@@ -395,46 +399,36 @@ mean_high = df_high.value.mean()
 mean_low = df_low.value.mean()
 
 # More efficient: Use selections
-df.select(df.value > 100, name='high')
-df.select(df.value <= 100, name='low')
-mean_high = df.value.mean(selection='high')
-mean_low = df.value.mean(selection='low')
+df.select(df.value > 100, name="high")
+df.select(df.value <= 100, name="low")
+mean_high = df.value.mean(selection="high")
+mean_low = df.value.mean(selection="low")
 ```
 
 ### Strategy 3: Batch Aggregations
 
 ```python
 # Less efficient: Multiple passes
-stats = {
-    'mean': df.x.mean(),
-    'std': df.x.std(),
-    'min': df.x.min(),
-    'max': df.x.max()
-}
+stats = {"mean": df.x.mean(), "std": df.x.std(), "min": df.x.min(), "max": df.x.max()}
 
 # More efficient: Single pass
-delayed = [
-    df.x.mean(delay=True),
-    df.x.std(delay=True),
-    df.x.min(delay=True),
-    df.x.max(delay=True)
-]
+delayed = [df.x.mean(delay=True), df.x.std(delay=True), df.x.min(delay=True), df.x.max(delay=True)]
 results = vaex.execute(delayed)
-stats = dict(zip(['mean', 'std', 'min', 'max'], results))
+stats = dict(zip(["mean", "std", "min", "max"], results))
 ```
 
 ### Strategy 4: Choose Optimal File Formats
 
 ```python
 # Slow: Large CSV
-df = vaex.from_csv('huge.csv')  # Can take minutes
+df = vaex.from_csv("huge.csv")  # Can take minutes
 
 # Fast: HDF5 or Arrow
-df = vaex.open('huge.hdf5')     # Instant
-df = vaex.open('huge.arrow')    # Instant
+df = vaex.open("huge.hdf5")  # Instant
+df = vaex.open("huge.arrow")  # Instant
 
 # One-time conversion
-df = vaex.from_csv('huge.csv', convert='huge.hdf5')
+df = vaex.from_csv("huge.csv", convert="huge.hdf5")
 # Future loads: vaex.open('huge.hdf5')
 ```
 
@@ -442,14 +436,14 @@ df = vaex.from_csv('huge.csv', convert='huge.hdf5')
 
 ```python
 # Less efficient: Repeated calculations
-df['result'] = df.x.log() + df.x.log() * 2
+df["result"] = df.x.log() + df.x.log() * 2
 
 # More efficient: Reuse calculations
-df['log_x'] = df.x.log()
-df['result'] = df.log_x + df.log_x * 2
+df["log_x"] = df.x.log()
+df["result"] = df.log_x + df.log_x * 2
 
 # Even better: Combine operations
-df['result'] = df.x.log() * 3  # Simplified math
+df["result"] = df.x.log() * 3  # Simplified math
 ```
 
 ## Performance Profiling
@@ -460,7 +454,7 @@ df['result'] = df.x.log() * 3  # Simplified math
 import time
 import vaex
 
-df = vaex.open('large_file.hdf5')
+df = vaex.open("large_file.hdf5")
 
 # Time operations
 start = time.time()
@@ -474,7 +468,7 @@ print(f"Computed in {elapsed:.2f} seconds")
 ```python
 # Profile with context manager
 with vaex.profiler():
-    result = df.groupby('category').agg({'value': 'sum'})
+    result = df.groupby("category").agg({"value": "sum"})
 # Prints detailed timing information
 ```
 
@@ -489,10 +483,11 @@ def benchmark_operation(operation, name):
     print(f"{name}: {elapsed:.3f}s")
     return result
 
+
 # Test different approaches
 benchmark_operation(lambda: df.x.mean(), "Direct mean")
 benchmark_operation(lambda: df[df.x > 0].x.mean(), "Filtered mean")
-benchmark_operation(lambda: df.x.mean(selection='positive'), "Selection mean")
+benchmark_operation(lambda: df.x.mean(selection="positive"), "Selection mean")
 ```
 
 ## Common Performance Issues and Solutions
@@ -515,10 +510,10 @@ for col, result in zip(df.column_names, results):
 
 ```python
 # Problem: Materializing large virtual columns
-df['large_col'] = (complex_expression).values
+df["large_col"] = (complex_expression).values
 
 # Solution: Keep virtual, or materialize and export
-df['large_col'] = complex_expression  # Virtual
+df["large_col"] = complex_expression  # Virtual
 # Or: df.export_hdf5('with_new_col.hdf5')
 ```
 
@@ -526,28 +521,28 @@ df['large_col'] = complex_expression  # Virtual
 
 ```python
 # Problem: Exporting with many virtual columns
-df.export_csv('output.csv')  # Slow if many virtual columns
+df.export_csv("output.csv")  # Slow if many virtual columns
 
 # Solution: Export to HDF5 or Arrow (faster)
-df.export_hdf5('output.hdf5')
-df.export_arrow('output.arrow')
+df.export_hdf5("output.hdf5")
+df.export_arrow("output.arrow")
 
 # Or materialize first for CSV
 df_materialized = df.materialize()
-df_materialized.export_csv('output.csv')
+df_materialized.export_csv("output.csv")
 ```
 
 ### Issue: Repeated Complex Calculations
 
 ```python
 # Problem: Complex virtual column used repeatedly
-df['complex'] = df.x.log() * df.y.sqrt() + df.z ** 3
-result1 = df.groupby('cat1').agg({'complex': 'mean'})
-result2 = df.groupby('cat2').agg({'complex': 'sum'})
+df["complex"] = df.x.log() * df.y.sqrt() + df.z**3
+result1 = df.groupby("cat1").agg({"complex": "mean"})
+result2 = df.groupby("cat2").agg({"complex": "sum"})
 result3 = df.complex.std()
 
 # Solution: Materialize once
-df['complex'] = (df.x.log() * df.y.sqrt() + df.z ** 3).values
+df["complex"] = (df.x.log() * df.y.sqrt() + df.z**3).values
 # Or: df = df.materialize('complex')
 ```
 

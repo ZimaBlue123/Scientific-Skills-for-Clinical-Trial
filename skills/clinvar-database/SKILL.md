@@ -136,10 +136,10 @@ Process XML files to extract variant details, classifications, and evidence.
 import gzip
 import xml.etree.ElementTree as ET
 
-with gzip.open('ClinVarVariationRelease.xml.gz', 'rt') as f:
-    for event, elem in ET.iterparse(f, events=('end',)):
-        if elem.tag == 'VariationArchive':
-            variation_id = elem.attrib.get('VariationID')
+with gzip.open("ClinVarVariationRelease.xml.gz", "rt") as f:
+    for event, elem in ET.iterparse(f, events=("end",)):
+        if elem.tag == "VariationArchive":
+            variation_id = elem.attrib.get("VariationID")
             # Extract clinical significance, review status, etc.
             elem.clear()  # Free memory
 ```
@@ -164,11 +164,11 @@ bcftools annotate -a clinvar.vcf.gz -c INFO your_variants.vcf
 ```python
 import vcf
 
-vcf_reader = vcf.Reader(filename='clinvar.vcf.gz')
+vcf_reader = vcf.Reader(filename="clinvar.vcf.gz")
 for record in vcf_reader:
-    clnsig = record.INFO.get('CLNSIG', [])
-    if 'Pathogenic' in clnsig:
-        gene = record.INFO.get('GENEINFO', [''])[0]
+    clnsig = record.INFO.get("CLNSIG", [])
+    if "Pathogenic" in clnsig:
+        gene = record.INFO.get("GENEINFO", [""])[0]
         print(f"{record.CHROM}:{record.POS} {gene} - {clnsig}")
 ```
 
@@ -181,16 +181,16 @@ Use pandas or command-line tools for rapid filtering and analysis.
 import pandas as pd
 
 # Load variant summary
-df = pd.read_csv('variant_summary.txt.gz', sep='\t', compression='gzip')
+df = pd.read_csv("variant_summary.txt.gz", sep="\t", compression="gzip")
 
 # Filter pathogenic variants in specific gene
 pathogenic_brca = df[
-    (df['GeneSymbol'] == 'BRCA1') &
-    (df['ClinicalSignificance'].str.contains('Pathogenic', na=False))
+    (df["GeneSymbol"] == "BRCA1")
+    & (df["ClinicalSignificance"].str.contains("Pathogenic", na=False))
 ]
 
 # Count variants by clinical significance
-sig_counts = df['ClinicalSignificance'].value_counts()
+sig_counts = df["ClinicalSignificance"].value_counts()
 ```
 
 **Using command-line tools:**

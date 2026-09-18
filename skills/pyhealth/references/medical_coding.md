@@ -105,6 +105,7 @@ Manages cross-system mappings between different coding standards.
 **Usage:**
 ```python
 from pyhealth.medcode import CrossMap
+
 ndc_to_atc = CrossMap.load("NDC", "ATC")
 atc_codes = ndc_to_atc.map("00074-3799-13", level=3)  # Get ATC level 3
 ```

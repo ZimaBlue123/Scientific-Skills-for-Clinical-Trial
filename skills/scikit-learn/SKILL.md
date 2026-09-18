@@ -79,31 +79,33 @@ from sklearn.impute import SimpleImputer
 from sklearn.ensemble import GradientBoostingClassifier
 
 # Define feature types
-numeric_features = ['age', 'income']
-categorical_features = ['gender', 'occupation']
+numeric_features = ["age", "income"]
+categorical_features = ["gender", "occupation"]
 
 # Create preprocessing pipelines
-numeric_transformer = Pipeline([
-    ('imputer', SimpleImputer(strategy='median')),
-    ('scaler', StandardScaler())
-])
+numeric_transformer = Pipeline(
+    [("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]
+)
 
-categorical_transformer = Pipeline([
-    ('imputer', SimpleImputer(strategy='most_frequent')),
-    ('onehot', OneHotEncoder(handle_unknown='ignore'))
-])
+categorical_transformer = Pipeline(
+    [
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("onehot", OneHotEncoder(handle_unknown="ignore")),
+    ]
+)
 
 # Combine transformers
-preprocessor = ColumnTransformer([
-    ('num', numeric_transformer, numeric_features),
-    ('cat', categorical_transformer, categorical_features)
-])
+preprocessor = ColumnTransformer(
+    [
+        ("num", numeric_transformer, numeric_features),
+        ("cat", categorical_transformer, categorical_features),
+    ]
+)
 
 # Full pipeline
-model = Pipeline([
-    ('preprocessor', preprocessor),
-    ('classifier', GradientBoostingClassifier(random_state=42))
-])
+model = Pipeline(
+    [("preprocessor", preprocessor), ("classifier", GradientBoostingClassifier(random_state=42))]
+)
 
 # Fit and predict
 model.fit(X_train, y_train)
@@ -327,14 +329,16 @@ This skill includes comprehensive reference files for deep dives into specific t
 1. **Load and explore data**
    ```python
    import pandas as pd
-   df = pd.read_csv('data.csv')
-   X = df.drop('target', axis=1)
-   y = df['target']
+
+   df = pd.read_csv("data.csv")
+   X = df.drop("target", axis=1)
+   y = df["target"]
    ```
 
 2. **Split data with stratification**
    ```python
    from sklearn.model_selection import train_test_split
+
    X_train, X_test, y_train, y_test = train_test_split(
        X, y, test_size=0.2, stratify=y, random_state=42
    )
@@ -347,28 +351,23 @@ This skill includes comprehensive reference files for deep dives into specific t
    from sklearn.compose import ColumnTransformer
 
    # Handle numeric and categorical features separately
-   preprocessor = ColumnTransformer([
-       ('num', StandardScaler(), numeric_features),
-       ('cat', OneHotEncoder(), categorical_features)
-   ])
+   preprocessor = ColumnTransformer(
+       [("num", StandardScaler(), numeric_features), ("cat", OneHotEncoder(), categorical_features)]
+   )
    ```
 
 4. **Build complete pipeline**
    ```python
-   model = Pipeline([
-       ('preprocessor', preprocessor),
-       ('classifier', RandomForestClassifier(random_state=42))
-   ])
+   model = Pipeline(
+       [("preprocessor", preprocessor), ("classifier", RandomForestClassifier(random_state=42))]
+   )
    ```
 
 5. **Tune hyperparameters**
    ```python
    from sklearn.model_selection import GridSearchCV
 
-   param_grid = {
-       'classifier__n_estimators': [100, 200],
-       'classifier__max_depth': [10, 20, None]
-   }
+   param_grid = {"classifier__n_estimators": [100, 200], "classifier__max_depth": [10, 20, None]}
 
    grid_search = GridSearchCV(model, param_grid, cv=5)
    grid_search.fit(X_train, y_train)
@@ -420,7 +419,7 @@ This skill includes comprehensive reference files for deep dives into specific t
    pca = PCA(n_components=2)
    X_2d = pca.fit_transform(X_scaled)
 
-   plt.scatter(X_2d[:, 0], X_2d[:, 1], c=labels, cmap='viridis')
+   plt.scatter(X_2d[:, 0], X_2d[:, 1], c=labels, cmap="viridis")
    ```
 
 ## Best Practices
@@ -429,10 +428,7 @@ This skill includes comprehensive reference files for deep dives into specific t
 Pipelines prevent data leakage and ensure consistency:
 ```python
 # Good: Preprocessing in pipeline
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('model', LogisticRegression())
-])
+pipeline = Pipeline([("scaler", StandardScaler()), ("model", LogisticRegression())])
 
 # Bad: Preprocessing outside (can leak information)
 X_scaled = StandardScaler().fit_transform(X)
@@ -504,10 +500,12 @@ scores = cross_val_score(model, X, y, cv=5)
 ```python
 # Use SGD for large datasets
 from sklearn.linear_model import SGDClassifier
+
 model = SGDClassifier()
 
 # Or MiniBatchKMeans for clustering
 from sklearn.cluster import MiniBatchKMeans
+
 model = MiniBatchKMeans(n_clusters=8, batch_size=100)
 ```
 

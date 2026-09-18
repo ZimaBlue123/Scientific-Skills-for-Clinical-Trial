@@ -94,11 +94,7 @@ api_key = "YOUR_API_KEY"
 url = "https://api.fda.gov/animalandveterinary/event.json"
 
 # Find adverse events in dogs
-params = {
-    "api_key": api_key,
-    "search": "animal.species:Dog",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "animal.species:Dog", "limit": 10}
 
 response = requests.get(url, params=params)
 data = response.json()
@@ -106,11 +102,7 @@ data = response.json()
 
 ```python
 # Search for specific drug adverse events
-params = {
-    "api_key": api_key,
-    "search": "drug.brand_name:*flea+collar*",
-    "limit": 20
-}
+params = {"api_key": api_key, "search": "drug.brand_name:*flea+collar*", "limit": 20}
 ```
 
 ```python
@@ -118,7 +110,7 @@ params = {
 params = {
     "api_key": api_key,
     "search": "animal.species:Cat",
-    "count": "reaction.veddra_term_name.exact"
+    "count": "reaction.veddra_term_name.exact",
 }
 ```
 
@@ -128,35 +120,23 @@ params = {
     "api_key": api_key,
     "search": "serious_ae:true+AND+outcome.medical_status:Died",
     "limit": 50,
-    "sort": "onset_date:desc"
+    "sort": "onset_date:desc",
 }
 ```
 
 ```python
 # Search by active ingredient
-params = {
-    "api_key": api_key,
-    "search": "drug.active_ingredients.name:*ivermectin*",
-    "limit": 25
-}
+params = {"api_key": api_key, "search": "drug.active_ingredients.name:*ivermectin*", "limit": 25}
 ```
 
 ```python
 # Find events in specific breed
-params = {
-    "api_key": api_key,
-    "search": "animal.breed.breed_component:*Labrador*",
-    "limit": 30
-}
+params = {"api_key": api_key, "search": "animal.breed.breed_component:*Labrador*", "limit": 30}
 ```
 
 ```python
 # Get events by route of administration
-params = {
-    "api_key": api_key,
-    "search": "drug.route:*topical*",
-    "limit": 40
-}
+params = {"api_key": api_key, "search": "drug.route:*topical*", "limit": 40}
 ```
 
 ## VeDDRA - Veterinary Dictionary for Drug Related Affairs
@@ -198,7 +178,7 @@ def analyze_species_adverse_events(species, drug_name, api_key):
     params = {
         "api_key": api_key,
         "search": f"animal.species:{species}+AND+drug.brand_name:*{drug_name}*",
-        "limit": 1000
+        "limit": 1000,
     }
 
     response = requests.get(url, params=params)
@@ -236,7 +216,9 @@ def analyze_species_adverse_events(species, drug_name, api_key):
         "serious_events": serious_count,
         "most_common_reactions": reaction_counts.most_common(10),
         "outcome_distribution": dict(outcome_counts),
-        "serious_percentage": round((serious_count / len(results)) * 100, 2) if len(results) > 0 else 0
+        "serious_percentage": round((serious_count / len(results)) * 100, 2)
+        if len(results) > 0
+        else 0,
     }
 ```
 
@@ -262,7 +244,7 @@ def analyze_breed_predisposition(reaction_term, api_key, min_events=5):
     params = {
         "api_key": api_key,
         "search": f"reaction.veddra_term_name:*{reaction_term}*",
-        "limit": 1000
+        "limit": 1000,
     }
 
     response = requests.get(url, params=params)
@@ -317,7 +299,7 @@ def compare_drug_safety(drug_list, species, api_key):
         params = {
             "api_key": api_key,
             "search": f"animal.species:{species}+AND+drug.brand_name:*{drug}*",
-            "limit": 1000
+            "limit": 1000,
         }
 
         response = requests.get(url, params=params)
@@ -327,9 +309,9 @@ def compare_drug_safety(drug_list, species, api_key):
             results = data["results"]
             serious = sum(1 for r in results if r.get("serious_ae") == "true")
             deaths = sum(
-                1 for r in results
-                if "outcome" in r
-                and any(o.get("medical_status") == "Died" for o in r["outcome"])
+                1
+                for r in results
+                if "outcome" in r and any(o.get("medical_status") == "Died" for o in r["outcome"])
             )
 
             comparison[drug] = {
@@ -337,7 +319,7 @@ def compare_drug_safety(drug_list, species, api_key):
                 "serious_events": serious,
                 "deaths": deaths,
                 "serious_rate": round((serious / len(results)) * 100, 2) if len(results) > 0 else 0,
-                "death_rate": round((deaths / len(results)) * 100, 2) if len(results) > 0 else 0
+                "death_rate": round((deaths / len(results)) * 100, 2) if len(results) > 0 else 0,
             }
 
     return comparison

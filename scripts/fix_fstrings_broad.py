@@ -6,6 +6,7 @@ Usage:
     python scripts/fix_fstrings_broad.py          # dry-run
     python scripts/fix_fstrings_broad.py --apply   # write changes
 """
+
 import argparse
 import os
 import py_compile
@@ -81,7 +82,7 @@ def main():
             errors.append(f"PRE-CHECK FAILED: {filepath}")
             continue
 
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(filepath, encoding="utf-8") as f:
             lines = f.readlines()
         original_lines = lines[:]
 

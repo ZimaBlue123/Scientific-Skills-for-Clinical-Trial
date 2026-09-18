@@ -115,7 +115,7 @@ import shap
 import tensorflow as tf
 
 # Assume model is a Keras model
-model = tf.keras.models.load_model('my_model.h5')
+model = tf.keras.models.load_model("my_model.h5")
 
 # Select background samples (subset of training data)
 background = X_train[:100]
@@ -232,7 +232,7 @@ import shap
 import torch
 
 # Assume model is a PyTorch model
-model = torch.load('model.pt')
+model = torch.load("model.pt")
 
 # Select background samples
 background = X_train[:100]

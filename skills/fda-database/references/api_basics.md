@@ -44,11 +44,7 @@ import requests
 api_key = "YOUR_API_KEY_HERE"
 url = "https://api.fda.gov/drug/event.json"
 
-params = {
-    "api_key": api_key,
-    "search": "patient.drug.medicinalproduct:aspirin",
-    "limit": 10
-}
+params = {"api_key": api_key, "search": "patient.drug.medicinalproduct:aspirin", "limit": 10}
 
 response = requests.get(url, params=params)
 ```
@@ -60,12 +56,9 @@ import requests
 api_key = "YOUR_API_KEY_HERE"
 url = "https://api.fda.gov/drug/event.json"
 
-params = {
-    "search": "patient.drug.medicinalproduct:aspirin",
-    "limit": 10
-}
+params = {"search": "patient.drug.medicinalproduct:aspirin", "limit": 10}
 
-response = requests.get(url, params=params, auth=(api_key, ''))
+response = requests.get(url, params=params, auth=(api_key, ""))
 ```
 
 ## Rate Limits
@@ -99,6 +92,7 @@ When you exceed rate limits, the API returns:
 import requests
 import time
 
+
 def query_with_rate_limit_handling(url, params, max_retries=3):
     """Query API with automatic rate limit handling."""
     for attempt in range(max_retries):
@@ -109,7 +103,7 @@ def query_with_rate_limit_handling(url, params, max_retries=3):
         except requests.exceptions.HTTPError as e:
             if response.status_code == 429:
                 # Rate limit exceeded
-                wait_time = (2 ** attempt) * 60  # Exponential backoff
+                wait_time = (2**attempt) * 60  # Exponential backoff
                 print(f"Rate limit hit. Waiting {wait_time} seconds...")
                 time.sleep(wait_time)
             else:
@@ -143,10 +137,7 @@ search=field:value
 
 **Example**:
 ```python
-params = {
-    "api_key": api_key,
-    "search": "patient.drug.medicinalproduct:aspirin"
-}
+params = {"api_key": api_key, "search": "patient.drug.medicinalproduct:aspirin"}
 ```
 
 ### Search Operators
@@ -155,18 +146,14 @@ params = {
 Combines multiple conditions (both must be true):
 ```python
 # Find aspirin adverse events in Canada
-params = {
-    "search": "patient.drug.medicinalproduct:aspirin+AND+occurcountry:ca"
-}
+params = {"search": "patient.drug.medicinalproduct:aspirin+AND+occurcountry:ca"}
 ```
 
 #### OR Operator
 Either condition can be true (OR is implicit with space):
 ```python
 # Find aspirin OR ibuprofen
-params = {
-    "search": "patient.drug.medicinalproduct:(aspirin ibuprofen)"
-}
+params = {"search": "patient.drug.medicinalproduct:(aspirin ibuprofen)"}
 ```
 
 Or explicitly:
@@ -180,45 +167,33 @@ params = {
 Exclude results:
 ```python
 # Events NOT in the United States
-params = {
-    "search": "_exists_:occurcountry+AND+NOT+occurcountry:us"
-}
+params = {"search": "_exists_:occurcountry+AND+NOT+occurcountry:us"}
 ```
 
 #### Wildcards
 Use asterisk (`*`) for partial matching:
 ```python
 # Any drug starting with "met"
-params = {
-    "search": "patient.drug.medicinalproduct:met*"
-}
+params = {"search": "patient.drug.medicinalproduct:met*"}
 
 # Any drug containing "cillin"
-params = {
-    "search": "patient.drug.medicinalproduct:*cillin*"
-}
+params = {"search": "patient.drug.medicinalproduct:*cillin*"}
 ```
 
 #### Exact Phrase Matching
 Use quotes for exact phrases:
 ```python
-params = {
-    "search": 'patient.reaction.reactionmeddrapt:"heart attack"'
-}
+params = {"search": 'patient.reaction.reactionmeddrapt:"heart attack"'}
 ```
 
 #### Range Queries
 Search within ranges:
 ```python
 # Date range (YYYYMMDD format)
-params = {
-    "search": "receivedate:[20200101+TO+20201231]"
-}
+params = {"search": "receivedate:[20200101+TO+20201231]"}
 
 # Numeric range
-params = {
-    "search": "patient.patientonsetage:[18+TO+65]"
-}
+params = {"search": "patient.patientonsetage:[18+TO+65]"}
 
 # Open-ended ranges
 params = {
@@ -230,24 +205,17 @@ params = {
 Check if a field exists:
 ```python
 # Records that have a patient age
-params = {
-    "search": "_exists_:patient.patientonsetage"
-}
+params = {"search": "_exists_:patient.patientonsetage"}
 
 # Records missing patient age
-params = {
-    "search": "_missing_:patient.patientonsetage"
-}
+params = {"search": "_missing_:patient.patientonsetage"}
 ```
 
 ### Limit Parameter
 
 Controls how many results to return (1-1000, default 1):
 ```python
-params = {
-    "search": "...",
-    "limit": 100
-}
+params = {"search": "...", "limit": 100}
 ```
 
 **Maximum**: 1000 results per request
@@ -257,11 +225,7 @@ params = {
 For pagination, skip the first N results:
 ```python
 # Get results 101-200
-params = {
-    "search": "...",
-    "limit": 100,
-    "skip": 100
-}
+params = {"search": "...", "limit": 100, "skip": 100}
 ```
 
 **Pagination Example**:
@@ -273,12 +237,7 @@ def get_all_results(url, search_query, api_key, max_results=5000):
     limit = 100
 
     while len(all_results) < max_results:
-        params = {
-            "api_key": api_key,
-            "search": search_query,
-            "limit": limit,
-            "skip": skip
-        }
+        params = {"api_key": api_key, "search": search_query, "limit": limit, "skip": skip}
 
         response = requests.get(url, params=params)
         data = response.json()
@@ -302,10 +261,7 @@ def get_all_results(url, search_query, api_key, max_results=5000):
 Aggregate and count results by a field (instead of returning individual records):
 ```python
 # Count events by country
-params = {
-    "search": "patient.drug.medicinalproduct:aspirin",
-    "count": "occurcountry"
-}
+params = {"search": "patient.drug.medicinalproduct:aspirin", "count": "occurcountry"}
 ```
 
 **Response Format**:
@@ -326,7 +282,7 @@ Add `.exact` suffix for exact phrase counting (especially important for multi-wo
 # Count exact reaction terms (not individual words)
 params = {
     "search": "patient.drug.medicinalproduct:aspirin",
-    "count": "patient.reaction.reactionmeddrapt.exact"
+    "count": "patient.reaction.reactionmeddrapt.exact",
 }
 ```
 
@@ -338,16 +294,10 @@ params = {
 Sort results by field:
 ```python
 # Sort by date, newest first
-params = {
-    "search": "...",
-    "sort": "receivedate:desc"
-}
+params = {"search": "...", "sort": "receivedate:desc"}
 
 # Sort by date, oldest first
-params = {
-    "search": "...",
-    "sort": "receivedate:asc"
-}
+params = {"search": "...", "sort": "receivedate:asc"}
 ```
 
 ## Response Format
@@ -427,9 +377,7 @@ When an error occurs:
 Query nested objects:
 ```python
 # Drug adverse events where serious outcome is death
-params = {
-    "search": "serious:1+AND+seriousnessdeath:1"
-}
+params = {"search": "serious:1+AND+seriousnessdeath:1"}
 ```
 
 ### Multiple Field Search
@@ -457,10 +405,7 @@ params = {
 Count within a specific subset:
 ```python
 # Count reactions for serious events only
-params = {
-    "search": "serious:1",
-    "count": "patient.reaction.reactionmeddrapt.exact"
-}
+params = {"search": "serious:1", "count": "patient.reaction.reactionmeddrapt.exact"}
 ```
 
 ## Best Practices
@@ -517,10 +462,12 @@ def clean_search_term(term):
     term = term.strip()
     return term
 
+
 def validate_date(date_str):
     """Validate date format (YYYYMMDD)."""
     import re
-    if not re.match(r'^\d{8}$', date_str):
+
+    if not re.match(r"^\d{8}$", date_str):
         raise ValueError("Date must be in YYYYMMDD format")
     return date_str
 ```
@@ -533,6 +480,7 @@ import json
 from pathlib import Path
 import hashlib
 import time
+
 
 class FDACache:
     """Simple file-based cache for FDA API responses."""
@@ -556,7 +504,7 @@ class FDACache:
             # Check if expired
             age = time.time() - cache_file.stat().st_mtime
             if age < self.ttl:
-                with open(cache_file, 'r') as f:
+                with open(cache_file, "r") as f:
                     return json.load(f)
 
         return None
@@ -566,11 +514,13 @@ class FDACache:
         key = self._get_cache_key(url, params)
         cache_file = self.cache_dir / f"{key}.json"
 
-        with open(cache_file, 'w') as f:
+        with open(cache_file, "w") as f:
             json.dump(data, f)
+
 
 # Usage
 cache = FDACache(ttl=3600)  # 1 hour cache
+
 
 def cached_api_call(url, params):
     """API call with caching."""
@@ -596,6 +546,7 @@ Track and respect rate limits:
 import time
 from collections import deque
 
+
 class RateLimiter:
     """Track and enforce rate limits."""
 
@@ -620,8 +571,10 @@ class RateLimiter:
 
         self.requests.append(time.time())
 
+
 # Usage
 rate_limiter = RateLimiter(max_per_minute=240)
+
 
 def rate_limited_request(url, params):
     """Make request with rate limiting."""
@@ -641,7 +594,7 @@ start_date = end_date - timedelta(days=30)
 
 params = {
     "search": f"receivedate:[{start_date.strftime('%Y%m%d')}+TO+{end_date.strftime('%Y%m%d')}]",
-    "limit": 1000
+    "limit": 1000,
 }
 ```
 
@@ -651,7 +604,7 @@ params = {
 params = {
     "search": "patient.drug.medicinalproduct:aspirin",
     "count": "patient.reaction.reactionmeddrapt.exact",
-    "limit": 10
+    "limit": 10,
 }
 ```
 
@@ -665,7 +618,7 @@ for drug in drugs:
     params = {
         "search": f"patient.drug.medicinalproduct:{drug}",
         "count": "patient.reaction.reactionmeddrapt.exact",
-        "limit": 10
+        "limit": 10,
     }
     results[drug] = requests.get(url, params=params).json()
 ```

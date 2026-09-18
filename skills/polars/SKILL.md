@@ -27,11 +27,9 @@ Basic DataFrame creation and operations:
 import polars as pl
 
 # Create DataFrame
-df = pl.DataFrame({
-    "name": ["Alice", "Bob", "Charlie"],
-    "age": [25, 30, 35],
-    "city": ["NY", "LA", "SF"]
-})
+df = pl.DataFrame(
+    {"name": ["Alice", "Bob", "Charlie"], "age": [25, 30, 35], "city": ["NY", "LA", "SF"]}
+)
 
 # Select columns
 df.select("name", "age")
@@ -40,9 +38,7 @@ df.select("name", "age")
 df.filter(pl.col("age") > 25)
 
 # Add computed columns
-df.with_columns(
-    age_plus_10=pl.col("age") + 10
-)
+df.with_columns(age_plus_10=pl.col("age") + 10)
 ```
 
 ## Core Concepts
@@ -59,10 +55,7 @@ Expressions are the fundamental building blocks of Polars operations. They descr
 **Example:**
 ```python
 # Expression-based computation
-df.select(
-    pl.col("name"),
-    (pl.col("age") * 12).alias("age_in_months")
-)
+df.select(pl.col("name"), (pl.col("age") * 12).alias("age_in_months"))
 ```
 
 ### Lazy vs Eager Evaluation
@@ -103,10 +96,7 @@ Select and manipulate columns:
 df.select("name", "age")
 
 # Select with expressions
-df.select(
-    pl.col("name"),
-    (pl.col("age") * 2).alias("double_age")
-)
+df.select(pl.col("name"), (pl.col("age") * 2).alias("double_age"))
 
 # Select all columns matching a pattern
 df.select(pl.col("^.*_id$"))
@@ -119,25 +109,17 @@ Filter rows by conditions:
 df.filter(pl.col("age") > 25)
 
 # Multiple conditions (cleaner than using &)
-df.filter(
-    pl.col("age") > 25,
-    pl.col("city") == "NY"
-)
+df.filter(pl.col("age") > 25, pl.col("city") == "NY")
 
 # Complex conditions
-df.filter(
-    (pl.col("age") > 25) | (pl.col("city") == "LA")
-)
+df.filter((pl.col("age") > 25) | (pl.col("city") == "LA"))
 ```
 
 ### With Columns
 Add or modify columns while preserving existing ones:
 ```python
 # Add new columns
-df.with_columns(
-    age_plus_10=pl.col("age") + 10,
-    name_upper=pl.col("name").str.to_uppercase()
-)
+df.with_columns(age_plus_10=pl.col("age") + 10, name_upper=pl.col("name").str.to_uppercase())
 
 # Parallel computation (all columns computed in parallel)
 df.with_columns(
@@ -150,20 +132,13 @@ df.with_columns(
 Group data and compute aggregations:
 ```python
 # Basic grouping
-df.group_by("city").agg(
-    pl.col("age").mean().alias("avg_age"),
-    pl.len().alias("count")
-)
+df.group_by("city").agg(pl.col("age").mean().alias("avg_age"), pl.len().alias("count"))
 
 # Multiple group keys
-df.group_by("city", "department").agg(
-    pl.col("salary").sum()
-)
+df.group_by("city", "department").agg(pl.col("salary").sum())
 
 # Conditional aggregations
-df.group_by("city").agg(
-    (pl.col("age") > 30).sum().alias("over_30")
-)
+df.group_by("city").agg((pl.col("age") > 30).sum().alias("over_30"))
 ```
 
 For detailed operation patterns, load `references/operations.md`.
@@ -184,13 +159,11 @@ Apply aggregations while preserving row count:
 # Add group statistics to each row
 df.with_columns(
     avg_age_by_city=pl.col("age").mean().over("city"),
-    rank_in_city=pl.col("salary").rank().over("city")
+    rank_in_city=pl.col("salary").rank().over("city"),
 )
 
 # Multiple grouping columns
-df.with_columns(
-    group_avg=pl.col("value").mean().over("category", "region")
-)
+df.with_columns(group_avg=pl.col("value").mean().over("category", "region"))
 ```
 
 **Mapping strategies:**
@@ -299,10 +272,7 @@ Polars offers significant performance improvements over pandas with a cleaner AP
 
 **Pandas sequential (slow):**
 ```python
-df.assign(
-    col_a=lambda df_: df_.value * 10,
-    col_b=lambda df_: df_.value * 100
-)
+df.assign(col_a=lambda df_: df_.value * 10, col_b=lambda df_: df_.value * 100)
 ```
 
 **Polars parallel (fast):**

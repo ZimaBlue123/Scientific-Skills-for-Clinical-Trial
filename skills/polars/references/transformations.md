@@ -63,11 +63,7 @@ df1.join(df2, left_on="user_id", right_on="id")
 
 **Multiple different columns:**
 ```python
-df1.join(
-    df2,
-    left_on=["user_id", "date"],
-    right_on=["id", "timestamp"]
-)
+df1.join(df2, left_on=["user_id", "date"], right_on=["id", "timestamp"])
 ```
 
 ### Suffix Handling
@@ -85,16 +81,13 @@ result = df1.join(df2, on="id", suffix="_right")
 
 **Example 1: Customer Orders**
 ```python
-customers = pl.DataFrame({
-    "customer_id": [1, 2, 3, 4],
-    "name": ["Alice", "Bob", "Charlie", "David"]
-})
+customers = pl.DataFrame(
+    {"customer_id": [1, 2, 3, 4], "name": ["Alice", "Bob", "Charlie", "David"]}
+)
 
-orders = pl.DataFrame({
-    "order_id": [101, 102, 103],
-    "customer_id": [1, 2, 1],
-    "amount": [100, 200, 150]
-})
+orders = pl.DataFrame(
+    {"order_id": [101, 102, 103], "customer_id": [1, 2, 1], "amount": [100, 200, 150]}
+)
 
 # Inner join - only customers with orders
 result = customers.join(orders, on="customer_id", how="inner")
@@ -105,23 +98,19 @@ result = customers.join(orders, on="customer_id", how="left")
 
 **Example 2: Time-series data**
 ```python
-prices = pl.DataFrame({
-    "date": ["2023-01-01", "2023-01-02", "2023-01-03"],
-    "stock": ["AAPL", "AAPL", "AAPL"],
-    "price": [150, 152, 151]
-})
-
-volumes = pl.DataFrame({
-    "date": ["2023-01-01", "2023-01-02"],
-    "stock": ["AAPL", "AAPL"],
-    "volume": [1000000, 1100000]
-})
-
-result = prices.join(
-    volumes,
-    on=["date", "stock"],
-    how="left"
+prices = pl.DataFrame(
+    {
+        "date": ["2023-01-01", "2023-01-02", "2023-01-03"],
+        "stock": ["AAPL", "AAPL", "AAPL"],
+        "price": [150, 152, 151],
+    }
 )
+
+volumes = pl.DataFrame(
+    {"date": ["2023-01-01", "2023-01-02"], "stock": ["AAPL", "AAPL"], "volume": [1000000, 1100000]}
+)
+
+result = prices.join(volumes, on=["date", "stock"], how="left")
 ```
 
 ### Asof Joins (Nearest Match)
@@ -130,23 +119,23 @@ For time-series data, join to nearest timestamp:
 
 ```python
 # Join to nearest earlier timestamp
-quotes = pl.DataFrame({
-    "timestamp": [1, 2, 3, 4, 5],
-    "stock": ["A", "A", "A", "A", "A"],
-    "quote": [100, 101, 102, 103, 104]
-})
+quotes = pl.DataFrame(
+    {
+        "timestamp": [1, 2, 3, 4, 5],
+        "stock": ["A", "A", "A", "A", "A"],
+        "quote": [100, 101, 102, 103, 104],
+    }
+)
 
-trades = pl.DataFrame({
-    "timestamp": [1.5, 3.5, 4.2],
-    "stock": ["A", "A", "A"],
-    "trade": [50, 75, 100]
-})
+trades = pl.DataFrame(
+    {"timestamp": [1.5, 3.5, 4.2], "stock": ["A", "A", "A"], "trade": [50, 75, 100]}
+)
 
 result = trades.join_asof(
     quotes,
     on="timestamp",
     by="stock",
-    strategy="backward"  # or "forward", "nearest"
+    strategy="backward",  # or "forward", "nearest"
 )
 ```
 
@@ -222,18 +211,16 @@ Convert unique values from one column into multiple columns.
 ### Basic Pivot
 
 ```python
-df = pl.DataFrame({
-    "date": ["2023-01", "2023-01", "2023-02", "2023-02"],
-    "product": ["A", "B", "A", "B"],
-    "sales": [100, 150, 120, 160]
-})
+df = pl.DataFrame(
+    {
+        "date": ["2023-01", "2023-01", "2023-02", "2023-02"],
+        "product": ["A", "B", "A", "B"],
+        "sales": [100, 150, 120, 160],
+    }
+)
 
 # Pivot: products become columns
-pivoted = df.pivot(
-    values="sales",
-    index="date",
-    columns="product"
-)
+pivoted = df.pivot(values="sales", index="date", columns="product")
 # Result:
 # date     | A   | B
 # 2023-01  | 100 | 150
@@ -245,36 +232,36 @@ pivoted = df.pivot(
 When there are duplicate combinations, aggregate:
 
 ```python
-df = pl.DataFrame({
-    "date": ["2023-01", "2023-01", "2023-01"],
-    "product": ["A", "A", "B"],
-    "sales": [100, 110, 150]
-})
+df = pl.DataFrame(
+    {
+        "date": ["2023-01", "2023-01", "2023-01"],
+        "product": ["A", "A", "B"],
+        "sales": [100, 110, 150],
+    }
+)
 
 # Aggregate duplicates
 pivoted = df.pivot(
     values="sales",
     index="date",
     columns="product",
-    aggregate_function="sum"  # or "mean", "max", "min", etc.
+    aggregate_function="sum",  # or "mean", "max", "min", etc.
 )
 ```
 
 ### Multiple Index Columns
 
 ```python
-df = pl.DataFrame({
-    "region": ["North", "North", "South", "South"],
-    "date": ["2023-01", "2023-01", "2023-01", "2023-01"],
-    "product": ["A", "B", "A", "B"],
-    "sales": [100, 150, 120, 160]
-})
-
-pivoted = df.pivot(
-    values="sales",
-    index=["region", "date"],
-    columns="product"
+df = pl.DataFrame(
+    {
+        "region": ["North", "North", "South", "South"],
+        "date": ["2023-01", "2023-01", "2023-01", "2023-01"],
+        "product": ["A", "B", "A", "B"],
+        "sales": [100, 150, 120, 160],
+    }
 )
+
+pivoted = df.pivot(values="sales", index=["region", "date"], columns="product")
 ```
 
 ## Unpivoting/Melting (Long Format)
@@ -284,17 +271,12 @@ Convert multiple columns into rows (opposite of pivot).
 ### Basic Unpivot
 
 ```python
-df = pl.DataFrame({
-    "date": ["2023-01", "2023-02"],
-    "product_A": [100, 120],
-    "product_B": [150, 160]
-})
+df = pl.DataFrame(
+    {"date": ["2023-01", "2023-02"], "product_A": [100, 120], "product_B": [150, 160]}
+)
 
 # Unpivot: convert columns to rows
-unpivoted = df.unpivot(
-    index="date",
-    on=["product_A", "product_B"]
-)
+unpivoted = df.unpivot(index="date", on=["product_A", "product_B"])
 # Result:
 # date     | variable   | value
 # 2023-01  | product_A  | 100
@@ -307,10 +289,7 @@ unpivoted = df.unpivot(
 
 ```python
 unpivoted = df.unpivot(
-    index="date",
-    on=["product_A", "product_B"],
-    variable_name="product",
-    value_name="sales"
+    index="date", on=["product_A", "product_B"], variable_name="product", value_name="sales"
 )
 ```
 
@@ -318,19 +297,18 @@ unpivoted = df.unpivot(
 
 ```python
 # Unpivot all columns matching pattern
-df = pl.DataFrame({
-    "id": [1, 2],
-    "sales_Q1": [100, 200],
-    "sales_Q2": [150, 250],
-    "sales_Q3": [120, 220],
-    "revenue_Q1": [1000, 2000]
-})
+df = pl.DataFrame(
+    {
+        "id": [1, 2],
+        "sales_Q1": [100, 200],
+        "sales_Q2": [150, 250],
+        "sales_Q3": [120, 220],
+        "revenue_Q1": [1000, 2000],
+    }
+)
 
 # Unpivot all sales columns
-unpivoted = df.unpivot(
-    index="id",
-    on=pl.col("^sales_.*$")
-)
+unpivoted = df.unpivot(index="id", on=pl.col("^sales_.*$"))
 ```
 
 ## Exploding (Unnesting Lists)
@@ -340,10 +318,7 @@ Convert list columns into multiple rows.
 ### Basic Explode
 
 ```python
-df = pl.DataFrame({
-    "id": [1, 2],
-    "values": [[1, 2, 3], [4, 5]]
-})
+df = pl.DataFrame({"id": [1, 2], "values": [[1, 2, 3], [4, 5]]})
 
 # Explode list into rows
 exploded = df.explode("values")
@@ -359,11 +334,7 @@ exploded = df.explode("values")
 ### Multiple Column Explode
 
 ```python
-df = pl.DataFrame({
-    "id": [1, 2],
-    "letters": [["a", "b"], ["c", "d"]],
-    "numbers": [[1, 2], [3, 4]]
-})
+df = pl.DataFrame({"id": [1, 2], "letters": [["a", "b"], ["c", "d"]], "numbers": [[1, 2], [3, 4]]})
 
 # Explode multiple columns (must be same length)
 exploded = df.explode("letters", "numbers")
@@ -374,18 +345,12 @@ exploded = df.explode("letters", "numbers")
 Swap rows and columns:
 
 ```python
-df = pl.DataFrame({
-    "metric": ["sales", "costs", "profit"],
-    "Q1": [100, 60, 40],
-    "Q2": [150, 80, 70]
-})
+df = pl.DataFrame(
+    {"metric": ["sales", "costs", "profit"], "Q1": [100, 60, 40], "Q2": [150, 80, 70]}
+)
 
 # Transpose
-transposed = df.transpose(
-    include_header=True,
-    header_name="quarter",
-    column_names="metric"
-)
+transposed = df.transpose(include_header=True, header_name="quarter", column_names="metric")
 # Result: quarters as rows, metrics as columns
 ```
 
@@ -395,11 +360,7 @@ transposed = df.transpose(
 
 ```python
 # Start wide
-wide = pl.DataFrame({
-    "id": [1, 2],
-    "A": [10, 20],
-    "B": [30, 40]
-})
+wide = pl.DataFrame({"id": [1, 2], "A": [10, 20], "B": [30, 40]})
 
 # To long
 long = wide.unpivot(index="id", on=["A", "B"])
@@ -412,35 +373,35 @@ wide_again = long.pivot(values="value", index="id", columns="variable")
 
 ```python
 # Nested data
-df = pl.DataFrame({
-    "user": [1, 2],
-    "purchases": [
-        [{"item": "A", "qty": 2}, {"item": "B", "qty": 1}],
-        [{"item": "C", "qty": 3}]
-    ]
-})
+df = pl.DataFrame(
+    {
+        "user": [1, 2],
+        "purchases": [
+            [{"item": "A", "qty": 2}, {"item": "B", "qty": 1}],
+            [{"item": "C", "qty": 3}],
+        ],
+    }
+)
 
 # Explode and unnest
-flat = (
-    df.explode("purchases")
-    .unnest("purchases")
-)
+flat = df.explode("purchases").unnest("purchases")
 ```
 
 ### Pattern 3: Aggregation to Pivot
 
 ```python
 # Raw data
-sales = pl.DataFrame({
-    "date": ["2023-01", "2023-01", "2023-02"],
-    "product": ["A", "B", "A"],
-    "sales": [100, 150, 120]
-})
+sales = pl.DataFrame(
+    {
+        "date": ["2023-01", "2023-01", "2023-02"],
+        "product": ["A", "B", "A"],
+        "sales": [100, 150, 120],
+    }
+)
 
 # Aggregate then pivot
 result = (
-    sales
-    .group_by("date", "product")
+    sales.group_by("date", "product")
     .agg(pl.col("sales").sum())
     .pivot(values="sales", index="date", columns="product")
 )
@@ -463,11 +424,10 @@ df.unpivot(index="id", on=pl.col("^sales.*$"))
 ```python
 # Complex reshaping pipeline
 result = (
-    df
-    .unpivot(index="id", on=pl.col("^Q[0-9]_.*$"))
+    df.unpivot(index="id", on=pl.col("^Q[0-9]_.*$"))
     .with_columns(
         quarter=pl.col("variable").str.extract(r"Q([0-9])", 1),
-        metric=pl.col("variable").str.extract(r"Q[0-9]_(.*)", 1)
+        metric=pl.col("variable").str.extract(r"Q[0-9]_(.*)", 1),
     )
     .drop("variable")
     .pivot(values="value", index=["id", "quarter"], columns="metric")
@@ -530,7 +490,7 @@ ts1.join_asof(ts2, on="timestamp", strategy="backward")
 # Create lag features
 df.with_columns(
     pl.col("value").shift(1).over("user_id").alias("prev_value"),
-    pl.col("value").shift(2).over("user_id").alias("prev_prev_value")
+    pl.col("value").shift(2).over("user_id").alias("prev_prev_value"),
 )
 ```
 

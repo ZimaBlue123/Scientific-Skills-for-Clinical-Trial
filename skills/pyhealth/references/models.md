@@ -37,9 +37,7 @@ All models inherit from `BaseModel` with standard PyTorch functionality:
 from pyhealth.models import LogisticRegression
 
 model = LogisticRegression(
-    dataset=sample_dataset,
-    feature_keys=["diagnoses", "medications"],
-    mode="binary"
+    dataset=sample_dataset, feature_keys=["diagnoses", "medications"], mode="binary"
 )
 ```
 
@@ -65,7 +63,7 @@ model = MLP(
     mode="binary",
     hidden_dim=128,
     num_layers=3,
-    dropout=0.5
+    dropout=0.5,
 )
 ```
 
@@ -98,7 +96,7 @@ model = CNN(
     mode="binary",
     num_filters=64,
     kernel_size=3,
-    num_layers=3
+    num_layers=3,
 )
 ```
 
@@ -139,7 +137,7 @@ model = RNN(
     rnn_type="LSTM",
     hidden_dim=128,
     num_layers=2,
-    bidirectional=True
+    bidirectional=True,
 )
 ```
 
@@ -180,7 +178,7 @@ model = Transformer(
     num_heads=8,
     num_layers=6,
     hidden_dim=256,
-    dropout=0.1
+    dropout=0.1,
 )
 ```
 
@@ -198,7 +196,7 @@ model = TransformersModel(
     dataset=sample_dataset,
     feature_keys=["text"],
     mode="multiclass",
-    pretrained_model="emilyalsentzer/Bio_ClinicalBERT"
+    pretrained_model="emilyalsentzer/Bio_ClinicalBERT",
 )
 ```
 
@@ -233,7 +231,7 @@ model = GNN(
     gnn_type="GAT",
     hidden_dim=128,
     num_layers=3,
-    num_heads=4
+    num_heads=4,
 )
 ```
 
@@ -258,10 +256,7 @@ model = GNN(
 from pyhealth.models import RETAIN
 
 model = RETAIN(
-    dataset=sample_dataset,
-    feature_keys=["diagnoses", "medications"],
-    mode="binary",
-    hidden_dim=128
+    dataset=sample_dataset, feature_keys=["diagnoses", "medications"], mode="binary", hidden_dim=128
 )
 
 # Get attention weights for interpretation
@@ -310,7 +305,7 @@ model = GAMENet(
     feature_keys=["diagnoses", "medications"],
     mode="multilabel",
     embedding_dim=128,
-    ddi_adj_path="/path/to/ddi_adjacency_matrix.pkl"
+    ddi_adj_path="/path/to/ddi_adjacency_matrix.pkl",
 )
 ```
 
@@ -340,7 +335,7 @@ model = SafeDrug(
     feature_keys=["diagnoses", "medications"],
     mode="multilabel",
     ddi_adj_path="/path/to/ddi_matrix.pkl",
-    molecule_path="/path/to/molecule_graphs.pkl"
+    molecule_path="/path/to/molecule_graphs.pkl",
 )
 ```
 
@@ -372,7 +367,7 @@ model = StageNet(
     mode="binary",
     hidden_dim=128,
     num_stages=3,
-    chunk_size=128
+    chunk_size=128,
 )
 ```
 
@@ -575,7 +570,7 @@ model = Transformer(
     embedding_dim=128,
     num_heads=8,
     num_layers=3,
-    dropout=0.3
+    dropout=0.3,
 )
 
 # 3. Train model
@@ -585,7 +580,7 @@ trainer.train(
     val_dataloader=val_loader,
     epochs=50,
     monitor="pr_auc_score",
-    monitor_criterion="max"
+    monitor_criterion="max",
 )
 
 # 4. Evaluate

@@ -38,10 +38,10 @@ result = x.mean().compute()  # Computed with threads
 import dask
 
 # Set globally
-dask.config.set(scheduler='threads')
+dask.config.set(scheduler="threads")
 
 # Or per-compute
-result = x.mean().compute(scheduler='threads')
+result = x.mean().compute(scheduler="threads")
 ```
 
 #### 2. Local Processes
@@ -65,8 +65,8 @@ result = x.mean().compute(scheduler='threads')
 import dask.bag as db
 
 # Good for Python object processing
-bag = db.read_text('data/*.txt')
-result = bag.map(complex_python_function).compute(scheduler='processes')
+bag = db.read_text("data/*.txt")
+result = bag.map(complex_python_function).compute(scheduler="processes")
 ```
 
 **Explicit Configuration**:
@@ -74,10 +74,10 @@ result = bag.map(complex_python_function).compute(scheduler='processes')
 import dask
 
 # Set globally
-dask.config.set(scheduler='processes')
+dask.config.set(scheduler="processes")
 
 # Or per-compute
-result = computation.compute(scheduler='processes')
+result = computation.compute(scheduler="processes")
 ```
 
 **Limitations**:
@@ -106,7 +106,7 @@ result = computation.compute(scheduler='processes')
 import dask
 
 # Enable for debugging
-dask.config.set(scheduler='synchronous')
+dask.config.set(scheduler="synchronous")
 
 # Now can use pdb
 result = computation.compute()  # Runs in single thread
@@ -149,8 +149,8 @@ import dask.dataframe as dd
 client = Client()  # Automatically uses all cores
 
 # Use distributed scheduler
-ddf = dd.read_csv('data.csv')
-result = ddf.groupby('category').mean().compute()
+ddf = dd.read_csv("data.csv")
+result = ddf.groupby("category").mean().compute()
 
 # View dashboard
 print(client.dashboard_link)
@@ -162,11 +162,7 @@ client.close()
 **Configuration Options**:
 ```python
 # Control resources
-client = Client(
-    n_workers=4,
-    threads_per_worker=2,
-    memory_limit='4GB'
-)
+client = Client(n_workers=4, threads_per_worker=2, memory_limit="4GB")
 ```
 
 #### 5. Cluster Distributed
@@ -191,12 +187,7 @@ from dask_jobqueue import SLURMCluster
 from dask.distributed import Client
 
 # Create cluster on HPC with SLURM
-cluster = SLURMCluster(
-    cores=24,
-    memory='100GB',
-    walltime='02:00:00',
-    queue='regular'
-)
+cluster = SLURMCluster(cores=24, memory="100GB", walltime="02:00:00", queue="regular")
 
 # Scale to 10 jobs
 cluster.scale(jobs=10)
@@ -232,9 +223,9 @@ client.close()
 import dask
 
 # Set scheduler globally for session
-dask.config.set(scheduler='threads')
-dask.config.set(scheduler='processes')
-dask.config.set(scheduler='synchronous')
+dask.config.set(scheduler="threads")
+dask.config.set(scheduler="processes")
+dask.config.set(scheduler="synchronous")
 ```
 
 ### Context Manager
@@ -243,7 +234,7 @@ dask.config.set(scheduler='synchronous')
 import dask
 
 # Temporarily use different scheduler
-with dask.config.set(scheduler='processes'):
+with dask.config.set(scheduler="processes"):
     result = computation.compute()
 
 # Back to default scheduler
@@ -254,9 +245,9 @@ result2 = computation2.compute()
 
 ```python
 # Specify scheduler per compute call
-result = computation.compute(scheduler='threads')
-result = computation.compute(scheduler='processes')
-result = computation.compute(scheduler='synchronous')
+result = computation.compute(scheduler="threads")
+result = computation.compute(scheduler="processes")
+result = computation.compute(scheduler="synchronous")
 ```
 
 ### Distributed Client
@@ -323,8 +314,8 @@ from dask.distributed import Client
 
 # Control thread/worker configuration
 client = Client(
-    n_workers=4,           # Number of worker processes
-    threads_per_worker=2   # Threads per worker process
+    n_workers=4,  # Number of worker processes
+    threads_per_worker=2,  # Threads per worker process
 )
 ```
 
@@ -356,11 +347,13 @@ export DASK_THREADS_PER_WORKER=2
 ```python
 # Development: Use local distributed for testing
 from dask.distributed import Client
+
 client = Client(processes=False)  # In-process for debugging
 
 # Production: Scale to cluster
 from dask.distributed import Client
-client = Client('scheduler-address:8786')
+
+client = Client("scheduler-address:8786")
 ```
 
 ### Mixed Workloads
@@ -370,13 +363,14 @@ import dask
 import dask.dataframe as dd
 
 # Use threads for DataFrame operations
-ddf = dd.read_parquet('data.parquet')
-result1 = ddf.mean().compute(scheduler='threads')
+ddf = dd.read_parquet("data.parquet")
+result1 = ddf.mean().compute(scheduler="threads")
 
 # Use processes for Python code
 import dask.bag as db
-bag = db.read_text('logs/*.txt')
-result2 = bag.map(parse_log).compute(scheduler='processes')
+
+bag = db.read_text("logs/*.txt")
+result2 = bag.map(parse_log).compute(scheduler="processes")
 ```
 
 ### Debugging Workflow
@@ -385,15 +379,16 @@ result2 = bag.map(parse_log).compute(scheduler='processes')
 import dask
 
 # Step 1: Debug with synchronous scheduler
-dask.config.set(scheduler='synchronous')
+dask.config.set(scheduler="synchronous")
 result = problematic_computation.compute()
 
 # Step 2: Test with threads
-dask.config.set(scheduler='threads')
+dask.config.set(scheduler="threads")
 result = computation.compute()
 
 # Step 3: Scale with distributed
 from dask.distributed import Client
+
 client = Client()
 result = computation.compute()
 ```
@@ -427,7 +422,7 @@ client = Client()
 result = computation.compute()
 
 # Get performance report
-client.profile(filename='profile.html')
+client.profile(filename="profile.html")
 ```
 
 ### Resource Monitoring
@@ -454,7 +449,7 @@ import dask
 # Use custom thread pool
 with ThreadPoolExecutor(max_workers=4) as executor:
     dask.config.set(pool=executor)
-    result = computation.compute(scheduler='threads')
+    result = computation.compute(scheduler="threads")
 ```
 
 ### Adaptive Scaling (Distributed)
@@ -476,10 +471,12 @@ result = computation.compute()
 ```python
 from dask.distributed import Client, WorkerPlugin
 
+
 class CustomPlugin(WorkerPlugin):
     def setup(self, worker):
         # Initialize worker-specific resources
         worker.custom_resource = initialize_resource()
+
 
 client = Client()
 client.register_worker_plugin(CustomPlugin())

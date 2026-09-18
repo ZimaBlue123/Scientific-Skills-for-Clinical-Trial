@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 diagnose_encoding_mojibake.py
 
@@ -34,9 +33,29 @@ MOJIBAKE_MARKERS = set(
 )
 
 TEXT_EXT = {
-    ".md", ".txt", ".py", ".json", ".yaml", ".yml", ".toml", ".cfg",
-    ".ini", ".html", ".css", ".js", ".ts", ".tsx", ".svg", ".xml",
-    ".drawio", ".ps1", ".cmd", ".bat", ".sh", ".rst", ".csv",
+    ".md",
+    ".txt",
+    ".py",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".toml",
+    ".cfg",
+    ".ini",
+    ".html",
+    ".css",
+    ".js",
+    ".ts",
+    ".tsx",
+    ".svg",
+    ".xml",
+    ".drawio",
+    ".ps1",
+    ".cmd",
+    ".bat",
+    ".sh",
+    ".rst",
+    ".csv",
 }
 
 SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".workbuddy"}
@@ -80,8 +99,10 @@ def scan_file(path: str) -> dict | None:
 
 
 def main() -> int:
-    root = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(
-        os.path.dirname(os.path.abspath(__file__))
+    root = (
+        sys.argv[1]
+        if len(sys.argv) > 1
+        else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     )
     hits: list[tuple[str, dict]] = []
     scanned = 0

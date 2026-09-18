@@ -60,6 +60,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     logger.info("action=batch_start input=%s", input_path)

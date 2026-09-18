@@ -36,7 +36,7 @@ from pyhealth.data import FeatureProcessor
 processor = FeatureProcessor(
     vocabulary="diagnoses",
     min_freq=5,  # Minimum code frequency
-    max_vocab_size=10000
+    max_vocab_size=10000,
 )
 
 processed_features = processor(raw_features)
@@ -64,11 +64,7 @@ processed_features = processor(raw_features)
 ```python
 from pyhealth.data import SequenceProcessor
 
-processor = SequenceProcessor(
-    max_seq_length=100,
-    padding="post",
-    truncating="post"
-)
+processor = SequenceProcessor(max_seq_length=100, padding="post", truncating="post")
 
 # Process diagnosis sequences
 processed_seq = processor(diagnosis_sequences)
@@ -109,7 +105,7 @@ from pyhealth.data import NestedFloatsProcessor
 
 processor = NestedFloatsProcessor(
     normalization="z-score",  # or "min-max"
-    fill_missing="mean"  # imputation strategy
+    fill_missing="mean",  # imputation strategy
 )
 
 processed_labs = processor(lab_values)
@@ -145,7 +141,7 @@ from pyhealth.data import TimeseriesProcessor
 processor = TimeseriesProcessor(
     time_unit="hour",  # "day", "hour", "minute"
     compute_gaps=True,
-    compute_frequency=True
+    compute_frequency=True,
 )
 
 processed_ts = processor(timestamps, events)
@@ -169,7 +165,7 @@ from pyhealth.data import SignalProcessor
 processor = SignalProcessor(
     sampling_rate=256,  # Hz
     bandpass_filter=(0.5, 50),  # Hz range
-    segment_length=30  # seconds
+    segment_length=30,  # seconds
 )
 
 processed_signal = processor(raw_eeg_signal)
@@ -196,7 +192,7 @@ from pyhealth.data import ImageProcessor
 processor = ImageProcessor(
     image_size=(224, 224),
     normalization="imagenet",  # or custom mean/std
-    augmentation=True
+    augmentation=True,
 )
 
 processed_image = processor(raw_image)
@@ -215,10 +211,7 @@ processed_image = processor(raw_image)
 ```python
 from pyhealth.data import BinaryLabelProcessor
 
-processor = BinaryLabelProcessor(
-    positive_class=1,
-    class_weight="balanced"
-)
+processor = BinaryLabelProcessor(positive_class=1, class_weight="balanced")
 
 processed_labels = processor(raw_labels)
 ```
@@ -240,7 +233,7 @@ from pyhealth.data import MultiClassLabelProcessor
 
 processor = MultiClassLabelProcessor(
     num_classes=5,  # e.g., sleep stages: W, N1, N2, N3, REM
-    class_weight="balanced"
+    class_weight="balanced",
 )
 
 processed_labels = processor(raw_labels)
@@ -264,7 +257,7 @@ from pyhealth.data import MultiLabelProcessor
 
 processor = MultiLabelProcessor(
     num_labels=100,  # total possible labels
-    threshold=0.5  # prediction threshold
+    threshold=0.5,  # prediction threshold
 )
 
 processed_labels = processor(raw_label_sets)
@@ -289,7 +282,7 @@ from pyhealth.data import RegressionLabelProcessor
 processor = RegressionLabelProcessor(
     normalization="z-score",  # or "min-max"
     clip_outliers=True,
-    outlier_std=3  # clip at 3 standard deviations
+    outlier_std=3,  # clip at 3 standard deviations
 )
 
 processed_targets = processor(raw_values)
@@ -319,7 +312,7 @@ processor = TextProcessor(
     tokenizer="word",  # or "sentencepiece", "bpe"
     lowercase=True,
     max_vocab_size=50000,
-    min_freq=5
+    min_freq=5,
 )
 
 processed_text = processor(clinical_notes)
@@ -336,10 +329,7 @@ processed_text = processor(clinical_notes)
 ```python
 from pyhealth.data import StageNetProcessor
 
-processor = StageNetProcessor(
-    chunk_size=128,
-    num_stages=3
-)
+processor = StageNetProcessor(chunk_size=128, num_stages=3)
 
 processed_data = processor(sequential_data)
 ```
@@ -384,9 +374,9 @@ processor = SampleProcessor(
     input_processors={
         "diagnoses": SequenceProcessor(max_seq_length=50),
         "medications": SequenceProcessor(max_seq_length=30),
-        "labs": NestedFloatsProcessor(normalization="z-score")
+        "labs": NestedFloatsProcessor(normalization="z-score"),
     },
-    output_processor=BinaryLabelProcessor()
+    output_processor=BinaryLabelProcessor(),
 )
 
 processed_sample = processor(raw_sample)
@@ -413,7 +403,7 @@ from pyhealth.data import DatasetProcessor
 processor = DatasetProcessor(
     sample_processor=sample_processor,
     num_workers=4,  # parallel processing
-    cache_dir="/path/to/cache"
+    cache_dir="/path/to/cache",
 )
 
 processed_dataset = processor(raw_dataset)
@@ -424,25 +414,20 @@ processed_dataset = processor(raw_dataset)
 ### Workflow 1: EHR Mortality Prediction
 
 ```python
-from pyhealth.data import (
-    SequenceProcessor,
-    BinaryLabelProcessor,
-    SampleProcessor
-)
+from pyhealth.data import SequenceProcessor, BinaryLabelProcessor, SampleProcessor
 
 # Define processors
 input_processors = {
     "diagnoses": SequenceProcessor(max_seq_length=50),
     "medications": SequenceProcessor(max_seq_length=30),
-    "procedures": SequenceProcessor(max_seq_length=20)
+    "procedures": SequenceProcessor(max_seq_length=20),
 }
 
 output_processor = BinaryLabelProcessor(class_weight="balanced")
 
 # Combine into sample processor
 sample_processor = SampleProcessor(
-    input_processors=input_processors,
-    output_processor=output_processor
+    input_processors=input_processors, output_processor=output_processor
 )
 
 # Process dataset
@@ -452,56 +437,46 @@ processed_samples = [sample_processor(s) for s in raw_samples]
 ### Workflow 2: Sleep Staging from EEG
 
 ```python
-from pyhealth.data import (
-    SignalProcessor,
-    MultiClassLabelProcessor,
-    SampleProcessor
-)
+from pyhealth.data import SignalProcessor, MultiClassLabelProcessor, SampleProcessor
 
 # Signal preprocessing
 signal_processor = SignalProcessor(
     sampling_rate=100,
     bandpass_filter=(0.3, 35),  # EEG frequency range
-    segment_length=30  # 30-second epochs
+    segment_length=30,  # 30-second epochs
 )
 
 # Label processing
 label_processor = MultiClassLabelProcessor(
     num_classes=5,  # W, N1, N2, N3, REM
-    class_weight="balanced"
+    class_weight="balanced",
 )
 
 # Combine
 sample_processor = SampleProcessor(
-    input_processors={"signal": signal_processor},
-    output_processor=label_processor
+    input_processors={"signal": signal_processor}, output_processor=label_processor
 )
 ```
 
 ### Workflow 3: Drug Recommendation
 
 ```python
-from pyhealth.data import (
-    SequenceProcessor,
-    MultiLabelProcessor,
-    SampleProcessor
-)
+from pyhealth.data import SequenceProcessor, MultiLabelProcessor, SampleProcessor
 
 # Input processing
 input_processors = {
     "diagnoses": SequenceProcessor(max_seq_length=50),
-    "previous_medications": SequenceProcessor(max_seq_length=40)
+    "previous_medications": SequenceProcessor(max_seq_length=40),
 }
 
 # Multi-label output (multiple drugs)
 output_processor = MultiLabelProcessor(
     num_labels=150,  # number of possible drugs
-    threshold=0.5
+    threshold=0.5,
 )
 
 sample_processor = SampleProcessor(
-    input_processors=input_processors,
-    output_processor=output_processor
+    input_processors=input_processors, output_processor=output_processor
 )
 ```
 
@@ -512,28 +487,24 @@ from pyhealth.data import (
     SequenceProcessor,
     NestedFloatsProcessor,
     RegressionLabelProcessor,
-    SampleProcessor
+    SampleProcessor,
 )
 
 # Process different feature types
 input_processors = {
     "diagnoses": SequenceProcessor(max_seq_length=30),
     "procedures": SequenceProcessor(max_seq_length=20),
-    "labs": NestedFloatsProcessor(
-        normalization="z-score",
-        fill_missing="mean"
-    )
+    "labs": NestedFloatsProcessor(normalization="z-score", fill_missing="mean"),
 }
 
 # Regression target
 output_processor = RegressionLabelProcessor(
     normalization="log",  # log-transform LOS
-    clip_outliers=True
+    clip_outliers=True,
 )
 
 sample_processor = SampleProcessor(
-    input_processors=input_processors,
-    output_processor=output_processor
+    input_processors=input_processors, output_processor=output_processor
 )
 ```
 

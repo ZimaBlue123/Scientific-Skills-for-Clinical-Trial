@@ -95,7 +95,7 @@ from sksurv.util import Surv
 y = Surv.from_arrays(event=event_array, time=time_array)
 
 # From DataFrame
-y = Surv.from_dataframe('event', 'time', df)
+y = Surv.from_dataframe("event", "time", df)
 ```
 
 #### Essential Preprocessing Steps
@@ -120,7 +120,7 @@ Primary metric for ranking/discrimination:
 from sksurv.metrics import concordance_index_censored, concordance_index_ipcw
 
 # Harrell's C-index
-c_harrell = concordance_index_censored(y_test['event'], y_test['time'], risk_scores)[0]
+c_harrell = concordance_index_censored(y_test["event"], y_test["time"], risk_scores)[0]
 
 # Uno's C-index (recommended)
 c_uno = concordance_index_ipcw(y_train, y_test, risk_scores)[0]
@@ -173,14 +173,14 @@ Estimate survival functions without parametric assumptions:
 ```python
 from sksurv.nonparametric import kaplan_meier_estimator
 
-time, survival_prob = kaplan_meier_estimator(y['event'], y['time'])
+time, survival_prob = kaplan_meier_estimator(y["event"], y["time"])
 ```
 
 #### Nelson-Aalen Estimator
 ```python
 from sksurv.nonparametric import nelson_aalen_estimator
 
-time, cumulative_hazard = nelson_aalen_estimator(y['event'], y['time'])
+time, cumulative_hazard = nelson_aalen_estimator(y["event"], y["time"])
 ```
 
 ## Typical Workflows
@@ -226,9 +226,8 @@ from sksurv.metrics import as_concordance_index_ipcw_scorer
 estimator = CoxnetSurvivalAnalysis(l1_ratio=0.9)  # Lasso-like
 
 # 2. Tune regularization with cross-validation
-param_grid = {'alpha_min_ratio': [0.01, 0.001]}
-cv = GridSearchCV(estimator, param_grid,
-                  scoring=as_concordance_index_ipcw_scorer(), cv=5)
+param_grid = {"alpha_min_ratio": [0.01, 0.001]}
+cv = GridSearchCV(estimator, param_grid, scoring=as_concordance_index_ipcw_scorer(), cv=5)
 cv.fit(X, y)
 
 # 3. Identify selected features
@@ -244,15 +243,14 @@ from sklearn.model_selection import GridSearchCV
 
 # 1. Define parameter grid
 param_grid = {
-    'learning_rate': [0.01, 0.05, 0.1],
-    'n_estimators': [100, 200, 300],
-    'max_depth': [3, 5, 7]
+    "learning_rate": [0.01, 0.05, 0.1],
+    "n_estimators": [100, 200, 300],
+    "max_depth": [3, 5, 7],
 }
 
 # 2. Grid search
 gbs = GradientBoostingSurvivalAnalysis()
-cv = GridSearchCV(gbs, param_grid, cv=5,
-                  scoring=as_concordance_index_ipcw_scorer(), n_jobs=-1)
+cv = GridSearchCV(gbs, param_grid, cv=5, scoring=as_concordance_index_ipcw_scorer(), n_jobs=-1)
 cv.fit(X_train, y_train)
 
 # 3. Evaluate best model
@@ -271,10 +269,10 @@ from sksurv.metrics import concordance_index_ipcw, integrated_brier_score
 
 # Define models
 models = {
-    'Cox': CoxPHSurvivalAnalysis(),
-    'RSF': RandomSurvivalForest(n_estimators=100, random_state=42),
-    'GBS': GradientBoostingSurvivalAnalysis(random_state=42),
-    'SVM': FastSurvivalSVM(random_state=42)
+    "Cox": CoxPHSurvivalAnalysis(),
+    "RSF": RandomSurvivalForest(n_estimators=100, random_state=42),
+    "GBS": GradientBoostingSurvivalAnalysis(random_state=42),
+    "SVM": FastSurvivalSVM(random_state=42),
 }
 
 # Evaluate each model
@@ -301,17 +299,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score, GridSearchCV
 
 # Use pipelines
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('model', CoxPHSurvivalAnalysis())
-])
+pipeline = Pipeline([("scaler", StandardScaler()), ("model", CoxPHSurvivalAnalysis())])
 
 # Use cross-validation
-scores = cross_val_score(pipeline, X, y, cv=5,
-                         scoring=as_concordance_index_ipcw_scorer())
+scores = cross_val_score(pipeline, X, y, cv=5, scoring=as_concordance_index_ipcw_scorer())
 
 # Use grid search
-param_grid = {'model__alpha': [0.1, 1.0, 10.0]}
+param_grid = {"model__alpha": [0.1, 1.0, 10.0]}
 cv = GridSearchCV(pipeline, param_grid, cv=5)
 cv.fit(X, y)
 ```
@@ -377,14 +371,14 @@ from sksurv.metrics import (
     brier_score,
     integrated_brier_score,
     as_concordance_index_ipcw_scorer,
-    as_integrated_brier_score_scorer
+    as_integrated_brier_score_scorer,
 )
 
 # Non-parametric estimation
 from sksurv.nonparametric import (
     kaplan_meier_estimator,
     nelson_aalen_estimator,
-    cumulative_incidence_competing_risks
+    cumulative_incidence_competing_risks,
 )
 
 # Data handling

@@ -98,14 +98,10 @@ from sklearn.model_selection import GridSearchCV
 from sksurv.metrics import concordance_index_censored
 
 # Define parameter grid
-param_grid = {'l1_ratio': [0.1, 0.5, 0.9],
-              'alpha_min_ratio': [0.01, 0.001]}
+param_grid = {"l1_ratio": [0.1, 0.5, 0.9], "alpha_min_ratio": [0.01, 0.001]}
 
 # Grid search with C-index
-cv = GridSearchCV(CoxnetSurvivalAnalysis(),
-                  param_grid,
-                  scoring='concordance_index_ipcw',
-                  cv=5)
+cv = GridSearchCV(CoxnetSurvivalAnalysis(), param_grid, scoring="concordance_index_ipcw", cv=5)
 cv.fit(X, y)
 
 # Best parameters

@@ -519,8 +519,7 @@ patient_genes = {"CYP2C19": "*1/*2", "CYP2D6": "*1/*1", "SLCO1B1": "*1/*5"}
 for med in patient_meds:
     for gene in patient_genes:
         response = requests.get(
-            "https://api.clinpgx.org/v1/geneDrugPair",
-            params={"gene": gene, "drug": med}
+            "https://api.clinpgx.org/v1/geneDrugPair", params={"gene": gene, "drug": med}
         )
         pairs = response.json()
         # Check for interactions
@@ -531,13 +530,10 @@ for med in patient_meds:
 Find all genes with CPIC Level A recommendations:
 
 ```python
-response = requests.get(
-    "https://api.clinpgx.org/v1/geneDrugPair",
-    params={"cpicLevel": "A"}
-)
+response = requests.get("https://api.clinpgx.org/v1/geneDrugPair", params={"cpicLevel": "A"})
 actionable_pairs = response.json()
 
-genes = set(pair['gene'] for pair in actionable_pairs)
+genes = set(pair["gene"] for pair in actionable_pairs)
 print(f"Panel should include: {sorted(genes)}")
 ```
 
@@ -546,16 +542,13 @@ print(f"Panel should include: {sorted(genes)}")
 Compare allele frequencies across populations:
 
 ```python
-alleles = requests.get(
-    "https://api.clinpgx.org/v1/allele",
-    params={"gene": "CYP2D6"}
-).json()
+alleles = requests.get("https://api.clinpgx.org/v1/allele", params={"gene": "CYP2D6"}).json()
 
 # Calculate phenotype frequencies
 pm_freq = {}  # Poor metabolizer frequencies
 for allele in alleles:
-    if allele['function'] == 'No function':
-        for pop, freq in allele['frequencies'].items():
+    if allele["function"] == "No function":
+        for pop, freq in allele["frequencies"].items():
             pm_freq[pop] = pm_freq.get(pop, 0) + freq
 ```
 
@@ -566,12 +559,11 @@ Check for high-risk gene-drug associations:
 ```python
 # Screen for HLA-B*57:01 before abacavir
 response = requests.get(
-    "https://api.clinpgx.org/v1/geneDrugPair",
-    params={"gene": "HLA-B", "drug": "abacavir"}
+    "https://api.clinpgx.org/v1/geneDrugPair", params={"gene": "HLA-B", "drug": "abacavir"}
 )
 pair = response.json()[0]
 
-if pair['cpicLevel'] == 'A':
+if pair["cpicLevel"] == "A":
     print("CRITICAL: Do not use if HLA-B*57:01 positive")
 ```
 
@@ -601,6 +593,7 @@ if pair['cpicLevel'] == 'A':
 import requests
 import time
 
+
 def safe_query(url, params=None, max_retries=3):
     for attempt in range(max_retries):
         try:
@@ -610,7 +603,7 @@ def safe_query(url, params=None, max_retries=3):
                 time.sleep(0.5)  # Rate limiting
                 return response.json()
             elif response.status_code == 429:
-                wait = 2 ** attempt
+                wait = 2**attempt
                 print(f"Rate limited. Waiting {wait}s...")
                 time.sleep(wait)
             elif response.status_code == 404:
@@ -640,6 +633,7 @@ def safe_query(url, params=None, max_retries=3):
 import json
 from pathlib import Path
 
+
 def cached_query(cache_file, query_func, *args, **kwargs):
     cache_path = Path(cache_file)
 
@@ -650,7 +644,7 @@ def cached_query(cache_file, query_func, *args, **kwargs):
     result = query_func(*args, **kwargs)
 
     if result:
-        with open(cache_path, 'w') as f:
+        with open(cache_path, "w") as f:
             json.dump(result, f)
 
     return result
@@ -659,6 +653,7 @@ def cached_query(cache_file, query_func, *args, **kwargs):
 ### Batch Processing
 ```python
 import time
+
 
 def batch_gene_query(genes, delay=0.5):
     results = {}

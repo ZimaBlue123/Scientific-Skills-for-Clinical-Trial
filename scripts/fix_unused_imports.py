@@ -8,6 +8,7 @@ Only targets imports that:
 
 Safety: py_compile before and after each file.
 """
+
 import argparse
 import os
 import py_compile
@@ -64,11 +65,11 @@ def remove_symbol_from_import(line, symbol):
     # Pattern: from typing import A, B, C
     # Remove symbol with surrounding comma/space
     # Try removing ", Symbol" first
-    result = re.sub(rf',\s*{symbol}\b', '', line)
+    result = re.sub(rf",\s*{symbol}\b", "", line)
     if result != line:
         return result
     # Try removing "Symbol, " (if it's the first)
-    result = re.sub(rf'\b{symbol}\b,\s*', '', line)
+    result = re.sub(rf"\b{symbol}\b,\s*", "", line)
     if result != line:
         return result
     # Only symbol on the line
@@ -101,7 +102,7 @@ def main():
             errors.append(f"PRE-CHECK FAILED: {filepath}")
             continue
 
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(filepath, encoding="utf-8") as f:
             lines = f.readlines()
         original_lines = lines[:]
 

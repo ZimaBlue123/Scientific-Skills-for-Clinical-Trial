@@ -114,9 +114,11 @@ pip install python-dotenv
 **Using python-dotenv in scripts:**
 ```python
 from dotenv import load_dotenv
+
 load_dotenv()  # Loads .env file automatically
 
 import os
+
 api_key = os.environ.get("OPENROUTER_API_KEY")
 ```
 
@@ -321,7 +323,7 @@ from litellm import completion
 response = completion(
     model="openrouter/perplexity/sonar-pro",
     messages=[{"role": "user", "content": "query"}],
-    api_base="https://custom-endpoint.com/v1"  # Custom URL
+    api_base="https://custom-endpoint.com/v1",  # Custom URL
 )
 ```
 
@@ -335,10 +337,7 @@ from litellm import completion
 response = completion(
     model="openrouter/perplexity/sonar-pro",
     messages=[{"role": "user", "content": "query"}],
-    extra_headers={
-        "HTTP-Referer": "https://your-app.com",
-        "X-Title": "Your App Name"
-    }
+    extra_headers={"HTTP-Referer": "https://your-app.com", "X-Title": "Your App Name"},
 )
 ```
 
@@ -352,7 +351,7 @@ from litellm import completion
 response = completion(
     model="openrouter/perplexity/sonar-pro-search",
     messages=[{"role": "user", "content": "complex query"}],
-    timeout=120  # 120 seconds timeout
+    timeout=120,  # 120 seconds timeout
 )
 ```
 

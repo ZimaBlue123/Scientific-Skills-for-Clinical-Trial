@@ -38,8 +38,9 @@ works = find_institution_works("MIT", client, limit=200)
 
 # Filter for recent papers
 import datetime
+
 current_year = datetime.datetime.now().year
-recent_works = [w for w in works if w['publication_year'] == current_year]
+recent_works = [w for w in works if w["publication_year"] == current_year]
 ```
 
 ## Highly Cited Papers on a Topic
@@ -52,17 +53,15 @@ recent_works = [w for w in works if w['publication_year'] == current_year]
 ```python
 works = client.search_works(
     search="CRISPR",
-    filter_params={
-        "publication_year": ">2019"
-    },
+    filter_params={"publication_year": ">2019"},
     sort="cited_by_count:desc",
-    per_page=100
+    per_page=100,
 )
 
-for work in works['results']:
-    title = work['title']
-    citations = work['cited_by_count']
-    year = work['publication_year']
+for work in works["results"]:
+    title = work["title"]
+    citations = work["cited_by_count"]
+    year = work["publication_year"]
     print(f"{title} ({year}): {citations} citations")
 ```
 
@@ -80,7 +79,7 @@ papers = get_open_access_papers(
     search_term="climate change",
     client=client,
     oa_status="any",  # or "gold", "green", "hybrid", "bronze"
-    limit=200
+    limit=200,
 )
 
 for paper in papers:
@@ -99,17 +98,14 @@ for paper in papers:
 ```python
 from scripts.query_helpers import get_publication_trends
 
-trends = get_publication_trends(
-    search_term="machine learning",
-    client=client
-)
+trends = get_publication_trends(search_term="machine learning", client=client)
 
 # Sort by year
-trends_sorted = sorted(trends, key=lambda x: x['key'])
+trends_sorted = sorted(trends, key=lambda x: x["key"])
 
 for trend in trends_sorted[-10:]:  # Last 10 years
-    year = trend['key']
-    count = trend['count']
+    year = trend["key"]
+    count = trend["count"]
     print(f"{year}: {count} publications")
 ```
 
@@ -124,17 +120,14 @@ for trend in trends_sorted[-10:]:  # Last 10 years
 from scripts.query_helpers import analyze_research_output
 
 analysis = analyze_research_output(
-    entity_type='institution',
-    entity_name='Stanford University',
-    client=client,
-    years='2020-2024'
+    entity_type="institution", entity_name="Stanford University", client=client, years="2020-2024"
 )
 
 print(f"Institution: {analysis['entity_name']}")
 print(f"Total works: {analysis['total_works']}")
 print(f"Open access: {analysis['open_access_percentage']}%")
 print("\nTop topics:")
-for topic in analysis['top_topics'][:5]:
+for topic in analysis["top_topics"][:5]:
     print(f"  - {topic['key_display_name']}: {topic['count']} works")
 ```
 
@@ -153,11 +146,7 @@ dois = [
     # ... up to 50 DOIs
 ]
 
-works = client.batch_lookup(
-    entity_type='works',
-    ids=dois,
-    id_field='doi'
-)
+works = client.batch_lookup(entity_type="works", ids=dois, id_field="doi")
 
 for work in works:
     print(f"{work['title']} - {work['publication_year']}")
@@ -174,10 +163,7 @@ for work in works:
 works = client.sample_works(
     sample_size=50,
     seed=42,  # For reproducibility
-    filter_params={
-        "publication_year": "2023",
-        "is_oa": "true"
-    }
+    filter_params={"publication_year": "2023", "is_oa": "true"},
 )
 
 print(f"Got {len(works)} random papers from 2023")
@@ -192,24 +178,17 @@ print(f"Got {len(works)} random papers from 2023")
 **Python example**:
 ```python
 # First, get institution IDs
-mit_response = client._make_request(
-    '/institutions',
-    params={'search': 'MIT', 'per-page': 1}
-)
-mit_id = mit_response['results'][0]['id'].split('/')[-1]
+mit_response = client._make_request("/institutions", params={"search": "MIT", "per-page": 1})
+mit_id = mit_response["results"][0]["id"].split("/")[-1]
 
 stanford_response = client._make_request(
-    '/institutions',
-    params={'search': 'Stanford', 'per-page': 1}
+    "/institutions", params={"search": "Stanford", "per-page": 1}
 )
-stanford_id = stanford_response['results'][0]['id'].split('/')[-1]
+stanford_id = stanford_response["results"][0]["id"].split("/")[-1]
 
 # Find works with authors from both institutions
 works = client.search_works(
-    filter_params={
-        "authorships.institutions.id": f"{mit_id}+{stanford_id}"
-    },
-    per_page=100
+    filter_params={"authorships.institutions.id": f"{mit_id}+{stanford_id}"}, per_page=100
 )
 
 print(f"Found {works['meta']['count']} collaborative papers")
@@ -224,22 +203,16 @@ print(f"Found {works['meta']['count']} collaborative papers")
 **Python example**:
 ```python
 # Step 1: Find journal source ID
-source_response = client._make_request(
-    '/sources',
-    params={'search': 'Nature', 'per-page': 1}
-)
-source = source_response['results'][0]
-source_id = source['id'].split('/')[-1]
+source_response = client._make_request("/sources", params={"search": "Nature", "per-page": 1})
+source = source_response["results"][0]
+source_id = source["id"].split("/")[-1]
 
 print(f"Found journal: {source['display_name']} (ID: {source_id})")
 
 # Step 2: Get works from that source
 works = client.search_works(
-    filter_params={
-        "primary_location.source.id": source_id,
-        "publication_year": "2023"
-    },
-    per_page=200
+    filter_params={"primary_location.source.id": source_id, "publication_year": "2023"},
+    per_page=200,
 )
 
 print(f"Found {works['meta']['count']} papers from Nature in 2023")
@@ -254,20 +227,14 @@ print(f"Found {works['meta']['count']} papers from Nature in 2023")
 **Python example**:
 ```python
 # Get MIT ID
-inst_response = client._make_request(
-    '/institutions',
-    params={'search': 'MIT', 'per-page': 1}
-)
-mit_id = inst_response['results'][0]['id'].split('/')[-1]
+inst_response = client._make_request("/institutions", params={"search": "MIT", "per-page": 1})
+mit_id = inst_response["results"][0]["id"].split("/")[-1]
 
 # Group by topics
 topics = client.group_by(
-    entity_type='works',
-    group_field='topics.id',
-    filter_params={
-        "authorships.institutions.id": mit_id,
-        "publication_year": ">2020"
-    }
+    entity_type="works",
+    group_field="topics.id",
+    filter_params={"authorships.institutions.id": mit_id, "publication_year": ">2020"},
 )
 
 print("Top research topics at MIT (2020+):")
@@ -285,20 +252,21 @@ for i, topic in enumerate(topics[:10], 1):
 ```python
 # Get the work
 doi = "https://doi.org/10.1038/s41586-021-03819-2"
-work = client.get_entity('works', doi)
+work = client.get_entity("works", doi)
 
 # Get papers that cite it
-cited_by_url = work['cited_by_api_url']
+cited_by_url = work["cited_by_api_url"]
 
 # Extract just the query part and use it
 import requests
-response = requests.get(cited_by_url, params={'mailto': client.email})
+
+response = requests.get(cited_by_url, params={"mailto": client.email})
 citing_works = response.json()
 
 print(f"{work['title']}")
 print(f"Total citations: {work['cited_by_count']}")
 print(f"\nRecent citing papers:")
-for citing_work in citing_works['results'][:5]:
+for citing_work in citing_works["results"][:5]:
     print(f"  - {citing_work['title']} ({citing_work['publication_year']})")
 ```
 
@@ -311,30 +279,30 @@ for citing_work in citing_works['results'][:5]:
 **Python example**:
 ```python
 all_papers = client.paginate_all(
-    endpoint='/works',
-    params={
-        'search': 'quantum computing',
-        'filter': 'publication_year:2022-2024'
-    },
-    max_results=10000  # Limit to prevent excessive API calls
+    endpoint="/works",
+    params={"search": "quantum computing", "filter": "publication_year:2022-2024"},
+    max_results=10000,  # Limit to prevent excessive API calls
 )
 
 print(f"Retrieved {len(all_papers)} papers")
 
 # Save to CSV
 import csv
-with open('quantum_papers.csv', 'w', newline='') as f:
+
+with open("quantum_papers.csv", "w", newline="") as f:
     writer = csv.writer(f)
-    writer.writerow(['Title', 'Year', 'Citations', 'DOI', 'OA Status'])
+    writer.writerow(["Title", "Year", "Citations", "DOI", "OA Status"])
 
     for paper in all_papers:
-        writer.writerow([
-            paper['title'],
-            paper['publication_year'],
-            paper['cited_by_count'],
-            paper.get('doi', 'N/A'),
-            paper['open_access']['oa_status']
-        ])
+        writer.writerow(
+            [
+                paper["title"],
+                paper["publication_year"],
+                paper["cited_by_count"],
+                paper.get("doi", "N/A"),
+                paper["open_access"]["oa_status"],
+            ]
+        )
 ```
 
 ## Complex Multi-Filter Query
@@ -346,20 +314,17 @@ with open('quantum_papers.csv', 'w', newline='') as f:
 **Python example**:
 ```python
 # Get IDs for top institutions
-top_institutions = ['MIT', 'Stanford', 'Oxford']
+top_institutions = ["MIT", "Stanford", "Oxford"]
 inst_ids = []
 
 for inst_name in top_institutions:
-    response = client._make_request(
-        '/institutions',
-        params={'search': inst_name, 'per-page': 1}
-    )
-    if response['results']:
-        inst_id = response['results'][0]['id'].split('/')[-1]
+    response = client._make_request("/institutions", params={"search": inst_name, "per-page": 1})
+    if response["results"]:
+        inst_id = response["results"][0]["id"].split("/")[-1]
         inst_ids.append(inst_id)
 
 # Combine with pipe for OR
-inst_filter = '|'.join(inst_ids)
+inst_filter = "|".join(inst_ids)
 
 # Complex query
 works = client.search_works(
@@ -368,14 +333,14 @@ works = client.search_works(
         "publication_year": ">2022",
         "cited_by_count": ">50",
         "is_oa": "true",
-        "authorships.institutions.id": inst_filter
+        "authorships.institutions.id": inst_filter,
     },
     sort="cited_by_count:desc",
-    per_page=200
+    per_page=200,
 )
 
 print(f"Found {works['meta']['count']} papers matching criteria")
-for work in works['results'][:10]:
+for work in works["results"][:10]:
     print(f"{work['title']}")
     print(f"  Citations: {work['cited_by_count']}, Year: {work['publication_year']}")
 ```

@@ -21,7 +21,7 @@ Unsupervised learning discovers patterns in unlabeled data through clustering, d
 ```python
 from sklearn.cluster import KMeans
 
-model = KMeans(n_clusters=3, init='k-means++', n_init=10, random_state=42)
+model = KMeans(n_clusters=3, init="k-means++", n_init=10, random_state=42)
 labels = model.fit_predict(X)
 centers = model.cluster_centers_
 
@@ -56,7 +56,7 @@ labels = model.fit_predict(X)
 ```python
 from sklearn.cluster import DBSCAN
 
-model = DBSCAN(eps=0.5, min_samples=5, metric='euclidean')
+model = DBSCAN(eps=0.5, min_samples=5, metric="euclidean")
 labels = model.fit_predict(X)
 
 # Number of clusters (excluding noise)
@@ -104,12 +104,13 @@ labels = model.fit_predict(X)
 ```python
 from sklearn.cluster import AgglomerativeClustering
 
-model = AgglomerativeClustering(n_clusters=3, linkage='ward')
+model = AgglomerativeClustering(n_clusters=3, linkage="ward")
 labels = model.fit_predict(X)
 
 # Create dendrogram using scipy
 from scipy.cluster.hierarchy import dendrogram, linkage
-Z = linkage(X, method='ward')
+
+Z = linkage(X, method="ward")
 dendrogram(Z)
 ```
 
@@ -138,7 +139,7 @@ labels = model.fit_predict(X)
 ```python
 from sklearn.cluster import SpectralClustering
 
-model = SpectralClustering(n_clusters=3, affinity='rbf', random_state=42)
+model = SpectralClustering(n_clusters=3, affinity="rbf", random_state=42)
 labels = model.fit_predict(X)
 ```
 
@@ -210,10 +211,10 @@ for k in K_range:
     model.fit(X)
     inertias.append(model.inertia_)
 
-plt.plot(K_range, inertias, 'bo-')
-plt.xlabel('Number of clusters')
-plt.ylabel('Inertia')
-plt.title('Elbow Method')
+plt.plot(K_range, inertias, "bo-")
+plt.xlabel("Number of clusters")
+plt.ylabel("Inertia")
+plt.title("Elbow Method")
 ```
 
 ## Dimensionality Reduction
@@ -264,7 +265,7 @@ X_reduced = pca.fit_transform(X)
 ```python
 from sklearn.decomposition import KernelPCA
 
-pca = KernelPCA(n_components=2, kernel='rbf', gamma=0.1)
+pca = KernelPCA(n_components=2, kernel="rbf", gamma=0.1)
 X_reduced = pca.fit_transform(X)
 ```
 
@@ -289,8 +290,9 @@ X_embedded = tsne.fit_transform(X)
 
 # Visualize
 import matplotlib.pyplot as plt
-plt.scatter(X_embedded[:, 0], X_embedded[:, 1], c=labels, cmap='viridis')
-plt.title('t-SNE visualization')
+
+plt.scatter(X_embedded[:, 0], X_embedded[:, 1], c=labels, cmap="viridis")
+plt.title("t-SNE visualization")
 ```
 
 **UMAP (not in scikit-learn, but compatible)**
@@ -351,7 +353,7 @@ X_embedded = mds.fit_transform(X)
 ```python
 from sklearn.decomposition import NMF
 
-nmf = NMF(n_components=10, init='nndsvd', random_state=42)
+nmf = NMF(n_components=10, init="nndsvd", random_state=42)
 W = nmf.fit_transform(X)  # Document-topic matrix
 H = nmf.components_  # Topic-word matrix
 ```
@@ -440,7 +442,7 @@ outlier_scores = lof.negative_outlier_factor_
 ```python
 from sklearn.svm import OneClassSVM
 
-model = OneClassSVM(nu=0.1, kernel='rbf', gamma='auto')
+model = OneClassSVM(nu=0.1, kernel="rbf", gamma="auto")
 model.fit(X_train)
 predictions = model.predict(X_test)  # -1 for outliers, 1 for inliers
 ```
@@ -469,7 +471,7 @@ predictions = model.fit_predict(X)
 ```python
 from sklearn.mixture import GaussianMixture
 
-gmm = GaussianMixture(n_components=3, covariance_type='full', random_state=42)
+gmm = GaussianMixture(n_components=3, covariance_type="full", random_state=42)
 gmm.fit(X)
 
 # Predict cluster labels
