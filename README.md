@@ -194,6 +194,35 @@ py -3 scripts/_tools/_audit_phase3_imports.py
 | `pptx-gmc-sync-from-word` | Word GMC/例数/P 值同步到 PPT 指定页表格 | `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
 | `docx-to-markdown` | DOCX 文本/表格抽取为 Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
 
+### 临床数据自动化 Skills（vendored 能力层）
+
+这一组 SKILL.md 是**薄能力层**，脚本本体位于 `scripts/clinical-automation/`
+—— 该目录是从 [`ZimaBlue123/Clinical-Data-Automation`](https://github.com/ZimaBlue123/Clinical-Data-Automation)
+整体迁入的外部子项目，保留了完整提交历史与原有 `01_` … `34_` 编号结构。
+
+依赖需在该目录内**单独安装**，不要并入仓库根：
+
+```bash
+pip install -r scripts/clinical-automation/requirements.txt
+```
+
+| Skill | 用途 | 覆盖模块 |
+|-------|------|----------|
+| `clinical-pdf-ectd` | PDF eCTD 申报合规装甲与审计报告 | 18 |
+| `clinical-sae-extraction` | SAE 严重不良事件结构化抽取 | 33 |
+| `clinical-word-tables` | Word 表格导出 Excel / pzfx 抗体数据替换 / 图表复刻 | 07、08、09 |
+| `clinical-pdf-extraction` | 血清报告、ADR、规则驱动提取与干扰区定位 | 12、13、21 |
+| `clinical-docx-editing` | Word 样式清理与 OOXML 批量替换 | 10、11 |
+| `clinical-excel-charts` | 临床图表生成与 GMC/GMI/阳转率填表、期刊配色 | 01、02 |
+| `clinical-pdf-hygiene` | 标题重命名、去重、XSS 清理、威胁分析 | 15、17、22、23 |
+| `clinical-ppt-toolkit` | PPT 合并去重与边角水印去除 | 03、04 |
+| `document-format-convert` | PPT/Word/PDF/图片 互转与 PDF 合并 | 05、06、14、16、19、34 |
+| `clinical-document-translation` | Excel/CSV/Word/PDF 中英双向翻译 | 24 |
+
+> 编号 25–32 在原仓库中为非临床工具（Py 转 EXE、C 盘清理、WiFi 密码、文件计数、
+> 文献下载、代理导出、DNS 泄漏、网速测试），本次迁入时已剔除，故编号不连续。
+> 详见 `scripts/clinical-automation/README.md` 文首说明。
+
 ### 图表 Skill（项目内置）
 
 | Skill | 用途 | 安装位置 | 快速使用 |

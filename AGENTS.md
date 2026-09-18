@@ -17,6 +17,23 @@
 - **迭代清理机制**：在执行多轮迭代任务时（例如 V1 到 V10 版本的生成），一旦确认生成了最终版（Final/Latest），Agent **必须主动清理** 之前的过渡废弃脚本（如 `_v1.py` 至 `_v9.py` 等中间产物），只保留最终的执行脚本并进行重命名定档（如 `generate_[topic]_final.py`）。
 - **文件命名规范**：脚本文件应具有自描述性（Self-descriptive），拒绝含糊不清的名称（如单纯的 `test.py` 或 `gen_docx.py`），应当准确指代其生成的报告内容。
 
+### 3.1 豁免：vendored 子项目 `scripts/clinical-automation/`
+
+该目录是从 `ZimaBlue123/Clinical-Data-Automation` **整体迁入的外部子项目**
+（保留完整提交历史），以下规则在**该目录内部不适用**：
+
+| 规则 | 在子目录内的处理 |
+|---|---|
+| 脚本必须自描述命名 | 不适用：保留原有 `01_` … `34_` 编号目录与原有文件名 |
+| 迭代清理过渡脚本 | 不适用：不得删除子目录内的任何脚本来"清理" |
+| 依赖统一在根 `requirements.txt` | 不适用：子目录使用自己的 `requirements.txt`，**禁止**合并进根目录 |
+| 根 `README.md` / `AGENTS.md` 覆盖 | 子目录有自己的同名文件，二者互相独立 |
+
+- **约束**：新增脚本**不得**放进该子目录；它只作为只读能力库使用。
+- **规则冲突时**：一律以本文件（仓库根 `AGENTS.md`）为准，子目录内的 `AGENTS.md` 仅作参考。
+- **能力入口**：`skills/clinical-*`、`skills/document-format-convert` 等 SKILL.md
+  是调用这些脚本的推荐入口，**不要绕过它们直接改子目录里的脚本**。
+
 ## 4. 强制代码与技能复用 (Mandatory Code & Skill Reuse)
 
 - **核心原则**：严禁在未排查现有资产的情况下“重复造轮子”（Reinventing the wheel）。

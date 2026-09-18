@@ -163,6 +163,37 @@ This repository currently includes **30 skills**, grouped as follows.
 | `pptx-gmc-sync-from-word` | sync GMC/n/P-values from Word into PPT tables | `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
 | `docx-to-markdown` | extract DOCX text/tables to Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
 
+### Clinical Data Automation Skills (vendored capability layer)
+
+These SKILL.md files are a **thin capability layer**. The scripts themselves live in
+`scripts/clinical-automation/`, a vendored sub-project imported wholesale from
+[`ZimaBlue123/Clinical-Data-Automation`](https://github.com/ZimaBlue123/Clinical-Data-Automation)
+with its full commit history and original `01_` … `34_` numbering.
+
+Install its dependencies **inside that directory**; do not merge them into the repo root:
+
+```bash
+pip install -r scripts/clinical-automation/requirements.txt
+```
+
+| Skill | Purpose | Modules |
+|-------|---------|---------|
+| `clinical-pdf-ectd` | eCTD submission compliance hardening and audit report | 18 |
+| `clinical-sae-extraction` | Structured SAE field extraction | 33 |
+| `clinical-word-tables` | Word tables to Excel, pzfx antibody substitution, chart replication | 07, 08, 09 |
+| `clinical-pdf-extraction` | Serology reports, ADR grading, rule-driven extraction, mask regions | 12, 13, 21 |
+| `clinical-docx-editing` | Word style cleanup and OOXML batch replace | 10, 11 |
+| `clinical-excel-charts` | Clinical charts, GMC/GMI/seroconversion fill-in, journal palettes | 01, 02 |
+| `clinical-pdf-hygiene` | Title-driven rename, dedupe, XSS cleanup, threat scan | 15, 17, 22, 23 |
+| `clinical-ppt-toolkit` | Deck merge/dedupe and corner watermark removal | 03, 04 |
+| `document-format-convert` | PPT / Word / PDF / image conversion and PDF merge | 05, 06, 14, 16, 19, 34 |
+| `clinical-document-translation` | Bidirectional ZH-EN translation for Excel/CSV/Word/PDF | 24 |
+
+> Modules 25–32 were non-clinical utilities (Py-to-EXE, disk cleanup, WiFi passwords,
+> file counting, paper download, proxy export, DNS leak, speed test) and were excluded
+> on import, so the numbering is intentionally non-contiguous.
+> See the header note in `scripts/clinical-automation/README.md`.
+
 ### Diagram Skill (Project-Integrated)
 
 | Skill | Purpose | Location | Quick Usage |
