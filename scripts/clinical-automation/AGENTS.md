@@ -1,3 +1,17 @@
+> ## 本目录为外部迁入的 vendored 子项目
+>
+> - **来源**：`ZimaBlue123/Clinical-Data-Automation`（独立仓库，仍然保留，本处为副本）
+> - **迁入方式**：`git fetch` + 分支重定位 + `--allow-unrelated-histories` 合并，完整提交历史已带入
+> - **独立维护**：本目录内的编号目录结构、`requirements.txt`、`pyproject.toml`、`pytest.ini`
+>   **不并入仓库根**的对应文件，请在本目录内按需安装依赖
+> - **规则优先级**：与仓库根 `AGENTS.md` 冲突时，**一律以仓库根为准**；
+>   本文件仅作为该子项目自身约定的参考
+> - **已剔除的非临床模块**（仍在源仓库保留）：`25_Py_to_EXE`、`26_C_Drive_Cleanup`、
+>   `27_WiFi_Passwords`、`28_Folder_File_Count`、`29_Paper_Batch_Download`、
+>   `30_Proxy_Config_Export`、`31_DNS_Leak_Detector`、`32_Network_Speed_Test`
+> - **未带入的内容**：各模块 `input/` 与 `output/`、构建产物 `dist/`、
+>   `config.yaml`、`24_File_Translator/.env` —— 这些在源仓库即已被 gitignore
+
 # AGENTS.md — AI Agent 协作指引
 
 > 本文件供 AI 编程助手（如 Mavis / Claude Code / Cursor / GitHub Copilot Workspace 等）
