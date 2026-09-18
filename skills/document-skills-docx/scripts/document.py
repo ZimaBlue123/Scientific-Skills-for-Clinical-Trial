@@ -293,7 +293,7 @@ class DocxXMLEditor(XMLEditor):
         # Validate that there are insertions to reject
         if not ins_elements:
             raise ValueError(
-                f"revert_insertion requires w:ins elements. "
+                "revert_insertion requires w:ins elements. "
                 f"The provided element <{elem.tagName}> contains no insertions. "
             )
 
@@ -374,7 +374,7 @@ class DocxXMLEditor(XMLEditor):
         # Validate that there are deletions to reject
         if not del_elements:
             raise ValueError(
-                f"revert_deletion requires w:del elements. "
+                "revert_deletion requires w:del elements. "
                 f"The provided element <{elem.tagName}> contains no deletions. "
             )
 

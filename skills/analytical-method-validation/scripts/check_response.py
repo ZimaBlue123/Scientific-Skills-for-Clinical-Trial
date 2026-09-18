@@ -241,7 +241,7 @@ def main() -> int:
     )
     if args.weight != "none" and lof.get("applicable"):
         note(
-            f"the lack-of-fit F test is computed on unweighted residuals while the fit used "
+            "the lack-of-fit F test is computed on unweighted residuals while the fit used "
             f"{args.weight} weighting, so its null distribution is approximate here. Read it "
             "alongside the back-calculated error per level, which is unaffected"
         )

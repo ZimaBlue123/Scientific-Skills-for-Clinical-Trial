@@ -253,13 +253,13 @@ def main() -> int:
         claimed = args.confirm_ql if args.confirm_ql is not None else conservative
         if args.confirm_ql is None and qls:
             note(
-                f"no --confirm-ql given, so the reporting-threshold check uses the most "
+                "no --confirm-ql given, so the reporting-threshold check uses the most "
                 f"conservative estimate ({conservative:.6g}), not the most favourable "
                 f"({min(qls):.6g})"
             )
             if min(qls) <= args.reporting_threshold < conservative:
                 findings.append(
-                    f"the QL estimates straddle the reporting threshold "
+                    "the QL estimates straddle the reporting threshold "
                     f"{args.reporting_threshold:.6g}: {min(qls):.6g} would pass and "
                     f"{conservative:.6g} would not. Whether this procedure meets Q2(R2) "
                     "3.2.3.5 depends on which approach is chosen, so choose it, justify it, "

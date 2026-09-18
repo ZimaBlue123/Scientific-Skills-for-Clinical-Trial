@@ -12,7 +12,6 @@ Rate Limit: ~50 requests per minute per IP address
 
 import json
 from typing import Dict, List, Optional, Union
-from urllib.parse import urlencode
 
 import requests
 

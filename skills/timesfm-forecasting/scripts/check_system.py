@@ -231,7 +231,7 @@ def check_ram(profile: dict[str, Any]) -> CheckResult:
             detail=(
                 f"System has {total:.1f} GB RAM but {profile['name']} requires "
                 f"at least {min_ram:.0f} GB. The model will likely fail to load "
-                f"or cause the system to swap heavily and become unresponsive."
+                "or cause the system to swap heavily and become unresponsive."
             ),
             value=value,
         )
@@ -242,7 +242,7 @@ def check_ram(profile: dict[str, Any]) -> CheckResult:
             detail=(
                 f"System has {total:.1f} GB RAM. {profile['name']} recommends "
                 f"{rec_ram:.0f} GB. It may work with small batch sizes but could "
-                f"be tight. Use per_core_batch_size=4 or lower."
+                "be tight. Use per_core_batch_size=4 or lower."
             ),
             value=value,
         )
@@ -316,7 +316,7 @@ def check_disk(profile: dict[str, Any]) -> CheckResult:
             detail=(
                 f"Only {free_gb:.1f} GB free in {check_dir}. "
                 f"Need at least {required:.0f} GB for model weights. "
-                f"Free up space or set HF_HOME to a larger volume."
+                "Free up space or set HF_HOME to a larger volume."
             ),
             value=value,
         )

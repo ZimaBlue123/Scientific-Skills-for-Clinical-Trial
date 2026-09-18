@@ -151,7 +151,7 @@ Get your OpenRouter API key from:
         if create_env_file(args.api_key, args.env_file):
             print()
             print("Next steps:")
-            print(f"1. Load the environment variables:")
+            print("1. Load the environment variables:")
             print(f"   source {args.env_file}")
             print("2. Or export directly:")
             print(f"   export OPENROUTER_API_KEY={args.api_key}")

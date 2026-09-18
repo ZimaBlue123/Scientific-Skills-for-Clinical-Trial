@@ -141,7 +141,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Convert documents to Markdown with AI-enhanced image descriptions",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=f"""
+        epilog="""
 Available prompt types:
   scientific    - For scientific diagrams, graphs, and charts
   presentation  - For presentation slides

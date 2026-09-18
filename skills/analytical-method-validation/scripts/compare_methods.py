@@ -190,7 +190,7 @@ def main() -> int:
             f"equivalence NOT demonstrated at +/-{args.margin:g} {unit}: the "
             f"{100 * (1 - 2 * args.alpha):.0f}% CI "
             f"({tost['ci_1_minus_2alpha'][0]:.4g}, {tost['ci_1_minus_2alpha'][1]:.4g}) is not "
-            f"contained in the margin"
+            "contained in the margin"
         )
 
     if args.slope_tolerance is not None:

@@ -209,7 +209,7 @@ def create_visualization(data: dict) -> None:
     )
     ax.annotate(
         f"Store A earns {ratio:.1f}x Store C\n(premium vs discount pricing)\n"
-        f"-> store_type is a useful static covariate",
+        "-> store_type is a useful static covariate",
         xy=(0.97, 0.05),
         xycoords="axes fraction",
         ha="right",
@@ -287,7 +287,7 @@ def create_visualization(data: dict) -> None:
     ax.annotate(
         f"Holiday weeks: +{h_lift:.0f} units avg\n"
         f"Promotion weeks: +{p_lift:.0f} units avg\n"
-        f"Future event schedules must be known for XReg",
+        "Future event schedules must be known for XReg",
         xy=(0.97, 0.05),
         xycoords="axes fraction",
         ha="right",
@@ -366,9 +366,9 @@ def create_visualization(data: dict) -> None:
     ax.legend(fontsize=7.5, loc="upper right")
     ax.grid(True, alpha=0.22, axis="y")
     ax.annotate(
-        f"Holidays (+200) and promotions (+150) dominate\n"
+        "Holidays (+200) and promotions (+150) dominate\n"
         f"Price effect (+/-{np.abs(pe).max():.0f} units) is minor by comparison\n"
-        f"-> Time-varying covariates explain most sales spikes",
+        "-> Time-varying covariates explain most sales spikes",
         xy=(0.97, 0.55),
         xycoords="axes fraction",
         ha="right",

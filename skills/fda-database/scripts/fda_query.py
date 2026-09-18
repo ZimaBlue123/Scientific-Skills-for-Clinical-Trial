@@ -15,10 +15,10 @@ Usage:
 import hashlib
 import json
 import time
-from collections import Counter, deque
+from collections import deque
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 import requests
 

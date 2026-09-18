@@ -197,7 +197,7 @@ def main(argv: list[str] | None = None) -> int:
         if others:
             print(
                 f"# other lineage-like columns here: {', '.join(others)} "
-                f"(select one with --lineage-field)",
+                "(select one with --lineage-field)",
                 file=sys.stderr,
             )
     return 1 if failures else 0

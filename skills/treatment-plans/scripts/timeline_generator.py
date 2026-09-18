@@ -361,7 +361,7 @@ Note: Visual timeline generation requires matplotlib.
     else:
         create_text_timeline(timeline_data, args.output)
     
-    print(f"\nTimeline generation complete!")
+    print("\nTimeline generation complete!")
 
 
 if __name__ == '__main__':

@@ -537,10 +537,10 @@ def main():
     print(f"Analyzing: {filepath}")
     analysis = analyze_file(filepath)
 
-    print(f"\nGenerating report...")
+    print("\nGenerating report...")
     generate_markdown_report(analysis, output_path)
 
-    print(f"\n✓ Analysis complete!")
+    print("\n✓ Analysis complete!")
 
 
 if __name__ == '__main__':

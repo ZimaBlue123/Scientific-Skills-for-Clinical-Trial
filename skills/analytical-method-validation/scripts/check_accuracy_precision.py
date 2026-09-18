@@ -344,7 +344,7 @@ def main() -> int:
             )
         else:
             findings.append(
-                f"repeatability design meets neither Q2(R2) 3.3.2.1 option: "
+                "repeatability design meets neither Q2(R2) 3.3.2.1 option: "
                 f"{len(records)} determinations across {len(levels)} level(s), with at most "
                 f"{best_single} at any one level. Option (a) needs "
                 f"{spec['range_determinations']} across at least {spec['range_levels']} levels; "

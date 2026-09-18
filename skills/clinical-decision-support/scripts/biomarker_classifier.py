@@ -195,7 +195,7 @@ def correlate_biomarker_outcome(data, biomarker_col, outcome_col, biomarker_type
         # Chi-square test
         chi2, p_value, dof, expected = stats.chi2_contingency(contingency)
         
-        print(f"\nChi-square test:")
+        print("\nChi-square test:")
         print(f"  χ² = {chi2:.2f}, df = {dof}, p = {p_value:.4f}")
         
         # Odds ratio if 2x2 table
@@ -216,12 +216,12 @@ def correlate_biomarker_outcome(data, biomarker_col, outcome_col, biomarker_type
         # Correlation coefficient
         r, p_value = stats.pearsonr(analysis_data[biomarker_col], analysis_data[outcome_col])
         
-        print(f"\nPearson correlation:")
+        print("\nPearson correlation:")
         print(f"  r = {r:.3f}, p = {p_value:.4f}")
         
         # Also report Spearman for robustness
         rho, p_spearman = stats.spearmanr(analysis_data[biomarker_col], analysis_data[outcome_col])
-        print(f"Spearman correlation:")
+        print("Spearman correlation:")
         print(f"  ρ = {rho:.3f}, p = {p_spearman:.4f}")
     
     return p_value
@@ -240,14 +240,14 @@ def stratify_cohort_report(data, stratification_var, output_dir='stratification_
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     
-    print(f"\nCOHORT STRATIFICATION REPORT")
+    print("\nCOHORT STRATIFICATION REPORT")
     print("="*60)
     print(f"Stratification Variable: {stratification_var}")
     print(f"Total Patients: {len(data)}")
     
     # Group distribution
     distribution = data[stratification_var].value_counts()
-    print(f"\nGroup Distribution:")
+    print("\nGroup Distribution:")
     for group, count in distribution.items():
         pct = count / len(data) * 100
         print(f"  {group}: {count} ({pct:.1f}%)")

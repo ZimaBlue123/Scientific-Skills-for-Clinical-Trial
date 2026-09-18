@@ -175,7 +175,7 @@ class XMLEditor:
         if len(matches) > 1:
             raise ValueError(
                 f"Multiple nodes found: <{tag}>. "
-                f"Add more filters (attrs, line_number, or contains) to narrow the search."
+                "Add more filters (attrs, line_number, or contains) to narrow the search."
             )
         return matches[0]
 

@@ -15,7 +15,6 @@ Dependencies: None (pure Python)
 
 import argparse
 import re
-from collections import defaultdict
 from pathlib import Path
 
 

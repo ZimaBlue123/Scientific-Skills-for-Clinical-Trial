@@ -224,7 +224,7 @@ def display_validation_results(filepath: Path, results: Dict,
     
     # Timeframes
     if has_timeframes:
-        print(f"✓ Time-bound goals present")
+        print("✓ Time-bound goals present")
         if timeframe_examples:
             print("   Examples:", ", ".join(timeframe_examples[:3]))
     else:
@@ -233,7 +233,7 @@ def display_validation_results(filepath: Path, results: Dict,
     
     # Measurable metrics
     if has_metrics:
-        print(f"✓ Quantitative/measurable goals present")
+        print("✓ Quantitative/measurable goals present")
         if metric_examples:
             print("   Examples:", ", ".join(metric_examples[:3]))
     else:

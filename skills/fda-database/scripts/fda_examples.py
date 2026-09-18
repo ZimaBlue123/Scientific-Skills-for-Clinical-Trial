@@ -34,7 +34,7 @@ def example_drug_safety_profile(fda, drug_name):
         print(f"Total Adverse Event Reports: {total:,}")
 
     # 2. Most common reactions
-    print(f"\nMost Common Adverse Reactions:")
+    print("\nMost Common Adverse Reactions:")
     reactions = fda.count_by_field(
         "drug", "event",
         search=f"patient.drug.medicinalproduct:*{drug_name}*",
@@ -63,7 +63,7 @@ def example_drug_safety_profile(fda, drug_name):
             print(f"  - {recall.get('reason_for_recall', 'Unknown')} "
                   f"(Class {recall.get('classification', 'Unknown')})")
     else:
-        print(f"\nRecent Recalls: None found")
+        print("\nRecent Recalls: None found")
 
 
 def example_device_surveillance(fda, device_name):
@@ -86,7 +86,7 @@ def example_device_surveillance(fda, device_name):
         print(f"Total Adverse Event Reports: {total:,}")
 
     # 2. Event types
-    print(f"\nEvent Type Distribution:")
+    print("\nEvent Type Distribution:")
     event_types = fda.count_by_field(
         "device", "event",
         search=f"device.brand_name:*{device_name}*",
@@ -100,7 +100,7 @@ def example_device_surveillance(fda, device_name):
     # 3. Recent events
     recent = fda.query_device_events(device_name, limit=5)
     if "results" in recent and len(recent["results"]) > 0:
-        print(f"\nRecent Events (sample):")
+        print("\nRecent Events (sample):")
         for i, event in enumerate(recent["results"][:3], 1):
             event_type = event.get("event_type", "Unknown")
             date = event.get("date_received", "Unknown")
@@ -209,7 +209,7 @@ def example_comparative_drug_analysis(fda, drug_list):
         drug_list: List of drug names to compare
     """
     print(f"\n{'='*60}")
-    print(f"COMPARATIVE DRUG ANALYSIS")
+    print("COMPARATIVE DRUG ANALYSIS")
     print(f"{'='*60}\n")
 
     print(f"Comparing: {', '.join(drug_list)}\n")
@@ -287,11 +287,11 @@ def example_veterinary_analysis(fda, species, drug_name):
         from collections import Counter
         reaction_counts = Counter(reactions)
 
-        print(f"\nMost Common Reactions:")
+        print("\nMost Common Reactions:")
         for reaction, count in reaction_counts.most_common(10):
             print(f"  {reaction}: {count}")
     else:
-        print(f"No adverse events found")
+        print("No adverse events found")
 
 
 def main():

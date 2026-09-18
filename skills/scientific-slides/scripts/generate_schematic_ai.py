@@ -961,7 +961,7 @@ Environment:
                 # The image is real; the quality claim is not. Say which.
                 print(
                     f"  (Completed in {used} iteration(s) - quality NOT verified,"
-                    f" the review produced no score. Check the image yourself.)"
+                    " the review produced no score. Check the image yourself.)"
                 )
             sys.exit(0)
         else:

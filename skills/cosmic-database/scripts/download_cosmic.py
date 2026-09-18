@@ -154,7 +154,7 @@ def get_common_file_path(
         'gene_expression': f'{genome_assembly}/cosmic/{version}/CosmicCompleteGeneExpression.tsv.gz',
         'copy_number': f'{genome_assembly}/cosmic/{version}/CosmicCompleteCNA.tsv.gz',
         'fusion_genes': f'{genome_assembly}/cosmic/{version}/CosmicFusionExport.tsv.gz',
-        'signatures': f'signatures/signatures.tsv',
+        'signatures': 'signatures/signatures.tsv',
         'sample_info': f'{genome_assembly}/cosmic/{version}/CosmicSample.tsv.gz',
     }
 

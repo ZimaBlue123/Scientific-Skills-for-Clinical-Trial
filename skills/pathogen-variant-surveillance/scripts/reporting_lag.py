@@ -219,14 +219,14 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"# {args.target:.0%} of a cohort has arrived by {reached[0]} days.\n"
                 f"# Trust collection dates up to {cutoff.isoformat()}; treat anything "
-                f"later as provisional.",
+                "later as provisional.",
                 file=sys.stderr,
             )
         else:
             print(
                 f"# no lag up to {OFFSETS[-1]} days reaches {args.target:.0%} completeness "
                 f"(best {max(sum(c[o] for c in curves) / len(curves) for o in OFFSETS):.0%}). "
-                f"Recent weeks cannot support a prevalence estimate here.",
+                "Recent weeks cannot support a prevalence estimate here.",
                 file=sys.stderr,
             )
         print(

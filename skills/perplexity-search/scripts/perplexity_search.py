@@ -20,7 +20,7 @@ import argparse
 import json
 import os
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 
 def check_dependencies():
@@ -259,7 +259,7 @@ Available Models:
 
     # Print usage stats if verbose
     if args.verbose:
-        print(f"\nUsage:", file=sys.stderr)
+        print("\nUsage:", file=sys.stderr)
         print(f"  Prompt tokens: {result['usage']['prompt_tokens']}", file=sys.stderr)
         print(f"  Completion tokens: {result['usage']['completion_tokens']}", file=sys.stderr)
         print(f"  Total tokens: {result['usage']['total_tokens']}", file=sys.stderr)

@@ -18,7 +18,6 @@ from pathlib import Path
 
 def check_python_version():
     """Check Python version."""
-    import sys
 
     version = sys.version_info
 
@@ -29,7 +28,7 @@ def check_python_version():
     else:
         print(
             f"  ✗ Python {version.major}.{version.minor}.{version.micro} "
-            f"(requires Python 3.8 or higher)"
+            "(requires Python 3.8 or higher)"
         )
         return False
 

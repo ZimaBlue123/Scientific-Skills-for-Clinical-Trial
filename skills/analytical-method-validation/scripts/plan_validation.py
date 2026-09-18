@@ -108,7 +108,7 @@ def plan_m10(modality: str) -> list[dict]:
             "item": "calibration curve",
             "requirement": (
                 f"minimum {crit['calibration_min_levels']} concentration levels including "
-                f"the LLOQ; at least "
+                "the LLOQ; at least "
                 f"{crit['calibration_min_pass_fraction'] * 100:.0f}% of standards must pass"
             ),
             "tolerance": (
@@ -163,7 +163,7 @@ def plan_m10(modality: str) -> list[dict]:
         {
             "item": "incurred sample reanalysis",
             "requirement": (
-                f"repeat a predefined subset in separate runs; at least "
+                "repeat a predefined subset in separate runs; at least "
                 f"{crit['isr_pass_fraction'] * 100:.0f}% of repeats must agree"
             ),
             "tolerance": f"percent difference within +/-{crit['isr_tolerance_pct']:.0f}%",

@@ -98,7 +98,7 @@ def cached_query(cache_file: str, query_func, *args, **kwargs) -> Any:
         with open(cache_path, encoding="utf-8") as f:
             return json.load(f)
 
-    print(f"Cache miss. Querying API...")
+    print("Cache miss. Querying API...")
     result = query_func(*args, **kwargs)
 
     if result is not None:

@@ -332,7 +332,7 @@ def main(argv: list[str] | None = None) -> int:
                 f"# growth {name}: log-odds slope {fit['slope_per_week']:+.3f}/week "
                 f"(95% CI {fit['ci_low']:+.3f} to {fit['ci_high']:+.3f}, "
                 f"{int(fit['n_weeks'])} weeks, dispersion {fit['dispersion']:.1f}). "
-                f"Descriptive only -- confounded by sampling and reporting changes.",
+                "Descriptive only -- confounded by sampling and reporting changes.",
                 file=sys.stderr,
             )
     return 0

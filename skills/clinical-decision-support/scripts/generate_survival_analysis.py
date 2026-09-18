@@ -310,7 +310,7 @@ def generate_report(data, output_dir, prefix='survival'):
                 f.write(f"  24-month survival rate: {surv_24m*100:.1f}%\n")
             f.write("\n")
         
-        f.write(f"Log-Rank Test:\n")
+        f.write("Log-Rank Test:\n")
         f.write(f"  p-value = {logrank_p:.4f}\n")
         f.write(f"  Interpretation: {'Significant' if logrank_p < 0.05 else 'Not significant'} difference in survival\n\n")
         
@@ -336,7 +336,7 @@ def generate_report(data, output_dir, prefix='survival'):
             kmf = kmf_models[group]
             median = kmf.median_survival_time_
             if i == 0:
-                f.write(f"Median survival, months (95\\% CI) & ")
+                f.write("Median survival, months (95\\% CI) & ")
                 if median != np.inf:
                     f.write(f"{median:.1f} & ")
                 else:

@@ -135,7 +135,7 @@ def create_frame(
     ax.set_xlabel("Date", fontsize=11)
     ax.set_ylabel("Temperature Anomaly (°C)", fontsize=11)
     ax.set_title(
-        f"TimesFM Forecast Evolution\n"
+        "TimesFM Forecast Evolution\n"
         f"Step {step_data['step']}/{total_steps}: {step_data['n_points']} points → "
         f"forecast from {step_data['last_historical_date']}",
         fontsize=13,
