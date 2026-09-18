@@ -1,65 +1,19 @@
-arviz==1.3.0
 beautifulsoup4==4.15.0
-Bio==1.8.4
-chembl_webresource_client==0.10.9
-defusedxml==0.7.1
-# Office document I/O: `import docx` / `import pptx` are used by the vast
-# majority of the report-generation scripts in this repository.
-python-docx>=1.1.0
-python-pptx>=1.0.0
-networkx>=3.0
-pydicom>=2.4.0
-pymoo>=0.6.1
-seaborn>=0.13.0
-simpy>=4.1.0
-statsmodels>=0.14.0
-drugbank_downloader==0.2.1
-ete3==3.1.3
-PyMuPDF==1.26.4
-gymnasium==1.3.0
-h5py==3.16.0
+PyMuPDF
 img2table==2.0.0
-lifelines==0.30.3
-lightning==2.6.6
-litellm==1.101.0
 lxml==6.1.0
-mp_api==0.46.5
-numpy>=2.1.3,<2.3
+markitdown==0.1.7
+numpy==2.5.3
 openpyxl==3.1.5
-pandas==2.2.3
-pdf2image==1.17.0
+pdf-inspector
 pdfplumber==0.11.9
 Pillow==12.3.0
-probeinterface==0.4.0
-psutil==7.2.2
-pubchempy==1.0.5
-pyDOE3==1.6.2
 pypdf==6.19.0
-PyPDF2==3.0.1
 pytesseract==0.3.13
 pytest==9.0.3
-python-dotenv==1.2.3
-pywin32==311; sys_platform == "win32"
-PyYAML==6.0.3
+python-docx==1.2.0
+python-pptx==1.0.2
+pywin32==311
 rapidocr_onnxruntime==1.4.4
-Requests==2.34.2
-scholarly==1.7.11
-scikit_learn==1.9.1
-scipy==1.18.1
-six==1.17.0
-spikeinterface==0.104.9
-stable_baselines3==2.9.0
+scikit-learn==1.9.1
 striprtf==0.0.33
-tdc==0.1
-timesfm==3.0.2
-torch==2.13.0
-tqdm==4.67.3
-zeep==4.3.3
-pdf-inspector==1.20.0
-# --- Project-owned dependencies previously missing ---
-# Core document-to-markdown conversion backend (scripts/convert_to_md.py)
-markitdown>=0.1.0
-# SVG rendering fallback used by scripts/project_self_check.py
-cairosvg>=2.7.0
-# Explicit declaration of transitive dependency (via seaborn); widely used
-matplotlib>=3.8.0
