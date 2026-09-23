@@ -1,6 +1,7 @@
 """Clinical Local RAG Utility (Retrieval-Augmented Generation)."""
 
 from __future__ import annotations
+
 import logging
 from typing import Any
 
@@ -11,7 +12,7 @@ class ClinicalDocumentIndex:
 
     def __init__(self, document_text: str, chunk_size: int = 500, overlap: int = 50):
         self.chunks = self._chunk_text(document_text, chunk_size, overlap)
-        
+
         try:
             from sklearn.feature_extraction.text import TfidfVectorizer
             self.vectorizer = TfidfVectorizer(
@@ -19,7 +20,7 @@ class ClinicalDocumentIndex:
                 ngram_range=(1, 2),
                 max_df=0.95,
             )
-            
+
             if self.chunks:
                 self.tfidf_matrix = self.vectorizer.fit_transform(self.chunks)
                 logger.info(f"Indexed {len(self.chunks)} document chunks.")
@@ -49,8 +50,8 @@ class ClinicalDocumentIndex:
             return []
 
         try:
-            from sklearn.metrics.pairwise import cosine_similarity
             import numpy as np
+            from sklearn.metrics.pairwise import cosine_similarity
         except ImportError:
             return []
 

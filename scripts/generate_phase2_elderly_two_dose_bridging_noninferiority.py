@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Ⅱ期临床试验 老年人群（≥60 岁）两剂次桥接非劣效分析
 研究：YDSWX(TVAX-009)-002 —— 远大赛威信重组乙型肝炎疫苗（汉逊酵母，CpG 和铝佐剂）Ⅱ期基础阶段
@@ -22,21 +21,21 @@
 非劣效界值：-5%，判定 = 率差 95%CI 下限 > -5%
 """
 
+import glob
 import os
 import sys
-import glob
 
 import docx
 from openpyxl import Workbook
-from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 # 复用既有脚本的统计实现（避免重复造轮子）
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from generate_phase2_age_band_immunogenicity_noninferiority import (  # noqa: E402
     clopper_pearson,
-    mn_ci,
     fisher_exact_2x2,
+    mn_ci,
     self_check,
 )
 
@@ -387,9 +386,9 @@ def build_conclusion(results):
              f"PPS {m3m7[0]['diff']:+.2f}%（vs 对照 M7）与 {m3m8[0]['diff']:+.2f}%（vs 对照 M8），"
              f"FAS {m3m7[1]['diff']:+.2f}% 与 {m3m8[1]['diff']:+.2f}%，"
              f"量级均很小，方向与界值 −5% 接近，未见阳转率的实质性下降。")
-    L.append(f"   ③ 未获确证的直接原因是样本量：≥60 岁队列每组仅 75 例（FAS）/ 71~74 例（PPS），"
-             f"率差 95%CI 半宽普遍在 9~13 个百分点，下限难以越过 −5%。"
-             f"这是精度不足，而非观察到差异。")
+    L.append("   ③ 未获确证的直接原因是样本量：≥60 岁队列每组仅 75 例（FAS）/ 71~74 例（PPS），"
+             "率差 95%CI 半宽普遍在 9~13 个百分点，下限难以越过 −5%。"
+             "这是精度不足，而非观察到差异。")
     L.append("")
     L.append("3）依据链：")
     L.append("   ① 试验组 C3 的第 3 剂安排在首剂后 6 个月，故其在 M2、M3 时点实际仅接种 2 剂"

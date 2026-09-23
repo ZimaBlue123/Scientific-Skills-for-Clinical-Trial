@@ -18,6 +18,7 @@ diagnose_encoding_mojibake.py
 from __future__ import annotations
 
 import warnings
+
 warnings.warn(
     "This module is deprecated as of Phase 4 Pipeline refactoring. Please use the new `scripts.pipeline` package instead.",
     DeprecationWarning,

@@ -1,9 +1,11 @@
 """Encoding validation utilities."""
 
 from __future__ import annotations
+
 import logging
 from pathlib import Path
-from ..extract.text_normalizer import fix_mojibake, MOJIBAKE_MARKERS, _is_pua
+
+from ..extract.text_normalizer import MOJIBAKE_MARKERS, _is_pua
 
 logger = logging.getLogger(__name__)
 
@@ -18,25 +20,25 @@ def diagnose_encoding(path: Path | str) -> dict:
         raw = open(path, "rb").read()
     except OSError:
         return {"status": "error", "message": "Cannot read file"}
-        
+
     if b"\\x00" in raw[:4096]:
         return {"status": "binary"}
-        
+
     try:
         text = raw.decode("utf-8")
     except UnicodeDecodeError:
         return {"status": "not-utf8"}
-        
+
     pua = sum(1 for c in text if _is_pua(c))
     markers = sum(1 for c in text if c in MOJIBAKE_MARKERS)
-    
+
     if pua > 0 or markers >= 5:
         return {
             "status": "mojibake",
             "pua_count": pua,
             "marker_count": markers
         }
-        
+
     return {"status": "ok"}
 
 __all__ = ["check_bom", "diagnose_encoding"]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 自检脚本：Ⅱ期 老年≥60岁 两剂次桥接非劣效分析 交付文件复核
 独立于生成脚本，重新走一遍数据源与算法，逐项比对待交付 Excel。
@@ -12,8 +11,8 @@
   F. 说明页文本完整性（各节标题齐全、无占位符）
 """
 
-import os
 import glob
+import os
 import re
 
 import docx

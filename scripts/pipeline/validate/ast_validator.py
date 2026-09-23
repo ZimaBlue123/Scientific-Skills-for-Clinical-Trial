@@ -1,6 +1,7 @@
 """AST validation utilities for checking robustness smells."""
 
 from __future__ import annotations
+
 import ast
 import logging
 from pathlib import Path
@@ -21,9 +22,9 @@ def check_robustness_smells(source_path: Path | str) -> list[dict[str, object]]:
         tree = ast.parse(source, filename=str(path))
     except Exception as e:
         return [{"line": 0, "kind": "error", "detail": str(e)}]
-        
+
     findings = []
-    
+
     for node in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler):
             if node.type is None:
@@ -50,7 +51,7 @@ def check_robustness_smells(source_path: Path | str) -> list[dict[str, object]]:
                         "kind": "mutable-default",
                         "detail": "mutable default argument used"
                     })
-                    
+
     return findings
 
 __all__ = ["check_robustness_smells"]

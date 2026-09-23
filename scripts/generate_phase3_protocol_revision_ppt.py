@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 生成《TVAX-009 Ⅲ期临床方案修订要点（CDE 沟通会前后）》汇报 PPT · V2。
 

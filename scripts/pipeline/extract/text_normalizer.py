@@ -1,9 +1,9 @@
 """Text normalization and encoding diagnostics."""
 
 from __future__ import annotations
+
 import logging
 import re
-from collections import Counter
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ def fix_mojibake(text: str) -> str:
     """
     pua_count = sum(1 for c in text if _is_pua(c))
     marker_count = sum(1 for c in text if c in MOJIBAKE_MARKERS)
-    
+
     if pua_count > 0 or marker_count > 5:
         logger.warning(f"Mojibake detected! PUA: {pua_count}, Markers: {marker_count}")
         try:
@@ -51,7 +51,7 @@ def fix_mojibake(text: str) -> str:
             pass
         except Exception:
             pass
-            
+
     return text
 
 def normalize_whitespace(text: str) -> str:

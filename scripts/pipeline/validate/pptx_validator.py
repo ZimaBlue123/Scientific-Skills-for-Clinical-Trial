@@ -1,6 +1,7 @@
 """PPTX validation utilities."""
 
 from __future__ import annotations
+
 import logging
 from pathlib import Path
 
@@ -21,18 +22,18 @@ def check_overflow(slide) -> bool:
 def find_overflow_slides(pptx_path: Path | str) -> list[int]:
     """Find all slide indices that contain text overflow."""
     from pptx import Presentation
-    
+
     path = Path(pptx_path)
     if not path.exists():
         return []
-        
+
     prs = Presentation(str(path))
     overflows = []
-    
+
     for i, slide in enumerate(prs.slides, start=1):
         if check_overflow(slide):
             overflows.append(i)
-            
+
     return overflows
 
 __all__ = ["check_overflow", "find_overflow_slides"]

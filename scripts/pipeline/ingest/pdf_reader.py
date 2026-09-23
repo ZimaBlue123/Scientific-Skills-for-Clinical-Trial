@@ -1,6 +1,7 @@
 """PDF extraction module."""
 
 from __future__ import annotations
+
 import logging
 from pathlib import Path
 
@@ -9,13 +10,13 @@ logger = logging.getLogger(__name__)
 def extract_pdf_text(pdf_path: Path | str, max_pages: int | None = None) -> str:
     """Extract text from a PDF file."""
     from pypdf import PdfReader
-    
+
     path = Path(pdf_path)
     reader = PdfReader(str(path))
     chunks: list[str] = []
     total = len(reader.pages)
     limit = total if max_pages is None else min(total, max_pages)
-    
+
     for idx in range(limit):
         page = reader.pages[idx]
         try:

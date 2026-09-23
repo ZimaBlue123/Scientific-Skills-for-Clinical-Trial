@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 二期临床试验免疫原性（抗-HBs 阳转率）年龄层可比性非劣效分析
 研究：YDSWX(TVAX-009)-002 —— 远大赛威信重组乙型肝炎疫苗（汉逊酵母，CpG 和铝佐剂）II 期基础阶段
@@ -16,14 +15,14 @@
 试验组仅保留高剂量：01 程序 = A2（0,1 月高剂量）；02 程序 = B2（0,2 月高剂量）
 """
 
-import math
 import glob
+import math
 import os
-from math import comb, lgamma, log, sqrt, erf
+from math import comb, erf, lgamma, log, sqrt
 
 import docx
 from openpyxl import Workbook
-from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 # ----------------------------------------------------------------------------

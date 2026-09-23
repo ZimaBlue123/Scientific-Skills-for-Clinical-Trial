@@ -30,17 +30,17 @@ from __future__ import annotations
 
 import copy
 import logging
+import sys
 from datetime import datetime, timezone
 from itertools import count
 from pathlib import Path
-import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from docx import Document  # noqa: E402
-from docx.oxml.ns import qn  # noqa: E402
 from docx.oxml import OxmlElement  # noqa: E402
+from docx.oxml.ns import qn  # noqa: E402
 
 LOG_FORMAT = "%(asctime)s [%(levelname)s] track_changes: %(message)s"
 logger = logging.getLogger("track_changes")

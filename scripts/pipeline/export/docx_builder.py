@@ -1,6 +1,7 @@
 """DOCX export utilities."""
 
 from __future__ import annotations
+
 import logging
 from collections.abc import Iterable
 from pathlib import Path
@@ -21,14 +22,14 @@ _TARGET_STYLES = (
 def apply_cn_en_fonts(doc, styles: Iterable[str] | None = None) -> int:
     """Enforce document-wide fonts: Times New Roman for English, 宋体 for Chinese."""
     from docx.oxml.ns import qn
-    
+
     target_styles = list(styles) if styles is not None else _TARGET_STYLES
     updated = 0
-    
+
     styles_dict = getattr(doc, "styles", None)
     if styles_dict is None:
         return 0
-        
+
     for style_name in target_styles:
         if style_name not in styles_dict:
             continue
@@ -46,16 +47,16 @@ def apply_cn_en_fonts(doc, styles: Iterable[str] | None = None) -> int:
             updated += 1
         except (KeyError, ValueError):
             pass
-            
+
     return updated
 
 def create_clinical_docx(output_path: Path | str, content: str) -> None:
     """Create a basic clinical DOCX report with standard fonts."""
     from docx import Document
-    
+
     doc = Document()
     apply_cn_en_fonts(doc)
-    
+
     for line in content.split("\\n"):
         if line.startswith("# "):
             doc.add_heading(line[2:], level=1)
@@ -63,7 +64,7 @@ def create_clinical_docx(output_path: Path | str, content: str) -> None:
             doc.add_heading(line[3:], level=2)
         else:
             doc.add_paragraph(line)
-            
+
     out = Path(output_path)
     out.parent.mkdir(parents=True, exist_ok=True)
     doc.save(str(out))

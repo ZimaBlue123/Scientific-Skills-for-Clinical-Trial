@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 提取两份乙肝疫苗 III 期方案文本（含修订痕迹）与参考 PPT 文本，供设计层面差异比对使用。
 
@@ -8,13 +7,12 @@
 - 参考 PPT: 按页输出文字（含表格与备注）
 输出目录: reports/protocol_diff/
 """
-import os
-import sys
 import argparse
+import os
+
 from docx import Document
 from docx.oxml.ns import qn
 from pptx import Presentation
-from pptx.util import Emu
 
 BASE = r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial"
 OUT = os.path.join(BASE, "reports", "protocol_diff")
