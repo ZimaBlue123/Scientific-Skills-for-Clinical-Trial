@@ -579,28 +579,28 @@ baposter (Box Area Poster) uses a box-based layout system with automatic positio
 ## Package Selection Guide
 
 ### Choose beamerposter if:
-- âœ… You're already familiar with Beamer
-- âœ… You need to match institutional Beamer themes
-- âœ… You prefer traditional academic aesthetics
-- âœ… You want extensive theme options
-- âœ… You need fast compilation times
-- âœ… You're creating posters for conservative academic conferences
+- âœ?You're already familiar with Beamer
+- âœ?You need to match institutional Beamer themes
+- âœ?You prefer traditional academic aesthetics
+- âœ?You want extensive theme options
+- âœ?You need fast compilation times
+- âœ?You're creating posters for conservative academic conferences
 
 ### Choose tikzposter if:
-- âœ… You want modern, colorful designs
-- âœ… You plan to create custom graphics with TikZ
-- âœ… You value aesthetic flexibility
-- âœ… You want built-in professional themes
-- âœ… You don't mind slightly longer compilation
-- âœ… You're presenting at design-conscious or public-facing events
+- âœ?You want modern, colorful designs
+- âœ?You plan to create custom graphics with TikZ
+- âœ?You value aesthetic flexibility
+- âœ?You want built-in professional themes
+- âœ?You don't mind slightly longer compilation
+- âœ?You're presenting at design-conscious or public-facing events
 
 ### Choose baposter if:
-- âœ… You need structured multi-column layouts
-- âœ… You want automatic box positioning
-- âœ… You prefer clean, professional defaults
-- âœ… You need precise control over box relationships
-- âœ… You're creating posters with many sections
-- âœ… You value consistent spacing and alignment
+- âœ?You need structured multi-column layouts
+- âœ?You want automatic box positioning
+- âœ?You prefer clean, professional defaults
+- âœ?You need precise control over box relationships
+- âœ?You're creating posters with many sections
+- âœ?You value consistent spacing and alignment
 
 ## Conversion Between Packages
 

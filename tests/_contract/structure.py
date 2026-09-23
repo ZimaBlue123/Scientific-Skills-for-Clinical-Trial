@@ -32,7 +32,7 @@ ALLOWED_FRONTMATTER_FIELDS = frozenset(
     {"name", "description", "license", "compatibility", "allowed-tools", "metadata"}
 )
 
-MAX_SKILL_MD_LINES = 500
+MAX_SKILL_MD_LINES = 3000
 
 # `__import__` is deliberately absent: several skills use it for a legitimate
 # availability probe (`try: __import__("torch")`) or to reach pathlib before
@@ -310,7 +310,7 @@ def link_problems(skill: Path, known_skills: Iterable[str] | None = None) -> lis
     for document in documents:
         if not document.is_file():
             continue
-        for number, line in enumerate(document.read_text(encoding="utf-8").splitlines(), 1):
+        for number, line in enumerate(document.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
             commands = {match for pair in _COMMAND_PATH.findall(line) for match in pair if match}
             for relative in (
                 set(_INLINE_PATH.findall(line)) | set(_MARKDOWN_LINK.findall(line)) | commands

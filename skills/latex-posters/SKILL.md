@@ -1215,7 +1215,7 @@ grep -i "warning\|error\|overfull\|underfull" poster.log
 - [ ] QR codes tested and functional
 - [ ] Alternative formats prepared (PNG for social media)
 
-**Review Script** (Available in `scripts/review_poster.sh`):
+**Review Script** (Available in `review_poster script`):
 ```bash
 #!/bin/bash
 # Automated poster PDF review script

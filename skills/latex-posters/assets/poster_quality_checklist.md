@@ -51,7 +51,7 @@ Run in terminal: `grep -i "warning\|overfull\|underfull" poster.log`
 
 ### Automated Checks
 
-Run: `./scripts/review_poster.sh poster.pdf` or manually verify:
+Run: `./review_poster script poster.pdf` or manually verify:
 
 #### Page Specifications
 ```bash

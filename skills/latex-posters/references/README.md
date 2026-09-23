@@ -60,7 +60,7 @@ xelatex poster.tex
 
 ```bash
 # Run automated checks
-./scripts/review_poster.sh poster.pdf
+./review_poster script poster.pdf
 
 # Manual verification (see checklist below)
 ```
@@ -353,7 +353,7 @@ vim my_poster.tex
 pdflatex my_poster.tex
 
 # 4. Review
-./scripts/review_poster.sh my_poster.pdf
+./review_poster script my_poster.pdf
 
 # 5. Test print at 25% scale
 # (A0 on A4 paper)
@@ -406,7 +406,7 @@ pdflatex my_poster.tex
 For issues or questions:
 - Review reference documentation in `references/`
 - Check troubleshooting section above
-- Run automated review: `./scripts/review_poster.sh`
+- Run automated review: `./review_poster script`
 - Use quality checklist: `assets/poster_quality_checklist.md`
 
 ## Version

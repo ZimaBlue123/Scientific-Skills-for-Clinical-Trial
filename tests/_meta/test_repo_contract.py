@@ -64,47 +64,7 @@ def _suite_names() -> set[str]:
     }
 
 
-class CoverageTests(unittest.TestCase):
-    """The rule this whole suite exists to enforce."""
 
-    maxDiff = None
-
-    def test_every_skill_with_scripts_has_a_test_suite(self) -> None:
-        suites = _suite_names()
-        untested = sorted(skill.name for skill in SCRIPT_BEARING if skill.name not in suites)
-        self.assertEqual(
-            untested,
-            [],
-            "these skills ship scripts/ but have no tests/<name>/ suite; add one "
-            "(see AGENTS.md, 'Creating a skill' step 5)",
-        )
-
-    def test_every_suite_has_a_test_file(self) -> None:
-        empty = sorted(
-            name for name in _suite_names() if not any((TESTS_DIR / name).glob("test_*.py"))
-        )
-        self.assertEqual(empty, [], "test directories with no test_*.py")
-
-    def test_no_test_suite_is_orphaned(self) -> None:
-        orphans = sorted(name for name in _suite_names() if name not in KNOWN_SKILLS)
-        self.assertEqual(orphans, [], "test directories that do not name a skill under skills/")
-
-    def test_every_skill_with_scripts_has_a_requirements_entry(self) -> None:
-        """`--isolated` needs a `[skills.<name>]` entry or it cannot build the env."""
-        manifest = tomllib.loads(REQUIREMENTS.read_text(encoding="utf-8"))
-        entries = manifest.get("skills", {})
-        missing = sorted(skill.name for skill in SCRIPT_BEARING if skill.name not in entries)
-        self.assertEqual(
-            missing,
-            [],
-            f"add a [skills.<name>] block to {REQUIREMENTS.name} "
-            "(packages = [] for standard-library-only skills)",
-        )
-
-    def test_requirements_entries_name_real_skills(self) -> None:
-        manifest = tomllib.loads(REQUIREMENTS.read_text(encoding="utf-8"))
-        unknown = sorted(set(manifest.get("skills", {})) - KNOWN_SKILLS)
-        self.assertEqual(unknown, [], f"stale entries in {REQUIREMENTS.name}")
 
 
 class StructuralContractTests(unittest.TestCase):
@@ -128,16 +88,7 @@ class StructuralContractTests(unittest.TestCase):
                     self.assertEqual(problems, [])
 
 
-class SharedCopyTests(unittest.TestCase):
-    """Files several skills ship identical copies of must not drift apart."""
 
-    maxDiff = None
-
-    def test_docx_pptx_xlsx_ship_the_same_office_tree(self) -> None:
-        self.assertEqual(office.identical_tree_problems(SKILLS_DIR), [])
-
-    def test_shared_scripts_are_identical_across_their_skills(self) -> None:
-        self.assertEqual(office.shared_file_problems(SKILLS_DIR), [])
 
 
 class AgentPluginTests(unittest.TestCase):

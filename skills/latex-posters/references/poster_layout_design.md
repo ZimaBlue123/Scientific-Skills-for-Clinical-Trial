@@ -274,13 +274,9 @@ Effective poster layout organizes content for maximum impact and comprehension. 
 Viewers' eyes naturally follow a Z-shape on landscape layouts:
 
 ```
-START â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ TOP RIGHT
-  â†“                                    â†“
-  â†“                                    â†“
-MIDDLE LEFT â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ MIDDLE RIGHT
-  â†“                                    â†“
-  â†“                                    â†“
-BOTTOM LEFT â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ END
+START â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?TOP RIGHT
+  â†?                                   â†?  â†?                                   â†?MIDDLE LEFT â†?â†?â†?â†?â†?â†?â†?â†?â†?MIDDLE RIGHT
+  â†?                                   â†?  â†?                                   â†?BOTTOM LEFT â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?END
 ```
 
 **Design Strategy**:
@@ -299,20 +295,10 @@ BOTTOM LEFT â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ END
 Portrait posters follow F-shaped eye movement:
 
 ```
-TITLE â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’
-  â†“
-INTRO â†’ â†’ â†’ â†’
-  â†“
-METHODS
-  â†“
-RESULTS â†’ â†’ â†’
-  â†“
-RESULTS (cont.)
-  â†“
-DISCUSSION
-  â†“
-CONCLUSIONS â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’ â†’
-```
+TITLE â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?â†?  â†?INTRO â†?â†?â†?â†?  â†?METHODS
+  â†?RESULTS â†?â†?â†?  â†?RESULTS (cont.)
+  â†?DISCUSSION
+  â†?CONCLUSIONS â†?â†?â†?â†?â†?â†?â†?â†?â†?```
 
 **Design Strategy**:
 1. Place engaging content at top-left
@@ -328,11 +314,11 @@ Classic newspaper layout principle:
 +------------------+------------------+
 | PRIMARY AREA     | STRONG FALLOW    |
 | (most attention) | (moderate attn)  |
-|   â†“              |        â†“         |
+|   â†?             |        â†?        |
 +------------------+------------------+
 | WEAK FALLOW      | TERMINAL AREA    |
 | (least attention)| (final resting)  |
-|                  |        â†‘         |
+|                  |        â†?        |
 +------------------+------------------+
 ```
 
@@ -348,10 +334,10 @@ Guide viewers explicitly through content:
 
 **Numerical Ordering**:
 ```latex
-\block{â¶ Introduction}{...}
-\block{â· Methods}{...}
-\block{â¸ Results}{...}
-\block{â¹ Conclusions}{...}
+\block{â?Introduction}{...}
+\block{â?Methods}{...}
+\block{â?Results}{...}
+\block{â?Conclusions}{...}
 ```
 
 **Arrows and Lines**:
@@ -440,12 +426,9 @@ Guide viewers explicitly through content:
 **1. Top-to-Bottom Flow**:
 ```
 Introduction/Background
-        â†“
-Methods/Approach
-        â†“
-Results (Multiple panels)
-        â†“
-Discussion/Conclusions
+        â†?Methods/Approach
+        â†?Results (Multiple panels)
+        â†?Discussion/Conclusions
 ```
 
 **2. Left-to-Right, Top-to-Bottom**:
@@ -563,16 +546,16 @@ Discussion/Conclusions
 ### Visual Breathing Room
 
 **Avoid**:
-- âŒ Elements touching edges
-- âŒ Text blocks directly adjacent
-- âŒ Figures without surrounding space
-- âŒ Cramped, claustrophobic feel
+- â?Elements touching edges
+- â?Text blocks directly adjacent
+- â?Figures without surrounding space
+- â?Cramped, claustrophobic feel
 
 **Implement**:
-- âœ… Clear separation between sections
-- âœ… Space around focal points
-- âœ… Generous padding inside boxes
-- âœ… Balanced distribution of content
+- âœ?Clear separation between sections
+- âœ?Space around focal points
+- âœ?Generous padding inside boxes
+- âœ?Balanced distribution of content
 
 ## Block and Box Design
 
@@ -644,7 +627,7 @@ Discussion/Conclusions
 ```
 [Intro Text]
 [Related Figure]
-    â†“ grouped
+    â†?grouped
 [Methods Text]
 [Methods Diagram]
 ```
@@ -862,29 +845,29 @@ Discussion/Conclusions
 ## Common Layout Mistakes
 
 **1. Unbalanced Visual Weight**
-- âŒ All content on left, empty right side
-- âŒ Large figure dominating, tiny text elsewhere
-- âœ… Distribute content evenly across poster
+- â?All content on left, empty right side
+- â?Large figure dominating, tiny text elsewhere
+- âœ?Distribute content evenly across poster
 
 **2. Inconsistent Spacing**
-- âŒ Random gaps between blocks
-- âŒ Elements touching in some places, spaced in others
-- âœ… Use consistent spacing values throughout
+- â?Random gaps between blocks
+- â?Elements touching in some places, spaced in others
+- âœ?Use consistent spacing values throughout
 
 **3. Poor Column Width**
-- âŒ Extremely narrow columns (hard to read)
-- âŒ Very wide columns (eye tracking difficult)
-- âœ… Optimal: 40-80 characters per line
+- â?Extremely narrow columns (hard to read)
+- â?Very wide columns (eye tracking difficult)
+- âœ?Optimal: 40-80 characters per line
 
 **4. Ignoring Grid**
-- âŒ Random placement of elements
-- âŒ Misaligned blocks
-- âœ… Align to invisible grid, consistent positioning
+- â?Random placement of elements
+- â?Misaligned blocks
+- âœ?Align to invisible grid, consistent positioning
 
 **5. Overcrowding**
-- âŒ No white space, cramped feel
-- âŒ Trying to fit too much content
-- âœ… Generous margins, clear separation
+- â?No white space, cramped feel
+- â?Trying to fit too much content
+- âœ?Generous margins, clear separation
 
 ## Conclusion
 

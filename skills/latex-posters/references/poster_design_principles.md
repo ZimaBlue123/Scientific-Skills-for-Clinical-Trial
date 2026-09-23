@@ -105,32 +105,20 @@ Design for natural eye movement and logical content progression.
 
 **Z-Pattern (Landscape posters)**:
 ```
-Start ‚Üí ‚Üí ‚Üí Top Right
-  ‚Üì
-Middle Left ‚Üí ‚Üí Middle
-  ‚Üì
-Bottom Left ‚Üí ‚Üí ‚Üí End
+Start ‚Ü?‚Ü?‚Ü?Top Right
+  ‚Ü?Middle Left ‚Ü?‚Ü?Middle
+  ‚Ü?Bottom Left ‚Ü?‚Ü?‚Ü?End
 ```
 
 **F-Pattern (Portrait posters)**:
 ```
-Title ‚Üí ‚Üí ‚Üí ‚Üí
-‚Üì
-Section 1 ‚Üí ‚Üí
-‚Üì
-Section 2 ‚Üí ‚Üí
-‚Üì
-Section 3 ‚Üí ‚Üí
-‚Üì
-Conclusion ‚Üí ‚Üí
-```
+Title ‚Ü?‚Ü?‚Ü?‚Ü?‚Ü?Section 1 ‚Ü?‚Ü?‚Ü?Section 2 ‚Ü?‚Ü?‚Ü?Section 3 ‚Ü?‚Ü?‚Ü?Conclusion ‚Ü?‚Ü?```
 
 **Gutenberg Diagram**:
 ```
 Primary Area     Strong Fallow
 (top-left)       (top-right)
-        ‚Üì              ‚Üì
-Weak Fallow      Terminal Area
+        ‚Ü?             ‚Ü?Weak Fallow      Terminal Area
 (bottom-left)    (bottom-right)
 ```
 
@@ -161,9 +149,9 @@ Weak Fallow      Terminal Area
 - **Georgia**: Designed for screens, readable
 
 **Avoid**:
-- ‚ùå Comic Sans (unprofessional)
-- ‚ùå Decorative or script fonts (illegible from distance)
-- ‚ùå Mixing more than 2-3 font families
+- ‚ù?Comic Sans (unprofessional)
+- ‚ù?Decorative or script fonts (illegible from distance)
+- ‚ù?Mixing more than 2-3 font families
 
 **LaTeX Implementation**:
 ```latex
@@ -211,18 +199,18 @@ Weak Fallow      Terminal Area
 ### Text Formatting Best Practices
 
 **Use**:
-- ‚úÖ **Bold** for emphasis and headers
-- ‚úÖ Short paragraphs (3-5 lines maximum)
-- ‚úÖ Bullet points for lists
-- ‚úÖ Adequate line spacing (1.2-1.5)
-- ‚úÖ High contrast (dark text on light background)
+- ‚ú?**Bold** for emphasis and headers
+- ‚ú?Short paragraphs (3-5 lines maximum)
+- ‚ú?Bullet points for lists
+- ‚ú?Adequate line spacing (1.2-1.5)
+- ‚ú?High contrast (dark text on light background)
 
 **Avoid**:
-- ‚ùå Italics from distance (hard to read)
-- ‚ùå ALL CAPS FOR LONG TEXT (SLOW TO READ)
-- ‚ùå Underlines (old-fashioned, interferes with descenders)
-- ‚ùå Long paragraphs (> 6 lines)
-- ‚ùå Light text on light backgrounds
+- ‚ù?Italics from distance (hard to read)
+- ‚ù?ALL CAPS FOR LONG TEXT (SLOW TO READ)
+- ‚ù?Underlines (old-fashioned, interferes with descenders)
+- ‚ù?Long paragraphs (> 6 lines)
+- ‚ù?Light text on light backgrounds
 
 **Line Spacing**:
 ```latex
@@ -318,11 +306,11 @@ Ensure readability with sufficient contrast:
 - Black on light cyan
 
 **Poor Contrast (Avoid)**:
-- ‚ùå Red on green (color-blind issue)
-- ‚ùå Yellow on white
-- ‚ùå Light gray on white
-- ‚ùå Blue on black (hard to read)
-- ‚ùå Any pure colors on each other
+- ‚ù?Red on green (color-blind issue)
+- ‚ù?Yellow on white
+- ‚ù?Light gray on white
+- ‚ù?Blue on black (hard to read)
+- ‚ù?Any pure colors on each other
 
 **Contrast Ratio Standards**:
 - Minimum: 4.5:1 (WCAG AA)
@@ -351,10 +339,10 @@ Ensure readability with sufficient contrast:
 - Purple + Green (use with caution)
 
 **Avoid**:
-- ‚ùå Red + Green (indistinguishable to most common color blindness)
-- ‚ùå Green + Brown
-- ‚ùå Blue + Purple (can be problematic)
-- ‚ùå Light green + Yellow
+- ‚ù?Red + Green (indistinguishable to most common color blindness)
+- ‚ù?Green + Brown
+- ‚ù?Blue + Purple (can be problematic)
+- ‚ù?Light green + Yellow
 
 **Recommended Palettes**:
 
@@ -470,14 +458,13 @@ Divide poster into 3√ó3 grid; place key elements at intersections:
 
 ```
 +-----+-----+-----+
-|  √ó  |     |  √ó  |  ‚Üê Top third (title, logos)
+|  √ó  |     |  √ó  |  ‚Ü?Top third (title, logos)
 +-----+-----+-----+
-|     |  √ó  |     |  ‚Üê Middle third (main content)
+|     |  √ó  |     |  ‚Ü?Middle third (main content)
 +-----+-----+-----+
-|  √ó  |     |  √ó  |  ‚Üê Bottom third (conclusions)
+|  √ó  |     |  √ó  |  ‚Ü?Bottom third (conclusions)
 +-----+-----+-----+
-  ‚Üë           ‚Üë
-Left        Right
+  ‚Ü?          ‚Ü?Left        Right
 ```
 
 **Power Points** (intersections):
@@ -617,10 +604,10 @@ Strategic use of icons enhances comprehension:
 - Avoid patterns that create visual noise
 
 **Avoid**:
-- ‚ùå Busy backgrounds
-- ‚ùå Images behind text
-- ‚ùå High contrast backgrounds
-- ‚ùå Repeating patterns that cause visual artifacts
+- ‚ù?Busy backgrounds
+- ‚ù?Images behind text
+- ‚ù?High contrast backgrounds
+- ‚ù?Repeating patterns that cause visual artifacts
 
 ```latex
 % Gradient background in tikzposter
@@ -646,61 +633,61 @@ Strategic use of icons enhances comprehension:
 ### Critical Errors
 
 **1. Too Much Text** (Most common mistake)
-- ‚ùå More than 1000 words
-- ‚ùå Long paragraphs (>5 lines)
-- ‚ùå Small font sizes to fit more content
-- ‚úÖ Solution: Cut ruthlessly, use bullet points, focus on key messages
+- ‚ù?More than 1000 words
+- ‚ù?Long paragraphs (>5 lines)
+- ‚ù?Small font sizes to fit more content
+- ‚ú?Solution: Cut ruthlessly, use bullet points, focus on key messages
 
 **2. Poor Contrast**
-- ‚ùå Light text on light background
-- ‚ùå Colored text on colored background
-- ‚úÖ Solution: Dark on light or light on dark, test contrast ratio
+- ‚ù?Light text on light background
+- ‚ù?Colored text on colored background
+- ‚ú?Solution: Dark on light or light on dark, test contrast ratio
 
 **3. Font Size Too Small**
-- ‚ùå Body text under 24pt
-- ‚ùå Trying to fit full paper content
-- ‚úÖ Solution: 30pt+ body text, prioritize key findings
+- ‚ù?Body text under 24pt
+- ‚ù?Trying to fit full paper content
+- ‚ú?Solution: 30pt+ body text, prioritize key findings
 
 **4. Cluttered Layout**
-- ‚ùå No white space
-- ‚ùå Elements touching edges
-- ‚ùå Random placement
-- ‚úÖ Solution: Generous margins, grid alignment, intentional white space
+- ‚ù?No white space
+- ‚ù?Elements touching edges
+- ‚ù?Random placement
+- ‚ú?Solution: Generous margins, grid alignment, intentional white space
 
 **5. Inconsistent Styling**
-- ‚ùå Multiple font families
-- ‚ùå Varying header styles
-- ‚ùå Misaligned elements
-- ‚úÖ Solution: Define style guide, use templates, align to grid
+- ‚ù?Multiple font families
+- ‚ù?Varying header styles
+- ‚ù?Misaligned elements
+- ‚ú?Solution: Define style guide, use templates, align to grid
 
 ### Moderate Issues
 
 **6. Poor Figure Quality**
-- ‚ùå Pixelated images (<300 DPI)
-- ‚ùå Tiny axis labels
-- ‚ùå Unreadable legends
-- ‚úÖ Solution: Vector graphics (PDF/SVG), large labels, clear legends
+- ‚ù?Pixelated images (<300 DPI)
+- ‚ù?Tiny axis labels
+- ‚ù?Unreadable legends
+- ‚ú?Solution: Vector graphics (PDF/SVG), large labels, clear legends
 
 **7. Color Overload**
-- ‚ùå Too many colors (>5 distinct hues)
-- ‚ùå Neon or overly saturated colors
-- ‚úÖ Solution: Limit to 2-3 main colors, use tints/shades for variation
+- ‚ù?Too many colors (>5 distinct hues)
+- ‚ù?Neon or overly saturated colors
+- ‚ú?Solution: Limit to 2-3 main colors, use tints/shades for variation
 
 **8. Ignoring Visual Hierarchy**
-- ‚ùå All text same size
-- ‚ùå No clear entry point
-- ‚úÖ Solution: Vary sizes significantly, clear title, visual flow
+- ‚ù?All text same size
+- ‚ù?No clear entry point
+- ‚ú?Solution: Vary sizes significantly, clear title, visual flow
 
 **9. Information Overload**
-- ‚ùå Trying to show everything
-- ‚ùå Too many figures
-- ‚úÖ Solution: Show 3-5 key results, link to full paper via QR code
+- ‚ù?Trying to show everything
+- ‚ù?Too many figures
+- ‚ú?Solution: Show 3-5 key results, link to full paper via QR code
 
 **10. Poor Typography**
-- ‚ùå Justified text (uneven spacing)
-- ‚ùå All caps body text
-- ‚ùå Mixing serif and sans-serif randomly
-- ‚úÖ Solution: Left-align body, sentence case, consistent fonts
+- ‚ù?Justified text (uneven spacing)
+- ‚ù?All caps body text
+- ‚ù?Mixing serif and sans-serif randomly
+- ‚ú?Solution: Left-align body, sentence case, consistent fonts
 
 ## Design Checklist
 
@@ -725,7 +712,7 @@ Strategic use of icons enhances comprehension:
 
 ### Content Review
 
-- [ ] Clear narrative arc (problem ‚Üí approach ‚Üí findings ‚Üí impact)
+- [ ] Clear narrative arc (problem ‚Ü?approach ‚Ü?findings ‚Ü?impact)
 - [ ] 1-3 main messages clearly communicated
 - [ ] Methods concise but reproducible
 - [ ] Results visually presented (not just text)

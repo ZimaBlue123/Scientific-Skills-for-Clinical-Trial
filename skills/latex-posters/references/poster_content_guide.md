@@ -20,16 +20,16 @@ Content is king in research posters. This guide covers writing strategies, secti
 
 ### 2. Tell a Story, Not a Paper
 
-**Poster ‚â† Condensed Paper**
+**Poster ‚â?Condensed Paper**
 
-**Paper approach** (‚ùå):
+**Paper approach** (‚ù?:
 - Comprehensive literature review
 - Detailed methodology
 - All results presented
 - Lengthy discussion
 - 50+ references
 
-**Poster approach** (‚úÖ):
+**Poster approach** (‚ú?:
 - One sentence background
 - Visual methods diagram
 - 3-5 key results
@@ -38,7 +38,7 @@ Content is king in research posters. This guide covers writing strategies, secti
 
 **Story Arc for Posters**:
 ```
-Hook (Problem) ‚Üí Approach ‚Üí Discovery ‚Üí Impact
+Hook (Problem) ‚Ü?Approach ‚Ü?Discovery ‚Ü?Impact
 ```
 
 **Example**:
@@ -81,13 +81,13 @@ Hook (Problem) ‚Üí Approach ‚Üí Discovery ‚Üí Impact
 - Icons and symbols
 - Color blocks and design elements
 
-**Too Text-Heavy** (‚ùå):
+**Too Text-Heavy** (‚ù?:
 - Wall of text
 - Small figures
 - Intimidating to viewers
 - Low engagement
 
-**Well-Balanced** (‚úÖ):
+**Well-Balanced** (‚ú?:
 - Clear figures dominate
 - Text supports visuals
 - Easy to scan
@@ -137,10 +137,10 @@ Example: "Urban Heat Islands: A Machine Learning Framework for Mitigation"
 ```
 
 **Avoid**:
-- ‚ùå Generic titles: "A Study of X"
-- ‚ùå Overly cute or clever wordplay (confuses message)
-- ‚ùå Excessive jargon: "Utilization of CRISPR-Cas9..."
-- ‚ùå Unnecessarily long: "Investigation of the potential role of..."
+- ‚ù?Generic titles: "A Study of X"
+- ‚ù?Overly cute or clever wordplay (confuses message)
+- ‚ù?Excessive jargon: "Utilization of CRISPR-Cas9..."
+- ‚ù?Unnecessarily long: "Investigation of the potential role of..."
 
 **LaTeX Title Formatting**:
 ```latex
@@ -207,10 +207,10 @@ improve cross-species accuracy.
 - Image of application context
 
 **Common Mistakes**:
-- ‚ùå Extensive literature review
-- ‚ùå Too much background detail
-- ‚ùå Undefined acronyms at first use
-- ‚ùå Missing clear objective statement
+- ‚ù?Extensive literature review
+- ‚ù?Too much background detail
+- ‚ù?Undefined acronyms at first use
+- ‚ù?Missing clear objective statement
 
 ### Methods
 
@@ -243,21 +243,21 @@ improve cross-species accuracy.
 **For Experimental Studies**:
 ```
 Methods
-‚Ä¢ Study design: Randomized controlled trial (n=200)
-‚Ä¢ Participants: Adults aged 18-65 with Type 2 diabetes
-‚Ä¢ Intervention: 12-week exercise program vs. standard care
-‚Ä¢ Outcomes: HbA1c (primary), insulin sensitivity (secondary)
-‚Ä¢ Analysis: Linear mixed models, intention-to-treat
+‚Ä?Study design: Randomized controlled trial (n=200)
+‚Ä?Participants: Adults aged 18-65 with Type 2 diabetes
+‚Ä?Intervention: 12-week exercise program vs. standard care
+‚Ä?Outcomes: HbA1c (primary), insulin sensitivity (secondary)
+‚Ä?Analysis: Linear mixed models, intention-to-treat
 ```
 
 **For Computational Studies**:
 ```
 Methods
-‚Ä¢ Dataset: 10,000 labeled images from ImageNet
-‚Ä¢ Architecture: ResNet-50 with custom attention mechanism
-‚Ä¢ Training: 100 epochs, Adam optimizer, learning rate 0.001
-‚Ä¢ Validation: 5-fold cross-validation
-‚Ä¢ Comparison: Baseline CNN, VGG-16, Inception-v3
+‚Ä?Dataset: 10,000 labeled images from ImageNet
+‚Ä?Architecture: ResNet-50 with custom attention mechanism
+‚Ä?Training: 100 epochs, Adam optimizer, learning rate 0.001
+‚Ä?Validation: 5-fold cross-validation
+‚Ä?Comparison: Baseline CNN, VGG-16, Inception-v3
 ```
 
 **Format Options**:
@@ -309,10 +309,10 @@ Mean¬±SD shown for control (blue, n=45) and treatment (orange, n=47) groups.
 **Example Results Text**:
 ```
 Key Findings
-‚Ä¢ Model achieved 87% accuracy on test set (vs. 73% baseline)
-‚Ä¢ Performance consistent across 5 bacterial species (p<0.001)
-‚Ä¢ Prediction speed: <30 seconds per isolate
-‚Ä¢ Feature importance: protein structure (42%), sequence (35%), 
+‚Ä?Model achieved 87% accuracy on test set (vs. 73% baseline)
+‚Ä?Performance consistent across 5 bacterial species (p<0.001)
+‚Ä?Prediction speed: <30 seconds per isolate
+‚Ä?Feature importance: protein structure (42%), sequence (35%), 
   evolutionary conservation (23%)
 ```
 
@@ -353,13 +353,13 @@ Key Findings
 **Example**:
 ```
 Conclusions
-‚Ä¢ First cross-species model for antibiotic resistance prediction 
+‚Ä?First cross-species model for antibiotic resistance prediction 
   achieving >85% accuracy
-‚Ä¢ Protein structure integration critical for generalizability 
+‚Ä?Protein structure integration critical for generalizability 
   (improved accuracy by 14%)
-‚Ä¢ Prediction speed enables clinical decision support within 
+‚Ä?Prediction speed enables clinical decision support within 
   consultation timeframe
-‚Ä¢ Potential to reduce inappropriate antibiotic use by 20-30%
+‚Ä?Potential to reduce inappropriate antibiotic use by 20-30%
 ```
 
 **2. Limitations** (25-50 words, optional but recommended):
@@ -370,9 +370,9 @@ Conclusions
 **Example**:
 ```
 Limitations
-‚Ä¢ Training data limited to 5 bacterial species
-‚Ä¢ Requires genomic sequencing (not widely available)
-‚Ä¢ Validation needed in prospective clinical trials
+‚Ä?Training data limited to 5 bacterial species
+‚Ä?Requires genomic sequencing (not widely available)
+‚Ä?Validation needed in prospective clinical trials
 ```
 
 **3. Future Directions** (25-50 words, optional):
@@ -383,16 +383,16 @@ Limitations
 **Example**:
 ```
 Next Steps
-‚Ä¢ Expand to 20+ additional species
-‚Ä¢ Develop point-of-care sequencing integration
-‚Ä¢ Launch multi-center clinical validation study (2025)
+‚Ä?Expand to 20+ additional species
+‚Ä?Develop point-of-care sequencing integration
+‚Ä?Launch multi-center clinical validation study (2025)
 ```
 
 **Avoid**:
-- ‚ùå Overstating findings: "This revolutionary breakthrough..."
-- ‚ùå Extensive comparison to other work
-- ‚ùå New results in Discussion
-- ‚ùå Vague conclusions: "Further research is needed"
+- ‚ù?Overstating findings: "This revolutionary breakthrough..."
+- ‚ù?Extensive comparison to other work
+- ‚ù?New results in Discussion
+- ‚ù?Vague conclusions: "Further research is needed"
 
 ### References
 
@@ -471,12 +471,12 @@ Lab: smithlab.university.edu | Twitter: @smithlab
 ### Active vs. Passive Voice
 
 **Prefer Active Voice** (more engaging, clearer):
-- ‚úÖ "We developed a model..."
-- ‚úÖ "The treatment reduced symptoms..."
+- ‚ú?"We developed a model..."
+- ‚ú?"The treatment reduced symptoms..."
 
 **Passive Voice** (when appropriate):
-- ‚úÖ "Samples were collected from..."
-- ‚úÖ "Data were analyzed using..."
+- ‚ú?"Samples were collected from..."
+- ‚ú?"Data were analyzed using..."
 
 ### Sentence Length
 
@@ -486,21 +486,21 @@ Lab: smithlab.university.edu | Twitter: @smithlab
 - **Avoid**: >30 words (hard to follow)
 
 **Example Revision**:
-- ‚ùå Long: "We performed a comprehensive analysis of gene expression data from 500 patients with colorectal cancer using RNA sequencing and identified 47 differentially expressed genes associated with treatment response." (31 words)
-- ‚úÖ Short: "We analyzed RNA sequencing data from 500 colorectal cancer patients. We identified 47 genes associated with treatment response." (19 words total, two sentences)
+- ‚ù?Long: "We performed a comprehensive analysis of gene expression data from 500 patients with colorectal cancer using RNA sequencing and identified 47 differentially expressed genes associated with treatment response." (31 words)
+- ‚ú?Short: "We analyzed RNA sequencing data from 500 colorectal cancer patients. We identified 47 genes associated with treatment response." (19 words total, two sentences)
 
 ### Bullet Points vs. Paragraphs
 
 **Use Bullet Points For**:
-- ‚úÖ Lists of items or findings
-- ‚úÖ Key conclusions
-- ‚úÖ Methods steps
-- ‚úÖ Study characteristics
+- ‚ú?Lists of items or findings
+- ‚ú?Key conclusions
+- ‚ú?Methods steps
+- ‚ú?Study characteristics
 
 **Use Short Paragraphs For**:
-- ‚úÖ Narrative flow (Introduction)
-- ‚úÖ Complex explanations
-- ‚úÖ Connected ideas
+- ‚ú?Narrative flow (Introduction)
+- ‚ú?Complex explanations
+- ‚ú?Connected ideas
 
 **Bullet Point Best Practices**:
 - Start with action verbs or nouns
@@ -511,11 +511,11 @@ Lab: smithlab.university.edu | Twitter: @smithlab
 **Example**:
 ```
 Methods
-‚Ä¢ Participants: 200 adults (18-65 years)
-‚Ä¢ Design: Double-blind RCT (12 weeks)
-‚Ä¢ Intervention: Daily 30-min exercise
-‚Ä¢ Control: Standard care
-‚Ä¢ Analysis: Mixed models (SPSS v.28)
+‚Ä?Participants: 200 adults (18-65 years)
+‚Ä?Design: Double-blind RCT (12 weeks)
+‚Ä?Intervention: Daily 30-min exercise
+‚Ä?Control: Standard care
+‚Ä?Analysis: Mixed models (SPSS v.28)
 ```
 
 ### Acronyms and Jargon
@@ -530,9 +530,9 @@ We used machine learning (ML) to analyze... Later, ML predicted...
 - AI, ML, CNN (in computer science context)
 
 **Avoid Excessive Jargon**:
-- ‚ùå "Utilized" ‚Üí ‚úÖ "Used"
-- ‚ùå "Implement utilization of" ‚Üí ‚úÖ "Use"
-- ‚ùå "A majority of" ‚Üí ‚úÖ "Most"
+- ‚ù?"Utilized" ‚Ü?‚ú?"Used"
+- ‚ù?"Implement utilization of" ‚Ü?‚ú?"Use"
+- ‚ù?"A majority of" ‚Ü?‚ú?"Most"
 
 ### Numbers and Statistics
 
@@ -705,34 +705,34 @@ Our method reduces errors by 34\% compared to state-of-the-art.
 ## Common Content Mistakes
 
 **1. Too Much Text**
-- ‚ùå >1000 words
-- ‚ùå Long paragraphs
-- ‚ùå Full paper condensed
-- ‚úÖ 300-800 words, bullet points, key findings only
+- ‚ù?>1000 words
+- ‚ù?Long paragraphs
+- ‚ù?Full paper condensed
+- ‚ú?300-800 words, bullet points, key findings only
 
 **2. Unclear Message**
-- ‚ùå Multiple unrelated findings
-- ‚ùå No clear conclusion
-- ‚ùå Vague implications
-- ‚úÖ 1-3 main points, explicit conclusions
+- ‚ù?Multiple unrelated findings
+- ‚ù?No clear conclusion
+- ‚ù?Vague implications
+- ‚ú?1-3 main points, explicit conclusions
 
 **3. Methods Overkill**
-- ‚ùå Detailed protocols
-- ‚ùå All parameters listed
-- ‚ùå Routine procedures described
-- ‚úÖ Visual flowchart, key details only
+- ‚ù?Detailed protocols
+- ‚ù?All parameters listed
+- ‚ù?Routine procedures described
+- ‚ú?Visual flowchart, key details only
 
 **4. Poor Figure Integration**
-- ‚ùå Figures without context
-- ‚ùå Unclear captions
-- ‚ùå Text doesn't reference figures
-- ‚úÖ Figures central, well-captioned, text integrated
+- ‚ù?Figures without context
+- ‚ù?Unclear captions
+- ‚ù?Text doesn't reference figures
+- ‚ú?Figures central, well-captioned, text integrated
 
 **5. Missing Context**
-- ‚ùå No background
-- ‚ùå Undefined acronyms
-- ‚ùå Assumes expert knowledge
-- ‚úÖ Brief context, definitions, accessible to broader audience
+- ‚ù?No background
+- ‚ù?Undefined acronyms
+- ‚ù?Assumes expert knowledge
+- ‚ú?Brief context, definitions, accessible to broader audience
 
 ## Conclusion
 
