@@ -58,3 +58,17 @@ python util_check_docx.py --latest        # 输出校验，务必跑
 - 跨 run 替换能处理被格式打断的文本，但仍建议替换后用
   `util_check_docx.py --latest` 逐项核对
 - 与 `word-audit-report-format` 技能配合：先用本技能改内容，再按那个技能统一字体
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

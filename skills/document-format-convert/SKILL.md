@@ -61,3 +61,17 @@ python convert_to_native_ppt.py --dpi 300 --lang ch
   且运行时不要手动操作 Word / PowerPoint 窗口
 - 模块 16 是 OCR 重建，属于**尽力而为**的转换，表格复杂时务必人工核对
 - 若目标是 eCTD 申报合规，转换后请用 `clinical-pdf-ectd` 再处理一遍
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

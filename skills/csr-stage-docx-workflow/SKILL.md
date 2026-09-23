@@ -117,3 +117,17 @@ python -m markitdown "E:\...\review_materials\YDSWX~1.DOC" -o "E:\...\review_mat
 - 将“章节树抽取”自动化：从 shell.md 解析出标题数组，再由生成器按数组渲染
 - 将更多占位段落用PDF表/清单补齐（如：2.2 分析集、2.3 人口学、4.2 SOC/PT细表等）
 - 增加 `--shell-docx` 参数：允许用户指定任意结构参照docx
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

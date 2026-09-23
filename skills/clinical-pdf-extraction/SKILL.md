@@ -74,3 +74,17 @@ python main.py --input "input" --output "output"
 - 提取结果**必须人工核对**，尤其是数值型字段（GMC、CI、分级）
 - 规则驱动提取对 PDF 版式敏感，换来源文档就要重新调规则
 - 与 `clinical-pdf-hygiene` 的区别：本技能是**取数据**，那个是**整理与安全**
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

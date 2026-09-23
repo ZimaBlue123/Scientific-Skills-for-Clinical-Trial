@@ -81,3 +81,17 @@ python pdf_threat_analyzer.py
 - 模块 17 是**剪切**而非复制，务必先备份
 - 与 `clinical-pdf-ectd` 的区别：本技能面向**日常整理与安全**，那个面向**申报合规**
 - 与 `clinical-pdf-extraction` 的区别：本技能不取数据
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

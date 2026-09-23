@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "clinical-trial": {
+      "command": "python",
+      "args": ["-m", "clinical_mcp"]
+    }
+  }
+}

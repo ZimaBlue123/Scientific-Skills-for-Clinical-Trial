@@ -70,3 +70,17 @@ python word_to_excel_to_figure.py --input-dir "input" --table-map-json "output/t
 - 表格定位依赖**表题 / 表头关键词**，不同文档的写法差异会直接影响命中率，
   建议先用 `--list-word-tables` 或 `--dry-run` 核对
 - 模块 08 的 `.pzfx` 是 GraphPad Prism 的 XML 格式，替换后请用 Prism 打开验证一次
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

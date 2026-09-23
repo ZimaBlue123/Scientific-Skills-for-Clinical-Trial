@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "scientific-agent-skills",
+  "version": "0.1.0",
+  "description": "Clinical trial document handling, generation and review tooling.",
+  "author": "Scientific Skills for Clinical Trial Contributors",
+  "license": "MIT",
+  "repository": "https://github.com/ZimaBlue123/Scientific-Skills-for-Clinical-Trial",
+  "keywords": [
+    "clinical-trial",
+    "docx",
+    "pdf",
+    "markdown",
+    "review"
+  ],
+  "extensions": {
+    "mcp": {
+      "command": "python",
+      "args": [
+        "-m",
+        "clinical_mcp"
+      ]
+    }
+  }
+}

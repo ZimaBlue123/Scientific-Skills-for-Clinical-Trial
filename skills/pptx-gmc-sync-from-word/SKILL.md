@@ -29,3 +29,17 @@ metadata:
 python ...\\pptx-gmc-sync-from-word\\scripts\\sync_pptx_from_word.py --word <docx> --ppt <pptx>
 python ...\\pptx-gmc-sync-from-word\\scripts\\export_ppt_tables_to_word.py --ppt <pptx> --out <docx> --slides 1,2,4
 ```
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

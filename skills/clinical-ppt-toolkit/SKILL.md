@@ -51,3 +51,17 @@ python pptx_corner_logo_patch.py "input/your.pptx" -o "output/your_clean.pptx"
 - 合并结果**必须人工逐页复核**，TF-IDF 去重是相似度判定，可能误判内容相近但需保留的页
 - 叙事编排依赖 `SLIDE_BLUEPRINT` 配置，换项目时需要按新 CSR 结构调整
 - 若需要处理 PPT 里的图表配色或导出 PDF，见 `document-format-convert`
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

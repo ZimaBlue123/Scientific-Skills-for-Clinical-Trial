@@ -260,3 +260,6 @@ docs/_converted/
 # Archived scripts (local-only, not tracked)
 scripts/_archive/
 scripts/_archive_2026_consolidation/
+
+# Temporary reference repositories (cloned for architecture analysis)
+tmp_repos/

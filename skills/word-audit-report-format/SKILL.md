@@ -23,3 +23,17 @@ metadata:
 ## 项目内默认实现
 - 使用脚本：`scripts/generate_audit_report_docx.py`
 - 关键函数：`_apply_cn_en_fonts(doc)`
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

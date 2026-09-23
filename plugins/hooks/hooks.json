@@ -1,0 +1,22 @@
+{
+  "hooks": [
+    {
+      "type": "PostToolUse",
+      "matcher": "Write|Edit",
+      "description": "AST syntax verification on any edited Python file under scripts/ or skills/",
+      "command": "python -c \"import ast, sys, pathlib; p=pathlib.Path(sys.argv[1]); (ast.parse(p.read_text(encoding='utf-8'), filename=str(p)) if p.suffix=='.py' and ('scripts' in p.parts or 'skills' in p.parts) else None)\" \"$EDITED_FILE\""
+    },
+    {
+      "type": "PreToolUse",
+      "matcher": "Bash",
+      "description": "Guard: block destructive operations on vendored clinical-automation subproject (AGENTS.md §3.1)",
+      "command": "python -c \"import sys; cmd=sys.argv[1]; blocked=['rm ','rm -','mv ','sed -i','del ','rmdir']; sys.exit(1) if 'clinical-automation' in cmd and any(b in cmd for b in blocked) else None\" \"$COMMAND\""
+    },
+    {
+      "type": "PreToolUse",
+      "matcher": "Write",
+      "description": "Guard: enforce scripts must be written to scripts/ directory (AGENTS.md §3)",
+      "command": "python -c \"import sys, pathlib; p=pathlib.Path(sys.argv[1]); sys.exit(1) if p.suffix=='.py' and 'scripts' not in p.parts and 'skills' not in p.parts and 'tests' not in p.parts and 'clinical_mcp' not in p.parts and 'pipeline' not in p.parts else None\" \"$TARGET_FILE\""
+    }
+  ]
+}

@@ -66,3 +66,17 @@ python apply_clinical_colors.py --batch --input "input" --output "output"
 ## 注意事项
 - **涨用红、跌用绿**（中国区惯例），配色预设已按此约定，不要反向套用欧美配色
 - `--palette` 支持多期刊预设，投稿前确认目标期刊的具体要求
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

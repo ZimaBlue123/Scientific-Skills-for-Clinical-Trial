@@ -53,3 +53,17 @@ pip install -r scripts/clinical-automation/requirements.txt
 - `pymupdf < 1.27` 下 `page.delete_link` 行为不一致，建议 `pymupdf >= 1.27.0`
 - 与 `clinical-pdf-hygiene` 的分工：本技能面向**申报合规**，那个面向**安全与整理**
 - 更详细的参数与条款说明见 `scripts/clinical-automation/18_PDF_eCTD_Converter/README.md`
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

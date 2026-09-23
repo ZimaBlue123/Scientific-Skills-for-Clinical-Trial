@@ -148,3 +148,17 @@ jobs:
           print(f"\n{len(errors)} error(s), {len(warnings)} warning(s).")
           sys.exit(1 if errors else 0)
           PY
+
+      - name: Validate registry (internal links & ordering)
+        run: |
+          # Run the custom registry validator. Warnings exit with 1, errors with 2.
+          # We don't want to fail the build on warnings (exit 1) since there are existing broken links,
+          # but we do want to fail on errors (exit 2).
+          uv run python scripts/validate_skills_registry.py --format json > validation_report.json
+          exit_code=$?
+          if [ $exit_code -eq 2 ]; then
+            echo "Registry validation found errors."
+            cat validation_report.json
+            exit 2
+          fi
+          exit 0

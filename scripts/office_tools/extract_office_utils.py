@@ -1,5 +1,13 @@
 from __future__ import annotations
 
+import warnings
+warnings.warn(
+    "This module is deprecated as of Phase 4 Pipeline refactoring. Please use the new `scripts.pipeline` package instead.",
+    DeprecationWarning,
+    stacklevel=2
+)
+
+
 """
 extract_office_utils.py
 Unified extraction utilities for DOCX, PPTX, and XLSX files.
@@ -81,7 +89,11 @@ def extract_docx_to_markdown(filepath: Path) -> str:
     out: list[str] = []
 
     def _heading_level(para: Paragraph) -> int | None:
-        name = (para.style.name or "").strip().lower()
+        # ``para.style`` is None for paragraphs whose style reference cannot be
+        # resolved (seen in docx files produced by third-party note-taking
+        # tools); treat those as plain body text instead of crashing.
+        style = para.style
+        name = (getattr(style, "name", None) or "").strip().lower()
         if name == "title":
             return 0
         if name.startswith("heading "):

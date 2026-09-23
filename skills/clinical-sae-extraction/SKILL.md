@@ -51,3 +51,17 @@ $env:SAE_API_TOKEN = "<your token>"
 ## 注意事项
 - 抽取结果属于**辅助初筛**，医学判定必须由人工复核后确认
 - 先跑 `self-check` 再跑 `batch`，可避免大批任务跑到一半才发现配置问题
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format
