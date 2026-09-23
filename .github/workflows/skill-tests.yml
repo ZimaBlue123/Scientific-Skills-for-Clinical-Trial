@@ -91,6 +91,7 @@ jobs:
               name
               for name, entry in manifest["skills"].items()
               if not entry.get("packages") and "python" not in entry
+              and (pathlib.Path("skills") / name).is_dir()
               and (pathlib.Path("tests") / name).is_dir()
           )
           print(" ".join(names))

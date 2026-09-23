@@ -52,7 +52,7 @@ def discover(names: list[str]) -> list[Path]:
     available = sorted(
         path
         for path in TESTS_DIR.iterdir()
-        if path.is_dir() and not path.name.startswith((".", "_"))
+        if path.is_dir() and not path.name.startswith((".", "_")) and path.name != "skills"
     )
     if not names:
         return available
