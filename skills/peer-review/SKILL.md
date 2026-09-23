@@ -38,7 +38,7 @@ If your document does not already contain schematics or diagrams:
 
 **How to generate schematics:**
 ```bash
-python scripts/generate_schematic.py "your diagram description" -o figures/output.png
+python ../scientific-schematics/scripts/generate_schematic.py "your diagram description" -o figures/output.png
 ```
 
 The AI will automatically:

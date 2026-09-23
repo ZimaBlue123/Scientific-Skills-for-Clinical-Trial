@@ -20,7 +20,7 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
 
 _FM_RE = re.compile(r"\A(---\n)(.*?)(\n---\n)", re.S)

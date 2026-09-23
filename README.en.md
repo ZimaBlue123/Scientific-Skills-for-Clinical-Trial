@@ -342,12 +342,12 @@ To supplement evidence/trial intelligence, run `clinicaltrials-database` with `p
 
 | Script | Purpose | Status |
 |--------|---------|--------|
-| `scripts/convert_to_md.py` | Document to Markdown (recommended) | ✅ Recommended |
+| `scripts/pipeline/convert/convert_to_md.py` | Document to Markdown (recommended) | ✅ Recommended |
 | `scripts/md_to_docx.py` | Markdown to Word | ✅ Recommended |
 | `scripts/convert_doc_to_docx.py` | Legacy .doc conversion | ✅ Recommended |
 | `scripts/_archive/generate_csr_docx.py` | CSR Stage Summary |
-| `scripts/project_self_check.py` | Project self-check | ✅ Recommended |
-| `scripts/cleanup_generated_artifacts.py` | Cleanup cache | ✅ Recommended |
+| `scripts/_tools/project_self_check.py` | Project self-check | ✅ Recommended |
+| `scripts/_tools/cleanup_generated_artifacts.py` | Cleanup cache | ✅ Recommended |
 
 ### Deprecated Scripts
 
@@ -398,10 +398,10 @@ Need to generate a report?
 
 ```bash
 # Single file
-python scripts/convert_to_md.py input.docx -o output.md
+python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
 
 # Batch folder (output to review_materials/converted/)
-python scripts/convert_to_md.py --folder review_materials -o review_materials/converted
+python scripts/pipeline/convert/convert_to_md.py --folder review_materials -o review_materials/converted
 ```
 
 #### 2) Convert Markdown audit report to Word
@@ -427,7 +427,7 @@ Note: `review_materials/` is ignored by `.gitignore` and not uploaded to GitHub.
 Copy-Item "review_materials\1-3-1说明-20260529-新.docx" target.docx
 
 # Then process with script
-python scripts/convert_to_md.py target.docx -o output.md
+python scripts/pipeline/convert/convert_to_md.py target.docx -o output.md
 ```
 
 ---

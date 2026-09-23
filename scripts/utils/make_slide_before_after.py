@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -27,14 +28,23 @@ def render(pptx: str, page: int, out: Path, w: int = 3200, h: int = 1800) -> Non
     )
 
 
+def _system_font_dir() -> Path:
+    """Return the OS font directory without hard-coding a drive letter."""
+    windir = os.environ.get("WINDIR") or os.environ.get("SystemRoot")
+    if windir:
+        return Path(windir) / "Fonts"
+    return Path("/usr/share/fonts")  # POSIX fallback (Linux/macOS)
+
+
 def load_font(size: int):
+    font_dir = _system_font_dir()
     for name in ("msyh.ttc", "msyhbd.ttc", "simhei.ttf", "arial.ttf"):
-        p = Path(r"C:\Windows\Fonts") / name
+        p = font_dir / name
         if p.exists():
             try:
                 return ImageFont.truetype(str(p), size)
             except OSError:
-                pass
+                pass  # Intentional: font file unreadable; try the next candidate below.
     return ImageFont.load_default()
 
 

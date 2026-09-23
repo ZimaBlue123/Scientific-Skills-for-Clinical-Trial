@@ -1,6 +1,6 @@
 # Sync project skills/ to Cursor global ~/.cursor/skills/
-# Usage: powershell -File scripts/sync_skills_to_global.ps1
-#        powershell -File scripts/sync_skills_to_global.ps1 -Skill pptx-gmc-sync-from-word
+# Usage: powershell -File scripts/_tools/sync_skills_to_global.ps1
+#        powershell -File scripts/_tools/sync_skills_to_global.ps1 -Skill pptx-gmc-sync-from-word
 
 param(
     [string]$Skill = ""

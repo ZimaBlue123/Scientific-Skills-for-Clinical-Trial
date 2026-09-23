@@ -25,16 +25,16 @@ Typical usage
 
     # Preview what would be cleaned from the project (no filesystem changes):
 
-    python scripts/cleanup_generated_artifacts.py artifacts --dry-run
+    python scripts/_tools/cleanup_generated_artifacts.py artifacts --dry-run
 
     # Same, for IDE history (Cursor/Roo Code/etc.), age-filtered at 14 days:
 
-    python scripts/cleanup_generated_artifacts.py ide-history --apply \\
+    python scripts/_tools/cleanup_generated_artifacts.py ide-history --apply \\
         --max-age-days 14 --keep-manifest reports/ide_history_manifest.json
 
     # Legacy invocation (kept for any existing callers):
 
-    python scripts/cleanup_generated_artifacts.py --apply --max-age-days 14
+    python scripts/_tools/cleanup_generated_artifacts.py --apply --max-age-days 14
 """
 
 from __future__ import annotations
@@ -150,7 +150,7 @@ def _delete_files(files: Sequence[Path], *, dry_run: bool, result: CleanupResult
         try:
             f.unlink()
         except FileNotFoundError:
-            continue
+            continue  # Intentional: file already gone, which is the desired end state.
         except (OSError, PermissionError) as exc:
             logger.error("failed to remove %s: %s", f, exc)
             result.failed.append(f)
@@ -173,7 +173,7 @@ def _cleanup_empty_dirs(p: Path, *, dry_run: bool) -> int:
             if any(d.iterdir()):
                 continue
         except (OSError, PermissionError):
-            continue
+            continue  # Intentional: directory is inaccessible; never abort the whole sweep.
         if dry_run:
             logger.info("[dry-run] would remove empty dir: %s", d)
             continue
@@ -536,7 +536,7 @@ def cleanup_ide_history(
                 else:
                     entry.unlink()
             except FileNotFoundError:
-                continue
+                continue  # Intentional: already removed by an earlier pass.
             except (OSError, PermissionError) as exc:
                 logger.error("failed to remove %s: %s", entry, exc)
                 result.failed.append(entry)
@@ -650,7 +650,7 @@ def run_artifacts(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--root",
         type=Path,
-        default=Path(__file__).resolve().parents[1],
+        default=Path(__file__).resolve().parents[2],
         help="Project root (default: parent of this script).",
     )
     parser.add_argument(

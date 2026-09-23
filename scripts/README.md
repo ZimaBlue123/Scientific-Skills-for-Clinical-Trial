@@ -45,13 +45,13 @@ scripts/
 python scripts/extract_office_utils.py review_materials/ -o dump.txt
 
 # 转换 Word 为 Markdown
-python scripts/convert_to_md.py input.docx -o output.md
+python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
 
 # OCR 图片表格 → Word
 python scripts/extract_tables_to_docx.py input.png -o output.docx
 
 # 项目自检
-python scripts/project_self_check.py
+python scripts/_tools/project_self_check.py
 
 # PubMed 检索
 python scripts/pubmed_search_tool.py --query '"hepatitis B vaccine"[tiab]' --out result.json

@@ -184,7 +184,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    repo_root = Path(__file__).resolve().parents[1]
+    repo_root = Path(__file__).resolve().parents[2]
     try:
         skill_count, pair_count = build_report(
             repo_root=repo_root,

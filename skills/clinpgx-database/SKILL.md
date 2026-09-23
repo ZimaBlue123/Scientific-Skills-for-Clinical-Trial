@@ -628,3 +628,17 @@ pair_info = response.json()
 - **PharmCAT**: https://pharmcat.clinpgx.org/
 - **ClinGen**: https://clinicalgenome.org/
 - **Contact**: api@clinpgx.org (for substantial API use)
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

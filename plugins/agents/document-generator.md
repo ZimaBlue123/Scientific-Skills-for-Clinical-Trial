@@ -24,7 +24,7 @@ documents in DOCX, PPTX, PDF, and XLSX formats with strict formatting compliance
 ### PDF Operations
 - **Text Extraction**: `scripts/pipeline/ingest/pdf_reader.py` (PyMuPDF backend)
 - **Table Extraction**: `scripts/pipeline/extract/table_extractor.py` (OCR + img2table)
-- **Conversion**: `scripts/convert_to_md.py` for PDF â†?Markdown
+- **Conversion**: `scripts/pipeline/convert/convert_to_md.py` for PDF â†’Markdown
 
 ### XLSX Operations
 - **Extraction**: `scripts/pipeline/ingest/pdf_reader.py` with XML fallback
@@ -51,13 +51,13 @@ Before delivering any generated document to the user:
 - [ ] No patient identifiers in output
 - [ ] File saved to `outputs/` directory
 - [ ] Table borders and grid styling verified for DOCX
-- [ ] Heading hierarchy is correct (H1 â†?H2 â†?H3, no skips)
+- [ ] Heading hierarchy is correct (H1 â†’H2 â†’H3, no skips)
 
 ## Error Recovery
 
 | Error | Cause | Fix |
 |-------|-------|-----|
 | `ValueError` on XLSX parse | Malformed EDC XML | Use XML fallback in `extract_office_utils.py` |
-| `COMError` on DOC â†?DOCX | Office not installed or file locked | Check Office installation, close open files |
+| `COMError` on DOC â†’DOCX | Office not installed or file locked | Check Office installation, close open files |
 | Mojibake in output | GBK/GB18030 input read as UTF-8 | Run `diagnose_encoding_mojibake.py`, re-read with detected encoding |
 | Missing fonts in DOCX | `apply_cn_en_fonts` not called | Call after all content insertion, verify `w:rFonts` XML attributes |

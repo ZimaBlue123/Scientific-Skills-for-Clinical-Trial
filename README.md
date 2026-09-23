@@ -430,13 +430,13 @@ print(result.text_content)
 
 | 脚本 | 用途 | 状态 |
 |------|------|------|
-| `scripts/convert_to_md.py` | 文档转Markdown（推荐） | ✅ 推荐 |
+| `scripts/pipeline/convert/convert_to_md.py` | 文档转Markdown（推荐） | ✅ 推荐 |
 | `scripts/md_to_docx.py` | Markdown转Word | ✅ 推荐 |
 | `scripts/generate_csr_docx.py` | CSR阶段性小结 | ✅ 推荐 |
-| `scripts/project_self_check.py` | 项目自检 | ✅ 推荐 |
-| `scripts/cleanup_generated_artifacts.py` | 清理缓存与IDE历史记录 | ✅ 推荐 |
-| `scripts/on_open_cleanup.cmd` | 开机/打开项目时自动清理 | ✅ 辅助 |
-| `scripts/register_cleanup_logon_task.ps1` | 注册开机自启清理任务 | ✅ 辅助 |
+| `scripts/_tools/project_self_check.py` | 项目自检 | ✅ 推荐 |
+| `scripts/_tools/cleanup_generated_artifacts.py` | 清理缓存与IDE历史记录 | ✅ 推荐 |
+| `scripts/_tools/on_open_cleanup.cmd` | 开机/打开项目时自动清理 | ✅ 辅助 |
+| `scripts/_tools/register_cleanup_logon_task.ps1` | 注册开机自启清理任务 | ✅ 辅助 |
 
 ### 已废弃脚本
 
@@ -451,10 +451,10 @@ print(result.text_content)
 
 ```
 需要从docx提取纯文本？
-  → python scripts/convert_to_md.py input.docx -o output.md
+  → python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
 
 需要带编号段落提取（##P1, ##T1标记）？
-  → python scripts/convert_to_md.py input.docx -o output.md --mode numbered
+  → python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md --mode numbered
 
 需要将Markdown转换为Word？
   → python scripts/md_to_docx.py input.md -o output.docx
@@ -479,10 +479,10 @@ print(result.text_content)
 
 ```bash
 # 单文件
-python scripts/convert_to_md.py input.docx -o output.md
+python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
 
 # 批量文件夹（输出到 review_materials/converted/）
-python scripts/convert_to_md.py --folder review_materials -o review_materials/converted
+python scripts/pipeline/convert/convert_to_md.py --folder review_materials -o review_materials/converted
 ```
 
 #### 2) 将 Markdown 审核报告转成 Word
@@ -508,7 +508,7 @@ python scripts/generate_csr_docx.py --root "项目根目录"
 Copy-Item "review_materials\1-3-1说明-20260529-新.docx" target.docx
 
 # 然后用脚本处理
-python scripts/convert_to_md.py target.docx -o output.md
+python scripts/pipeline/convert/convert_to_md.py target.docx -o output.md
 ```
 
 ---

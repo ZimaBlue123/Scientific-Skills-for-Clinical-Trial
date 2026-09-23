@@ -51,3 +51,17 @@ python file_translator.py                    # 交互式
   法规术语时，必须人工核对；建议配合项目内的术语表使用
 - 受试者相关数据属于敏感信息，翻译前确认是否允许经由第三方翻译服务
 - 大文件先小批量试跑，确认术语与格式都没问题再全量
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

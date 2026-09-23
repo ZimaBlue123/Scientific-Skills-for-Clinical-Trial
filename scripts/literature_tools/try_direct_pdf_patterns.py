@@ -9,7 +9,9 @@ from __future__ import annotations
 import urllib.request
 from pathlib import Path
 
-ROOT = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial")
+# Resolve the repository root from this file rather than hard-coding a machine path:
+# scripts/literature_tools/<script>.py -> [0]=literature_tools, [1]=scripts, [2]=root.
+ROOT = Path(__file__).resolve().parents[2]
 DEST = ROOT / "review_materials" / "文献库-F2F Meeting" / "01_立题依据-流行病学与接种策略"
 
 UA = (

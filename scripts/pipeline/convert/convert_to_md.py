@@ -7,13 +7,13 @@ Supports batch folder conversion or single-file conversion.
 Usage
 -----
     # Single file (standard markdown)
-    py -3 scripts/convert_to_md.py input.docx -o output.md
+    py -3 scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
 
     # Single file with numbered paragraphs/tables (##P1, ##T1 markers)
-    py -3 scripts/convert_to_md.py input.docx -o output.md --mode numbered
+    py -3 scripts/pipeline/convert/convert_to_md.py input.docx -o output.md --mode numbered
 
     # Batch folder
-    py -3 scripts/convert_to_md.py --folder review_materials -o review_materials/converted
+    py -3 scripts/pipeline/convert/convert_to_md.py --folder review_materials -o review_materials/converted
 """
 
 from __future__ import annotations
@@ -111,7 +111,8 @@ def _convert_pdf_basic(filepath: Path) -> str | None:
         reader = pypdf.PdfReader(str(filepath))
         return "\n\n".join((p.extract_text() or "") for p in reader.pages).strip() or None
     except ImportError:
-        pass
+        # Optional dependency; fall through to the pdfplumber backend below.
+        logger.debug("pypdf not installed; skipping backend for %s", filepath.name)
     except Exception as exc:  # noqa: BLE001
         logger.error("[pypdf] %s: %s", filepath.name, exc)
 
@@ -327,10 +328,10 @@ def _build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  py -3 scripts/convert_to_md.py document.docx -o output.md
-  py -3 scripts/convert_to_md.py document.docx -o output.md --mode numbered
-  py -3 scripts/convert_to_md.py --folder review_materials
-  py -3 scripts/convert_to_md.py --folder review_materials -o markdown_output/
+  py -3 scripts/pipeline/convert/convert_to_md.py document.docx -o output.md
+  py -3 scripts/pipeline/convert/convert_to_md.py document.docx -o output.md --mode numbered
+  py -3 scripts/pipeline/convert/convert_to_md.py --folder review_materials
+  py -3 scripts/pipeline/convert/convert_to_md.py --folder review_materials -o markdown_output/
         """,
     )
     parser.add_argument("input", nargs="?", help="Input file or folder")

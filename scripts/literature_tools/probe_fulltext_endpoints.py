@@ -13,7 +13,9 @@ import re
 import urllib.request
 from pathlib import Path
 
-ROOT = Path(r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial")
+# Resolve the repository root from this file rather than hard-coding a machine path:
+# scripts/literature_tools/<script>.py -> [0]=literature_tools, [1]=scripts, [2]=root.
+ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "scripts" / "_fulltext_probe.txt"
 UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "

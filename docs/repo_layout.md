@@ -27,6 +27,6 @@ Scientific-Skills-for-Clinical_Trial/
 - **生成物不入库**：报告类产物（如 `reports/*.docx`）默认忽略；如果需要入库，请放到 `docs/` 并说明来源与生成方式。
 - **不要提交 skill 压缩包**：`skills/*.zip` 为冗余备份，应删除，仅保留解压后的 skill 目录。
 - **vendored 能力库只读**：`scripts/clinical-automation/` 由外部项目整体迁入，保留原有编号目录与文件名以对齐上游；新增仓库脚本不要放进该目录，需要复用能力时在 `skills/` 下建文档型 skill 指向它。
-- **全局 skills 同步**：维护脚本 `scripts/sync_skills_to_global.ps1` 将 `skills/` 复制到 `%USERPROFILE%\.cursor\skills\`。
+- **全局 skills 同步**：维护脚本 `scripts/_tools/sync_skills_to_global.ps1` 将 `skills/` 复制到 `%USERPROFILE%\.cursor\skills\`。
 - **下载/缓存不入库**：`downloads/`、各类缓存与本地环境目录应保持在 `.gitignore` 中。
 

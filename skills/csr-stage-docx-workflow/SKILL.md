@@ -18,14 +18,13 @@ metadata:
 
 ## 现有实现入口（默认）
 
-- 生成脚本：`scripts/generate_csr_docx.py`
+本项目未提供单一的一键式生成脚本；`.docx` 由下列可复用模块组装，按本文件的工作流清单逐步执行：
+
+- 读取结构参照与源文件：`scripts/pipeline/ingest/docx_reader.py`、`scripts/pipeline/ingest/pdf_reader.py`
+- 正文/表格抽取：`scripts/pipeline/extract/table_extractor.py`、`scripts/pipeline/extract/text_normalizer.py`
+- 导出与字体规范：`scripts/pipeline/export/docx_builder.py`（`apply_cn_en_fonts` 统一中英文字体、生成原生 Word 目录域）
+- 交付前校验：`scripts/pipeline/validate/ast_validator.py`、`scripts/pipeline/validate/encoding_validator.py`
 - 依赖：`requirements.txt`（至少包含 `python-docx`、`pymupdf`）
-
-运行命令：
-
-```bash
-python scripts/generate_csr_docx.py --root "项目根目录"
-```
 
 输出位置：
 

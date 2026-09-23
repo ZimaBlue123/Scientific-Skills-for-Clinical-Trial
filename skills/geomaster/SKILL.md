@@ -242,7 +242,7 @@ Understanding CRS is fundamental to geospatial work:
 - **Projected CRS**: EPSG:3857 (Web Mercator) - uses meters
 - **UTM Zones**: EPSG:326xx (North), EPSG:327xx (South) - minimizes distortion
 
-See [coordinate-systems.md](references/coordinate-systems.md) for comprehensive CRS reference.
+See [advanced-gis.md](references/advanced-gis.md) for broader GIS context, including coordinate handling.
 
 ### Vector vs Raster Data
 

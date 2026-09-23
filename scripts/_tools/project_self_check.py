@@ -21,7 +21,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 PY = sys.executable
 OUT_JSON = ROOT / "reports" / "self_check_report.json"
 OUT_MD = ROOT / "reports" / "self_check_report.md"

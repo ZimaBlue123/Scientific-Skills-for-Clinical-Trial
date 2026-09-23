@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILLS_DIR = REPO_ROOT / "skills"
 
 # --------------------------------------------------------------------------- #
@@ -38,7 +38,7 @@ _FM_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 ALLOWED_FIELDS = frozenset(
     {"name", "description", "license", "compatibility", "allowed-tools", "metadata"}
 )
-VALID_TOOLS = frozenset({"Read", "Write", "Edit", "Bash"})
+VALID_TOOLS = frozenset({"Read", "Write", "Edit", "Bash", "Glob", "Grep"})
 MAX_DESCRIPTION_LENGTH = 1024
 
 

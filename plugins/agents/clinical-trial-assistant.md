@@ -17,7 +17,7 @@ These are critical patterns you MUST follow when calling project scripts:
 
 | Script | Correct Usage | Common Pitfall |
 |--------|--------------|----------------|
-| `scripts/pipeline/ingest/docx_reader.py` | `from scripts.pipeline.ingest.docx_reader import extract_docx_text` | Do NOT import `extract_text` �?the function is `extract_docx_text` |
+| `scripts/pipeline/ingest/docx_reader.py` | `from scripts.pipeline.ingest.docx_reader import extract_docx_text` | Do NOT import `extract_text` —the function is `extract_docx_text` |
 | `scripts/pipeline/export/docx_builder.py` | `apply_cn_en_fonts(doc)` after all content is written | Calling before content insertion resets font on empty paragraphs |
 | `scripts/pipeline/export/docx_builder.py` | `make_argparser()` returns parser, call `.parse_args()` separately | Do NOT call `parse_args()` inside `make_argparser()` |
 | `scripts/pipeline/transform/clinical_rag.py` | `ClinicalDocumentIndex(chunk_size=500)` | Default chunk_size is 200; use 500 for clinical PDFs |
@@ -28,26 +28,26 @@ These are critical patterns you MUST follow when calling project scripts:
 ```
 User Request
 ├── 📄 Document Generation
-�?  ├── CSR / 阶段性小�?�?skills/csr-stage-docx-workflow
-�?  ├── Audit Report / 审核报告 �?skills/word-audit-report-format
-�?  ├── PPTX Deck �?skills/clinical-ppt-toolkit
-�?  └── Format Conversion �?skills/document-format-convert
+│  ├── CSR / 阶段性小结 →skills/csr-stage-docx-workflow
+│  ├── Audit Report / 审核报告 →skills/word-audit-report-format
+│  ├── PPTX Deck →skills/clinical-ppt-toolkit
+│  └── Format Conversion →skills/document-format-convert
 ├── 🔬 Safety Data
-�?  ├── SAE Extraction �?skills/clinical-sae-extraction
-�?  ├── SAE Listing Excel �?scripts/generators/build_sae_listing_workbook.py
-�?  └── Adverse Event Tables �?scripts/data_processing/scan_tfl_sae_tables.py
+│  ├── SAE Extraction →skills/clinical-sae-extraction
+│  ├── SAE Listing Excel →skills/clinical-sae-extraction
+│  └── Adverse Event Tables →scripts/_archive_2026_consolidation/data_processing/scan_tfl_sae_tables.py
 ├── 📊 Statistical Analysis
-�?  ├── Immunogenicity �?skills/antibody-kinetics
-�?  ├── Non-inferiority �?scripts/generate_phase2_*.py
-�?  └── General Statistics �?skills/statistical-analysis
+│  ├── Immunogenicity →skills/antibody-kinetics
+│  ├── Non-inferiority →skills/statistical-analysis
+│  └── General Statistics →skills/statistical-analysis
 ├── 📚 Literature Search
-�?  ├── PubMed �?skills/pubmed-database or scripts/literature_tools/
-�?  ├── ClinicalTrials.gov �?skills/clinicaltrials-database
-�?  └── Broad Search �?skills/perplexity-search
-└── 🗃�?Database Query
-    ├── Drug Safety �?skills/fda-database
-    ├── Gene/Variant �?skills/clinvar-database
-    └── Drug Targets �?skills/opentargets-database
+─  ├── PubMed →skills/pubmed-database or scripts/literature_tools/
+─  ├── ClinicalTrials.gov →skills/clinicaltrials-database
+─  └── Broad Search →skills/perplexity-search
+└── 🗃️Database Query
+    ├── Drug Safety →skills/fda-database
+    ├── Gene/Variant →skills/clinvar-database
+    └── Drug Targets →skills/opentargets-database
 ```
 
 ## Safety Rules
@@ -56,7 +56,7 @@ User Request
 1. All file operations MUST use `encoding="utf-8"` explicitly
 2. Before processing any input file, check for BOM markers and mojibake
 3. On Windows with Chinese paths, use 8.3 short names: `cmd /c dir /x`
-4. If mojibake is detected, run `scripts/diagnose_encoding_mojibake.py` first
+4. If mojibake is detected, run `scripts/_tools/diagnose_encoding_mojibake.py` first
 
 ### Patient Data Protection (MANDATORY)
 1. NEVER include individual patient identifiers in generated documents

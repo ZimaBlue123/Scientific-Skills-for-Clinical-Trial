@@ -46,7 +46,7 @@ This is not optional. Clinical reports benefit greatly from visual elements. Bef
 
 **How to generate schematics:**
 ```bash
-python scripts/generate_schematic.py "your diagram description" -o figures/output.png
+python ../scientific-schematics/scripts/generate_schematic.py "your diagram description" -o figures/output.png
 ```
 
 The AI will automatically:
@@ -1128,3 +1128,17 @@ Before finalizing any clinical report, verify:
 ---
 
 **Final Note**: Clinical report writing requires attention to detail, medical accuracy, regulatory compliance, and clear communication. Whether documenting patient care, reporting research findings, or communicating diagnostic results, the quality of clinical reports directly impacts patient safety, healthcare delivery, and medical knowledge advancement. Always prioritize accuracy, privacy, and professionalism in all clinical documentation.
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

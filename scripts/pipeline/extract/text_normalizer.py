@@ -25,12 +25,12 @@ def detect_encoding(raw_bytes: bytes) -> str:
         raw_bytes.decode("utf-8")
         return "utf-8"
     except UnicodeDecodeError:
-        pass
+        pass  # Intentional: not UTF-8, fall through to the next candidate encoding.
     try:
         raw_bytes.decode("gb18030")
         return "gb18030"
     except UnicodeDecodeError:
-        pass
+        pass  # Intentional: not GB18030 either; the latin-1 fallback below always decodes.
     return "latin-1"
 
 def fix_mojibake(text: str) -> str:
@@ -42,15 +42,12 @@ def fix_mojibake(text: str) -> str:
     marker_count = sum(1 for c in text if c in MOJIBAKE_MARKERS)
 
     if pua_count > 0 or marker_count > 5:
-        logger.warning(f"Mojibake detected! PUA: {pua_count}, Markers: {marker_count}")
-        try:
-            # Typical fix for utf-8 interpreted as latin1 or cp1252, etc.
-            # But the specific diagnosis logic from scripts is more about detection.
-            # Here we just return the text as is with a warning, or attempt a naive fix.
-            # For clinical docs, manual intervention is usually preferred over lossy fixes.
-            pass
-        except Exception:
-            pass
+        # Report only: for clinical documents, manual intervention is preferred over
+        # lossy automatic re-decoding, so the text is returned unchanged for review.
+        logger.warning(
+            "Mojibake detected: PUA=%d, markers=%d - returning text unchanged for manual review",
+            pua_count, marker_count,
+        )
 
     return text
 

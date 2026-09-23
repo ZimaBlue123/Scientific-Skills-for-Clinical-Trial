@@ -118,7 +118,7 @@ This is not optional. Clinical decision documents require clear visual algorithm
 
 **How to generate schematics:**
 ```bash
-python scripts/generate_schematic.py "your diagram description" -o figures/output.png
+python ../scientific-schematics/scripts/generate_schematic.py "your diagram description" -o figures/output.png
 ```
 
 The AI will automatically:
@@ -503,3 +503,17 @@ See the `scripts/` directory for analysis and visualization tools:
 - `build_decision_tree.py` - TikZ flowchart generation for treatment algorithms
 - `biomarker_classifier.py` - Patient stratification algorithms by molecular subtype
 - `validate_cds_document.py` - Quality and compliance checks (HIPAA, statistical reporting standards)
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

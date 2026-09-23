@@ -36,7 +36,7 @@ import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parents[2]
 VENDORED = "clinical-automation"
 
 # Literals that are legitimate even though they look like absolute paths.

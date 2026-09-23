@@ -51,7 +51,7 @@ This is not optional. Scientific papers without visual elements are incomplete. 
 
 **Generate the graphical abstract FIRST:**
 ```bash
-python scripts/generate_schematic.py "Graphical abstract for [paper title]: [brief description showing workflow from input → methods → key findings → conclusions]" -o figures/graphical_abstract.png
+python ../scientific-schematics/scripts/generate_schematic.py "Graphical abstract for [paper title]: [brief description showing workflow from input → methods → key findings → conclusions]" -o figures/graphical_abstract.png
 ```
 
 **Graphical Abstract Requirements:**
@@ -81,7 +81,7 @@ Every document should be richly illustrated. Generate figures liberally - when i
 
 **Use scientific-schematics EXTENSIVELY for technical diagrams:**
 ```bash
-python scripts/generate_schematic.py "your diagram description" -o figures/output.png
+python ../scientific-schematics/scripts/generate_schematic.py "your diagram description" -o figures/output.png
 ```
 
 - Study design and methodology flowcharts (CONSORT, PRISMA, STROBE)
@@ -97,7 +97,7 @@ python scripts/generate_schematic.py "your diagram description" -o figures/outpu
 
 **Use generate-image EXTENSIVELY for visual content:**
 ```bash
-python scripts/generate_image.py "your image description" -o figures/output.png
+python ../generate-image/scripts/generate_image.py "your image description" -o figures/output.png
 ```
 
 - Photorealistic illustrations of concepts
@@ -682,7 +682,7 @@ The venue-templates skill provides:
 - `venue_writing_styles.md`: Master style comparison
 - Venue-specific guides: `nature_science_style.md`, `cell_press_style.md`, `medical_journal_styles.md`, `ml_conference_style.md`, `cs_conference_style.md`
 - `reviewer_expectations.md`: What reviewers look for at each venue
-- Writing examples in `assets/examples/`
+- Writing examples in `assets/REPORT_FORMATTING_GUIDE.md`
 
 **Workflow**: First use this skill for general scientific writing principles (IMRAD, clarity, citations), then consult venue-templates for venue-specific style adaptation.
 

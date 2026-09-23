@@ -46,7 +46,9 @@ def apply_cn_en_fonts(doc, styles: Iterable[str] | None = None) -> int:
             rfonts.set(qn("w:cs"), _ASCII_FONT)
             updated += 1
         except (KeyError, ValueError):
-            pass
+            # Styles that expose no rPr/rFonts element cannot be patched; skip quietly
+            # but keep a trace so silent font regressions stay diagnosable.
+            logger.debug("Skipping font patch for style %r: no rPr/rFonts element", style_name)
 
     return updated
 

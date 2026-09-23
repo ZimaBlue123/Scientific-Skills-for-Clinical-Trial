@@ -51,7 +51,7 @@ This is not optional. Treatment plans benefit greatly from visual elements. Befo
 
 **How to generate schematics:**
 ```bash
-python scripts/generate_schematic.py "your diagram description" -o figures/output.png
+python ../scientific-schematics/scripts/generate_schematic.py "your diagram description" -o figures/output.png
 ```
 
 The AI will automatically:
@@ -1586,3 +1586,17 @@ See the scripts/ directory for automation tools:
 - check_completeness.py - Checks if all required fields are present
 - 
 alidate_treatment_plan.py - Validates plan against medical standards
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

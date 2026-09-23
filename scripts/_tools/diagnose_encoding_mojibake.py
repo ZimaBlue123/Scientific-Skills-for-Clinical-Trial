@@ -12,7 +12,7 @@ diagnose_encoding_mojibake.py
   3) 有效 UTF-8 但中文占比异常 + 上述特征字密度超阈值
 
 用法:
-    python scripts/diagnose_encoding_mojibake.py [根目录]
+    python scripts/_tools/diagnose_encoding_mojibake.py [根目录]
 """
 
 from __future__ import annotations

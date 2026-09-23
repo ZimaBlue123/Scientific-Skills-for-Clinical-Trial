@@ -1,9 +1,11 @@
 import os
 import re
+from pathlib import Path
 
-base_dir = (
-    r"E:\Cursor Project\2-Scientific-Skills-for-Clinical_Trial\review_materials\文献库-F2F Meeting"
-)
+# Resolve relative to this file so the script works on any machine/checkout.
+# scripts/utils/update_indexes.py -> parents[0]=utils, [1]=scripts, [2]=repo root.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+base_dir = str(REPO_ROOT / "review_materials" / "文献库-F2F Meeting")
 missing_txt = os.path.join(base_dir, "未获取文献清单.txt")
 index_md = os.path.join(base_dir, "00_文献库总索引.md")
 
