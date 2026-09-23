@@ -408,5 +408,5 @@ def get_all_results(endpoint, search_query, api_key, max_results=1000):
 
 - OpenFDA Drug API Documentation: https://open.fda.gov/apis/drug/
 - API Basics: See `api_basics.md` in this references directory
-- Python examples: See `scripts/fda_drug_query.py`
+- Python examples: See `scripts/fda_query.py` (unified openFDA query CLI)
 - Field reference guides: Available at https://open.fda.gov/apis/drug/[endpoint]/searchable-fields/

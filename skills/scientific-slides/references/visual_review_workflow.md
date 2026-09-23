@@ -115,14 +115,14 @@ python skills/scientific-slides/scripts/pdf_to_images.py presentation.pdf output
 
 ### Method 2: Using PowerPoint Thumbnail Script
 
-For PowerPoint presentations, use the pptx skill's thumbnail tool:
+For PowerPoint presentations, use the `document-skills-pptx` skill's thumbnail tool:
 
 ```bash
 # Create thumbnail grid
-python scripts/thumbnail.py presentation.pptx output --cols 4
+python ../document-skills-pptx/scripts/thumbnail.py presentation.pptx output --cols 4
 
 # Individual slides
-python scripts/thumbnail.py presentation.pptx slides/slide --individual
+python ../document-skills-pptx/scripts/thumbnail.py presentation.pptx slides/slide --individual
 ```
 
 **Advantages**:
