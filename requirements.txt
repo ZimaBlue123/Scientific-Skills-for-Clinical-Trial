@@ -1,19 +1,41 @@
-beautifulsoup4==4.15.0
-PyMuPDF
-img2table==2.0.0
-lxml==6.1.0
-markitdown==0.1.7
-numpy==2.5.3
-openpyxl==3.1.5
-pdf-inspector
-pdfplumber==0.11.9
-Pillow==12.3.0
-pypdf==6.19.0
-pytesseract==0.3.13
-pytest==9.0.3
+# ============================================================
+# Runtime dependencies — source of truth for `pip install -r`
+# ============================================================
+# Scope: the repository's own pipeline / tooling code plus the Python helpers
+# bundled inside `skills/*/scripts/`. Optional, skill-specific scientific stacks
+# (torch, rdkit, scanpy, pymoo, ...) are intentionally NOT listed: they are
+# declared per-skill and installed on demand.
+#
+# Dev-only tooling (ruff, mypy, flake8, pytest, pre-commit) lives in
+# requirements-dev.txt, which CI installs in addition to this file.
+
+# --- Document I/O (core pipeline) -----------------------------------------
 python-docx==1.2.0
 python-pptx==1.0.2
-pywin32==311; platform_system == "Windows"
-rapidocr_onnxruntime==1.4.4
-scikit-learn==1.9.1
+openpyxl==3.1.5
+
+# --- PDF ------------------------------------------------------------------
+pypdf==6.19.0
+pdfplumber==0.11.9
+PyMuPDF
+pdf-inspector
+
+# --- Conversion / text extraction -----------------------------------------
+markitdown==0.1.7
 striprtf==0.0.33
+lxml==6.1.0
+
+# --- Imaging --------------------------------------------------------------
+Pillow==12.3.0
+
+# --- Data / numeric -------------------------------------------------------
+numpy==2.5.3
+scikit-learn==1.9.1
+
+# --- HTTP / configuration -------------------------------------------------
+requests
+python-dotenv>=1.0.0
+
+# --- Windows COM automation (Word / PowerPoint) ---------------------------
+# Imported lazily by COM-based document conversion; only relevant on Windows.
+pywin32==311; platform_system == "Windows"

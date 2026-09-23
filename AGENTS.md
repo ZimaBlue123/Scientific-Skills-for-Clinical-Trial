@@ -38,6 +38,6 @@
 
 - **核心原则**：严禁在未排查现有资产的情况下“重复造轮子”（Reinventing the wheel）。
 - **执行 SOP (Pre-Flight Check)**：在着手编写任何新脚本或提供复杂解决方案之前，Agent **必须强制执行**以下前置排查：
-  1. **排查脚本库**：使用 `find_by_name`、`grep_search` 或 `list_dir` 搜索 `scripts/`（及其子目录 `office_tools`, `data_processing` 等）中是否已存在类似功能的脚本（如 Office 处理、PDF 解析、数据对齐）。
+  1. **排查脚本库**：使用 `find_by_name`、`grep_search` 或 `list_dir` 搜索 `scripts/`（及其子目录 `pipeline/`、`utils/`、`literature_tools/`、`_tools/` 等）中是否已存在类似功能的脚本（如 Office 处理、PDF 解析、数据对齐）。
   2. **查阅内置技能**：浏览 Agent 提示词中提供的 `<skills>` 列表，确认是否有官方或项目定制的 Skill 可直接处理该任务。
-- **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `office_tools/extract_office_utils.py`）进行扩展开发；除非是全新的独立业务逻辑，否则避免从零开始写新文件。
+- **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `scripts/pipeline/ingest/docx_reader.py`、`scripts/pipeline/extract/table_extractor.py`）进行扩展开发；除非是全新的独立业务逻辑，否则避免从零开始写新文件。

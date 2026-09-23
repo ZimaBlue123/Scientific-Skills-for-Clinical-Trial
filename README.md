@@ -431,12 +431,17 @@ print(result.text_content)
 | 脚本 | 用途 | 状态 |
 |------|------|------|
 | `scripts/pipeline/convert/convert_to_md.py` | 文档转Markdown（推荐） | ✅ 推荐 |
-| `scripts/md_to_docx.py` | Markdown转Word | ✅ 推荐 |
-| `scripts/generate_csr_docx.py` | CSR阶段性小结 | ✅ 推荐 |
+| `scripts/pipeline/export/docx_builder.py` | DOCX 导出与中英文字体规范（Word/审核报告生成的基础模块） | ✅ 推荐 |
 | `scripts/_tools/project_self_check.py` | 项目自检 | ✅ 推荐 |
 | `scripts/_tools/cleanup_generated_artifacts.py` | 清理缓存与IDE历史记录 | ✅ 推荐 |
 | `scripts/_tools/on_open_cleanup.cmd` | 开机/打开项目时自动清理 | ✅ 辅助 |
 | `scripts/_tools/register_cleanup_logon_task.ps1` | 注册开机自启清理任务 | ✅ 辅助 |
+| `scripts/literature_tools/pubmed_search_tool.py` | PubMed 文献检索 CLI | ✅ 推荐 |
+
+> `scripts/` 现行分层：`pipeline/`（核心业务流）· `_tools/`（内部运维/审计工具）·
+> `utils/`（通用工具）· `literature_tools/`（文献工具）·
+> `_archive_2026_consolidation/`（一次性业务代码封存，不再维护）·
+> `clinical-automation/`（外部迁入的只读能力库）。
 
 ### 已废弃脚本
 
