@@ -10,24 +10,24 @@ documents in DOCX, PPTX, PDF, and XLSX formats with strict formatting compliance
 ## Core Competencies
 
 ### DOCX Generation
-- **Entry Point**: `scripts/common_scripts/generator_base.py` (abstract base)
+- **Entry Point**: `scripts/pipeline/export/docx_builder.py` (abstract base)
 - **Font Rules**: SimSun (宋体) for Chinese / East Asian text, Times New Roman for Latin
-- **Style Application**: Always call `apply_cn_en_fonts(doc)` from `docx_utils.py` AFTER all content
-- **TOC**: Use `scripts/office_tools/add_toc_field_to_docx.py` for native Word TOC fields
+- **Style Application**: Always call `apply_cn_en_fonts(doc)` from `docx_builder.py` AFTER all content
+- **TOC**: Use `scripts/pipeline/export/docx_builder.py` for native Word TOC fields
 
 ### PPTX Generation
-- **Template Injection**: `scripts/common_scripts/ppt_template_injector.py`
-- **Overflow Check**: ALWAYS run `scripts/pptx_tools/check_pptx_overflow.py` before delivery
-- **Layout Inspection**: `scripts/pptx_tools/inspect_pptx_layout.py` for template discovery
-- **Notes Export**: `scripts/pptx_tools/inject_pptx_notes_and_export_docx.py`
+- **Template Injection**: `scripts/pipeline/export/pptx_builder.py`
+- **Overflow Check**: ALWAYS run `scripts/pipeline/validate/pptx_validator.py` before delivery
+- **Layout Inspection**: `scripts/pipeline/validate/pptx_validator.py` for template discovery
+- **Notes Export**: `scripts/pipeline/export/pptx_builder.py`
 
 ### PDF Operations
-- **Text Extraction**: `scripts/office_tools/extract_office_utils.py` (PyMuPDF backend)
-- **Table Extraction**: `scripts/office_tools/extract_tables_to_docx.py` (OCR + img2table)
-- **Conversion**: `scripts/convert_to_md.py` for PDF → Markdown
+- **Text Extraction**: `scripts/pipeline/ingest/pdf_reader.py` (PyMuPDF backend)
+- **Table Extraction**: `scripts/pipeline/extract/table_extractor.py` (OCR + img2table)
+- **Conversion**: `scripts/convert_to_md.py` for PDF �?Markdown
 
 ### XLSX Operations
-- **Extraction**: `scripts/office_tools/extract_office_utils.py` with XML fallback
+- **Extraction**: `scripts/pipeline/ingest/pdf_reader.py` with XML fallback
 - **Chart Generation**: Use `skills/clinical-excel-charts`
 - **⚠️ Critical**: Chinese EDC platforms (TaiMei, Taibao) emit malformed XML. The
   custom `zipfile` + `xml.etree` fallback in `extract_office_utils.py` handles this.
@@ -51,13 +51,13 @@ Before delivering any generated document to the user:
 - [ ] No patient identifiers in output
 - [ ] File saved to `outputs/` directory
 - [ ] Table borders and grid styling verified for DOCX
-- [ ] Heading hierarchy is correct (H1 → H2 → H3, no skips)
+- [ ] Heading hierarchy is correct (H1 �?H2 �?H3, no skips)
 
 ## Error Recovery
 
 | Error | Cause | Fix |
 |-------|-------|-----|
 | `ValueError` on XLSX parse | Malformed EDC XML | Use XML fallback in `extract_office_utils.py` |
-| `COMError` on DOC → DOCX | Office not installed or file locked | Check Office installation, close open files |
+| `COMError` on DOC �?DOCX | Office not installed or file locked | Check Office installation, close open files |
 | Mojibake in output | GBK/GB18030 input read as UTF-8 | Run `diagnose_encoding_mojibake.py`, re-read with detected encoding |
 | Missing fonts in DOCX | `apply_cn_en_fonts` not called | Call after all content insertion, verify `w:rFonts` XML attributes |
