@@ -6,55 +6,71 @@
 
 ```
 scripts/
-├── common_scripts/         # 共享库（docx_utils 等）
-├── _tools/                 # 内部审计/自检辅助脚本
-├── _archive/               # 已归档的历史单次任务脚本（不提交）
-├── _archive_2026_consolidation/ # 2026 年大整合归档（不提交）
-├── *.py                    # 活跃核心脚本（见下表）
-├── *.cmd / *.ps1           # Windows 辅助脚本
-└── README.md               # 本文件
+├── pipeline/                       # 模块化数据处理管线（核心架构）
+│   ├── ingest/                     #   文档读取（docx/pdf/pptx/xlsx）
+│   ├── extract/                    #   表格/文本提取 & 规范化
+│   ├── transform/                  #   数据清洗 / 临床 RAG
+│   ├── convert/                    #   格式转换（→ Markdown）
+│   ├── export/                     #   生成 Word/PPT 输出
+│   └── validate/                   #   AST / 编码 / PPTX 校验
+├── _tools/                         # 内部审计 / 自检 / 维护脚本
+├── utils/                          # 跨模块共享帮助函数
+├── literature_tools/               # 文献检索客户端
+├── clinical-automation/            # 外部子项目（只读，勿修改）
+├── _archive/                       # 已归档的一次性脚本（不追踪）
+└── _archive_2026_consolidation/    # 2026 大整合归档（不追踪）
 ```
 
-## 活跃脚本清单
+## 核心管线模块 (`pipeline/`)
 
-| 脚本 | 功能 | 主要依赖 |
+| 模块 | 功能 | 主要依赖 |
 |------|------|----------|
-| `extract_office_utils.py` | 统一 Office 文档提取（DOCX/DOC/PPTX/XLSX，含容错 XML 提取） | python-docx, python-pptx, openpyxl |
-| `edit_office_utils.py` | Office 文档编辑工具（段落遍历、Run 创建、单元格操作） | python-docx |
-| `extract_ib_texts.py` | IB（研究者手册）结构化文本提取 | python-docx |
-| `extract_tables_to_docx.py` | OCR + 表格流水线（图片 → Word） | pytesseract, img2table, Pillow |
-| `convert_to_md.py` | docx/pdf/rtf/doc 统一转 Markdown | python-docx, pypdf, pdfplumber, striprtf, markitdown |
-| `make_safe_md_copies.py` | 生成 .md 文件的安全副本（去敏感信息） | stdlib |
-| `project_self_check.py` | 项目自检：外部命令可用性 + Python 脚本冒烟测试 | stdlib |
-| `cleanup_generated_artifacts.py` | 清理 generated/ 与历史状态等可重建产物 | stdlib |
-| `skill_dedupe_report.py` | skills 去重报告 | stdlib |
-| `pubmed_search_tool.py` | PubMed 文献检索（NCBI E-utilities） | stdlib (urllib) |
+| `ingest/docx_reader.py` | 读取 Word 文档结构与文本 | python-docx |
+| `ingest/pdf_reader.py` | 读取 PDF 文档 | pypdf, pdfplumber |
+| `ingest/pptx_reader.py` | 读取 PowerPoint 演示文稿 | python-pptx |
+| `ingest/xlsx_reader.py` | 读取 Excel 工作簿 | openpyxl |
+| `extract/table_extractor.py` | 从文档中提取结构化表格 | — |
+| `extract/text_normalizer.py` | 文本规范化处理 | — |
+| `transform/clinical_rag.py` | 临床数据 RAG 转换 | — |
+| `convert/convert_to_md.py` | 多格式 → Markdown 转换 | markitdown, striprtf |
+| `export/docx_builder.py` | 程序化生成 Word 文档 | python-docx |
+| `export/pptx_builder.py` | 程序化生成 PPT 文档 | python-pptx |
+| `validate/ast_validator.py` | Python AST 语法验证 | stdlib |
+| `validate/encoding_validator.py` | 文件编码验证 | stdlib |
+| `validate/pptx_validator.py` | PPTX 结构验证 | python-pptx |
 
-## 辅助脚本
+## 内部工具 (`_tools/`)
 
 | 脚本 | 功能 |
 |------|------|
-| `on_open_cleanup.cmd` | 开机/打开项目时自动清理 |
-| `register_cleanup_logon_task.ps1` | 注册 Windows 开机自启清理任务 |
-| `sync_skills_to_global.ps1` | Windows skills 同步至全局目录 |
+| `generate_skills_index.py` | 重新生成 `SKILLS_INDEX.md` |
+| `inject_skill_sop.py` | 为核心 Skill 注入 Pre-flight / Post-execution SOP |
+| `skill_dedupe_report.py` | Skills 去重报告 |
+| `validate_skills_registry.py` | 校验 Skills 注册表完整性 |
+| `audit_skills.py` | Skills 审计 |
+| `scan_imports.py` | 扫描 import 依赖 |
+| `validate_codebase.py` | 代码库质量验证 |
+| `project_self_check.py` | 项目自检（外部命令可用性 + 冒烟测试） |
+| `fix_skills_frontmatter.py` | 修复 SKILL.md YAML Frontmatter |
+| `fix_unused_imports.py` | 清理未使用的 import |
+| `fix_fstrings_broad.py` | f-string 修复 |
+| `audit_robustness_smells.py` | 代码健壮性审计 |
+| `cleanup_generated_artifacts.py` | 清理可重建产物 |
 
 ## 用法
 
 ```bash
-# 提取 .xlsx（含容错）
-python scripts/extract_office_utils.py review_materials/ -o dump.txt
-
 # 转换 Word 为 Markdown
 python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
-
-# OCR 图片表格 → Word
-python scripts/extract_tables_to_docx.py input.png -o output.docx
 
 # 项目自检
 python scripts/_tools/project_self_check.py
 
-# PubMed 检索
-python scripts/pubmed_search_tool.py --query '"hepatitis B vaccine"[tiab]' --out result.json
+# 重新生成 Skills 索引
+python scripts/_tools/generate_skills_index.py
+
+# 注入 SOP 到核心 Skills
+python scripts/_tools/inject_skill_sop.py --write
 ```
 
 ## 约定
@@ -63,14 +79,4 @@ python scripts/pubmed_search_tool.py --query '"hepatitis B vaccine"[tiab]' --out
 - 第三方依赖必须显式声明 import 错误提示
 - 不在仓库级产生可重建 artifacts（已通过 `.gitignore` 过滤）
 - 已归档的历史脚本保存在 `_archive/` 下，仅作参考，不纳入版本追踪
-
-## 关键脚本说明
-
-### extract_office_utils.py
-
-统一入口：DOCX 纯文本 / Markdown 提取、PPTX 全量提取（含表格/组合形状/备注）、
-XLSX zip+xml 解析（绕开 openpyxl 的严格 autoFilter ref 校验）。
-
-部分国内 EDC 系统（如太美、太保、同心等）导出的 .xlsx 含历史遗留的非规范 XML，
-会导致 openpyxl 直接抛 `ValueError`。本脚本使用 zipfile + xml.etree 直接解析，
-稳健地提取所有文本内容。
+- `clinical-automation/` 为外部子项目，保持只读，详见根 `AGENTS.md` §3.1
