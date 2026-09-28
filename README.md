@@ -78,7 +78,7 @@ New-Item -ItemType Directory -Force -Path $dst | Out-Null
 Copy-Item -Recurse -Force ".\skills\*" $dst
 
 # 仅同步单个 skill（示例）
-powershell -File .\scripts\sync_skills_to_global.ps1 -Skill pptx-gmc-sync-from-word
+powershell -File .\scripts\_tools\sync_skills_to_global.ps1 -Skill pptx-gmc-sync-from-word
 ```
 
 macOS/Linux（bash）示例：
@@ -92,19 +92,24 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # 每个 skill 一个目录（核心内容，157 个）
+├── skills/                # 每个 skill 一个目录（核心内容，175 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
-├── scripts/               # 仓库级可执行脚本入口（含 CSR/审核报告生成）
-│   ├── common_scripts/    # 共享工具模块（如 docx_utils）
-│   └── _archive/          # 已归档的历史版本（不再维护）
+├── scripts/               # 仓库级可执行脚本入口
+│   ├── pipeline/          # 模块化数据处理管线（ingest/extract/transform/export/validate）
+│   ├── _tools/            # 内部审计/自检/维护脚本
+│   ├── utils/             # 跨模块共享帮助函数
+│   ├── literature_tools/  # 文献检索客户端
+│   ├── clinical-automation/ # 外部子项目（只读）
+│   └── _archive/          # 已归档的历史版本（不追踪）
 ├── tests/                 # 测试
 ├── pyproject.toml         # 项目元数据 + ruff/mypy/pytest 配置
 ├── requirements.txt
 ├── requirements-dev.txt
+├── SKILLS_INDEX.md        # 全局技能索引（自动生成）
 └── CONTRIBUTING.md
 ```
 
-维护约定与更详细解释见 `docs/repo_layout.md`。
+维护约定与更详细解释见 `docs/repo_layout.md` 及 `scripts/README.md`。
 
 ---
 
@@ -113,24 +118,24 @@ Scientific-Skills-for-Clinical_Trial/
 本仓库在每次重大重构时会跑一组**自检脚本**（位于 `scripts/_tools/`）。这些脚本可独立于 IDE / CI 运行，方便人工排查。
 
 ```bash
-# Phase 1: py_compile + pyflakes 全量扫描
-py -3 scripts/_tools/_audit_phase1_compile.py
-py -3 scripts/_tools/_audit_phase1_pyflakes.py
-py -3 scripts/_tools/_audit_phase1_ast.py
+# 静态语法 + AST 验证
+python scripts/_tools/validate_codebase.py
 
-# Phase 2: 扫描冗余文件 / 临时日志（不删除）
-py -3 scripts/_tools/_audit_phase2_scan.py
-# 拟删除清单写入 docs/cleanup_phase2_plan.md
+# Skills 注册表校验
+python scripts/_tools/validate_skills_registry.py
 
-# Phase 3: 导入依赖审计（与 requirements.txt 对照）
-py -3 scripts/_tools/_audit_phase3_imports.py
+# Skills 去重报告
+python scripts/_tools/skill_dedupe_report.py
+
+# 重新生成 SKILLS_INDEX.md
+python scripts/_tools/generate_skills_index.py
+
+# 为核心 Skills 注入 SOP
+python scripts/_tools/inject_skill_sop.py --write
+
+# Import 依赖扫描
+python scripts/_tools/scan_imports.py
 ```
-
-报告分别落在：
-
-- `docs/audit_phase1.md` —— 静态分析 + AST 深度审查
-- `docs/cleanup_phase2_plan.md` —— 删除清单（含风险等级）
-- `reports/phase3_imports.md` —— 第三方 import 使用矩阵
 
 
 
