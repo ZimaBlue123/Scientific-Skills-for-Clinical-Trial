@@ -154,11 +154,17 @@ jobs:
           # Run the custom registry validator. Warnings exit with 1, errors with 2.
           # We don't want to fail the build on warnings (exit 1) since there are existing broken links,
           # but we do want to fail on errors (exit 2).
-          uv run python scripts/validate_skills_registry.py --format json > validation_report.json
+          set +e
+          uv run python scripts/_tools/validate_skills_registry.py --format json > validation_report.json
           exit_code=$?
-          if [ $exit_code -eq 2 ]; then
+          set -e
+
+          if [ "$exit_code" -eq 2 ]; then
             echo "Registry validation found errors."
             cat validation_report.json
             exit 2
+          elif [ "$exit_code" -ne 0 ] && [ "$exit_code" -ne 1 ]; then
+            echo "Registry validator failed unexpectedly with exit code $exit_code."
+            cat validation_report.json
+            exit "$exit_code"
           fi
-          exit 0
