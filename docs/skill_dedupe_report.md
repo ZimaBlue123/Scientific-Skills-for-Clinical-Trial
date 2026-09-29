@@ -80,7 +80,7 @@
 - **0.301**: `peer-review`  <->  `scientific-slides`
 - **0.301**: `clinical-decision-support`  <->  `clinical-reports`
 - **0.301**: `bioservices`  <->  `reactome-database`
-- **0.300**: `networkx`  <->  `torch_geometric`
+- **0.300**: `networkx`  <->  `torch-geometric`
 - **0.299**: `bioservices`  <->  `string-database`
 - **0.299**: `hypothesis-generation`  <->  `literature-review`
 - **0.299**: `biorxiv-database`  <->  `citation-management`
