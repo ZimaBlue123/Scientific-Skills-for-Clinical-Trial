@@ -41,3 +41,7 @@
   1. **排查脚本库**：使用 `find_by_name`、`grep_search` 或 `list_dir` 搜索 `scripts/`（及其子目录 `pipeline/`、`utils/`、`literature_tools/`、`_tools/` 等）中是否已存在类似功能的脚本（如 Office 处理、PDF 解析、数据对齐）。
   2. **查阅内置技能**：浏览 Agent 提示词中提供的 `<skills>` 列表，确认是否有官方或项目定制的 Skill 可直接处理该任务。
 - **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `scripts/pipeline/ingest/docx_reader.py`、`scripts/pipeline/extract/table_extractor.py`）进行扩展开发；除非是全新的独立业务逻辑，否则避免从零开始写新文件。
+
+## 5. 严格输出与认知护栏 (Strict Output & Cognitive Guardrail)
+- **无废话原则 (Zero-Filler)**：在处理临床数据提取、报告审查或与自动化管道交互时，Agent 必须直接输出结果。严禁使用诸如 Here is the..., Hope this helps! 等过渡性或客套话。若需要输出 JSON/代码，必须且只能输出代码块，防止破坏下游的 Parser。
+- **强制指令**：全面应用 skills/clinical-strict-extractor 规范，所有多步任务必须量化并编号。确保内容高信噪比。
