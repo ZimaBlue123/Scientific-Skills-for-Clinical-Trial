@@ -3,9 +3,7 @@ name: fireworks-tech-graph
 description: Generate architecture/flow/UML technical diagrams from natural language and export SVG plus PNG assets.
 metadata:
   version: "1.0.0"
-  surfaces:
-  - ide
-  - terminal
+  surfaces: "ide terminal"
 ---
 
 # Fireworks Tech Graph
