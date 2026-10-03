@@ -5,8 +5,8 @@ license: MIT
 compatibility: Requires Python 3.10+ with openpyxl, XlsxWriter and pandas. Colour presets follow the Chinese market convention (red = up, green = down).
 allowed-tools: Read Write Edit Bash
 metadata:
-  version:" "1.0""
-  skill-author: Scientific Skills for Clinical Trial Contributors
+  version: "1.0"
+  skill-author: "Scientific Skills for Clinical Trial Contributors"
   last-reviewed: "2026-09-18"
 ---
 # 临床 Excel 图表与配色

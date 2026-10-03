@@ -4,8 +4,8 @@ description: Search scientific papers and retrieve structured experimental data 
 allowed-tools: Bash
 license: MIT
 metadata:
-  version:" "1.0.0""
-  skill-author: BGPT
+  version: "1.0.0"
+  skill-author: "BGPT"
   website: https://bgpt.pro/mcp
   github: https://github.com/connerlambden/bgpt-mcp
 ---

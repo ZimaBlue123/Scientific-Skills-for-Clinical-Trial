@@ -6,11 +6,11 @@ description: >-
 license: MIT
 compatibility: No external dependencies. Pure document-based cognitive skill.
 allowed-tools: Read Write Edit
-activation: explicit-only
 metadata:
-  version:" "1.0.0""
-  skill-author: Scientific Skills for Clinical Trial Contributors
+  version: "1.0.0"
+  skill-author: "Scientific Skills for Clinical Trial Contributors"
   last-reviewed: "2026-09-30"
+  activation: explicit-only
 ---
 # PV Medical Auditor — SAE 报告审核与 Query 生成
 

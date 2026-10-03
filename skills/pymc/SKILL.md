@@ -3,8 +3,8 @@ name: pymc
 description: Bayesian modeling with PyMC. Build hierarchical models, MCMC (NUTS), variational inference, LOO/WAIC comparison, posterior checks, for probabilistic programming and inference.
 license: Apache License, Version 2.0
 metadata:
-  version:" "1.0.0""
-  skill-author: K-Dense Inc.
+  version: "1.0.0"
+  skill-author: "K-Dense Inc."
 ---
 # PyMC Bayesian Modeling
 

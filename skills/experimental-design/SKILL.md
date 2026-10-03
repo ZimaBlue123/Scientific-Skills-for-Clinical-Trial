@@ -5,8 +5,8 @@ allowed-tools: Read Write Edit Bash
 compatibility: Requires Python >=3.10. Scripts use numpy, pandas, and pyDOE3 (DOE matrices). Install with uv as shown below.
 license: MIT license
 metadata:
-  version:" "1.2""
-  skill-author: K-Dense Inc.
+  version: "1.2"
+  skill-author: "K-Dense Inc."
 ---
 # Experimental Design
 

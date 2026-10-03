@@ -5,8 +5,8 @@ license: MIT
 compatibility: Requires Python 3.11+ with numpy and scipy. No network access and no proprietary software. The estimation tools this skill orients you towards (NONMEM, Monolix, Phoenix, Simcyp, GastroPlus) are licensed separately and are never invoked by these scripts.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version:" "1.2""
-  skill-author: K-Dense Inc.
+  version: "1.2"
+  skill-author: "K-Dense Inc."
   last-reviewed: "2026-07-27"
 ---
 # Pharmacokinetic and Pharmacodynamic Modelling

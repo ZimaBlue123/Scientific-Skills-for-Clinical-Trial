@@ -3,7 +3,7 @@ name: document-skills-pptx
 description: Read, edit, and restructure PowerPoint (PPTX) presentations
 license: Proprietary. LICENSE.txt has complete terms
 metadata:
-  version:" "1.0.0""
+  version: "1.0.0"
 ---
 # PPTX creation, editing, and analysis
 

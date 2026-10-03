@@ -4,8 +4,8 @@ description: This skill should be used when converting academic papers into prom
 allowed-tools: Read Write Edit Bash
 license: Unknown
 metadata:
-  version:" "1.0.0""
-  skill-author: K-Dense Inc.
+  version: "1.0.0"
+  skill-author: "K-Dense Inc."
 ---
 # Paper2All: Academic Paper Transformation Pipeline
 

@@ -3,7 +3,7 @@ name: document-skills-pdf
 description: Read, manipulate, and extract structured data from PDF files
 license: Proprietary. LICENSE.txt has complete terms
 metadata:
-  version:" "1.0.0""
+  version: "1.0.0"
 ---
 # PDF Processing Guide
 

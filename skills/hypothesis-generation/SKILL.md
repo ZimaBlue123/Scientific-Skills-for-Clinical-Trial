@@ -4,8 +4,8 @@ description: Structured hypothesis formulation from observations. Use when you h
 allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
-  version:" "1.0.0""
-  skill-author: K-Dense Inc.
+  version: "1.0.0"
+  skill-author: "K-Dense Inc."
 ---
 # Scientific Hypothesis Generation
 

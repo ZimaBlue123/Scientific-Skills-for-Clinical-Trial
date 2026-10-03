@@ -2,7 +2,7 @@
 name: clinical-strict-extractor
 description: A cognitive guardrail skill inspired by i-have-adhd. Enforces strict, filler-free, and deterministic formatting for AI agents during clinical data extraction or report generation.
 metadata:
-  version:" "1.0.0""
+  version: "1.0.0"
 ---
 # Clinical Strict Extractor (Cognitive Guardrail)
 

@@ -7,7 +7,7 @@ description: >-
   Use when updating PPT tables from Word, replacing 校正GMC with GMC, fixing PPS/FAS
   mix-ups, or exporting slide tables to Word.
 metadata:
-  version:" "1.0.0""
+  version: "1.0.0"
 ---
 # PPTX GMC 同步（Word → PPT）
 
