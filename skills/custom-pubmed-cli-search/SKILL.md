@@ -3,7 +3,8 @@ name: custom-pubmed-cli-search
 description: Search PubMed using the project's custom CLI tool to fetch clinical trial literature.
 metadata:
   version: "1.0.0"
----# Custom PubMed CLI Search
+---
+# Custom PubMed CLI Search
 
 This skill instructs the AI agent on how to seamlessly use the project's internal `scripts/literature_tools/pubmed_search_tool.py` to perform medical literature searches.
 

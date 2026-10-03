@@ -251,7 +251,8 @@ TOST margin                               2.0000
 TOST p-value                              1.0528e-13
 90% CI (TOST)                             1.44127 to 1.48797
 equivalent at stated margin               yes
---- for contrast only ---
+---
+ for contrast only ---
 paired t-test p (NOT equivalence)         0.0000
 OLS slope (biased here)                   1.0396
 Deming slope                              1.0398
