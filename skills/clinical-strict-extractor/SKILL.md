@@ -2,9 +2,8 @@
 name: clinical-strict-extractor
 description: A cognitive guardrail skill inspired by i-have-adhd. Enforces strict, filler-free, and deterministic formatting for AI agents during clinical data extraction or report generation.
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
 ---
-
 # Clinical Strict Extractor (Cognitive Guardrail)
 
 **STOP AND READ THIS CAREFULLY.**
@@ -38,3 +37,19 @@ Use this skill automatically whenever:
 *   You are extracting structured data (Tables, JSON) from Clinical Trial Docs.
 *   You are generating pipeline scripts.
 *   You are running QA/QC (Quality Control) on generated clinical reports.
+
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

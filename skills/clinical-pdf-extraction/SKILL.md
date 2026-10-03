@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.10+ with pymupdf, pandas, openpyxl and pdfplumber; OCR additionally needs a local Tesseract installation.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version:" "1.0""
   skill-author: Scientific Skills for Clinical Trial Contributors
   last-reviewed: "2026-09-18"
 ---
-
 # 临床 PDF 数据提取
 
 三个模块按场景选用，可串联使用。

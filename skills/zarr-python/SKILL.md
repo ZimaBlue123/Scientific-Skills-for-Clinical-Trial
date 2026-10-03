@@ -3,10 +3,9 @@ name: zarr-python
 description: Chunked N-D arrays for cloud storage. Compressed arrays, parallel I/O, S3/GCS integration, NumPy/Dask/Xarray compatible, for large-scale scientific computing pipelines.
 license: MIT license
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # Zarr Python
 
 ## Overview

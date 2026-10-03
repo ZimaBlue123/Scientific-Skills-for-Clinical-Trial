@@ -3,10 +3,9 @@ name: pytorch-lightning
 description: Deep learning framework (PyTorch Lightning). Organize PyTorch code into LightningModules, configure Trainers for multi-GPU/TPU, implement data pipelines, callbacks, logging (W&B, TensorBoard), distributed training (DDP, FSDP, DeepSpeed), for scalable neural network training.
 license: Apache-2.0 license
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # PyTorch Lightning
 
 ## Overview

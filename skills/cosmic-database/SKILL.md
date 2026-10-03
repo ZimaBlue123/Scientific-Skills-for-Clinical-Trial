@@ -3,10 +3,9 @@ name: cosmic-database
 description: Access COSMIC cancer mutation database. Query somatic mutations, Cancer Gene Census, mutational signatures, gene fusions, for cancer research and precision oncology. Requires authentication.
 license: Unknown
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # COSMIC Database
 
 ## Overview

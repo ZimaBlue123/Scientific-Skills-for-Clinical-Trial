@@ -14,8 +14,10 @@ MOJIBAKE_MARKERS = set(
     "鐩爜铻嶈繍缂撴潯鑺傛暟鎹璁扮"
 )
 
+
 def _is_pua(ch: str) -> bool:
     return 0xE000 <= ord(ch) <= 0xF8FF
+
 
 def detect_encoding(raw_bytes: bytes) -> str:
     """Guess the encoding of raw bytes."""
@@ -33,9 +35,10 @@ def detect_encoding(raw_bytes: bytes) -> str:
         pass  # Intentional: not GB18030 either; the latin-1 fallback below always decodes.
     return "latin-1"
 
+
 def fix_mojibake(text: str) -> str:
     """Identify and attempt to fix common mojibake patterns.
-    
+
     Checks for Private Use Area (PUA) characters and common GBK mis-decodes.
     """
     pua_count = sum(1 for c in text if _is_pua(c))
@@ -46,15 +49,18 @@ def fix_mojibake(text: str) -> str:
         # lossy automatic re-decoding, so the text is returned unchanged for review.
         logger.warning(
             "Mojibake detected: PUA=%d, markers=%d - returning text unchanged for manual review",
-            pua_count, marker_count,
+            pua_count,
+            marker_count,
         )
 
     return text
+
 
 def normalize_whitespace(text: str) -> str:
     """Normalize tabs, spaces, and newlines."""
     text = re.sub(r"[ \\t]+", " ", text)
     text = re.sub(r"\\n{3,}", "\\n\\n", text)
     return text.strip()
+
 
 __all__ = ["detect_encoding", "fix_mojibake", "normalize_whitespace"]

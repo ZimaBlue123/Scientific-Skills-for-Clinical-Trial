@@ -7,9 +7,10 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 def extract_xlsx_data(xlsx_path: Path | str) -> dict[str, list[list[str]]]:
     """Extract data from .xlsx file using XML parsing for robust extraction.
-    
+
     Returns a dictionary mapping sheet names to a list of rows.
     Uses openpyxl with a fallback to robust XML extraction for non-conforming EDC exports.
     """
@@ -32,5 +33,6 @@ def extract_xlsx_data(xlsx_path: Path | str) -> dict[str, list[list[str]]]:
         data["Fallback"] = [["XML fallback triggered"]]
 
     return data
+
 
 __all__ = ["extract_xlsx_data"]

@@ -51,7 +51,7 @@ def _metadata_scalars(frontmatter: str) -> dict[str, str]:
     except StopIteration:
         return {}
     scalars: dict[str, str] = {}
-    for line in lines[start + 1:]:
+    for line in lines[start + 1 :]:
         if line.strip() and not line.startswith((" ", "\t")):
             break
         m = re.match(r"^  ([A-Za-z][A-Za-z0-9_-]*):(.*)$", line)
@@ -82,6 +82,7 @@ def _resolve_description(frontmatter: str, value: str) -> str:
 # Skill data model
 # --------------------------------------------------------------------------- #
 
+
 @dataclass
 class SkillInfo:
     name: str
@@ -98,75 +99,241 @@ class SkillInfo:
 
 # Order matters: first match wins.  More specific patterns come before general.
 CATEGORY_RULES: list[tuple[str, list[str]]] = [
-    ("🧬 生物信息学 & 基因组学", [
-        "alphafold", "anndata", "biopython", "cellxgene", "deeptools",
-        "ena-database", "ensembl", "esm", "etetoolkit", "flowio", "gene-database",
-        "geniml", "geo-database", "gget", "gnomad", "gtars", "gwas-database",
-        "histolab", "lamindb", "neurokit2", "neuropixels", "pathml",
-        "pathogen-variant", "pysam", "pydeseq2", "scanpy", "scikit-bio",
-        "scvi-tools", "tiledbvcf", "umap-learn", "zarr-python",
-    ]),
-    ("💊 临床试验 & 合规", [
-        "clinical-", "clinicaltrials", "clinpgx", "clinvar", "csr-stage",
-        "fda-database", "iso-standards", "treatment-plans", "word-audit",
-        "pptx-gmc-sync", "analytical-method",
-    ]),
-    ("📄 文档处理 & 报告生成", [
-        "document-skills", "document-format", "clinical-docx", "clinical-pdf",
-        "clinical-ppt", "clinical-word", "clinical-excel", "clinical-sae",
-        "markitdown", "latex-posters", "pptx-posters", "infographics",
-        "scientific-slides", "scientific-writing", "paper-2-web",
-        "markdown-mermaid",
-    ]),
-    ("📊 统计分析 & 建模", [
-        "statistical-", "statsmodels", "scikit-learn", "scikit-survival",
-        "shap", "pymc", "pymoo", "experimental-design", "exploratory-data",
-        "hypothesis-generation", "statistical-power", "timesfm",
-        "pkpd-modeling", "antibody-kinetics",
-    ]),
-    ("🔬 化学 & 药物设计", [
-        "rdkit", "datamol", "deepchem", "medchem", "molfeat", "pubchem",
-        "chembl", "drugbank", "zinc-database", "pytdc", "diffdock",
-        "matchms", "pyopenms", "cobrapy", "rowan",
-    ]),
-    ("📚 文献检索 & 知识管理", [
-        "pubmed", "openalex", "biorxiv", "paper-lookup", "literature-review",
-        "citation-management", "pyzotero", "bgpt-paper", "perplexity",
-        "custom-pubmed", "peer-review", "scientific-schematics",
-    ]),
-    ("🗃️ 数据库接口", [
-        "database-lookup", "brenda", "cosmic", "hmdb", "kegg",
-        "metabolomics-workbench", "opentargets", "pdb-database",
-        "reactome", "string-database", "uniprot", "bioservices",
-        "datacommons", "ontology-term", "imaging-data",
-    ]),
-    ("📈 数据可视化", [
-        "matplotlib", "plotly", "seaborn", "scientific-visualization",
-        "fireworks-tech-graph", "networkx",
-    ]),
-    ("🧪 实验设计 & 实验室集成", [
-        "benchling", "dnanexus", "ginkgo", "labarchive", "latchbio",
-        "omero", "opentrons", "protocolsio", "pylabrobot", "adaptyv",
-        "open-notebook",
-    ]),
-    ("💰 金融 & 经济数据", [
-        "alpha-vantage", "fred-economic", "edgartools", "hedgefundmonitor",
-        "denario", "usfiscaldata",
-    ]),
-    ("🔧 量子计算 & 物理", [
-        "cirq", "qiskit", "pennylane", "qutip", "astropy", "pymatgen",
-        "fluidsim", "sympy",
-    ]),
-    ("🤖 机器学习 & 深度学习", [
-        "pytorch-lightning", "transformers", "stable-baselines3",
-        "torch_geometric", "torchdrug", "pufferlib", "hypogenic",
-    ]),
-    ("🛠️ 通用工具", [
-        "dask", "polars", "vaex", "simpy", "modal", "matlab", "aeon",
-        "arboreto", "geopandas", "geomaster", "get-available-resources",
-        "github-proxy-push", "generate-image", "market-research",
-        "pydicom", "pyhealth", "usptodata", "uspto",
-    ]),
+    (
+        "🧬 生物信息学 & 基因组学",
+        [
+            "alphafold",
+            "anndata",
+            "biopython",
+            "cellxgene",
+            "deeptools",
+            "ena-database",
+            "ensembl",
+            "esm",
+            "etetoolkit",
+            "flowio",
+            "gene-database",
+            "geniml",
+            "geo-database",
+            "gget",
+            "gnomad",
+            "gtars",
+            "gwas-database",
+            "histolab",
+            "lamindb",
+            "neurokit2",
+            "neuropixels",
+            "pathml",
+            "pathogen-variant",
+            "pysam",
+            "pydeseq2",
+            "scanpy",
+            "scikit-bio",
+            "scvi-tools",
+            "tiledbvcf",
+            "umap-learn",
+            "zarr-python",
+        ],
+    ),
+    (
+        "💊 临床试验 & 合规",
+        [
+            "clinical-",
+            "clinicaltrials",
+            "clinpgx",
+            "clinvar",
+            "csr-stage",
+            "fda-database",
+            "iso-standards",
+            "treatment-plans",
+            "word-audit",
+            "pptx-gmc-sync",
+            "analytical-method",
+        ],
+    ),
+    (
+        "📄 文档处理 & 报告生成",
+        [
+            "document-skills",
+            "document-format",
+            "clinical-docx",
+            "clinical-pdf",
+            "clinical-ppt",
+            "clinical-word",
+            "clinical-excel",
+            "clinical-sae",
+            "markitdown",
+            "latex-posters",
+            "pptx-posters",
+            "infographics",
+            "scientific-slides",
+            "scientific-writing",
+            "paper-2-web",
+            "markdown-mermaid",
+        ],
+    ),
+    (
+        "📊 统计分析 & 建模",
+        [
+            "statistical-",
+            "statsmodels",
+            "scikit-learn",
+            "scikit-survival",
+            "shap",
+            "pymc",
+            "pymoo",
+            "experimental-design",
+            "exploratory-data",
+            "hypothesis-generation",
+            "statistical-power",
+            "timesfm",
+            "pkpd-modeling",
+            "antibody-kinetics",
+        ],
+    ),
+    (
+        "🔬 化学 & 药物设计",
+        [
+            "rdkit",
+            "datamol",
+            "deepchem",
+            "medchem",
+            "molfeat",
+            "pubchem",
+            "chembl",
+            "drugbank",
+            "zinc-database",
+            "pytdc",
+            "diffdock",
+            "matchms",
+            "pyopenms",
+            "cobrapy",
+            "rowan",
+        ],
+    ),
+    (
+        "📚 文献检索 & 知识管理",
+        [
+            "pubmed",
+            "openalex",
+            "biorxiv",
+            "paper-lookup",
+            "literature-review",
+            "citation-management",
+            "pyzotero",
+            "bgpt-paper",
+            "perplexity",
+            "custom-pubmed",
+            "peer-review",
+            "scientific-schematics",
+        ],
+    ),
+    (
+        "🗃️ 数据库接口",
+        [
+            "database-lookup",
+            "brenda",
+            "cosmic",
+            "hmdb",
+            "kegg",
+            "metabolomics-workbench",
+            "opentargets",
+            "pdb-database",
+            "reactome",
+            "string-database",
+            "uniprot",
+            "bioservices",
+            "datacommons",
+            "ontology-term",
+            "imaging-data",
+        ],
+    ),
+    (
+        "📈 数据可视化",
+        [
+            "matplotlib",
+            "plotly",
+            "seaborn",
+            "scientific-visualization",
+            "fireworks-tech-graph",
+            "networkx",
+        ],
+    ),
+    (
+        "🧪 实验设计 & 实验室集成",
+        [
+            "benchling",
+            "dnanexus",
+            "ginkgo",
+            "labarchive",
+            "latchbio",
+            "omero",
+            "opentrons",
+            "protocolsio",
+            "pylabrobot",
+            "adaptyv",
+            "open-notebook",
+        ],
+    ),
+    (
+        "💰 金融 & 经济数据",
+        [
+            "alpha-vantage",
+            "fred-economic",
+            "edgartools",
+            "hedgefundmonitor",
+            "denario",
+            "usfiscaldata",
+        ],
+    ),
+    (
+        "🔧 量子计算 & 物理",
+        [
+            "cirq",
+            "qiskit",
+            "pennylane",
+            "qutip",
+            "astropy",
+            "pymatgen",
+            "fluidsim",
+            "sympy",
+        ],
+    ),
+    (
+        "🤖 机器学习 & 深度学习",
+        [
+            "pytorch-lightning",
+            "transformers",
+            "stable-baselines3",
+            "torch_geometric",
+            "torchdrug",
+            "pufferlib",
+            "hypogenic",
+        ],
+    ),
+    (
+        "🛠️ 通用工具",
+        [
+            "dask",
+            "polars",
+            "vaex",
+            "simpy",
+            "modal",
+            "matlab",
+            "aeon",
+            "arboreto",
+            "geopandas",
+            "geomaster",
+            "get-available-resources",
+            "github-proxy-push",
+            "generate-image",
+            "market-research",
+            "pydicom",
+            "pyhealth",
+            "usptodata",
+            "uspto",
+        ],
+    ),
 ]
 
 
@@ -183,6 +350,7 @@ def _classify(skill_name: str) -> str:
 # --------------------------------------------------------------------------- #
 # Index generation
 # --------------------------------------------------------------------------- #
+
 
 def _scan_skills(skills_dir: Path) -> list[SkillInfo]:
     """Scan all skills and extract metadata."""
@@ -204,15 +372,18 @@ def _scan_skills(skills_dir: Path) -> list[SkillInfo]:
 
         fm = _extract_frontmatter(text)
         if fm is None:
-            skills.append(SkillInfo(
-                name=skill_dir.name,
-                description="⚠️ Missing frontmatter",
-                version="—",
-                license="—",
-                category=_classify(skill_dir.name),
-                has_scripts=any((skill_dir / "scripts").rglob("*"))
-                if (skill_dir / "scripts").is_dir() else False,
-            ))
+            skills.append(
+                SkillInfo(
+                    name=skill_dir.name,
+                    description="⚠️ Missing frontmatter",
+                    version="—",
+                    license="—",
+                    category=_classify(skill_dir.name),
+                    has_scripts=any((skill_dir / "scripts").rglob("*"))
+                    if (skill_dir / "scripts").is_dir()
+                    else False,
+                )
+            )
             continue
 
         entries = _top_level_entries(fm)
@@ -228,15 +399,18 @@ def _scan_skills(skills_dir: Path) -> list[SkillInfo]:
         if lic in ("Unknown", ""):
             lic = "—"
 
-        skills.append(SkillInfo(
-            name=skill_dir.name,
-            description=desc,
-            version=meta.get("version", "—"),
-            license=lic,
-            category=_classify(skill_dir.name),
-            has_scripts=any((skill_dir / "scripts").rglob("*"))
-            if (skill_dir / "scripts").is_dir() else False,
-        ))
+        skills.append(
+            SkillInfo(
+                name=skill_dir.name,
+                description=desc,
+                version=meta.get("version", "—"),
+                license=lic,
+                category=_classify(skill_dir.name),
+                has_scripts=any((skill_dir / "scripts").rglob("*"))
+                if (skill_dir / "scripts").is_dir()
+                else False,
+            )
+        )
 
     return skills
 
@@ -302,9 +476,9 @@ def _generate_index(skills: list[SkillInfo]) -> str:
     # Summary footer
     with_scripts = sum(1 for s in skills if s.has_scripts)
     lines.append("---\n")
-    lines.append(f"**总计**: {len(skills)} skills | "
-                 f"{with_scripts} 含自定义脚本 | "
-                 f"{len(by_cat)} 个分类")
+    lines.append(
+        f"**总计**: {len(skills)} skills | {with_scripts} 含自定义脚本 | {len(by_cat)} 个分类"
+    )
 
     return "\n".join(lines)
 
@@ -313,16 +487,21 @@ def _generate_index(skills: list[SkillInfo]) -> str:
 # CLI
 # --------------------------------------------------------------------------- #
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Auto-generate categorized SKILLS_INDEX.md from SKILL.md frontmatter.",
     )
     parser.add_argument(
-        "--out", type=str, default=None,
+        "--out",
+        type=str,
+        default=None,
         help="Output file path (default: SKILLS_INDEX.md at repo root)",
     )
     parser.add_argument(
-        "--skills-dir", type=str, default=None,
+        "--skills-dir",
+        type=str,
+        default=None,
         help="Path to skills directory (default: auto-detect)",
     )
     args = parser.parse_args()

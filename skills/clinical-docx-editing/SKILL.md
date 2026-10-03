@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.10+ with python-docx, lxml and PyYAML. Both modules rewrite documents in place, so back up before running.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version:" "1.0""
   skill-author: Scientific Skills for Clinical Trial Contributors
   last-reviewed: "2026-09-18"
 ---
-
 # Word 文档批量编辑
 
 ## 一、样式清理与命名规范化

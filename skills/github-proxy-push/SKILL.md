@@ -2,10 +2,9 @@
 name: github-proxy-push
 description: Diagnose GitHub network/proxy issues and provide stable push workflow for restricted networks.
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   surfaces: "ide terminal"
 ---
-
 # GitHub Proxy Push
 
 用于在网络受限或代理环境下，定位 `git push` 失败原因，并给出可复现的推送修复步骤。

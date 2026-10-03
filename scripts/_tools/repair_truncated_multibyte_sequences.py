@@ -37,7 +37,19 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # Scanned extensions only; binary formats are intentionally skipped so that a
 # legitimate 0x3F inside, say, a PNG is never touched.
-TEXT_SUFFIXES = {".md", ".py", ".json", ".yaml", ".yml", ".txt", ".toml", ".ps1", ".cmd", ".rst", ".tex"}
+TEXT_SUFFIXES = {
+    ".md",
+    ".py",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".txt",
+    ".toml",
+    ".ps1",
+    ".cmd",
+    ".rst",
+    ".tex",
+}
 
 # Directories that are never repaired in place.
 EXCLUDED_PARTS = {".git", ".venv", "node_modules", "__pycache__", ".ruff_cache", ".workbuddy"}
@@ -78,10 +90,10 @@ def learn_prefix_completions(files: list[Path]) -> dict[bytes, Counter]:
         while idx < length - 2:
             lead = data[idx]
             if 0xE0 <= lead <= 0xEF:  # start of a 3-byte sequence
-                prefix = data[idx:idx + 2]
+                prefix = data[idx : idx + 2]
                 third = data[idx + 2]
                 if 0x80 <= third <= 0xBF:
-                    counts.setdefault(prefix, Counter())[data[idx:idx + 3]] += 1
+                    counts.setdefault(prefix, Counter())[data[idx : idx + 3]] += 1
                     idx += 3
                     continue
             idx += 1
@@ -98,7 +110,9 @@ def _resolve(prefix: bytes, learned: dict[bytes, Counter]) -> bytes | None:
     return candidates.most_common(1)[0][0]
 
 
-def repair_bytes(data: bytes, learned: dict[bytes, Counter] | None = None) -> tuple[bytes, list[str]]:
+def repair_bytes(
+    data: bytes, learned: dict[bytes, Counter] | None = None
+) -> tuple[bytes, list[str]]:
     """Return ``(repaired_bytes, human_readable_repairs)``.
 
     Each *bad* pattern is ``<incomplete utf-8 prefix> + b'?'``. In valid UTF-8 a
@@ -113,7 +127,7 @@ def repair_bytes(data: bytes, learned: dict[bytes, Counter] | None = None) -> tu
     for index in range(2, len(buffer) - 1):
         if buffer[index] != 0x3F:  # '?'
             continue
-        prefix = bytes(buffer[index - 2:index])
+        prefix = bytes(buffer[index - 2 : index])
         lead = prefix[0:1]
         if not (0xC2 <= lead[0] <= 0xEF):
             continue
@@ -124,7 +138,7 @@ def repair_bytes(data: bytes, learned: dict[bytes, Counter] | None = None) -> tu
             log.append(f"offset {index - 2}: unresolved prefix {prefix.hex()} (left untouched)")
             continue
         replacement_char = full.decode("utf-8")
-        buffer[index - 2:index + 1] = full
+        buffer[index - 2 : index + 1] = full
         log.append(
             f"offset {index - 2}: {prefix.hex()} + '?' -> "
             f"U+{ord(replacement_char):04X} ({replacement_char!r})"

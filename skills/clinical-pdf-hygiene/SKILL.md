@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.10+ with pymupdf (1.27.0+ recommended) and pypdf (6.0+); pytesseract is optional for the module 17 OCR fallback.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version:" "1.0""
   skill-author: Scientific Skills for Clinical Trial Contributors
   last-reviewed: "2026-09-18"
 ---
-
 # PDF 整理与安全
 
 四个独立工具，按需求单独调用，彼此无依赖。

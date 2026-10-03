@@ -7,6 +7,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 def extract_docx_text(docx_path: Path | str) -> str:
     """Extract all text from a .docx file."""
     from docx import Document
@@ -26,6 +27,7 @@ def extract_docx_text(docx_path: Path | str) -> str:
 
     return "\\n\\n".join(full_text)
 
+
 def extract_docx_tables(docx_path: Path | str) -> list[list[list[str]]]:
     """Extract structured tables from a .docx file."""
     from docx import Document
@@ -40,5 +42,6 @@ def extract_docx_tables(docx_path: Path | str) -> list[list[list[str]]]:
         tables_data.append(table_data)
 
     return tables_data
+
 
 __all__ = ["extract_docx_text", "extract_docx_tables"]

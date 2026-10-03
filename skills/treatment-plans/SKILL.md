@@ -4,10 +4,9 @@ description: Generate concise (3-4 page), focused medical treatment plans in LaT
 allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # Treatment Plan Writing
 
 ## Overview

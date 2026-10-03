@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.10+ with pymupdf, pandas, openpyxl and fonttools. Runs fully offline; no network access is needed.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version:" "1.0""
   skill-author: Scientific Skills for Clinical Trial Contributors
   last-reviewed: "2026-09-18"
 ---
-
 # PDF eCTD 合规装甲
 
 ## 适用场景

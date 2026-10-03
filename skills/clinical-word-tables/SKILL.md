@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.10+ with python-docx, openpyxl and pandas. Module 07 additionally needs pywin32 and a local Microsoft Word installation (Windows only).
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version:" "1.0""
   skill-author: Scientific Skills for Clinical Trial Contributors
   last-reviewed: "2026-09-18"
 ---
-
 # Word 表格 → Excel / GraphPad
 
 本技能聚合三个相邻模块，按任务选择对应脚本。

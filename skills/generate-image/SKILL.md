@@ -4,10 +4,9 @@ description: Generate or edit images using AI models (FLUX, Nano Banana 2). Use 
 license: MIT license
 compatibility: Requires an OpenRouter API key
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # Generate Image
 
 Generate and edit high-quality images using OpenRouter's image generation models including FLUX.2 Pro and Gemini 3.1 Flash Image Preview.

@@ -4,13 +4,12 @@ description: Build slide decks and presentations for research talks. Use this fo
 allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
-  version: "1.8"
+  version:" "1.8""
   skill-author: K-Dense Inc.
   openclaw:
     primaryEnv: OPENROUTER_API_KEY
   envVars: '[{"name":"OPENROUTER_API_KEY","required":false,"description":"OpenRouter API key for the skill''s LLM-powered steps."}]'
 ---
-
 # Scientific Slides
 
 ## Overview

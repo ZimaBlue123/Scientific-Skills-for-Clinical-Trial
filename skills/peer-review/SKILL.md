@@ -4,10 +4,9 @@ description: Structured manuscript/grant review with checklist-based evaluation.
 allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # Scientific Critical Evaluation and Peer Review
 
 ## Overview

@@ -62,7 +62,7 @@ def _metadata_scalars(frontmatter: str) -> dict[str, str]:
     except StopIteration:
         return {}
     scalars: dict[str, str] = {}
-    for line in lines[start + 1:]:
+    for line in lines[start + 1 :]:
         if line.strip() and not line.startswith((" ", "\t")):
             break
         m = re.match(r"^  ([A-Za-z][A-Za-z0-9_-]*):(.*)$", line)
@@ -92,7 +92,7 @@ def _fix_frontmatter(
     opening = fm_match.group(1)  # "---\n"
     fm_body = fm_match.group(2)  # The YAML content
     closing = fm_match.group(3)  # "\n---\n"
-    rest = text[fm_match.end():]  # Everything after the closing ---
+    rest = text[fm_match.end() :]  # Everything after the closing ---
 
     entries = _top_level_entries(fm_body)
     keys = [k for k, _ in entries]
@@ -104,13 +104,15 @@ def _fix_frontmatter(
     # ── Fix 1: name mismatch ─────────────────────────────────────────────
     fm_name = values.get("name", "").strip("\"'")
     if "name" in keys and fm_name != skill_name:
-        actions.append(FixAction(
-            skill=skill_name,
-            field="name",
-            action="corrected",
-            old_value=fm_name,
-            new_value=skill_name,
-        ))
+        actions.append(
+            FixAction(
+                skill=skill_name,
+                field="name",
+                action="corrected",
+                old_value=fm_name,
+                new_value=skill_name,
+            )
+        )
         # Replace the name line
         for i, line in enumerate(lines):
             if line.startswith("name:"):
@@ -121,26 +123,30 @@ def _fix_frontmatter(
     # ── Fix 2: missing metadata block ────────────────────────────────────
     has_metadata = "metadata" in keys
     if not has_metadata:
-        actions.append(FixAction(
-            skill=skill_name,
-            field="metadata",
-            action="added",
-            old_value="(missing)",
-            new_value='metadata:\n  version: "1.0.0"',
-        ))
+        actions.append(
+            FixAction(
+                skill=skill_name,
+                field="metadata",
+                action="added",
+                old_value="(missing)",
+                new_value='metadata:\n  version: "1.0.0"',
+            )
+        )
         lines.append("metadata:")
         lines.append('  version: "1.0.0"')
         modified = True
 
     # ── Fix 3: missing metadata.version ──────────────────────────────────
     elif "version" not in meta:
-        actions.append(FixAction(
-            skill=skill_name,
-            field="metadata.version",
-            action="added",
-            old_value="(missing)",
-            new_value='"1.0.0"',
-        ))
+        actions.append(
+            FixAction(
+                skill=skill_name,
+                field="metadata.version",
+                action="added",
+                old_value="(missing)",
+                new_value='"1.0.0"',
+            )
+        )
         # Find the metadata: line and insert version right after it
         for i, line in enumerate(lines):
             if line.startswith("metadata:"):
@@ -153,13 +159,15 @@ def _fix_frontmatter(
         raw_version = meta["version"]
         if re.fullmatch(r"\d+\.\d+", raw_version):
             # It's ambiguous (YAML float), needs quoting
-            actions.append(FixAction(
-                skill=skill_name,
-                field="metadata.version",
-                action="corrected",
-                old_value=raw_version,
-                new_value=f'"{raw_version}"',
-            ))
+            actions.append(
+                FixAction(
+                    skill=skill_name,
+                    field="metadata.version",
+                    action="corrected",
+                    old_value=raw_version,
+                    new_value=f'"{raw_version}"',
+                )
+            )
             for i, line in enumerate(lines):
                 stripped = line.strip()
                 if stripped.startswith("version:") and line.startswith("  "):
@@ -210,15 +218,21 @@ def main() -> None:
         description="Batch-fix SKILL.md YAML frontmatter.",
     )
     parser.add_argument(
-        "--dry-run", action="store_true", default=False,
+        "--dry-run",
+        action="store_true",
+        default=False,
         help="Preview changes without applying them (default)",
     )
     parser.add_argument(
-        "--apply", action="store_true", default=False,
+        "--apply",
+        action="store_true",
+        default=False,
         help="Actually apply fixes to SKILL.md files",
     )
     parser.add_argument(
-        "--skills-dir", type=str, default=None,
+        "--skills-dir",
+        type=str,
+        default=None,
         help="Path to skills directory (default: auto-detect)",
     )
     args = parser.parse_args()
@@ -233,8 +247,7 @@ def main() -> None:
 
     report = FixReport()
     skill_dirs = sorted(
-        d for d in skills_dir.iterdir()
-        if d.is_dir() and (d / "SKILL.md").is_file()
+        d for d in skills_dir.iterdir() if d.is_dir() and (d / "SKILL.md").is_file()
     )
     report.total_scanned = len(skill_dirs)
 

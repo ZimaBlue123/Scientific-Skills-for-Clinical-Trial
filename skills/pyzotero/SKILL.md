@@ -4,10 +4,9 @@ description: Interact with Zotero reference management libraries using the pyzot
 allowed-tools: Read Write Edit Bash
 license: MIT License
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # Pyzotero
 
 Pyzotero is a Python wrapper for the [Zotero API v3](https://www.zotero.org/support/dev/web_api/v3/start). Use it to programmatically manage Zotero libraries: read items and collections, create and update references, upload attachments, manage tags, and export citations.

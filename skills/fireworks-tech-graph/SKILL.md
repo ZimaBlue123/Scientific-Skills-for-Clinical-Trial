@@ -2,10 +2,9 @@
 name: fireworks-tech-graph
 description: Generate architecture/flow/UML technical diagrams from natural language and export SVG plus PNG assets.
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   surfaces: "ide terminal"
 ---
-
 # Fireworks Tech Graph
 
 将自然语言描述转成技术图（架构图、流程图、序列图、UML 等），输出 SVG，并可进一步导出 PNG。

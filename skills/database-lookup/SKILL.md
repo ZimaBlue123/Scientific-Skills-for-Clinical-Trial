@@ -4,10 +4,9 @@ description: Query documented public database APIs with explicit endpoints, filt
 allowed-tools: Read Bash
 license: MIT
 metadata:
-  version: "1.5"
+  version:" "1.5""
   skill-author: "K-Dense Inc."
 ---
-
 # Database Lookup
 
 This skill catalogs 78 public databases with documented API access patterns. Your job is to turn the user's intent into a reproducible retrieval: select the authoritative database(s), make bounded and rate-limited API calls, verify counts when completeness matters, and return results with enough provenance that another agent or human can repeat the lookup.

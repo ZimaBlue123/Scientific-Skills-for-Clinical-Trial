@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.11+. Scripts use only the standard library - no third-party packages. Needs network access to the public GenSpectrum LAPIS instances (lapis.cov-spectrum.org, lapis.genspectrum.org, lapis.pathoplexus.org) and to raw.githubusercontent.com for pango-designation. No API key.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.1"
+  version:" "1.1""
   skill-author: K-Dense Inc.
   last-reviewed: "2026-07-27"
 ---
-
 # Pathogen Variant Surveillance
 
 ## When to use

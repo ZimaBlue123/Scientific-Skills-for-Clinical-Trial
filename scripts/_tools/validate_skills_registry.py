@@ -66,7 +66,7 @@ def _metadata_scalars(frontmatter: str) -> list[tuple[str, str]]:
     except StopIteration:
         return []
     scalars: list[tuple[str, str]] = []
-    for line in lines[start + 1:]:
+    for line in lines[start + 1 :]:
         if line.strip() and not line.startswith((" ", "\t")):
             break
         m = re.match(r"^  ([A-Za-z][A-Za-z0-9_-]*):(.*)$", line)
@@ -124,6 +124,7 @@ def _check_internal_links(skill_dir: Path, skill_md_text: str) -> list[str]:
 # TF-IDF duplicate detection (adapted from skill_dedupe_report.py)
 # --------------------------------------------------------------------------- #
 
+
 def _tokenize(text: str) -> list[str]:
     text = re.sub(r"```[\s\S]*?```", " ", text)
     text = re.sub(r"`[^`]*`", " ", text)
@@ -177,6 +178,7 @@ def _find_duplicates(
 # Main validation engine
 # --------------------------------------------------------------------------- #
 
+
 @dataclass
 class Issue:
     skill: str
@@ -219,8 +221,7 @@ def validate_registry(
     """Run all registry validation checks and return structured results."""
     result = ValidationResult()
     skill_dirs = sorted(
-        d for d in skills_dir.iterdir()
-        if d.is_dir() and (d / "SKILL.md").is_file()
+        d for d in skills_dir.iterdir() if d.is_dir() and (d / "SKILL.md").is_file()
     )
     result.total_skills = len(skill_dirs)
 
@@ -229,13 +230,15 @@ def validate_registry(
     sorted_names = sorted(names, key=str.lower)
     for i, (actual, expected) in enumerate(zip(names, sorted_names)):
         if actual != expected:
-            result.issues.append(Issue(
-                skill=actual,
-                level="warning",
-                rule="alphabetical_order",
-                message=f"Out of alphabetical order: `{actual}` should be at position "
-                        f"of `{expected}` (index {i})",
-            ))
+            result.issues.append(
+                Issue(
+                    skill=actual,
+                    level="warning",
+                    rule="alphabetical_order",
+                    message=f"Out of alphabetical order: `{actual}` should be at position "
+                    f"of `{expected}` (index {i})",
+                )
+            )
             break  # Report only the first out-of-order item
 
     # ── 2. Per-skill checks ──────────────────────────────────────────────
@@ -256,10 +259,14 @@ def validate_registry(
         # ── 2a. Frontmatter existence ────────────────────────────────────
         fm = _extract_frontmatter(text)
         if fm is None:
-            result.issues.append(Issue(
-                name, "error", "frontmatter_missing",
-                "SKILL.md has no `---` delimited YAML frontmatter",
-            ))
+            result.issues.append(
+                Issue(
+                    name,
+                    "error",
+                    "frontmatter_missing",
+                    "SKILL.md has no `---` delimited YAML frontmatter",
+                )
+            )
             continue
 
         entries = _top_level_entries(fm)
@@ -269,89 +276,129 @@ def validate_registry(
         # ── 2b. Required fields ──────────────────────────────────────────
         for req in ("name", "description", "metadata"):
             if req not in keys:
-                result.issues.append(Issue(
-                    name, "error", f"missing_{req}",
-                    f"Frontmatter is missing required field `{req}`",
-                ))
+                result.issues.append(
+                    Issue(
+                        name,
+                        "error",
+                        f"missing_{req}",
+                        f"Frontmatter is missing required field `{req}`",
+                    )
+                )
 
         # ── 2c. Unknown fields ───────────────────────────────────────────
         for key in keys:
             if key not in ALLOWED_FIELDS:
-                result.issues.append(Issue(
-                    name, "error", "unknown_field",
-                    f"Top-level `{key}` is not a valid spec field — move under `metadata`",
-                ))
+                result.issues.append(
+                    Issue(
+                        name,
+                        "error",
+                        "unknown_field",
+                        f"Top-level `{key}` is not a valid spec field — move under `metadata`",
+                    )
+                )
 
         # ── 2d. Name matches directory ───────────────────────────────────
         fm_name = values.get("name", "").strip("\"'")
         if fm_name and fm_name != name:
-            result.issues.append(Issue(
-                name, "error", "name_mismatch",
-                f"Frontmatter name `{fm_name}` does not match directory `{name}`",
-            ))
+            result.issues.append(
+                Issue(
+                    name,
+                    "error",
+                    "name_mismatch",
+                    f"Frontmatter name `{fm_name}` does not match directory `{name}`",
+                )
+            )
 
         # ── 2e. Description length ───────────────────────────────────────
         desc_raw = values.get("description", "")
         desc = _resolve_description(fm, desc_raw)
         if desc and len(desc) > MAX_DESCRIPTION_LENGTH:
-            result.issues.append(Issue(
-                name, "warning", "description_too_long",
-                f"Description is {len(desc)} chars, exceeds {MAX_DESCRIPTION_LENGTH}",
-            ))
+            result.issues.append(
+                Issue(
+                    name,
+                    "warning",
+                    "description_too_long",
+                    f"Description is {len(desc)} chars, exceeds {MAX_DESCRIPTION_LENGTH}",
+                )
+            )
 
         # ── 2f. allowed-tools format ─────────────────────────────────────
         tools = values.get("allowed-tools")
         if tools is not None:
             if "," in tools or tools.startswith("["):
-                result.issues.append(Issue(
-                    name, "error", "allowed_tools_format",
-                    f"`allowed-tools` must be space-separated, got: {tools}",
-                ))
+                result.issues.append(
+                    Issue(
+                        name,
+                        "error",
+                        "allowed_tools_format",
+                        f"`allowed-tools` must be space-separated, got: {tools}",
+                    )
+                )
             else:
                 for token in tools.split():
                     if token not in VALID_TOOLS:
-                        result.issues.append(Issue(
-                            name, "warning", "allowed_tools_invalid",
-                            f"Unknown tool in `allowed-tools`: `{token}`",
-                        ))
+                        result.issues.append(
+                            Issue(
+                                name,
+                                "warning",
+                                "allowed_tools_invalid",
+                                f"Unknown tool in `allowed-tools`: `{token}`",
+                            )
+                        )
 
         # ── 2g. metadata.version required ────────────────────────────────
         scalars = dict(_metadata_scalars(fm))
         if "metadata" in keys and "version" not in scalars:
-            result.issues.append(Issue(
-                name, "error", "missing_version",
-                "`metadata.version` is required",
-            ))
+            result.issues.append(
+                Issue(
+                    name,
+                    "error",
+                    "missing_version",
+                    "`metadata.version` is required",
+                )
+            )
 
         # ── 2h. Unquoted metadata values ─────────────────────────────────
         for key, value in scalars.items():
             ambiguous = re.fullmatch(
                 r"\d+|\d+\.\d+|true|false|yes|no|on|off|\d{4}-\d{2}-\d{2}",
-                value, re.I,
+                value,
+                re.I,
             )
             if ambiguous:
-                result.issues.append(Issue(
-                    name, "warning", "unquoted_metadata",
-                    f"`metadata.{key}: {value}` should be quoted to stay a string",
-                ))
+                result.issues.append(
+                    Issue(
+                        name,
+                        "warning",
+                        "unquoted_metadata",
+                        f"`metadata.{key}: {value}` should be quoted to stay a string",
+                    )
+                )
 
         # ── 2i. Internal link validity ───────────────────────────────────
         if check_links:
             for problem in _check_internal_links(skill_dir, text):
-                result.issues.append(Issue(
-                    name, "warning", "broken_link", problem,
-                ))
+                result.issues.append(
+                    Issue(
+                        name,
+                        "warning",
+                        "broken_link",
+                        problem,
+                    )
+                )
 
     # ── 3. Duplicate detection ───────────────────────────────────────────
     if check_duplicates and len(texts_for_dedupe) >= 2:
         dupes = _find_duplicates(texts_for_dedupe, threshold=dedupe_threshold)
         for sim, a, b in dupes[:20]:  # Cap at 20 pairs
-            result.issues.append(Issue(
-                skill=f"{a} <-> {b}",
-                level="warning",
-                rule="duplicate_content",
-                message=f"Cosine similarity {sim:.3f} exceeds threshold {dedupe_threshold}",
-            ))
+            result.issues.append(
+                Issue(
+                    skill=f"{a} <-> {b}",
+                    level="warning",
+                    rule="duplicate_content",
+                    message=f"Cosine similarity {sim:.3f} exceeds threshold {dedupe_threshold}",
+                )
+            )
 
     return result
 
@@ -359,6 +406,7 @@ def validate_registry(
 # --------------------------------------------------------------------------- #
 # Output formatters
 # --------------------------------------------------------------------------- #
+
 
 def _format_markdown(result: ValidationResult) -> str:
     lines: list[str] = [
@@ -398,33 +446,44 @@ def _format_json(result: ValidationResult) -> str:
 # CLI
 # --------------------------------------------------------------------------- #
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Validate the skills registry for completeness and consistency.",
     )
     parser.add_argument(
-        "--format", choices=["json", "markdown"], default="markdown",
+        "--format",
+        choices=["json", "markdown"],
+        default="markdown",
         help="Output format (default: markdown)",
     )
     parser.add_argument(
-        "--out", type=str, default=None,
+        "--out",
+        type=str,
+        default=None,
         help="Write output to file (default: stdout for json, "
-             "reports/skills_validation_report.md for markdown)",
+        "reports/skills_validation_report.md for markdown)",
     )
     parser.add_argument(
-        "--no-links", action="store_true",
+        "--no-links",
+        action="store_true",
         help="Skip internal link validation (faster)",
     )
     parser.add_argument(
-        "--no-dedupe", action="store_true",
+        "--no-dedupe",
+        action="store_true",
         help="Skip duplicate content detection (faster)",
     )
     parser.add_argument(
-        "--dedupe-threshold", type=float, default=0.87,
+        "--dedupe-threshold",
+        type=float,
+        default=0.87,
         help="Cosine similarity threshold for duplicate detection (default: 0.87)",
     )
     parser.add_argument(
-        "--skills-dir", type=str, default=None,
+        "--skills-dir",
+        type=str,
+        default=None,
         help="Path to skills directory (default: auto-detect from repo root)",
     )
     args = parser.parse_args()

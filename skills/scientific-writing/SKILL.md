@@ -4,10 +4,9 @@ description: Core skill for the deep research and writing tool. Write scientific
 allowed-tools: Read Write Edit Bash
 license: MIT license
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # Scientific Writing
 
 ## Overview

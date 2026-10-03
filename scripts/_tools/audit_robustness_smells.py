@@ -25,7 +25,7 @@ import warnings
 warnings.warn(
     "This module is deprecated as of Phase 4 Pipeline refactoring. Please use the new `scripts.pipeline` package instead.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 

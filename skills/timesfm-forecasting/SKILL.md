@@ -13,9 +13,8 @@ allowed-tools: Read Write Edit Bash
 license: Apache-2.0 license
 metadata:
   skill-author: Clayton Young / Superior Byte Works, LLC (@borealBytes)
-  version: "1.0.0"
+  version:" "1.0.0""
 ---
-
 # TimesFM Forecasting
 
 ## Overview

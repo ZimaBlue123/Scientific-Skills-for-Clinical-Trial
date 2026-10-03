@@ -7,6 +7,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 def extract_pptx_text(pptx_path: Path | str) -> str:
     """Extract all text, including tables and group shapes, from a PPTX file."""
     from pptx import Presentation
@@ -39,6 +40,7 @@ def extract_pptx_text(pptx_path: Path | str) -> str:
 
     return "\n".join(lines)
 
+
 def extract_pptx_notes(pptx_path: Path | str) -> list[str]:
     """Extract notes from all slides in a PPTX file."""
     from pptx import Presentation
@@ -54,5 +56,6 @@ def extract_pptx_notes(pptx_path: Path | str) -> list[str]:
             notes.append("")
 
     return notes
+
 
 __all__ = ["extract_pptx_text", "extract_pptx_notes"]

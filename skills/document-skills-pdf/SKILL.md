@@ -3,9 +3,8 @@ name: document-skills-pdf
 description: Read, manipulate, and extract structured data from PDF files
 license: Proprietary. LICENSE.txt has complete terms
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
 ---
-
 # PDF Processing Guide
 
 ## Overview
@@ -327,3 +326,19 @@ with open("encrypted.pdf", "wb") as output:
 - For JavaScript libraries (pdf-lib), see reference.md
 - If you need to fill out a PDF form, follow the instructions in forms.md
 - For troubleshooting guides, see reference.md
+
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

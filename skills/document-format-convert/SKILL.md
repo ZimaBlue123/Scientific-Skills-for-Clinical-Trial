@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.10+ with pymupdf, python-pptx and Pillow. Office automation (modules 05 and 06) needs pywin32 plus a local Microsoft Office install on Windows; module 16 needs paddleocr and paddlepaddle.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version:" "1.0""
   skill-author: Scientific Skills for Clinical Trial Contributors
   last-reviewed: "2026-09-18"
 ---
-
 # 文档格式互转
 
 各模块彼此独立，按需调用。

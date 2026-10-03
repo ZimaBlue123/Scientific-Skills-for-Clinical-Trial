@@ -19,6 +19,7 @@ _TARGET_STYLES = (
     "Table Grid",
 )
 
+
 def apply_cn_en_fonts(doc, styles: Iterable[str] | None = None) -> int:
     """Enforce document-wide fonts: Times New Roman for English, 宋体 for Chinese."""
     from docx.oxml.ns import qn
@@ -52,6 +53,7 @@ def apply_cn_en_fonts(doc, styles: Iterable[str] | None = None) -> int:
 
     return updated
 
+
 def create_clinical_docx(output_path: Path | str, content: str) -> None:
     """Create a basic clinical DOCX report with standard fonts."""
     from docx import Document
@@ -71,5 +73,6 @@ def create_clinical_docx(output_path: Path | str, content: str) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     doc.save(str(out))
     logger.info(f"Created DOCX at {out}")
+
 
 __all__ = ["create_clinical_docx", "apply_cn_en_fonts"]

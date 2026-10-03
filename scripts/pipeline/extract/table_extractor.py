@@ -6,7 +6,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def find_tables_by_heading(tables: list[list[list[str]]], heading_keywords: list[str]) -> list[list[list[str]]]:
+
+def find_tables_by_heading(
+    tables: list[list[list[str]]], heading_keywords: list[str]
+) -> list[list[list[str]]]:
     """Find tables that contain specific heading keywords."""
     matched_tables = []
 
@@ -18,6 +21,7 @@ def find_tables_by_heading(tables: list[list[list[str]]], heading_keywords: list
             matched_tables.append(table)
 
     return matched_tables
+
 
 def parse_table_columns(table: list[list[str]], column_indices: list[int]) -> list[list[str]]:
     """Extract specific columns from a table."""
@@ -33,5 +37,6 @@ def parse_table_columns(table: list[list[str]], column_indices: list[int]) -> li
         parsed.append(parsed_row)
 
     return parsed
+
 
 __all__ = ["find_tables_by_heading", "parse_table_columns"]

@@ -7,6 +7,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 def create_slide(prs, title: str, content: str, layout_idx: int = 1) -> None:
     """Create a slide with title and content."""
     layout = prs.slide_layouts[layout_idx]
@@ -19,6 +20,7 @@ def create_slide(prs, title: str, content: str, layout_idx: int = 1) -> None:
         if shape.placeholder_format.idx == 1:
             shape.text = content
             break
+
 
 def inject_pptx_data(output_path: Path | str, data: dict[str, str]) -> None:
     """Generate a PPTX file from a dictionary of slide titles and contents."""
@@ -33,5 +35,6 @@ def inject_pptx_data(output_path: Path | str, data: dict[str, str]) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     prs.save(str(out))
     logger.info(f"Created PPTX at {out}")
+
 
 __all__ = ["inject_pptx_data", "create_slide"]

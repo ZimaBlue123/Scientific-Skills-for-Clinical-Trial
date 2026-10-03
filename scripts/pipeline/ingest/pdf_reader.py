@@ -7,6 +7,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 def extract_pdf_text(pdf_path: Path | str, max_pages: int | None = None) -> str:
     """Extract text from a PDF file."""
     from pypdf import PdfReader
@@ -26,9 +27,11 @@ def extract_pdf_text(pdf_path: Path | str, max_pages: int | None = None) -> str:
         chunks.append(f"\\n========= PAGE {idx + 1}/{total} =========\\n{txt}")
     return "".join(chunks)
 
+
 def extract_pdf_tables(pdf_path: Path | str) -> list[list[list[str]]]:
     """Extract tables from a PDF."""
     # Placeholder for table extraction logic
     return []
+
 
 __all__ = ["extract_pdf_text", "extract_pdf_tables"]

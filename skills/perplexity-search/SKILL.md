@@ -4,10 +4,9 @@ description: Perform AI-powered web searches with real-time information using Pe
 license: MIT license
 compatibility: An OpenRouter API key is required to use Perplexity search
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
   skill-author: K-Dense Inc.
 ---
-
 # Perplexity Search
 
 ## Overview

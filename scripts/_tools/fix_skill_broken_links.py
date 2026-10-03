@@ -97,7 +97,9 @@ def plan_edits() -> list[tuple[Path, Redirect, int]]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write", action="store_true", help="Apply the rewrites (default: dry run)")
+    parser.add_argument(
+        "--write", action="store_true", help="Apply the rewrites (default: dry run)"
+    )
     args = parser.parse_args(argv)
 
     planned = plan_edits()
@@ -113,10 +115,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"       reason: {redirect.reason}")
         if args.write:
             text = skill_md.read_text(encoding="utf-8")
-            skill_md.write_text(text.replace(redirect.old, redirect.new), encoding="utf-8", newline="")
+            skill_md.write_text(
+                text.replace(redirect.old, redirect.new), encoding="utf-8", newline=""
+            )
 
-    print(f"\n{'Applied' if args.write else 'Planned'} {len(planned)} rule matches "
-          f"covering {total} reference(s).")
+    print(
+        f"\n{'Applied' if args.write else 'Planned'} {len(planned)} rule matches "
+        f"covering {total} reference(s)."
+    )
     if not args.write:
         print("Dry run only. Re-run with --write to apply.")
     return 0

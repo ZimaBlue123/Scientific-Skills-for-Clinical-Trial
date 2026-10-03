@@ -2,9 +2,8 @@
 name: csr-stage-docx-workflow
 description: Generates a phase/stage clinical study report (阶段性小结/CSR) as a Word .docx by strictly following a reference “shell” docx chapter structure and auto-filling key tables from PDF TLFs. Use when the user asks to “严格按照某docx章节结构重写/生成阶段性小结/重新生成CSR/导出docx”，especially on Windows with Chinese filenames (8.3 short names), and when sources include safety/immunogenicity/baseline PDFs.
 metadata:
-  version: "1.0.0"
+  version:" "1.0.0""
 ---
-
 # CSR 阶段性小结（Shell结构 + PDF自动填数）工作流
 
 ## 目标

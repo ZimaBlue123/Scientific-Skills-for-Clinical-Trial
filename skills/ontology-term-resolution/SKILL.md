@@ -5,10 +5,9 @@ license: MIT
 compatibility: Requires Python 3.11+. Scripts use only the standard library - no third-party packages. Needs network access to https://www.ebi.ac.uk/ols4 (public, no API key).
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.1"
+  version:" "1.1""
   skill-author: K-Dense Inc.
 ---
-
 # Ontology Term Resolution
 
 ## When to use

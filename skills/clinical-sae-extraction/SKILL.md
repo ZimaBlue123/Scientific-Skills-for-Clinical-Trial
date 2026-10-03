@@ -5,11 +5,10 @@ license: MIT
 compatibility: Requires Python 3.10+ and an OpenAI-compatible Chat Completions endpoint with a valid API token. Never commit real patient data or tokens.
 allowed-tools: Read Write Edit Bash
 metadata:
-  version: "1.0"
+  version:" "1.0""
   skill-author: Scientific Skills for Clinical Trial Contributors
   last-reviewed: "2026-09-18"
 ---
-
 # SAE 结构化抽取
 
 ## 适用场景

@@ -7,6 +7,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 def check_overflow(slide) -> bool:
     """Check if text content in a slide overflows its boundaries."""
     # This is a heuristic check as python-pptx doesn't have an exact rendering engine
@@ -18,6 +19,7 @@ def check_overflow(slide) -> bool:
         if len(shape.text_frame.text) > 1000:
             return True
     return False
+
 
 def find_overflow_slides(pptx_path: Path | str) -> list[int]:
     """Find all slide indices that contain text overflow."""
@@ -35,5 +37,6 @@ def find_overflow_slides(pptx_path: Path | str) -> list[int]:
             overflows.append(i)
 
     return overflows
+
 
 __all__ = ["check_overflow", "find_overflow_slides"]

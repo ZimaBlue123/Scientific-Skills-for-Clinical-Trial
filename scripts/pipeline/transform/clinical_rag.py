@@ -7,6 +7,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
+
 class ClinicalDocumentIndex:
     """A lightweight, in-memory search index for clinical documents using TF-IDF."""
 
@@ -15,6 +16,7 @@ class ClinicalDocumentIndex:
 
         try:
             from sklearn.feature_extraction.text import TfidfVectorizer
+
             self.vectorizer = TfidfVectorizer(
                 stop_words="english",
                 ngram_range=(1, 2),
@@ -77,5 +79,6 @@ class ClinicalDocumentIndex:
                 )
 
         return results
+
 
 __all__ = ["ClinicalDocumentIndex"]

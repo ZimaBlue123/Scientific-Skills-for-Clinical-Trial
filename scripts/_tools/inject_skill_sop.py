@@ -79,7 +79,9 @@ def needs_injection(text: str) -> bool:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write", action="store_true", help="Append the SOP block (default: dry run)")
+    parser.add_argument(
+        "--write", action="store_true", help="Append the SOP block (default: dry run)"
+    )
     args = parser.parse_args(argv)
 
     core = read_core_skill_names()
