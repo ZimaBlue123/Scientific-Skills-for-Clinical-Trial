@@ -45,3 +45,31 @@
 ## 5. 严格输出与认知护栏 (Strict Output & Cognitive Guardrail)
 - **无废话原则 (Zero-Filler)**：在处理临床数据提取、报告审查或与自动化管道交互时，Agent 必须直接输出结果。严禁使用诸如 Here is the..., Hope this helps! 等过渡性或客套话。若需要输出 JSON/代码，必须且只能输出代码块，防止破坏下游的 Parser。
 - **强制指令**：全面应用 skills/clinical-strict-extractor 规范，所有多步任务必须量化并编号。确保内容高信噪比。
+
+## 6. 批量操作安全协议 (Batch Operation Safety Protocol - Strict)
+
+> **背景**：2026-10-03 事故复盘——一次批处理正则替换脚本对 150+ 个 `SKILL.md` 文件执行了未经验证的写入，导致三轮连续 CI 失败（YAML 畸形值、字段错位、换行吞噬）。以下规则旨在永久杜绝此类问题。
+
+### 6.1 批量写入前置验证 (Pre-Write Validation — Mandatory)
+
+当 Agent 需要对 **≥3 个文件** 执行批量修改（包括正则替换、模板注入、frontmatter 重写等）时，**必须**按以下 SOP 执行：
+
+1. **Dry-Run 先行**：先在 ≤3 个样本文件上执行修改并打印 diff，肉眼确认输出符合预期后，再扩展到全量文件。
+2. **结构化后验证 (Post-Write Spot Check)**：全量修改完成后、`git add` 之前，**必须**至少抽查 3 个代表性文件（首个、中间、末尾）的关键修改区域，确认无畸形输出。
+3. **YAML 专项校验**：若修改涉及 YAML frontmatter，必须对修改后的文件执行以下检查：
+   - `---` 开闭标记各自独占一行
+   - 所有 `key: value` 的冒号后有空格
+   - 含特殊字符的值已加双引号（如 `skill-author: "K-Dense Inc."`）
+   - 字段层级正确（如 `version` 在 `metadata:` 缩进下）
+
+### 6.2 正则替换防御性编码 (Defensive Regex Rules)
+
+- **禁止贪婪通配**：涉及文件结构边界（如 `---`）的正则，必须使用非贪婪匹配 (`*?`) 并显式锚定行首/行尾。
+- **保留换行**：任何 `re.sub` 替换的 `ReplacementContent` 必须显式保留原始内容中的换行符 `\n`，严禁隐式吞掉行边界。
+- **避免多层引号嵌套**：替换结果中不得产生连续双引号 (`""`) 或引号缺失，替换后应断言引号配对正确。
+
+### 6.3 推送前 CI 预演 (Pre-Push Gate)
+
+- 若项目配有 CI 测试（如 `.github/workflows/skill-tests.yml`），在 `git push` 前应优先在本地执行等效验证（如运行 `python tests/_meta/test_skill_structure.py`），或至少确认修改文件的 YAML 可被 `python -c "import yaml; yaml.safe_load(open(...))"` 正常解析。
+- **严禁盲推 (No Blind Push)**：禁止在批量修改后未经任何验证直接执行 `git push`。
+
