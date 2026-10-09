@@ -1,0 +1,133 @@
+{
+  "study": {
+    "id": "YDSWX(TVAX-009B)-001(I)",
+    "title": "重组乙型肝炎疫苗（汉逊酵母，铝佐剂）Ⅰ期临床试验"
+  },
+  "summary_title": "16 岁及以上｜全程免后 1 个月",
+  "compare_desc": "全程（第 3 剂）接种后 1 个月，两组免疫程序一致（0,1,6 月三剂），该时点在两组均为完成全程免疫后的相同相对时点，可比性成立。",
+  "notes_title": "Ⅰ期 16 岁及以上人群 试验组 vs 对照组 免疫原性非劣效分析 —— 说明页",
+
+  "arms": {
+    "trial": "试验组",
+    "control": "对照组"
+  },
+  "arm_field": "group",
+
+  "source": {
+    "listing_docx": "review_materials/009B/远大赛威信重组乙肝(铝佐剂) I期-统计分析报告第2册(其余不良事件&清单).docx",
+    "listing_caption": "表16.2.6.1",
+    "exclusions_docx": "review_materials/009B/远大赛威信重组乙肝(铝佐剂) I期-统计分析报告第2册(其余不良事件&清单).docx",
+    "exclusions_caption": "表16.2.4.2",
+    "header_row": 1,
+    "id_col": "研究编号",
+    "id_pattern": "^[DG][0-9]+$",
+    "arm_col": "组别",
+    "static_cols": ["年龄组", "年龄(岁)", "性别"],
+    "measures": [
+      {"field": "pre", "header": "HBsAb", "occurrence": 1},
+      {"field": "m2", "header": "HBsAb", "occurrence": 2},
+      {"field": "m3", "header": "HBsAb", "occurrence": 3}
+    ],
+    "analysis_sets": ["FAS", "PPS1", "PPS2"],
+    "below_tokens": ["＜", "<"],
+    "above_tokens": ["＞", ">"]
+  },
+
+  "outcome": {"field": "m3"},
+  "analysis_sets": ["PPS2", "FAS"],
+  "cutoff": 10.0,
+  "fold": 4.0,
+  "gmc_label": "抗-HBs GMC",
+
+  "censoring": {
+    "value": 2.0,
+    "rule": "lod_half",
+    "rule_label": "LOD/2 = 1.00 mIU/mL"
+  },
+
+  "populations": [
+    {
+      "name": "免前阴性人群",
+      "filter": {"column": "pre", "op": "<", "value": 10},
+      "rate_metric": {"name": "抗-HBs阳转率", "event": "seroconversion"}
+    },
+    {
+      "name": "全人群",
+      "filter": null,
+      "rate_metric": {"name": "抗-HBs阳转（4倍增长）率", "event": "seroconversion_or_4fold"}
+    }
+  ],
+
+  "margins": {
+    "rate_diff": -5.0,
+    "gmc_ratio": 0.65
+  },
+
+  "verification": {
+    "official": [
+      {"kind": "rate", "sheet": "比较1_免前阴性人群_抗-HBs阳转率", "analysis_set": "PPS2", "arm": "trial", "x": 30, "n": 31, "pct": 96.77, "lo": 83.30, "hi": 99.92},
+      {"kind": "rate", "sheet": "比较1_免前阴性人群_抗-HBs阳转率", "analysis_set": "PPS2", "arm": "control", "x": 26, "n": 26, "pct": 100.0, "lo": 86.77, "hi": 100.0},
+      {"kind": "rate", "sheet": "比较1_免前阴性人群_抗-HBs阳转率", "analysis_set": "FAS", "arm": "trial", "x": 30, "n": 31, "pct": 96.77, "lo": 83.30, "hi": 99.92},
+      {"kind": "rate", "sheet": "比较1_免前阴性人群_抗-HBs阳转率", "analysis_set": "FAS", "arm": "control", "x": 27, "n": 27, "pct": 100.0, "lo": 87.23, "hi": 100.0},
+      {"kind": "rate", "sheet": "比较3_全人群_抗-HBs阳转（4倍增长）率", "analysis_set": "PPS2", "arm": "trial", "x": 37, "n": 39, "pct": 94.87, "lo": 82.68, "hi": 99.37},
+      {"kind": "rate", "sheet": "比较3_全人群_抗-HBs阳转（4倍增长）率", "analysis_set": "PPS2", "arm": "control", "x": 38, "n": 39, "pct": 97.44, "lo": 86.52, "hi": 99.94},
+      {"kind": "rate", "sheet": "比较3_全人群_抗-HBs阳转（4倍增长）率", "analysis_set": "FAS", "arm": "trial", "x": 38, "n": 40, "pct": 95.0, "lo": 83.08, "hi": 99.39},
+      {"kind": "rate", "sheet": "比较3_全人群_抗-HBs阳转（4倍增长）率", "analysis_set": "FAS", "arm": "control", "x": 39, "n": 40, "pct": 97.5, "lo": 86.84, "hi": 99.94},
+      {"kind": "gmc", "sheet": "比较2_免前阴性人群_抗-HBs GMC", "analysis_set": "PPS2", "arm": "trial", "n": 31, "gmc": 1299.517, "lo": 553.036, "hi": 3053.591},
+      {"kind": "gmc", "sheet": "比较2_免前阴性人群_抗-HBs GMC", "analysis_set": "PPS2", "arm": "control", "n": 26, "gmc": 2656.75, "lo": 1296.841, "hi": 5442.706},
+      {"kind": "gmc", "sheet": "比较2_免前阴性人群_抗-HBs GMC", "analysis_set": "FAS", "arm": "trial", "n": 31, "gmc": 1299.517, "lo": 553.036, "hi": 3053.591},
+      {"kind": "gmc", "sheet": "比较2_免前阴性人群_抗-HBs GMC", "analysis_set": "FAS", "arm": "control", "n": 27, "gmc": 2787.716, "lo": 1390.134, "hi": 5590.366},
+      {"kind": "gmc", "sheet": "比较4_全人群_抗-HBs GMC", "analysis_set": "PPS2", "arm": "trial", "n": 39, "gmc": 1486.826, "lo": 688.905, "hi": 3208.933},
+      {"kind": "gmc", "sheet": "比较4_全人群_抗-HBs GMC", "analysis_set": "PPS2", "arm": "control", "n": 39, "gmc": 1996.498, "lo": 1089.879, "hi": 3657.289},
+      {"kind": "gmc", "sheet": "比较4_全人群_抗-HBs GMC", "analysis_set": "FAS", "arm": "trial", "n": 40, "gmc": 1514.621, "lo": 715.37, "hi": 3206.842},
+      {"kind": "gmc", "sheet": "比较4_全人群_抗-HBs GMC", "analysis_set": "FAS", "arm": "control", "n": 40, "gmc": 2077.193, "lo": 1145.785, "hi": 3765.74},
+      {"kind": "gmc_p", "population": "免前阴性人群", "metric_label": "抗-HBs GMC", "analysis_set": "FAS", "p": 0.1696},
+      {"kind": "gmc_p", "population": "免前阴性人群", "metric_label": "抗-HBs GMC", "analysis_set": "PPS2", "p": 0.2048},
+      {"kind": "gmc_p", "population": "全人群", "metric_label": "抗-HBs GMC", "analysis_set": "FAS", "p": 0.5066},
+      {"kind": "gmc_p", "population": "全人群", "metric_label": "抗-HBs GMC", "analysis_set": "PPS2", "p": 0.544}
+    ]
+  },
+
+  "narrative": {
+    "purpose": [
+      "验证 16 岁及以上人群全程接种（0,1,6 月三剂）试验疫苗后 1 个月的抗-HBs 免疫原性，是否非劣于阳性对照疫苗，为后续临床开发提供桥接依据。",
+      "本分析为Ⅰ期数据的探索性再分析，非方案预设的确证性非劣效检验。"
+    ],
+    "data_source": [
+      "1）个体级数据：统计分析报告第 2 册 表 16.2.6.1 抗 HBs 结果清单（FAS），含每例受试者免前、第 2 剂免后 1 个月、全程免后 1 个月的抗-HBs（HBsAb）检测值；表 16.2.4.2 未进入各免疫原性集受试者清单，用于逐例反推 PPS1 / PPS2 成员。",
+      "2）汇总校准基准：临床研究报告（定稿，版本号 1.0，版本日期 2024 年 09 月 30 日）正文 表 11-9、表 11-11、表 11-12 官方发表值。",
+      "3）本期无受试者中途退出，80 例均完成全程接种与各时间点免疫原性采血，不存在缺失数据结转（LOCF）问题，故 PPS 与 FAS 均按个体级清单逐例重算。",
+      "4）统计方法依据：Ⅰ期统计分析计划（SAP）与 CSR 第 9.5.3 节免疫原性评价指标。"
+    ],
+    "arm_definitions": [
+      "1）人群：16 岁及以上全部受试者，不分年龄层（16-17 岁 20 例与 ≥18 岁 60 例合并分析）。",
+      "2）试验组：重组乙型肝炎疫苗（汉逊酵母，铝佐剂），0,1,6 月三剂，40 例。",
+      "3）对照组：阳性对照疫苗，艾美汉信疫苗（大连）有限公司生产的重组乙型肝炎疫苗（汉逊酵母），0,1,6 月三剂，40 例。",
+      "4）亚人群划分：",
+      "   · 免前阴性人群：免前抗-HBs <10 mIU/mL 者（FAS：试验组 31 例、对照组 27 例）。",
+      "   · 全人群：不分免前状态（FAS：两组各 40 例）。",
+      "   说明：本期免前阳性比例较高（试验组 22.50%、对照组 32.50%），故除传统阳转率外，增列全人群的抗-HBs 阳转（4 倍增长）率，以覆盖免前阳性者。"
+    ],
+    "timepoint_note": [
+      "全程（第 3 剂）接种后 1 个月，为 CSR 主要免疫原性终点时点。试验组与对照组免疫程序一致（0,1,6 月三剂），该时点在两组均为完成全程免疫后的相同相对时点，组间可比性成立。"
+    ],
+    "calibration_notes": [
+      "5）本例实测校准结果：8 项单组 GMC 与 95%CI 逐位吻合；4 项组间 GMC 比较 P 值完全吻合（0.5066 / 0.5440 / 0.1696 / 0.2048）；8 项单组率与 n/N 吻合。",
+      "6）删失值规则经反算确认为 LOD/2 = 1.00 mIU/mL：若取 LOD = 2.00，免前全人群 GMC 会算出 4.812 / 5.745，与官方 3.403 / 4.279 明显不符。"
+    ],
+    "interpretation": [
+      "3）依据链：",
+      "   ① 试验组与对照组免疫程序一致（0,1,6 月三剂），比较时点为各自的全程免后 1 个月，可比性成立。",
+      "   ② 两个分析集互为印证：PPS2 与 FAS 结论方向一致，且均由同一份个体级清单逐例重算。",
+      "   ③ 统计方法与官方一致：已通过 8 项单组 GMC、4 项组间 P 值、8 项单组率与 n/N 的逐项校准。",
+      "   ④ 免前阴性人群的 GMC 比较排除了免前阳性者的加强效应，更能反映疫苗本身的免疫原性；全人群的比较则更贴近真实使用人群的总体水平。两人群结论需结合解读，不宜相互替代。"
+    ],
+    "limitations": [
+      "1）样本量与设计定位：Ⅰ期样本量按《疫苗临床试验技术指导原则》Ⅰ期 20~30 人的要求、并结合年龄分层设为 80 例，属探索性设计，本身不具备非劣效确证的检验把握度。",
+      "2）探索性再分析：非方案预设的确证性非劣效检验，未做多重性调整，结论不可用作注册确证依据。",
+      "3）基线不均衡：对照组免前阳性比例（32.50%）高于试验组（22.50%），虽组间无统计学差异（P=0.3166），但会影响全人群 GMC 与阳转（4 倍增长）率的组间比较，解释时应考虑该前提。",
+      "4）免前阳性人群样本量小（试验组 9 例、对照组 13 例），本次未单独列示其 4 倍增长率与 GMC，其结论外推需谨慎。",
+      "5）本分析仅评价全程免后 1 个月的单时点体液免疫应答，未纳入第 2 剂免后 1 个月时点、细胞免疫及抗体持久性数据。"
+    ]
+  }
+}
