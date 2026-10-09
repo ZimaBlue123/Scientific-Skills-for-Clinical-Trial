@@ -185,6 +185,7 @@ python scripts/_tools/scan_imports.py
 | `clinical-reports` | 病例报告/CSR/SAE（CARE/ICH-E3） | `python skills/clinical-reports/scripts/validate_case_report.py` |
 | `clinical-decision-support` | 队列分层/循证推荐（LaTeX/PDF） | `python skills/clinical-decision-support/scripts/create_cohort_tables.py` |
 | `treatment-plans` | 个体化治疗计划（LaTeX/PDF） | `python skills/treatment-plans/scripts/generate_template.py` |
+| `clinical-immunogenicity-noninferiority` | 疫苗免疫原性非劣效分析（GMC 比值/率差 + 95%CI → 多子表 Excel） | `python skills/clinical-immunogenicity-noninferiority/scripts/compute_noninferiority.py --self-check` |
 
 ### 工具类 Skills
 
