@@ -43,6 +43,7 @@
 | `clinical-reports` | 病例报告/诊断报告/SAE/CSR（合规校验与模板） | MIT | `scripts/validate_case_report.py`, `scripts/validate_trial_report.py`, `scripts/check_deidentification.py` |
 | `clinical-decision-support` | 队列分层/疗效结局比较/循证治疗推荐（LaTeX/PDF） | MIT | `scripts/create_cohort_tables.py`, `scripts/generate_survival_analysis.py` |
 | `treatment-plans` | 个体化治疗计划（强调简洁可执行，LaTeX/PDF） | MIT | `scripts/generate_template.py`, `scripts/check_completeness.py` |
+| `clinical-immunogenicity-noninferiority` | 疫苗免疫原性非劣效/桥接分析：GMC 比值与率差及 95%CI，多子表 Excel 交付稿 | MIT | `scripts/parse_immunogenicity_listing.py`, `scripts/compute_noninferiority.py`, `scripts/build_noninferiority_workbook.py`, `scripts/selfcheck_output.py` |
 
 ### 工具类
 

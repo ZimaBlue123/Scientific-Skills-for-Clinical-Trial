@@ -149,6 +149,7 @@ This repository currently includes **30 skills**, grouped as follows.
 | `clinical-reports` | case reports/CSR/SAE (CARE/ICH-E3) | `python skills/clinical-reports/scripts/validate_case_report.py` |
 | `clinical-decision-support` | biomarker-stratified evidence recommendations | `python skills/clinical-decision-support/scripts/create_cohort_tables.py` |
 | `treatment-plans` | individualized treatment plan generation | `python skills/treatment-plans/scripts/generate_template.py` |
+| `clinical-immunogenicity-noninferiority` | vaccine immunogenicity non-inferiority/bridging analysis (GMC ratio & rate difference with 95%CI -> multi-sheet Excel) | `python skills/clinical-immunogenicity-noninferiority/scripts/compute_noninferiority.py --self-check` |
 
 ### Utility Skills
 
