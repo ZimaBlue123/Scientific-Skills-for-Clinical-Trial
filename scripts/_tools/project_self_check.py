@@ -133,7 +133,7 @@ def check_venv_policy() -> dict[str, object]:
         has_ignore = (".venv/" in text) or ("\n.venv\n" in f"\n{text}\n")
     return {
         "root_venv_present": root_venv.exists(),
-        "root_venv_file_count": (sum(1 for _ in root_venv.rglob("*")) if root_venv.exists() else 0),
+        "root_venv_file_count": (sum(1 for _ in root_venv.glob("*")) if root_venv.exists() else 0),
         "gitignore_has_venv_rule": has_ignore,
     }
 

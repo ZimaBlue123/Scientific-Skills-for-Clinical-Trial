@@ -92,7 +92,7 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # 每个 skill 一个目录（核心内容，175 个）
+├── skills/                # 每个 skill 一个目录（核心内容，178 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
 ├── scripts/               # 仓库级可执行脚本入口
 │   ├── pipeline/          # 模块化数据处理管线（ingest/extract/transform/export/validate）
@@ -143,7 +143,7 @@ python scripts/_tools/scan_imports.py
 
 ## Skills 清单与使用方法
 
-本仓库包含 **157 个 skills**（已合并上游 scientific-skills 的非重复条目），分为以下几类：
+本仓库包含 **178 个 skills**（已合并上游 scientific-skills 的非重复条目），分为以下几类：
 
 ### 核心数据分析 Skills
 

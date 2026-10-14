@@ -276,3 +276,13 @@ skills_validation_report.md
 # ==========================================================
 tests_output.txt
 *.log
+
+# Script output directories (local-only)
+scripts/_out/
+scripts/outputs/
+
+# Untracked extraction scratch space
+_extract/
+
+# Dedupe reports
+docs/skill_dedupe_report.md

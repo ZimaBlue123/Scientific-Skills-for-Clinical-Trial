@@ -15,10 +15,10 @@ import unittest
 
 # Resolve paths relative to this test file
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-SKILL_DIR = os.path.dirname(SCRIPT_DIR)
-REPO_ROOT = os.path.dirname(os.path.dirname(SKILL_DIR))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
+SKILL_DIR = os.path.join(REPO_ROOT, "skills", "open-notebook")
 REFERENCES_DIR = os.path.join(SKILL_DIR, "references")
-SCRIPTS_DIR = SCRIPT_DIR
+SCRIPTS_DIR = os.path.join(SKILL_DIR, "scripts")
 SKILL_MD = os.path.join(SKILL_DIR, "SKILL.md")
 MARKETPLACE_JSON = os.path.join(REPO_ROOT, ".claude-plugin", "marketplace.json")
 
@@ -105,7 +105,7 @@ class TestSkillMdFrontmatter(unittest.TestCase):
         """Frontmatter must include metadata with skill-author."""
         self.assertIn("metadata:", self.frontmatter)
         self.assertIn("skill-author:", self.frontmatter)
-        self.assertRegex(self.frontmatter, r"skill-author:\s*K-Dense Inc\.")
+        self.assertRegex(self.frontmatter, r'skill-author:\s*"?K-Dense Inc\.?"?')
 
 
 class TestSkillMdContent(unittest.TestCase):

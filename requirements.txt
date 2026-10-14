@@ -24,27 +24,29 @@ pdf-inspector
 markitdown==0.1.7
 striprtf==0.0.33
 lxml==6.1.0
+defusedxml>=0.7.1
 
 # --- Imaging --------------------------------------------------------------
 Pillow==12.3.0
+pdf2image
 
 # --- Data / numeric -------------------------------------------------------
 numpy==2.5.3
+pandas>=2.2.0
 scikit-learn==1.9.1
 
 # --- HTTP / configuration -------------------------------------------------
 requests
 python-dotenv>=1.0.0
+PyYAML>=6.0.1
+
+# --- CLI / progress -------------------------------------------------------
+tqdm
+
+# --- OCR / translation (lazy; used by select scripts) ---------------------
+pytesseract
+translators
 
 # --- Windows COM automation (Word / PowerPoint) ---------------------------
 # Imported lazily by COM-based document conversion; only relevant on Windows.
 pywin32==311; platform_system == "Windows"
-
-# --- Added during architecture consolidation ---
-pandas
-pdf2image
-pytesseract
-tqdm
-translators
-PyYAML
-
