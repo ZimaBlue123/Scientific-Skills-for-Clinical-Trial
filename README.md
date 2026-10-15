@@ -95,10 +95,8 @@ Scientific-Skills-for-Clinical_Trial/
 ├── skills/                # 每个 skill 一个目录（核心内容，178 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
 ├── scripts/               # 仓库级可执行脚本入口
-│   ├── pipeline/          # 模块化数据处理管线（ingest/extract/transform/export/validate）
+│   ├── pipeline/          # 模块化数据处理管线（ingest/extract/transform/export/validate/review/literature）
 │   ├── _tools/            # 内部审计/自检/维护脚本
-│   ├── utils/             # 跨模块共享帮助函数
-│   ├── literature_tools/  # 文献检索客户端
 │   ├── clinical-automation/ # 外部子项目（只读）
 │   └── _archive/          # 已归档的历史版本（不追踪）
 ├── tests/                 # 测试
