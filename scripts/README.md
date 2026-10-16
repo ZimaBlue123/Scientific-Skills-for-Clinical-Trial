@@ -12,10 +12,10 @@ scripts/
 │   ├── transform/                  #   数据清洗 / 临床 RAG
 │   ├── convert/                    #   格式转换（→ Markdown）
 │   ├── export/                     #   生成 Word/PPT 输出
+│   ├── literature/                 #   文献检索与下载客户端
+│   ├── review/                     #   文档审查与比对 (diff)
 │   └── validate/                   #   AST / 编码 / PPTX 校验
 ├── _tools/                         # 内部审计 / 自检 / 维护脚本
-├── utils/                          # 跨模块共享帮助函数
-├── literature_tools/               # 文献检索客户端
 ├── clinical-automation/            # 外部子项目（只读，勿修改）
 ├── _archive/                       # 已归档的一次性脚本（不追踪）
 └── _archive_2026_consolidation/    # 2026 大整合归档（不追踪）
