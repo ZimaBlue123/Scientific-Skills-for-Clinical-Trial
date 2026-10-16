@@ -158,21 +158,26 @@ def _fix_frontmatter(
     if "version" in meta:
         raw_version = meta["version"]
         if re.fullmatch(r"\d+\.\d+", raw_version):
-            # It's ambiguous (YAML float), needs quoting
-            actions.append(
-                FixAction(
-                    skill=skill_name,
-                    field="metadata.version",
-                    action="corrected",
-                    old_value=raw_version,
-                    new_value=f'"{raw_version}"',
-                )
-            )
+            # Check if the line is already properly quoted
             for i, line in enumerate(lines):
                 stripped = line.strip()
                 if stripped.startswith("version:") and line.startswith("  "):
-                    lines[i] = f'  version: "{raw_version}"'
-                    modified = True
+                    val_part = stripped.split(":", 1)[1].strip()
+                    if not (
+                        (val_part.startswith('"') and val_part.endswith('"'))
+                        or (val_part.startswith("'") and val_part.endswith("'"))
+                    ):
+                        actions.append(
+                            FixAction(
+                                skill=skill_name,
+                                field="metadata.version",
+                                action="corrected",
+                                old_value=raw_version,
+                                new_value=f'"{raw_version}"',
+                            )
+                        )
+                        lines[i] = f'  version: "{raw_version}"'
+                        modified = True
                     break
 
     # ── Write back if modified ───────────────────────────────────────────
