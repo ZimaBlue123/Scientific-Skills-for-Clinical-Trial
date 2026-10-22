@@ -116,8 +116,9 @@ Scientific-Skills-for-Clinical_Trial/
 本仓库在每次重大重构时会跑一组**自检脚本**（位于 `scripts/_tools/`）。这些脚本可独立于 IDE / CI 运行，方便人工排查。
 
 ```bash
-# 静态语法 + AST 验证
-python scripts/_tools/validate_codebase.py
+# 项目自检（语法 + 代码质量 + 鲁棒性审计）
+python scripts/_tools/project_self_check.py
+python scripts/_tools/audit_robustness_smells.py
 
 # Skills 注册表校验
 python scripts/_tools/validate_skills_registry.py
@@ -131,8 +132,8 @@ python scripts/_tools/generate_skills_index.py
 # 为核心 Skills 注入 SOP
 python scripts/_tools/inject_skill_sop.py --write
 
-# Import 依赖扫描
-python scripts/_tools/scan_imports.py
+# 未使用 Import 扫描
+python scripts/_tools/fix_unused_imports.py
 ```
 
 
