@@ -95,10 +95,11 @@ Scientific-Skills-for-Clinical_Trial/
 ├── skills/                # 每个 skill 一个目录（核心内容，178 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
 ├── scripts/               # 仓库级可执行脚本入口
-│   ├── pipeline/          # 模块化数据处理管线（ingest/extract/transform/export/validate/review/literature）
-│   ├── _tools/            # 内部审计/自检/维护脚本
+│   ├── SCRIPTS_INDEX.md   # 全局脚本能力与快速复用索引（自动生成）
+│   ├── pipeline/          # 模块化数据处理管线（ingest/extract/transform/convert/export/validate/review/literature）
+│   ├── _tools/            # 内部审计/索引/自检/维护脚本
 │   ├── clinical-automation/ # 外部子项目（只读）
-│   └── _archive/          # 已归档的历史版本（不追踪）
+│   └── _archive/          # 精选高价值交付物参考模板（本地参考，不追踪）
 ├── tests/                 # 测试
 ├── pyproject.toml         # 项目元数据 + ruff/mypy/pytest 配置
 ├── requirements.txt
@@ -113,9 +114,13 @@ Scientific-Skills-for-Clinical_Trial/
 
 ## 开发工作流
 
-本仓库在每次重大重构时会跑一组**自检脚本**（位于 `scripts/_tools/`）。这些脚本可独立于 IDE / CI 运行，方便人工排查。
+本仓库在每次重大重构时会跑一组**自检与索引脚本**（位于 `scripts/_tools/`）。这些脚本可独立于 IDE / CI 运行，方便人工排查与快速复用。
 
 ```bash
+# 快速检索可复用脚本能力（编写新脚本前必跑）
+python scripts/_tools/generate_scripts_index.py --search docx
+python scripts/_tools/generate_scripts_index.py
+
 # 项目自检（语法 + 代码质量 + 鲁棒性审计）
 python scripts/_tools/project_self_check.py
 python scripts/_tools/audit_robustness_smells.py
@@ -429,59 +434,46 @@ print(result.text_content)
 
 ---
 
-## 常用脚本
+## 常用脚本与快速复用机制
 
-### 脚本索引
+### 脚本能力索引 (`scripts/SCRIPTS_INDEX.md`)
+
+> 完整脚本清单见 [`scripts/SCRIPTS_INDEX.md`](scripts/SCRIPTS_INDEX.md)，支持通过 `python scripts/_tools/generate_scripts_index.py --search <keyword>` 秒级检索：
 
 | 脚本 | 用途 | 状态 |
 |------|------|------|
-| `scripts/pipeline/convert/convert_to_md.py` | 文档转Markdown（推荐） | ✅ 推荐 |
-| `scripts/pipeline/export/docx_builder.py` | DOCX 导出与中英文字体规范（Word/审核报告生成的基础模块） | ✅ 推荐 |
+| `scripts/pipeline/convert/convert_to_md.py` | 文档转 Markdown（支持 `--mode numbered` 锚点编号） | ✅ 推荐 |
+| `scripts/pipeline/ingest/rtf_reader.py` | SAS / 临床 TFL RTF 文本与二维表格提取 | ✅ 推荐 |
+| `scripts/pipeline/extract/extract_docx_tracked_text.py` | 零依赖提取含修订痕迹 (`w:ins`/`w:del`) 的 `.docx` 文本与表格 | ✅ 推荐 |
+| `scripts/pipeline/export/docx_builder.py` | DOCX 导出与中英文字体规范（Word/审核报告生成基础模块） | ✅ 推荐 |
+| `scripts/pipeline/export/update_docx_toc_fields.py` | 通过 Word COM 自动更新 `.docx` 目录域与页码 | ✅ 推荐 |
+| `scripts/pipeline/review/audit_protocol_crossrefs.py` | 核查临床方案 `.docx` 内部章节号与图表交叉引用 | ✅ 推荐 |
+| `scripts/pipeline/review/compare_docx_content.py` | 逐包、逐块、逐样式比对两份 `.docx` 文档 | ✅ 推荐 |
+| `scripts/pipeline/validate/docx_clean_validator.py` | 校验 `.docx` 清洁版合规性（红蓝字、高亮、批注） | ✅ 推荐 |
+| `scripts/pipeline/literature/pubmed_search_tool.py` | PubMed 文献检索 CLI | ✅ 推荐 |
+| `scripts/_tools/generate_scripts_index.py` | 生成脚本复用索引与 `--search` 关键词检索 | ✅ 推荐 |
 | `scripts/_tools/project_self_check.py` | 项目自检 | ✅ 推荐 |
-| `scripts/_tools/cleanup_generated_artifacts.py` | 清理缓存与IDE历史记录 | ✅ 推荐 |
-| `scripts/_tools/on_open_cleanup.cmd` | 开机/打开项目时自动清理 | ✅ 辅助 |
-| `scripts/_tools/register_cleanup_logon_task.ps1` | 注册开机自启清理任务 | ✅ 辅助 |
-| `scripts/literature_tools/pubmed_search_tool.py` | PubMed 文献检索 CLI | ✅ 推荐 |
+| `scripts/_tools/cleanup_generated_artifacts.py` | 清理缓存与 IDE 历史记录 | ✅ 推荐 |
 
-> `scripts/` 现行分层：`pipeline/`（核心业务流）· `_tools/`（内部运维/审计工具）·
-> `utils/`（通用工具）· `literature_tools/`（文献工具）·
-> `_archive_2026_consolidation/`（一次性业务代码封存，不再维护）·
+> `scripts/` 现行分层：`pipeline/`（核心业务流）· `_tools/`（内部运维/审计/索引工具）·
+> `_archive/`（精选交付物参考模板，本地参考不追踪）·
 > `clinical-automation/`（外部迁入的只读能力库）。
-
-### 已废弃脚本
-
-> 以下脚本已被废弃，功能已合并到 `convert_to_md.py`：
-
-| 脚本 | 替代方案 | 说明 |
-|------|----------|------|
-| `scripts/extract_docx_full.py` | `convert_to_md.py --mode standard` | 文本提取功能已合并 |
-| `scripts/extract_doc_text.py` | `convert_to_md.py` | .doc文本提取（Windows COM） |
 
 ### 如何选择
 
 ```
-需要从docx提取纯文本？
-  → python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
-
-需要带编号段落提取（##P1, ##T1标记）？
+需要从 docx/pdf/rtf 提取纯文本或带编号 Markdown（##P1, ##T1 标记）？
   → python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md --mode numbered
 
-需要将Markdown转换为Word？
-  → python scripts/md_to_docx.py input.md -o output.docx
+需要从含修订痕迹（Track Changes）的 docx 提取定稿/原稿文本？
+  → python scripts/pipeline/extract/extract_docx_tracked_text.py input.docx -o output.txt --mode final
+
+需要从 SAS 导出的临床 TFL (.rtf) 提取结构化二维表格？
+  → python scripts/pipeline/ingest/rtf_reader.py input.rtf --tables -o tables.json
+
+需要核查 Word 清洁版是否残留红蓝字、高亮或批注？
+  → python scripts/pipeline/validate/docx_clean_validator.py target.docx
 ```
-
-> 以下脚本针对特定产品，通用场景请使用上方推荐脚本：
-
-| 脚本 | 用途 |
-|------|------|
-| `scripts/generate_audit_report_docx.py` | 通用审核报告 |
-| `scripts/generate_clinical_doc_audit_report.py` | 临床文档审核报告 |
-| `scripts/generate_clinical_overview_doc_review_docx.py` | 临床概览审核Word |
-| `scripts/generate_phase_summary_doc_review_docx.py` | 阶段总结审核Word |
-| `scripts/generate_norovirus_review_docx.py` | 诺如病毒综述 |
-| `scripts/build_tvax006_IMA_v2_docx.py` | TVAX006产品专用 |
-| `scripts/cansino_detail4843_manual_docx.py` | 康希诺产品专用 |
-| `scripts/extract_tables_to_docx.py` | OCR图片转Word表格 |
 
 ### 文档审核工作流（素材 → Markdown → Word）
 
@@ -495,16 +487,12 @@ python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
 python scripts/pipeline/convert/convert_to_md.py --folder review_materials -o review_materials/converted
 ```
 
-#### 2) 将 Markdown 审核报告转成 Word
+#### 2) 方案交叉引用与数值/文本质量核查
 
 ```bash
-python scripts/md_to_docx.py "review_materials/<你的审核报告>.md" -o "review_materials/<你的审核报告>.docx"
-```
-
-#### 3) 生成 CSR 阶段性小结（Word）
-
-```bash
-python scripts/generate_csr_docx.py --root "项目根目录"
+python scripts/pipeline/review/audit_protocol_crossrefs.py review_materials/protocol.docx
+python scripts/pipeline/review/audit_protocol_numeric_consistency.py review_materials/converted/protocol.md
+python scripts/pipeline/review/scan_protocol_text_quality.py review_materials/converted/protocol.md
 ```
 
 提示：`review_materials/` 已在 `.gitignore` 中忽略，不会被上传到 GitHub。

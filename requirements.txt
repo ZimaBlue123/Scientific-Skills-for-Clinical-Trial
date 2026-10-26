@@ -18,7 +18,6 @@ openpyxl==3.1.5
 pypdf==6.19.0
 pdfplumber==0.11.9
 PyMuPDF
-pdf-inspector
 
 # --- Conversion / text extraction -----------------------------------------
 markitdown==0.1.7
@@ -28,7 +27,6 @@ defusedxml>=0.7.1
 
 # --- Imaging --------------------------------------------------------------
 Pillow==12.3.0
-pdf2image
 
 # --- Data / numeric -------------------------------------------------------
 numpy==2.5.3
@@ -42,10 +40,6 @@ PyYAML>=6.0.1
 
 # --- CLI / progress -------------------------------------------------------
 tqdm
-
-# --- OCR / translation (lazy; used by select scripts) ---------------------
-pytesseract
-translators
 
 # --- Windows COM automation (Word / PowerPoint) ---------------------------
 # Imported lazily by COM-based document conversion; only relevant on Windows.
