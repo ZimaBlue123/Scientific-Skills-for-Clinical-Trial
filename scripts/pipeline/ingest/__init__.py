@@ -3,6 +3,7 @@
 from .docx_reader import extract_docx_tables, extract_docx_text
 from .pdf_reader import extract_pdf_tables, extract_pdf_text
 from .pptx_reader import extract_pptx_notes, extract_pptx_text
+from .rtf_reader import decode_rtf_bytes, extract_rtf_tables, extract_rtf_text
 from .xlsx_reader import extract_xlsx_data
 
 __all__ = [
@@ -13,4 +14,7 @@ __all__ = [
     "extract_xlsx_data",
     "extract_pptx_text",
     "extract_pptx_notes",
+    "decode_rtf_bytes",
+    "extract_rtf_text",
+    "extract_rtf_tables",
 ]

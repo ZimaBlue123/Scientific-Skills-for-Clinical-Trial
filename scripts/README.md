@@ -1,24 +1,29 @@
 # scripts/
 
-仓库级可执行脚本入口。
+仓库级可执行脚本与模块化管线入口。
+
+> **快速检索与复用机制 (`AGENTS.md` §4)**：编写任何新脚本前，请先查阅 [`SCRIPTS_INDEX.md`](./SCRIPTS_INDEX.md) 或执行关键词检索：
+> ```bash
+> python scripts/_tools/generate_scripts_index.py --search <keyword>
+> ```
 
 ## 目录组织
 
 ```
 scripts/
+├── SCRIPTS_INDEX.md                # 全局脚本能力与快速复用索引（自动生成）
 ├── pipeline/                       # 模块化数据处理管线（核心架构）
-│   ├── ingest/                     #   文档读取（docx/pdf/pptx/xlsx）
-│   ├── extract/                    #   表格/文本提取 & 规范化
+│   ├── ingest/                     #   文档读取（docx/pdf/pptx/rtf/xlsx）
+│   ├── extract/                    #   表格/修订文本/旧版 .doc 提取 & 规范化
 │   ├── transform/                  #   数据清洗 / 临床 RAG
-│   ├── convert/                    #   格式转换（→ Markdown）
-│   ├── export/                     #   生成 Word/PPT 输出
-│   ├── literature/                 #   文献检索与下载客户端
-│   ├── review/                     #   文档审查与比对 (diff)
-│   └── validate/                   #   AST / 编码 / PPTX 校验
-├── _tools/                         # 内部审计 / 自检 / 维护脚本
+│   ├── convert/                    #   格式转换（.doc → .docx / 多格式 → Markdown）
+│   ├── export/                     #   生成 Word/PPT 输出 & 刷新目录域
+│   ├── literature/                 #   文献检索与批量下载客户端
+│   ├── review/                     #   文档审查、交叉引用核查与包级比对 (diff)
+│   └── validate/                   #   AST / 编码 / 清洁版 / TOC / PPTX 校验
+├── _tools/                         # 内部审计 / 索引生成 / 自检 / 维护脚本
 ├── clinical-automation/            # 外部子项目（只读，勿修改）
-├── _archive/                       # 已归档的一次性脚本（不追踪）
-└── _archive_2026_consolidation/    # 2026 大整合归档（不追踪）
+└── _archive/                       # 精选高价值交付物参考模板（本地参考，不追踪）
 ```
 
 ## 核心管线模块 (`pipeline/`)
@@ -26,51 +31,61 @@ scripts/
 | 模块 | 功能 | 主要依赖 |
 |------|------|----------|
 | `ingest/docx_reader.py` | 读取 Word 文档结构与文本 | python-docx |
-| `ingest/pdf_reader.py` | 读取 PDF 文档 | pypdf, pdfplumber |
-| `ingest/pptx_reader.py` | 读取 PowerPoint 演示文稿 | python-pptx |
+| `ingest/pdf_reader.py` | 读取 PDF 文本与结构化表格 | pypdf, pdfplumber |
+| `ingest/pptx_reader.py` | 读取 PowerPoint 演示文稿与备注 | python-pptx |
+| `ingest/rtf_reader.py` | 解析 SAS/临床 TFL RTF 文本与二维表格 | stdlib |
 | `ingest/xlsx_reader.py` | 读取 Excel 工作簿 | openpyxl |
-| `extract/table_extractor.py` | 从文档中提取结构化表格 | — |
-| `extract/text_normalizer.py` | 文本规范化处理 | — |
-| `transform/clinical_rag.py` | 临床数据 RAG 转换 | — |
-| `convert/convert_to_md.py` | 多格式 → Markdown 转换 | markitdown, striprtf |
-| `export/docx_builder.py` | 程序化生成 Word 文档 | python-docx |
+| `extract/extract_docx_tracked_text.py` | 零依赖提取含修订痕迹 (`w:ins`/`w:del`) 的 `.docx` 文本与表格 | stdlib |
+| `extract/extract_legacy_doc_text.py` | 通过 Word COM 批量提取旧版 `.doc` 文本与表格 | pywin32 |
+| `extract/table_extractor.py` | 从文档中按表头关键词提取结构化表格 | stdlib |
+| `extract/text_normalizer.py` | 编码检测、乱码诊断与空白字符规范化 | stdlib |
+| `transform/clinical_rag.py` | 临床文档本地 TF-IDF 检索索引 | scikit-learn, numpy |
+| `convert/convert_doc_to_docx.py` | 旧版二进制 `.doc` 转 `.docx` | pywin32 |
+| `convert/convert_to_md.py` | 多格式 → Markdown 转换（支持段落/表格锚点编号） | markitdown, striprtf |
+| `export/docx_builder.py` | 程序化生成 Word 文档与中英文字体规范化 | python-docx |
 | `export/pptx_builder.py` | 程序化生成 PPT 文档 | python-pptx |
-| `validate/ast_validator.py` | Python AST 语法验证 | stdlib |
-| `validate/encoding_validator.py` | 文件编码验证 | stdlib |
-| `validate/pptx_validator.py` | PPTX 结构验证 | python-pptx |
+| `export/update_docx_toc_fields.py` | 通过 Word COM 自动更新 `.docx` 目录域与页码 | pywin32 |
+| `review/audit_protocol_crossrefs.py` | 核查方案 `.docx` 内部章节号与图表交叉引用 | python-docx |
+| `review/audit_protocol_numeric_consistency.py` | 核查编号版方案 Markdown 占位符、单位与关键数值一致性 | stdlib |
+| `review/scan_protocol_text_quality.py` | 扫描方案 Markdown 标点混用、笔误与排版质量缺陷 | stdlib |
+| `review/compare_docx_content.py` | 逐包、逐块、逐样式比对两份 `.docx` 文档 | lxml |
+| `review/compare_pptx_package.py` | 校验修改前后 `.pptx` 内部构件完整性 | stdlib |
+| `validate/ast_validator.py` | Python AST 健壮性反模式检查 | stdlib |
+| `validate/docx_clean_validator.py` | 校验 `.docx` 清洁版合规性（红蓝字、高亮、批注） | python-docx, lxml |
+| `validate/docx_toc_validator.py` | 无损副本渲染核验 `.docx` 目录域与首页截图 | pywin32, PyMuPDF |
+| `validate/encoding_validator.py` | 文件 UTF-8 BOM 与乱码验证 | stdlib |
+| `validate/pptx_validator.py` | PPTX 文本框越界检测 | python-pptx |
 
 ## 内部工具 (`_tools/`)
 
 | 脚本 | 功能 |
 |------|------|
+| `generate_scripts_index.py` | 自动生成 `scripts/SCRIPTS_INDEX.md` 并支持 `--search` 关键词快速检索 |
 | `generate_skills_index.py` | 重新生成 `SKILLS_INDEX.md` |
 | `inject_skill_sop.py` | 为核心 Skill 注入 Pre-flight / Post-execution SOP |
-| `skill_dedupe_report.py` | Skills 去重报告 |
+| `skill_dedupe_report.py` | Skills 去重检测报告 |
 | `validate_skills_registry.py` | 校验 Skills 注册表完整性 |
-| `audit_skills.py` | Skills 审计 |
-| `scan_imports.py` | 扫描 import 依赖 |
-| `validate_codebase.py` | 代码库质量验证 |
-| `project_self_check.py` | 项目自检（外部命令可用性 + 冒烟测试） |
-| `fix_skills_frontmatter.py` | 修复 SKILL.md YAML Frontmatter |
-| `fix_unused_imports.py` | 清理未使用的 import |
-| `fix_fstrings_broad.py` | f-string 修复 |
-| `audit_robustness_smells.py` | 代码健壮性审计 |
-| `cleanup_generated_artifacts.py` | 清理可重建产物 |
+| `project_self_check.py` | 项目自检（外部命令可用性 + CLI 冒烟测试） |
+| `fix_skills_frontmatter.py` | 修复 `SKILL.md` YAML Frontmatter |
+| `fix_skill_broken_links.py` | 修复 `SKILL.md` 内部失效脚本链接 |
+| `fix_unused_imports.py` | 清理未使用的标准库 import |
+| `fix_fstrings_broad.py` | 清理无占位符的冗余 f-string |
+| `audit_robustness_smells.py` | AST 级代码健壮性与坏味道审计 |
+| `audit_missing_encoding.py` | 审计缺失 `encoding=` 参数的文本读写调用 |
+| `cleanup_generated_artifacts.py` | 清理可重建产物与 IDE 历史缓存 |
 
-## 用法
+## 常用命令
 
 ```bash
-# 转换 Word 为 Markdown
-python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
+# 快速检索可复用脚本
+python scripts/_tools/generate_scripts_index.py --search docx
 
-# 项目自检
-python scripts/_tools/project_self_check.py
-
-# 重新生成 Skills 索引
+# 重新生成脚本索引与技能索引
+python scripts/_tools/generate_scripts_index.py
 python scripts/_tools/generate_skills_index.py
 
-# 注入 SOP 到核心 Skills
-python scripts/_tools/inject_skill_sop.py --write
+# 代码健壮性审计
+python scripts/_tools/audit_robustness_smells.py
 ```
 
 ## 约定
@@ -78,5 +93,5 @@ python scripts/_tools/inject_skill_sop.py --write
 - Python ≥ 3.10，使用 `from __future__ import annotations`
 - 第三方依赖必须显式声明 import 错误提示
 - 不在仓库级产生可重建 artifacts（已通过 `.gitignore` 过滤）
-- 已归档的历史脚本保存在 `_archive/` 下，仅作参考，不纳入版本追踪
+- 精选参考脚本保存在 `_archive/` 下，仅作本地参考，不纳入版本追踪
 - `clinical-automation/` 为外部子项目，保持只读，详见根 `AGENTS.md` §3.1

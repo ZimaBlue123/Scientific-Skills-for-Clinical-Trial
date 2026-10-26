@@ -1,8 +1,9 @@
 """Audit project-owned Python sources for robustness smells.
 
 Scope: repository-owned code only (``scripts/`` excluding the vendored
-``scripts/clinical-automation/`` subtree, ``tests/`` and root-level modules).
-Vendored trees are intentionally skipped so upstream code stays byte-identical.
+``scripts/clinical-automation/`` subtree and local ``_archive/``, ``tests/``
+and root-level modules). Vendored trees are intentionally skipped so upstream
+code stays byte-identical.
 
 Checks performed (AST based, no execution):
     1. bare-except        -- ``except:`` without an exception type
@@ -14,20 +15,11 @@ Checks performed (AST based, no execution):
     7. hardcoded-abs-path -- literal ``C:\\\\Users\\\\...`` style paths
 
 Usage:
-    python scripts/audit_robustness_smells.py            # human readable
-    python scripts/audit_robustness_smells.py --json     # machine readable
+    python scripts/_tools/audit_robustness_smells.py            # human readable
+    python scripts/_tools/audit_robustness_smells.py --json     # machine readable
 """
 
 from __future__ import annotations
-
-import warnings
-
-warnings.warn(
-    "This module is deprecated as of Phase 4 Pipeline refactoring. Please use the new `scripts.pipeline` package instead.",
-    DeprecationWarning,
-    stacklevel=2,
-)
-
 
 import argparse
 import ast
@@ -37,7 +29,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-VENDORED = "clinical-automation"
+EXCLUDED_DIRS = {"clinical-automation", "_archive", "_archive_2026_consolidation"}
 
 # Literals that are legitimate even though they look like absolute paths.
 ALLOWED_ABS_PATH = re.compile(r"^[A-Za-z]:\\$|^/$")
@@ -63,7 +55,7 @@ BINARY_MODE = re.compile(r"b")
 
 
 def iter_owned_python_files() -> list[Path]:
-    """Collect repository-owned ``*.py`` files, excluding vendored trees."""
+    """Collect repository-owned ``*.py`` files, excluding vendored and archived trees."""
     roots: list[Path] = [REPO_ROOT / "scripts", REPO_ROOT / "tests"]
     files: list[Path] = []
 
@@ -71,7 +63,7 @@ def iter_owned_python_files() -> list[Path]:
         if not root.exists():
             continue
         for path in root.rglob("*.py"):
-            if VENDORED in path.parts:
+            if any(part in EXCLUDED_DIRS for part in path.parts):
                 continue
             files.append(path)
 
@@ -83,7 +75,10 @@ def iter_owned_python_files() -> list[Path]:
 
 
 def _is_silent_handler(node: ast.ExceptHandler) -> bool:
-    """True when the handler body swallows the error without any action."""
+    """True when a broad Exception/BaseException handler swallows the error without action."""
+    name = getattr(node.type, "id", None) or getattr(node.type, "attr", "")
+    if name not in {"Exception", "BaseException"}:
+        return False
     body = [n for n in node.body if not isinstance(n, ast.Pass)]
     if not body:
         return True

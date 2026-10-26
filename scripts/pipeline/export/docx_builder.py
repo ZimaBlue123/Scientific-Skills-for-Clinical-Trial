@@ -61,7 +61,7 @@ def create_clinical_docx(output_path: Path | str, content: str) -> None:
     doc = Document()
     apply_cn_en_fonts(doc)
 
-    for line in content.split("\\n"):
+    for line in content.split("\n"):
         if line.startswith("# "):
             doc.add_heading(line[2:], level=1)
         elif line.startswith("## "):

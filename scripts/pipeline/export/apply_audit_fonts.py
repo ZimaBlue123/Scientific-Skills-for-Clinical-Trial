@@ -78,12 +78,9 @@ def apply_audit_fonts(in_path: Path, out_path: Path) -> None:
 
     # 1) 样式级别（覆盖样式表）
     for style_name in STYLES_TO_SET:
-        try:
+        if style_name in doc.styles:
             style = doc.styles[style_name]
             _set_run_fonts(style)
-        except KeyError:
-            # 缺少该样式时跳过
-            pass
 
     # 2) 运行级别（覆盖已写入的字面 run）
     _walk_all_paragraph_runs(doc)

@@ -13,17 +13,18 @@ logger = logging.getLogger(__name__)
 def check_bom(path: Path | str) -> bool:
     """Check if file starts with a UTF-8 Byte Order Mark (BOM)."""
     with open(path, "rb") as f:
-        return f.read(3) == b"\\xef\\xbb\\xbf"
+        return f.read(3) == b"\xef\xbb\xbf"
 
 
 def diagnose_encoding(path: Path | str) -> dict:
     """Check a file for mojibake and encoding issues."""
     try:
-        raw = open(path, "rb").read()
+        with open(path, "rb") as f:
+            raw = f.read()
     except OSError:
         return {"status": "error", "message": "Cannot read file"}
 
-    if b"\\x00" in raw[:4096]:
+    if b"\x00" in raw[:4096]:
         return {"status": "binary"}
 
     try:

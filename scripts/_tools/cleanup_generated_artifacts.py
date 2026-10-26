@@ -148,9 +148,7 @@ def _delete_files(files: Sequence[Path], *, dry_run: bool, result: CleanupResult
             result.removed.append(f)
             continue
         try:
-            f.unlink()
-        except FileNotFoundError:
-            continue  # Intentional: file already gone, which is the desired end state.
+            f.unlink(missing_ok=True)
         except (OSError, PermissionError) as exc:
             logger.error("failed to remove %s: %s", f, exc)
             result.failed.append(f)
@@ -172,8 +170,9 @@ def _cleanup_empty_dirs(p: Path, *, dry_run: bool) -> int:
                 continue
             if any(d.iterdir()):
                 continue
-        except (OSError, PermissionError):
-            continue  # Intentional: directory is inaccessible; never abort the whole sweep.
+        except (OSError, PermissionError) as exc:
+            logger.debug("skipping inaccessible dir %s: %s", d, exc)
+            continue
         if dry_run:
             logger.info("[dry-run] would remove empty dir: %s", d)
             continue
@@ -534,9 +533,7 @@ def cleanup_ide_history(
                 if entry.is_dir() and not entry.is_symlink():
                     shutil.rmtree(entry)
                 else:
-                    entry.unlink()
-            except FileNotFoundError:
-                continue  # Intentional: already removed by an earlier pass.
+                    entry.unlink(missing_ok=True)
             except (OSError, PermissionError) as exc:
                 logger.error("failed to remove %s: %s", entry, exc)
                 result.failed.append(entry)

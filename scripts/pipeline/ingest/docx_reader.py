@@ -25,7 +25,7 @@ def extract_docx_text(docx_path: Path | str) -> str:
             if row_text:
                 full_text.append(" | ".join(row_text))
 
-    return "\\n\\n".join(full_text)
+    return "\n\n".join(full_text)
 
 
 def extract_docx_tables(docx_path: Path | str) -> list[list[list[str]]]:

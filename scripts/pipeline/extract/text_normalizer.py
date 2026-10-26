@@ -21,18 +21,14 @@ def _is_pua(ch: str) -> bool:
 
 def detect_encoding(raw_bytes: bytes) -> str:
     """Guess the encoding of raw bytes."""
-    if raw_bytes.startswith(b"\\xef\\xbb\\xbf"):
+    if raw_bytes.startswith(b"\xef\xbb\xbf"):
         return "utf-8-sig"
-    try:
-        raw_bytes.decode("utf-8")
-        return "utf-8"
-    except UnicodeDecodeError:
-        pass  # Intentional: not UTF-8, fall through to the next candidate encoding.
-    try:
-        raw_bytes.decode("gb18030")
-        return "gb18030"
-    except UnicodeDecodeError:
-        pass  # Intentional: not GB18030 either; the latin-1 fallback below always decodes.
+    for candidate in ("utf-8", "gb18030"):
+        try:
+            raw_bytes.decode(candidate)
+            return candidate
+        except UnicodeDecodeError as exc:
+            logger.debug("Not %s (%s); trying next encoding.", candidate, exc)
     return "latin-1"
 
 
@@ -58,8 +54,8 @@ def fix_mojibake(text: str) -> str:
 
 def normalize_whitespace(text: str) -> str:
     """Normalize tabs, spaces, and newlines."""
-    text = re.sub(r"[ \\t]+", " ", text)
-    text = re.sub(r"\\n{3,}", "\\n\\n", text)
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
 

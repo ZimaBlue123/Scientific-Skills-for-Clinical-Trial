@@ -24,14 +24,29 @@ def extract_pdf_text(pdf_path: Path | str, max_pages: int | None = None) -> str:
             txt = page.extract_text() or ""
         except Exception as exc:
             txt = f"<<extract error: {exc}>>"
-        chunks.append(f"\\n========= PAGE {idx + 1}/{total} =========\\n{txt}")
+        chunks.append(f"\n========= PAGE {idx + 1}/{total} =========\n{txt}")
     return "".join(chunks)
 
 
 def extract_pdf_tables(pdf_path: Path | str) -> list[list[list[str]]]:
-    """Extract tables from a PDF."""
-    # Placeholder for table extraction logic
-    return []
+    """Extract tables from a PDF using pdfplumber when available."""
+    path = Path(pdf_path)
+    if not path.exists():
+        return []
+    try:
+        import pdfplumber
+    except ImportError:
+        logger.warning("pdfplumber is not installed; skipping PDF table extraction.")
+        return []
+
+    tables: list[list[list[str]]] = []
+    with pdfplumber.open(str(path)) as pdf:
+        for page in pdf.pages:
+            for tbl in page.extract_tables() or []:
+                cleaned = [[(cell or "").strip() for cell in row] for row in tbl if row]
+                if cleaned:
+                    tables.append(cleaned)
+    return tables
 
 
 __all__ = ["extract_pdf_text", "extract_pdf_tables"]

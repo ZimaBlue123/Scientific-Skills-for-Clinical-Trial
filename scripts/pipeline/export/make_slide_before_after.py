@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import os
 import shutil
 import subprocess
@@ -41,10 +42,8 @@ def load_font(size: int):
     for name in ("msyh.ttc", "msyhbd.ttc", "simhei.ttf", "arial.ttf"):
         p = font_dir / name
         if p.exists():
-            try:
+            with contextlib.suppress(OSError):
                 return ImageFont.truetype(str(p), size)
-            except OSError:
-                pass  # Intentional: font file unreadable; try the next candidate below.
     return ImageFont.load_default()
 
 
