@@ -6,7 +6,7 @@ license: MIT license
 compatibility: Requires Python >=3.10；依赖 python-docx（读清单）与 openpyxl（写 Excel），无需联网。统计内核为纯标准库实现。
 metadata:
   version: "1.0.0"
-  skill-author: WorkBuddy
+  skill-author: "WorkBuddy"
   last-reviewed: "2026-10-09"
 ---
 

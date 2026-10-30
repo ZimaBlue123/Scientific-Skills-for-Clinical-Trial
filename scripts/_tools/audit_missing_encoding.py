@@ -44,6 +44,7 @@ LIB_RECEIVERS = {
     "soundfile",
     "wave",
     "zipfile",
+    "zf",
     "tarfile",
     "Document",
     "PdfReader",

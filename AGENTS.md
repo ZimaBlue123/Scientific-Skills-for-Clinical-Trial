@@ -38,9 +38,11 @@
 
 - **核心原则**：严禁在未排查现有资产的情况下“重复造轮子”（Reinventing the wheel）。
 - **执行 SOP (Pre-Flight Check)**：在着手编写任何新脚本或提供复杂解决方案之前，Agent **必须强制执行**以下前置排查：
-  1. **快速检索脚本能力索引**：优先读取 [`scripts/SCRIPTS_INDEX.md`](scripts/SCRIPTS_INDEX.md) 或执行 `python scripts/_tools/generate_scripts_index.py --search <keyword>`，快速扫描 `scripts/pipeline/`（`ingest/`、`extract/`、`transform/`、`convert/`、`export/`、`literature/`、`review/`、`validate/`）、`scripts/_tools/`、`scripts/clinical-automation/` 及 `scripts/_archive/` 中是否已存在可直接调用的模块或 CLI 脚本。
+  1. **快速检索脚本能力索引**：优先读取 [`scripts/SCRIPTS_INDEX.md`](scripts/SCRIPTS_INDEX.md)（含功能摘要、CLI 参数与公开 API）或执行 `python scripts/_tools/generate_scripts_index.py --search <keyword>`。该检索同时覆盖 `scripts/pipeline/`（`ingest/`、`extract/`、`transform/`、`convert/`、`export/`、`literature/`、`review/`、`validate/`）、`scripts/_tools/`、`scripts/clinical-automation/` 以及 `skills/*/scripts/` 中的全部模块。
   2. **查阅内置技能**：浏览 [`SKILLS_INDEX.md`](SKILLS_INDEX.md) 或提示词中的 `<skills>` 列表，确认是否有官方或项目定制的 Skill 可直接处理该任务。
-- **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `scripts/pipeline/ingest/docx_reader.py`、`scripts/pipeline/ingest/rtf_reader.py`、`scripts/pipeline/extract/table_extractor.py`）进行扩展开发；新增通用能力后应运行 `python scripts/_tools/generate_scripts_index.py` 刷新索引。
+  3. **在回复/计划中显式记录检索结论**：注明“已复用 `<模块>`”或“检索 `<keyword>` 无命中，新建 `<路径>`”，不得跳过本步骤。
+- **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `scripts/pipeline/ingest/docx_reader.py`、`scripts/pipeline/ingest/rtf_reader.py`、`scripts/pipeline/extract/table_extractor.py`、`scripts/pipeline/transform/rate_ci_methods.py`）进行扩展开发；新增通用能力后应运行 `python scripts/_tools/generate_scripts_index.py` 刷新索引（`--check` 可校验索引是否过期）。
+- **一次性脚本归宿**：特定项目/批次专用、含硬编码路径的脚本**不得**提交到 `scripts/` 根目录；任务完成后应将其中的通用算法沉淀进 `scripts/pipeline/`，其余一次性脚本直接删除（仓库不再保留 `scripts/_archive/`）。
 
 ## 5. 严格输出与认知护栏 (Strict Output & Cognitive Guardrail)
 - **无废话原则 (Zero-Filler)**：在处理临床数据提取、报告审查或与自动化管道交互时，Agent 必须直接输出结果。严禁使用诸如 Here is the..., Hope this helps! 等过渡性或客套话。若需要输出 JSON/代码，必须且只能输出代码块，防止破坏下游的 Parser。
@@ -70,7 +72,7 @@
 
 ### 6.3 推送前 CI 预演 (Pre-Push Gate)
 
-- 若项目配有 CI 测试（如 `.github/workflows/skill-tests.yml`），在 `git push` 前应优先在本地执行等效验证（如运行 `python tests/_meta/test_skill_structure.py`），或至少确认修改文件的 YAML 可被 `python -c "import yaml; yaml.safe_load(open(...))"` 正常解析。
+- 若项目配有 CI 测试（如 `.github/workflows/skill-tests.yml`），在 `git push` 前应优先在本地执行等效验证（如运行 `python -m pytest tests/_meta -q` 与 `python scripts/_tools/generate_scripts_index.py --check`），或至少确认修改文件的 YAML 可被 `python -c "import yaml; yaml.safe_load(open(...))"` 正常解析。
 - **严禁盲推 (No Blind Push)**：禁止在批量修改后未经任何验证直接执行 `git push`。
 
 ## 7. 临床科研与理论分析安全前置准则 (Clinical Research & Theoretical Analysis Guardrail)

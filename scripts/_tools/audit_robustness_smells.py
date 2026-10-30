@@ -43,6 +43,7 @@ LIB_RECEIVERS = {
     "pdfplumber",
     "tarfile",
     "zipfile",
+    "zf",
     "wave",
     "sndhdr",
     "Document",

@@ -100,11 +100,11 @@ TFL 第 3 册表 14.2.4.2.6 / 14.2.4.2.1 列出了官方的跨时点率差 CI，
 
 这 4 项已固化进 `scripts/compute_noninferiority.py --self-check`，每次运行都会复核。
 
-## 8. 既有脚本的归档位置
+## 8. 既有脚本的历史演进
 
-原深度分析脚本沉淀在仓库 `scripts/_archive/`：
+原深度分析脚本（历史归档版本）：
 `generate_phase2_age_band_immunogenicity_noninferiority.py`（统计函数源）
 与 `generate_phase2_elderly_two_dose_bridging_noninferiority.py`（本次交付）。
 本 skill 的 `compute_noninferiority.py` 从中继承了 Clopper-Pearson /
 Miettinen-Nurminen / Fisher 的实现，并补齐了 GMC 侧的方法。
-新项目请直接用本 skill 的脚本，不要再改 archive 里的副本。
+新项目请直接用本 skill 的脚本或 `scripts/pipeline/transform/rate_ci_methods.py`。
