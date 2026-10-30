@@ -92,14 +92,13 @@ cp -r ./skills/* ~/.cursor/skills/
 
 ```
 Scientific-Skills-for-Clinical_Trial/
-├── skills/                # 每个 skill 一个目录（核心内容，178 个）
+├── skills/                # 每个 skill 一个目录（核心内容，179 个）
 ├── docs/                  # 长文档（索引见下方"文档索引"）
 ├── scripts/               # 仓库级可执行脚本入口
 │   ├── SCRIPTS_INDEX.md   # 全局脚本能力与快速复用索引（自动生成）
 │   ├── pipeline/          # 模块化数据处理管线（ingest/extract/transform/convert/export/validate/review/literature）
 │   ├── _tools/            # 内部审计/索引/自检/维护脚本
-│   ├── clinical-automation/ # 外部子项目（只读）
-│   └── _archive/          # 精选高价值交付物参考模板（本地参考，不追踪）
+│   └── clinical-automation/ # 外部子项目（只读）
 ├── tests/                 # 测试
 ├── pyproject.toml         # 项目元数据 + ruff/mypy/pytest 配置
 ├── requirements.txt
@@ -456,8 +455,7 @@ print(result.text_content)
 | `scripts/_tools/cleanup_generated_artifacts.py` | 清理缓存与 IDE 历史记录 | ✅ 推荐 |
 
 > `scripts/` 现行分层：`pipeline/`（核心业务流）· `_tools/`（内部运维/审计/索引工具）·
-> `_archive/`（精选交付物参考模板，本地参考不追踪）·
-> `clinical-automation/`（外部迁入的只读能力库）。
+> `clinical-automation/`（外部迁入的只读能力库）。通用能力沉淀进 `pipeline/`，严禁保留临时脚本。
 
 ### 如何选择
 

@@ -92,8 +92,10 @@ Scientific-Skills-for-Clinical_Trial/
 ├── skills/                # One directory per skill (core content)
 ├── docs/                  # Long-form docs (see index below)
 ├── scripts/               # Repository-level executable scripts
-│   ├── common_scripts/    # Shared utility modules (e.g. docx_utils)
-│   └── _archive/          # Archived historical versions (unmaintained)
+│   ├── SCRIPTS_INDEX.md   # Global script capability & reuse index
+│   ├── pipeline/          # Modular data processing pipeline
+│   ├── _tools/            # Governance, index generation & validation tools
+│   └── clinical-automation/ # External vendored automation library (read-only)
 ├── tests/                 # Tests
 ├── pyproject.toml         # Project metadata + ruff/mypy/pytest config
 ├── requirements.txt
@@ -159,8 +161,8 @@ This repository currently includes **30 skills**, grouped as follows.
 | `perplexity-search` | AI-powered real-time web search | `python skills/perplexity-search/scripts/perplexity_search.py "query"` |
 | `github-proxy-push` | GitHub proxy diagnosis/push | see `SKILL.md` |
 | `pyhealth` | healthcare AI modeling toolkit | see `references/datasets.md` |
-| `csr-stage-docx-workflow` | CSR stage summary generation (Word) | `python scripts/_archive/generate_csr_docx.py` |
-| `word-audit-report-format` | Word audit report formatting | `python scripts/_archive/generate_audit_report_docx.py` |
+| `csr-stage-docx-workflow` | CSR stage summary generation (Word) | see `SKILL.md` (uses `scripts/pipeline/`) |
+| `word-audit-report-format` | Word audit report formatting | `python scripts/pipeline/export/apply_audit_fonts.py` |
 | `pptx-gmc-sync-from-word` | sync GMC/n/P-values from Word into PPT tables | `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
 | `docx-to-markdown` | extract DOCX text/tables to Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
 
@@ -337,87 +339,54 @@ To supplement evidence/trial intelligence, run `clinicaltrials-database` with `p
 
 ---
 
-## Common Scripts
+## Common Scripts & Reuse Mechanism
 
-### Script Index
+### Fast Script Reuse (`SCRIPTS_INDEX.md`)
 
-| Script | Purpose | Status |
-|--------|---------|--------|
-| `scripts/pipeline/convert/convert_to_md.py` | Document to Markdown (recommended) | ✅ Recommended |
-| `scripts/md_to_docx.py` | Markdown to Word | ✅ Recommended |
-| `scripts/convert_doc_to_docx.py` | Legacy .doc conversion | ✅ Recommended |
-| `scripts/_archive/generate_csr_docx.py` | CSR Stage Summary |
-| `scripts/_tools/project_self_check.py` | Project self-check | ✅ Recommended |
-| `scripts/_tools/cleanup_generated_artifacts.py` | Cleanup cache | ✅ Recommended |
+Before writing any new script, check the generated capability index [`scripts/SCRIPTS_INDEX.md`](scripts/SCRIPTS_INDEX.md) or run:
 
-### Deprecated Scripts
-
-> These scripts are deprecated. Functionality has been merged into `convert_to_md.py`:
-
-| Script | Alternative | Notes |
-|--------|-------------|-------|
-| `scripts/extract_docx_full.py` | `convert_to_md.py --mode standard` | Text extraction merged |
-| `scripts/extract_docx_to_md.py` | `convert_to_md.py --mode numbered` | Numbered output merged |
-| `scripts/extract_doc_text.py` | `convert_doc_to_docx.py` | ⚠️ Deprecated - .doc extraction integrated |
-| `scripts/convert_audit_report_md_to_docx.py` | `md_to_docx.py` | ⚠️ Deprecated - wrapper, use md_to_docx.py directly |
-| `scripts/_extract_docx_text.py` | `convert_to_md.py` | ⚠️ Deprecated - no-dependency fallback no longer needed |
-
-### Product-Specific Scripts
-
-> These scripts target specific products. For general use cases, prefer the recommended scripts above.
-
-| Script | Purpose |
-|--------|---------|
-| `scripts/_archive/generate_audit_report_docx.py` | General Audit Report |
-| `scripts/_archive/generate_clinical_doc_audit_report.py` | Clinical Document Audit |
-| `scripts/generate_clinical_overview_doc_review_docx.py` | Clinical overview review Word |
-| `scripts/generate_phase_summary_doc_review_docx.py` | Phase summary review Word |
-| `scripts/generate_norovirus_review_docx.py` | Norovirus epidemiological review |
-| `scripts/build_tvax006_IMA_v2_docx.py` | TVAX006 product-specific |
-| `scripts/cansino_detail4843_manual_docx.py` | Cansino product-specific |
-| `scripts/extract_tables_to_docx.py` | OCR image to Word table |
-
-### How to Choose
-
+```bash
+python scripts/_tools/generate_scripts_index.py --search <keyword>
 ```
-Need to extract text from docx?
-  → Use convert_to_md.py (supports pdf/rtf too)
 
-Need to convert Markdown to Word?
-  → Use md_to_docx.py
+### Core Pipeline Modules (`scripts/pipeline/`)
 
-Need to convert old .doc format?
-  → Use convert_doc_to_docx.py
-
-Need to generate a report?
-  → Check product-specific scripts or use generate_csr_docx.py for CSR
-```
+| Stage | Module | Purpose | Status |
+|-------|--------|---------|--------|
+| Convert | `scripts/pipeline/convert/convert_to_md.py` | Document to Markdown (docx/pdf/rtf/doc) | ✅ Recommended |
+| Convert | `scripts/pipeline/convert/convert_doc_to_docx.py` | Legacy binary .doc to .docx | ✅ Recommended |
+| Ingest | `scripts/pipeline/ingest/docx_reader.py` | Extract Word headings and text | ✅ Recommended |
+| Ingest | `scripts/pipeline/ingest/rtf_reader.py` | Parse SAS/clinical TFL RTF tables | ✅ Recommended |
+| Extract | `scripts/pipeline/extract/stream_docx_tables.py` | Stream large .docx tables to TSV | ✅ Recommended |
+| Extract | `scripts/pipeline/extract/extract_docx_tracked_text.py` | Extract tracked changes (w:ins / w:del) | ✅ Recommended |
+| Transform | `scripts/pipeline/transform/rate_ci_methods.py` | Clopper-Pearson / Wilson / Newcombe / MN rate CI | ✅ Recommended |
+| Transform | `scripts/pipeline/transform/quantile_definitions.py` | SAS PCTLDEF 1~5 & Tukey hinges quantile reconciliation | ✅ Recommended |
+| Export | `scripts/pipeline/export/docx_builder.py` | Standardized clinical Word output (SimSun + TNR) | ✅ Recommended |
+| Export | `scripts/pipeline/export/apply_audit_fonts.py` | Batch enforce SimSun / TNR font styling | ✅ Recommended |
+| Review | `scripts/pipeline/review/audit_protocol_crossrefs.py` | Protocol internal cross-reference audit | ✅ Recommended |
+| Validate | `scripts/pipeline/validate/docx_clean_validator.py` | Clean-version compliance validation | ✅ Recommended |
+| Governance | `scripts/_tools/generate_scripts_index.py` | Regenerate reuse index & CLI search | ✅ Recommended |
+| Governance | `scripts/_tools/cleanup_generated_artifacts.py` | Cleanup cache & build artifacts | ✅ Recommended |
 
 ### Document Review Workflow (materials -> Markdown -> Word)
 
-#### 1) Convert DOCX/XLSX/PDF to Markdown
+#### 1) Convert DOCX/PDF/RTF to Markdown
 
 ```bash
 # Single file
 python scripts/pipeline/convert/convert_to_md.py input.docx -o output.md
 
-# Batch folder (output to review_materials/converted/)
+# Batch folder (output to converted/)
 python scripts/pipeline/convert/convert_to_md.py --folder review_materials -o review_materials/converted
 ```
 
-#### 2) Convert Markdown audit report to Word
+#### 2) Enforce Audit Fonts on Output Word Documents
 
 ```bash
-python scripts/md_to_docx.py "review_materials/<your-report>.md" -o "review_materials/<your-report>.docx"
+python scripts/pipeline/export/apply_audit_fonts.py "review_materials/<your-report>.docx"
 ```
 
-#### 3) Generate CSR stage summary (Word)
-
-```bash
-python scripts/_archive/generate_csr_docx.py --root "project-root"
-```
-
-Note: `review_materials/` is ignored by `.gitignore` and not uploaded to GitHub.
+Note: `review_materials/` and `output/` are ignored by `.gitignore` and not uploaded to GitHub.
 
 ### Word Document Processing Tips
 

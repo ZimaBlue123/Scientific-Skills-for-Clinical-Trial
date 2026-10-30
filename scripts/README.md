@@ -14,16 +14,15 @@ scripts/
 ├── SCRIPTS_INDEX.md                # 全局脚本能力与快速复用索引（自动生成）
 ├── pipeline/                       # 模块化数据处理管线（核心架构）
 │   ├── ingest/                     #   文档读取（docx/pdf/pptx/rtf/xlsx）
-│   ├── extract/                    #   表格/修订文本/旧版 .doc 提取 & 规范化
-│   ├── transform/                  #   数据清洗 / 临床 RAG
+│   ├── extract/                    #   表格/流式解析/修订文本/旧版 .doc 提取 & 规范化
+│   ├── transform/                  #   统计置信区间/分位数对齐/数据清洗/临床 RAG
 │   ├── convert/                    #   格式转换（.doc → .docx / 多格式 → Markdown）
 │   ├── export/                     #   生成 Word/PPT 输出 & 刷新目录域
 │   ├── literature/                 #   文献检索与批量下载客户端
 │   ├── review/                     #   文档审查、交叉引用核查与包级比对 (diff)
 │   └── validate/                   #   AST / 编码 / 清洁版 / TOC / PPTX 校验
 ├── _tools/                         # 内部审计 / 索引生成 / 自检 / 维护脚本
-├── clinical-automation/            # 外部子项目（只读，勿修改）
-└── _archive/                       # 精选高价值交付物参考模板（本地参考，不追踪）
+└── clinical-automation/            # 外部子项目（只读，勿修改）
 ```
 
 ## 核心管线模块 (`pipeline/`)
@@ -38,8 +37,11 @@ scripts/
 | `extract/extract_docx_tracked_text.py` | 零依赖提取含修订痕迹 (`w:ins`/`w:del`) 的 `.docx` 文本与表格 | stdlib |
 | `extract/extract_legacy_doc_text.py` | 通过 Word COM 批量提取旧版 `.doc` 文本与表格 | pywin32 |
 | `extract/table_extractor.py` | 从文档中按表头关键词提取结构化表格 | stdlib |
+| `extract/stream_docx_tables.py` | 基于 lxml iterparse 流式提取超大 .docx 表格与段落为 TSV | lxml |
 | `extract/text_normalizer.py` | 编码检测、乱码诊断与空白字符规范化 | stdlib |
 | `transform/clinical_rag.py` | 临床文档本地 TF-IDF 检索索引 | scikit-learn, numpy |
+| `transform/rate_ci_methods.py` | 二项率与率差 95% 置信区间方法库（对齐 SAS PROC FREQ / RISKDIFF） | stdlib |
+| `transform/quantile_definitions.py` | 样本分位数定义库（精确复现 SAS PCTLDEF 1~5、Tukey hinges 与线性插值） | stdlib |
 | `convert/convert_doc_to_docx.py` | 旧版二进制 `.doc` 转 `.docx` | pywin32 |
 | `convert/convert_to_md.py` | 多格式 → Markdown 转换（支持段落/表格锚点编号） | markitdown, striprtf |
 | `export/docx_builder.py` | 程序化生成 Word 文档与中英文字体规范化 | python-docx |
@@ -93,5 +95,5 @@ python scripts/_tools/audit_robustness_smells.py
 - Python ≥ 3.10，使用 `from __future__ import annotations`
 - 第三方依赖必须显式声明 import 错误提示
 - 不在仓库级产生可重建 artifacts（已通过 `.gitignore` 过滤）
-- 精选参考脚本保存在 `_archive/` 下，仅作本地参考，不纳入版本追踪
+- 一次性特定批次脚本完成后，其通用算法沉淀进 `pipeline/`，不保留历史垃圾脚本
 - `clinical-automation/` 为外部子项目，保持只读，详见根 `AGENTS.md` §3.1
