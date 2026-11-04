@@ -283,6 +283,9 @@ scripts/outputs/
 
 # Untracked extraction scratch space
 _extract/
+_pdftmp/
+_preview/
+**/_preview/
 
 # Dedupe reports
 docs/skill_dedupe_report.md

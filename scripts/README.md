@@ -40,11 +40,12 @@ scripts/
 | `extract/stream_docx_tables.py` | 基于 lxml iterparse 流式提取超大 .docx 表格与段落为 TSV | lxml |
 | `extract/text_normalizer.py` | 编码检测、乱码诊断与空白字符规范化 | stdlib |
 | `transform/clinical_rag.py` | 临床文档本地 TF-IDF 检索索引 | scikit-learn, numpy |
+| `transform/immunogenicity_stats.py` | 疫苗临床 TFL 免疫原性统计与桥接样本量/把握度计算（Clopper-Pearson、Newcombe-Wilson、Farrington-Manning 评分检验、GMC 对数均值差非劣效） | scipy |
 | `transform/rate_ci_methods.py` | 二项率与率差 95% 置信区间方法库（对齐 SAS PROC FREQ / RISKDIFF） | stdlib |
 | `transform/quantile_definitions.py` | 样本分位数定义库（精确复现 SAS PCTLDEF 1~5、Tukey hinges 与线性插值） | stdlib |
 | `convert/convert_doc_to_docx.py` | 旧版二进制 `.doc` 转 `.docx` | pywin32 |
 | `convert/convert_to_md.py` | 多格式 → Markdown 转换（支持段落/表格锚点编号） | markitdown, striprtf |
-| `export/docx_builder.py` | 程序化生成 Word 文档与中英文字体规范化 | python-docx |
+| `export/docx_builder.py` | 程序化生成 Word 文档、中英文字体规范化与 OOXML 批注无损清除 (`strip_docx_comments`) | python-docx |
 | `export/pptx_builder.py` | 程序化生成 PPT 文档 | python-pptx |
 | `export/update_docx_toc_fields.py` | 通过 Word COM 自动更新 `.docx` 目录域与页码 | pywin32 |
 | `review/audit_protocol_crossrefs.py` | 核查方案 `.docx` 内部章节号与图表交叉引用 | python-docx |
@@ -74,6 +75,11 @@ scripts/
 | `fix_fstrings_broad.py` | 清理无占位符的冗余 f-string |
 | `audit_robustness_smells.py` | AST 级代码健壮性与坏味道审计 |
 | `audit_missing_encoding.py` | 审计缺失 `encoding=` 参数的文本读写调用 |
+| `inspect_docx_structure.py` | 快速导出 `.docx` 段落/表格索引结构与文本摘要 |
+| `inspect_docx_word_stats.py` | 通过 Word COM 只读读取 `.docx` 页数、字数、批注与目录条目 |
+| `preview_docx.py` | 通过 Word COM + PyMuPDF 渲染 `.docx` 为 PDF 与分页 PNG 以供版式目视质检 |
+| `preview_xlsx.py` | 通过 Excel COM + PyMuPDF 渲染 `.xlsx` 打印版式为 PDF 与分页 PNG |
+| `sync_toc_page_numbers.py` | 通过 Word COM 分页探测并无损回写 `.docx` 静态目录缓存页码 |
 | `cleanup_generated_artifacts.py` | 清理可重建产物与 IDE 历史缓存 |
 
 ## 常用命令

@@ -41,7 +41,7 @@
   1. **快速检索脚本能力索引**：优先读取 [`scripts/SCRIPTS_INDEX.md`](scripts/SCRIPTS_INDEX.md)（含功能摘要、CLI 参数与公开 API）或执行 `python scripts/_tools/generate_scripts_index.py --search <keyword>`。该检索同时覆盖 `scripts/pipeline/`（`ingest/`、`extract/`、`transform/`、`convert/`、`export/`、`literature/`、`review/`、`validate/`）、`scripts/_tools/`、`scripts/clinical-automation/` 以及 `skills/*/scripts/` 中的全部模块。
   2. **查阅内置技能**：浏览 [`SKILLS_INDEX.md`](SKILLS_INDEX.md) 或提示词中的 `<skills>` 列表，确认是否有官方或项目定制的 Skill 可直接处理该任务。
   3. **在回复/计划中显式记录检索结论**：注明“已复用 `<模块>`”或“检索 `<keyword>` 无命中，新建 `<路径>`”，不得跳过本步骤。
-- **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `scripts/pipeline/ingest/docx_reader.py`、`scripts/pipeline/ingest/rtf_reader.py`、`scripts/pipeline/extract/table_extractor.py`、`scripts/pipeline/transform/rate_ci_methods.py`）进行扩展开发；新增通用能力后应运行 `python scripts/_tools/generate_scripts_index.py` 刷新索引（`--check` 可校验索引是否过期）。
+- **扩展与优化**：只有在确认现有工具库无法直接满足需求时，才允许基于现有通用模块（如 `scripts/pipeline/ingest/docx_reader.py`、`scripts/pipeline/ingest/rtf_reader.py`、`scripts/pipeline/extract/table_extractor.py`、`scripts/pipeline/transform/rate_ci_methods.py`、`scripts/pipeline/transform/immunogenicity_stats.py`、`scripts/pipeline/export/docx_builder.py`）进行扩展开发；新增通用能力后应运行 `python scripts/_tools/generate_scripts_index.py` 刷新索引（`--check` 可校验索引是否过期）。
 - **一次性脚本归宿**：特定项目/批次专用、含硬编码路径的脚本**不得**提交到 `scripts/` 根目录；任务完成后应将其中的通用算法沉淀进 `scripts/pipeline/`，其余一次性脚本直接删除（仓库不再保留 `scripts/_archive/`）。
 
 ## 5. 严格输出与认知护栏 (Strict Output & Cognitive Guardrail)

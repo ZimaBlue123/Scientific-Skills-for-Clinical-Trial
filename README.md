@@ -146,7 +146,7 @@ python scripts/_tools/fix_unused_imports.py
 
 ## Skills 清单与使用方法
 
-本仓库包含 **178 个 skills**（已合并上游 scientific-skills 的非重复条目），分为以下几类：
+本仓库包含 **179 个 skills**（已合并上游 scientific-skills 的非重复条目），分为以下几类：
 
 ### 核心数据分析 Skills
 
