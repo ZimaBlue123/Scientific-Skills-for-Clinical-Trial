@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+import re
+import zipfile
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -75,4 +77,79 @@ def create_clinical_docx(output_path: Path | str, content: str) -> None:
     logger.info(f"Created DOCX at {out}")
 
 
-__all__ = ["create_clinical_docx", "apply_cn_en_fonts"]
+_COMMENT_PARTS = (
+    "word/comments.xml",
+    "word/commentsExtended.xml",
+    "word/commentsIds.xml",
+    "word/people.xml",
+)
+_COMMENT_RUN_RE = re.compile(
+    r"<w:r(?:\s[^>]*)?>(?:(?!</w:r>).)*?<w:commentReference[^>]*/>(?:(?!</w:r>).)*?</w:r>",
+    re.S,
+)
+
+
+def strip_docx_comments(src_path: Path | str, out_path: Path | str | None = None) -> int:
+    """Remove all comment parts and in-body comment range markers at the OOXML string level.
+
+    Operates on raw XML text rather than ElementTree round-tripping so original namespace
+    prefixes (e.g. ``w14``, ``w15``, ``wp14`` referenced by ``mc:Ignorable``) remain intact.
+    Returns the total number of ``<w:commentReference>`` runs stripped.
+    """
+    src = Path(src_path)
+    dst = Path(out_path) if out_path is not None else src
+    with zipfile.ZipFile(src) as zin:
+        names = zin.namelist()
+        data = {n: zin.read(n) for n in names}
+
+    drop = {n for n in names if n in _COMMENT_PARTS}
+    removed_runs = 0
+
+    for part in ("word/document.xml", "word/footnotes.xml", "word/endnotes.xml"):
+        if part not in data:
+            continue
+        xml = data[part].decode("utf-8")
+        removed_runs += len(_COMMENT_RUN_RE.findall(xml))
+        xml = _COMMENT_RUN_RE.sub("", xml)
+        xml = re.sub(r"<w:commentRangeStart[^>]*/>", "", xml)
+        xml = re.sub(r"<w:commentRangeEnd[^>]*/>", "", xml)
+        data[part] = xml.encode("utf-8")
+
+    rels = "word/_rels/document.xml.rels"
+    if rels in data:
+        xml = data[rels].decode("utf-8")
+        data[rels] = re.sub(
+            r"<Relationship\b[^>]*/>",
+            lambda m: "" if re.search(r"(comments|people)", m.group(0), re.I) else m.group(0),
+            xml,
+        ).encode("utf-8")
+
+    ct = "[Content_Types].xml"
+    if ct in data:
+        xml = data[ct].decode("utf-8")
+        data[ct] = re.sub(
+            r"<Override\b[^>]*/>",
+            lambda m: (
+                ""
+                if re.search(
+                    r"/word/(comments|commentsExtended|commentsIds|people)\.xml",
+                    m.group(0),
+                    re.I,
+                )
+                else m.group(0)
+            ),
+            xml,
+        ).encode("utf-8")
+
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as zout:
+        ordered = ["[Content_Types].xml"] + [x for x in data if x != "[Content_Types].xml"]
+        for n in ordered:
+            if n in drop or n not in data:
+                continue
+            zout.writestr(n, data[n])
+
+    return removed_runs
+
+
+__all__ = ["create_clinical_docx", "apply_cn_en_fonts", "strip_docx_comments"]

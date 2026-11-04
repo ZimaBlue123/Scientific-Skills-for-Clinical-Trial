@@ -35,6 +35,7 @@ SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".workbuddy
 # （Image.open / fitz.open / pdfplumber.open / io.BytesIO 等）
 LIB_RECEIVERS = {
     "fitz",
+    "pymupdf",
     "Image",
     "pdfplumber",
     "PIL",
