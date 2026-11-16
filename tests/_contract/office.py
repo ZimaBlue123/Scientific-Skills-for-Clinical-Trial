@@ -149,9 +149,11 @@ def office_test_case(skill_root: Path) -> type[unittest.TestCase]:
 
                 destination = root / "unpacked"
                 destination.mkdir()
-                with zipfile.ZipFile(archive) as handle:
-                    with self.assertRaisesRegex(ValueError, "unsafe archive entry"):
-                        self.helpers.safe_extract(handle, destination)
+                with (
+                    zipfile.ZipFile(archive) as handle,
+                    self.assertRaisesRegex(ValueError, "unsafe archive entry"),
+                ):
+                    self.helpers.safe_extract(handle, destination)
                 self.assertFalse((root / "escaped.xml").exists())
 
         def test_safe_extract_refuses_a_symlink_entry(self) -> None:
@@ -165,9 +167,11 @@ def office_test_case(skill_root: Path) -> type[unittest.TestCase]:
 
                 destination = root / "unpacked"
                 destination.mkdir()
-                with zipfile.ZipFile(archive) as handle:
-                    with self.assertRaisesRegex(ValueError, "symlink archive entry"):
-                        self.helpers.safe_extract(handle, destination)
+                with (
+                    zipfile.ZipFile(archive) as handle,
+                    self.assertRaisesRegex(ValueError, "symlink archive entry"),
+                ):
+                    self.helpers.safe_extract(handle, destination)
 
         # -- opc_target --------------------------------------------------
 

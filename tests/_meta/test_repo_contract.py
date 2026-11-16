@@ -20,6 +20,7 @@ import unittest
 from pathlib import Path
 
 import skill_contract
+
 try:
     import tomllib
 except ModuleNotFoundError:

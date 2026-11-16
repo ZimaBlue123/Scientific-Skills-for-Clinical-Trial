@@ -1,3 +1,7 @@
+"""AgentShield pre-flight path safety and dependency check utility."""
+
+from __future__ import annotations
+
 import os
 import sys
 

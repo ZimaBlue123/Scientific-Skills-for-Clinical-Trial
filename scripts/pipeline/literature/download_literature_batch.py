@@ -349,9 +349,10 @@ def try_unpaywall(item: LiteratureItem, dest: Path) -> bool:
 
     for loc in locations:
         pdf_url = loc.get("url_for_pdf") or loc.get("url")
-        if pdf_url and pdf_url.endswith(".pdf") or pdf_url and loc.get("url_for_pdf"):
-            if _download_pdf(pdf_url, dest):
-                return True
+        if (pdf_url and pdf_url.endswith(".pdf") or pdf_url and loc.get("url_for_pdf")) and _download_pdf(
+            pdf_url, dest
+        ):
+            return True
     return False
 
 

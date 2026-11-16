@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Extract Word comments (with anchoring text) and body paragraphs from a .docx.
 
@@ -11,7 +10,6 @@ Output (stdout / file): Markdown
   PART 2  - body paragraphs (non-empty) with paragraph index
 """
 
-import re
 import sys
 import zipfile
 from pathlib import Path
@@ -41,10 +39,10 @@ def comment_body(c):
 
 
 def load(path: Path):
-    z = zipfile.ZipFile(path)
-    names = z.namelist()
-    doc_xml = z.read("word/document.xml")
-    comments_xml = z.read("word/comments.xml") if "word/comments.xml" in names else None
+    with zipfile.ZipFile(path) as z:
+        names = z.namelist()
+        doc_xml = z.read("word/document.xml")
+        comments_xml = z.read("word/comments.xml") if "word/comments.xml" in names else None
     return doc_xml, comments_xml, names
 
 

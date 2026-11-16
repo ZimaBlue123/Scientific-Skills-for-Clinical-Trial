@@ -23,8 +23,8 @@ from __future__ import annotations
 
 import argparse
 import math
+from collections.abc import Callable
 from statistics import NormalDist
-from typing import Callable
 
 __all__ = [
     "z_value",

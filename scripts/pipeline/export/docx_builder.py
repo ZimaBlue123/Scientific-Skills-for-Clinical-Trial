@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import logging
 import re
 import zipfile
@@ -152,4 +153,73 @@ def strip_docx_comments(src_path: Path | str, out_path: Path | str | None = None
     return removed_runs
 
 
-__all__ = ["create_clinical_docx", "apply_cn_en_fonts", "strip_docx_comments"]
+def _first_run_rpr(cell):
+    """Return a deep copy of the first run ``w:rPr`` element inside ``cell``, if any."""
+    for p in cell.paragraphs:
+        for r in p.runs:
+            if r._element.rPr is not None:
+                return copy.deepcopy(r._element.rPr)
+    return None
+
+
+def _apply_run_rpr(run, rpr) -> None:
+    if rpr is None:
+        return
+    old = run._element.rPr
+    if old is not None:
+        run._element.remove(old)
+    run._element.insert(0, copy.deepcopy(rpr))
+
+
+def set_para_text_preserving_rpr(paragraph, text: str, rpr=None) -> None:
+    """Replace paragraph text while preserving ``w:pPr`` and applying ``rpr``."""
+    from docx.oxml.ns import qn
+
+    if rpr is None:
+        for r in paragraph.runs:
+            if r._element.rPr is not None:
+                rpr = copy.deepcopy(r._element.rPr)
+                break
+    p_el = paragraph._element
+    for child in list(p_el):
+        if child.tag != qn("w:pPr"):
+            p_el.remove(child)
+    run = paragraph.add_run(text)
+    _apply_run_rpr(run, rpr)
+
+
+def set_cell_single_text(cell, text: str) -> None:
+    """Collapse a table cell to one paragraph containing ``text``, preserving first-run rPr."""
+    rpr = _first_run_rpr(cell)
+    par = cell.paragraphs[0]
+    set_para_text_preserving_rpr(par, text, rpr)
+    for extra in cell.paragraphs[1:]:
+        parent = extra._element.getparent()
+        if parent is not None:
+            parent.remove(extra._element)
+
+
+def enable_table_row_cant_split(table) -> int:
+    """Prevent table rows from splitting across page breaks; return rows updated."""
+    from docx.oxml.ns import qn
+
+    updated = 0
+    for tr in table._tbl.findall(qn("w:tr")):
+        tr_pr = tr.find(qn("w:trPr"))
+        if tr_pr is None:
+            tr_pr = tr.makeelement(qn("w:trPr"), {})
+            tr.insert(0, tr_pr)
+        if tr_pr.find(qn("w:cantSplit")) is None:
+            tr_pr.insert(0, tr_pr.makeelement(qn("w:cantSplit"), {}))
+            updated += 1
+    return updated
+
+
+__all__ = [
+    "create_clinical_docx",
+    "apply_cn_en_fonts",
+    "strip_docx_comments",
+    "set_para_text_preserving_rpr",
+    "set_cell_single_text",
+    "enable_table_row_cant_split",
+]

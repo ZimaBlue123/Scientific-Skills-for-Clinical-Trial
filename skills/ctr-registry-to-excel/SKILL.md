@@ -132,3 +132,17 @@ python skills/ctr-registry-to-excel/scripts/extract_ctr_doc_text.py <doc目录> 
 
 - 项目 venv 无 pip、无 pywin32；系统 python 有 pip。两个解释器分工如上。
 - openpyxl 重排行的正确姿势见 `references/cleanup-rules.md` 第 3 节。
+
+## Pre-flight Check
+
+Before executing, the agent MUST:
+1. Verify input file exists at the expected path
+2. Clear any cached results from previous runs
+3. Confirm required environment variables are set
+
+## Post-execution Validation
+
+After execution, the agent MUST:
+1. Verify output file was created successfully
+2. Run applicable validator (if available)
+3. Report results in standardized Markdown table format

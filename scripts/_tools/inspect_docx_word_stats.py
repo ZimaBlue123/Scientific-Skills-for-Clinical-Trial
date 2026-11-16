@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """用 Word COM 读取 docx 的页数 / 批注数 / 目录条目（只读，不改文件）。
 
 用法: python scripts/_tools/inspect_docx_word_stats.py <file.docx> [--update-toc]

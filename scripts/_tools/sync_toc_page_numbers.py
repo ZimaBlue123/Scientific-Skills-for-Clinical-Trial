@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """把 Word 实际分页结果回写进 docx 的目录（TOC）缓存页码。
 
 场景：用 python-docx 生成/修改文档后，为保持原文件版式不动（不走 Word 保存），
@@ -104,7 +103,7 @@ def main() -> int:
         print(f"[WARN] 条目数不一致：缓存 {len(cur)}，Word {len(truth)}")
 
     diffs = []
-    for (ct, cp), (tt, tp) in zip(cur, truth):
+    for (ct, cp), (tt, tp) in zip(cur, truth, strict=False):
         if ct != tt:
             print(f"[WARN] 标题不匹配：{ct!r} vs {tt!r}")
         if cp != tp:

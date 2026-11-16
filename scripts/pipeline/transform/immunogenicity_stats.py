@@ -21,8 +21,8 @@ Public API
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 from scipy import stats as _st
 
@@ -104,10 +104,6 @@ def rate_difference_ci(
         return (0.0, 0.0, 0.0)
     p1, p2 = n1 / N1, n2 / N2
     d = p1 - p2
-    cp1 = _st.beta.ppf(alpha / 2, n1, N1 - n1 + 1) if n1 > 0 else 0.0
-    cp1u = _st.beta.ppf(1 - alpha / 2, n1 + 1, N1 - n1) if n1 < N1 else 1.0
-    cp2 = _st.beta.ppf(alpha / 2, n2, N2 - n2 + 1) if n2 > 0 else 0.0
-    cp2u = _st.beta.ppf(1 - alpha / 2, n2 + 1, N2 - n2) if n2 < N2 else 1.0
     # Wilson score intervals for the two arms
     z = _st.norm.ppf(1 - alpha / 2)
 

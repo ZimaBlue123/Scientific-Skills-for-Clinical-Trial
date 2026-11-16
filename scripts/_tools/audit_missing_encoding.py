@@ -28,6 +28,7 @@ import ast
 import json
 import os
 import sys
+from pathlib import Path
 
 SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".workbuddy"}
 
@@ -72,9 +73,7 @@ def is_path_open(node: ast.Call) -> bool:
         if recv.id in LIB_RECEIVERS:
             return False
         # 首字母大写的通常是类（如 Image.open / Document.open）
-        if recv.id[:1].isupper():
-            return False
-        return True
+        return not recv.id[:1].isupper()
     # io.BytesIO(...) 之类：接收者是调用表达式，按库调用排除
     return False
 
@@ -103,7 +102,7 @@ def has_encoding(call: ast.Call) -> bool:
 
 def scan_file(path: str) -> list[dict]:
     try:
-        src = open(path, encoding="utf-8").read()
+        src = Path(path).read_text(encoding="utf-8")
         tree = ast.parse(src, filename=path)
     except (SyntaxError, UnicodeDecodeError, OSError):
         return []
@@ -128,7 +127,7 @@ def main() -> int:
     args = [a for a in sys.argv[1:]]
     as_json = "--json" in args
     args = [a for a in args if not a.startswith("--")]
-    root = args[0] if args else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = args[0] if args else str(Path(__file__).resolve().parents[2])
 
     report: dict[str, list[dict]] = {}
     files = 0

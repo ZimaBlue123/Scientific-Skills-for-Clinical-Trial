@@ -21,8 +21,8 @@ from __future__ import annotations
 
 import argparse
 import math
+from collections.abc import Iterable, Sequence
 from fractions import Fraction
-from typing import Iterable, Sequence
 
 __all__ = [
     "QUANTILE_DEFINITIONS",

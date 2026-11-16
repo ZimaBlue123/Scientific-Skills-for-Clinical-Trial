@@ -228,7 +228,7 @@ def validate_registry(
     # ── 1. Alphabetical order check ──────────────────────────────────────
     names = [d.name for d in skill_dirs]
     sorted_names = sorted(names, key=str.lower)
-    for i, (actual, expected) in enumerate(zip(names, sorted_names)):
+    for i, (actual, expected) in enumerate(zip(names, sorted_names, strict=False)):
         if actual != expected:
             result.issues.append(
                 Issue(
@@ -427,7 +427,6 @@ def _format_markdown(result: ValidationResult) -> str:
 
     for rule, issues in sorted(by_rule.items()):
         errors = [i for i in issues if i.level == "error"]
-        warnings = [i for i in issues if i.level == "warning"]
         level_tag = "🔴" if errors else "🟡"
         lines.append(f"## {level_tag} {rule} ({len(issues)} issues)\n")
         for i in issues:

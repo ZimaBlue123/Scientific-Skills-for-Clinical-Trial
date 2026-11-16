@@ -149,6 +149,8 @@ CATEGORY_RULES: list[tuple[str, list[str]]] = [
             "word-audit",
             "pptx-gmc-sync",
             "analytical-method",
+            "ctr-registry",
+            "pv-medical",
         ],
     ),
     (
@@ -156,6 +158,7 @@ CATEGORY_RULES: list[tuple[str, list[str]]] = [
         [
             "document-skills",
             "document-format",
+            "docx-to-markdown",
             "clinical-docx",
             "clinical-pdf",
             "clinical-ppt",
@@ -246,6 +249,7 @@ CATEGORY_RULES: list[tuple[str, list[str]]] = [
             "datacommons",
             "ontology-term",
             "imaging-data",
+            "uspto",
         ],
     ),
     (
@@ -306,6 +310,7 @@ CATEGORY_RULES: list[tuple[str, list[str]]] = [
             "transformers",
             "stable-baselines3",
             "torch_geometric",
+            "torch-geometric",
             "torchdrug",
             "pufferlib",
             "hypogenic",

@@ -170,9 +170,8 @@ def _check_runs_in_paragraphs(paragraphs, loc_prefix, result):
             if colour and _is_colour_close(colour, RED_RGBS):
                 result.issues.append(Issue("red_font", loc, snippet))
 
-            if colour and _is_colour_close(colour, BLUE_RGBS):
-                if not _run_is_in_hyperlink(run):
-                    result.issues.append(Issue("blue_font", loc, snippet))
+            if colour and _is_colour_close(colour, BLUE_RGBS) and not _run_is_in_hyperlink(run):
+                result.issues.append(Issue("blue_font", loc, snippet))
 
             hl = _get_run_highlight(run)
             if hl and hl.lower() in YELLOW_HIGHLIGHTS:

@@ -19,7 +19,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = Path(__file__).resolve().parent
-RENDER = HERE / "render_slide_highres.py"
+RENDER = HERE / "render_pptx_slides.py"
 
 
 def render(pptx: str, page: int, out: Path, w: int = 3200, h: int = 1800) -> None:
@@ -31,7 +31,7 @@ def render(pptx: str, page: int, out: Path, w: int = 3200, h: int = 1800) -> Non
 
 def _system_font_dir() -> Path:
     """Return the OS font directory without hard-coding a drive letter."""
-    windir = os.environ.get("WINDIR") or os.environ.get("SystemRoot")
+    windir = os.environ.get("WINDIR") or os.environ.get("SYSTEMROOT")
     if windir:
         return Path(windir) / "Fonts"
     return Path("/usr/share/fonts")  # POSIX fallback (Linux/macOS)
@@ -68,9 +68,9 @@ def main() -> int:
 
         ia, ib = Image.open(a).convert("RGB"), Image.open(b).convert("RGB")
         if args.crop:
-            l, t, r, bt = (float(x) for x in args.crop.split(","))
+            left, top, right, bottom = (float(x) for x in args.crop.split(","))
             ppi = ia.size[1] / 7.5
-            box = (int(l * ppi), int(t * ppi), int(r * ppi), int(bt * ppi))
+            box = (int(left * ppi), int(top * ppi), int(right * ppi), int(bottom * ppi))
             ia, ib = ia.crop(box), ib.crop(box)
 
         bar = 64

@@ -41,6 +41,7 @@ from __future__ import annotations
 import difflib
 import subprocess
 import sys
+from pathlib import Path
 
 DEFAULT_CODECS = ("gb18030", "gbk", "cp936")
 
@@ -101,7 +102,7 @@ def main() -> int:
     corrupted_path, rev, out_path = sys.argv[1], sys.argv[2], sys.argv[3]
 
     try:
-        corrupted = open(corrupted_path, "rb").read().decode("utf-8")
+        corrupted = Path(corrupted_path).read_bytes().decode("utf-8")
     except OSError as exc:
         print(f"[失败] 无法读取 {corrupted_path}: {exc}")
         return 1

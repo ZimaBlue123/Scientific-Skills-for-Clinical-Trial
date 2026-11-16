@@ -36,6 +36,7 @@ import os
 import py_compile
 import sys
 import tempfile
+from pathlib import Path
 
 SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", "node_modules", ".workbuddy"}
 LIB_RECEIVERS = {
@@ -96,7 +97,7 @@ def has_starstar(call: ast.Call) -> bool:
 
 def collect(path: str) -> list[ast.Call]:
     try:
-        raw = open(path, "rb").read()
+        raw = Path(path).read_bytes()
         tree = ast.parse(raw, filename=path)
     except (SyntaxError, OSError, ValueError):
         return []
@@ -164,7 +165,7 @@ def main() -> int:
     argv = sys.argv[1:]
     apply_changes = "--apply" in argv
     paths = [a for a in argv if not a.startswith("--")]
-    root = paths[0] if paths else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = paths[0] if paths else str(Path(__file__).resolve().parents[2])
 
     changed_files, changed_calls = 0, 0
     failed = 0
@@ -177,7 +178,7 @@ def main() -> int:
             calls = collect(full)
             if not calls:
                 continue
-            raw = open(full, "rb").read()
+            raw = Path(full).read_bytes()
             new_raw, n = patch_source(raw, calls)
             rel = os.path.relpath(full, root).replace("\\", "/")
             if not compile_ok(full, new_raw):

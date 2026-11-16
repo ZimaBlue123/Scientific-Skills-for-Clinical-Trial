@@ -18,10 +18,10 @@ Legend: **CLI** = `Yes` (runnable, `__main__` guard) / `Lib` (import only); **CL
 | `pipeline/convert` | [`convert_to_md.py`](pipeline/convert/convert_to_md.py) | Yes | `input`, `--folder`, `--output`, `--extensions`, `--mode`, `--max-cols` | `table_to_md`, `iter_block_items`, `docx_to_md_numbered`, `convert_file`, `convert_folder` | Unified document converter: Convert docx/pdf/rtf/doc to markdown. |
 | `pipeline/core` | [`document_facade.py`](pipeline/document_facade.py) | Lib | — | `UnifiedDocument` | Unified Document Facade (Inspired by Univer Architecture). |
 | `pipeline/export` | [`apply_audit_fonts.py`](pipeline/export/apply_audit_fonts.py) | Yes | — | `apply_audit_fonts` | 为审计报告 docx 全局应用宋体/Times New Roman 中英文字体。 |
-| `pipeline/export` | [`docx_builder.py`](pipeline/export/docx_builder.py) | Lib | — | `create_clinical_docx`, `apply_cn_en_fonts`, `strip_docx_comments` | DOCX export utilities. |
+| `pipeline/export` | [`docx_builder.py`](pipeline/export/docx_builder.py) | Lib | — | `create_clinical_docx`, `apply_cn_en_fonts`, `strip_docx_comments`, `set_para_text_preserving_rpr`, `set_cell_single_text`, `enable_table_row_cant_split` | DOCX export utilities. |
 | `pipeline/export` | [`make_slide_before_after.py`](pipeline/export/make_slide_before_after.py) | Yes | `old_pptx`, `new_pptx`, `page`, `out_png`, `--crop`, `--title-old` | `render`, `load_font` | 把两份 PPTX 的同一页渲染成上下对照图（可指定裁切区域），便于目视 diff。 |
 | `pipeline/export` | [`nativize_pptx.py`](pipeline/export/nativize_pptx.py) | Yes | `stage`, `final` | `nativize` | Normalize a python-pptx output by round-tripping it through PowerPoint COM. |
-| `pipeline/export` | [`pptx_builder.py`](pipeline/export/pptx_builder.py) | Lib | — | `inject_pptx_data`, `create_slide` | PPTX export utilities. |
+| `pipeline/export` | [`pptx_builder.py`](pipeline/export/pptx_builder.py) | Lib | — | `inject_pptx_data`, `create_slide`, `strip_pptx_highlights` | PPTX export utilities. |
 | `pipeline/export` | [`render_pptx_slides.py`](pipeline/export/render_pptx_slides.py) | Yes | `pptx`, `slides`, `--outdir`, `--width` | `render` | Render selected slides of a PPTX to PNG via PowerPoint COM. |
 | `pipeline/export` | [`update_docx_toc_fields.py`](pipeline/export/update_docx_toc_fields.py) | Yes | `docx_path` | `update_docx_toc_fields` | Update Word (.docx) Table of Contents (TOC) and page number fields via Word COM. |
 | `pipeline/extract` | [`extract_docx_review_comments.py`](pipeline/extract/extract_docx_review_comments.py) | Yes | — | `para_text`, `comment_body`, `load`, `extract_comments` | Extract Word comments (with anchoring text) and body paragraphs from a .docx. |
@@ -76,13 +76,13 @@ Legend: **CLI** = `Yes` (runnable, `__main__` guard) / `Lib` (import only); **CL
 | [`inspect_docx_structure.py`](_tools/inspect_docx_structure.py) | Yes | `docx`, `--max-chars` | Dump paragraph and table structure of a .docx (index, run count, preview text) for targeted inspection. |
 | [`inspect_docx_word_stats.py`](_tools/inspect_docx_word_stats.py) | Yes | `path`, `--update-toc`, `--dump-toc` | 用 Word COM 读取 docx 的页数 / 批注数 / 目录条目（只读，不改文件）。 |
 | [`make_safe_md_copies.py`](_tools/make_safe_md_copies.py) | Yes | `--src`, `--out`, `--manifest`, `--log-level` | Build sanitized copies of every ``*.md`` file under a source folder. |
-| [`pre_flight.py`](_tools/pre_flight.py) | Yes | — | Utility script |
+| [`pre_flight.py`](_tools/pre_flight.py) | Yes | — | AgentShield pre-flight path safety and dependency check utility. |
 | [`preview_docx.py`](_tools/preview_docx.py) | Yes | `docx`, `--out-dir`, `--tag`, `--dpi` | Render a .docx to PDF + PNG pages for visual QA. |
 | [`preview_xlsx.py`](_tools/preview_xlsx.py) | Yes | `xlsx`, `--out-dir`, `--sheet`, `--tag`, `--dpi` | Render an .xlsx to PDF + PNG pages for visual QA of the print layout. |
 | [`project_self_check.py`](_tools/project_self_check.py) | Yes | — | Project self-check: |
 | [`repair_mojibake_from_git.py`](_tools/repair_mojibake_from_git.py) | Yes | — | 修复 "UTF-8 中文被按中文代码页(GBK/GB18030)解码后又存成 UTF-8" 造成的乱码文件。 |
 | [`repair_truncated_multibyte_sequences.py`](_tools/repair_truncated_multibyte_sequences.py) | Yes | `--write` | Repair single-byte UTF-8 corruption where a sequence-final byte became ``?``. |
-| [`skill_dedupe_report.py`](_tools/skill_dedupe_report.py) | Yes | `--threshold`, `--top`, `--skills-subdir`, `--out` | Utility script |
+| [`skill_dedupe_report.py`](_tools/skill_dedupe_report.py) | Yes | `--threshold`, `--top`, `--skills-subdir`, `--out` | Generate a cosine-similarity deduplication report across all SKILL.md files. |
 | [`sync_toc_page_numbers.py`](_tools/sync_toc_page_numbers.py) | Yes | `docx`, `--check` | 把 Word 实际分页结果回写进 docx 的目录（TOC）缓存页码。 |
 | [`validate_skills_registry.py`](_tools/validate_skills_registry.py) | Yes | `--format`, `--out`, `--no-links`, `--no-dedupe`, `--dedupe-threshold`, `--skills-dir` | Validate the skills registry: frontmatter, internal links, ordering, and duplicates. |
 

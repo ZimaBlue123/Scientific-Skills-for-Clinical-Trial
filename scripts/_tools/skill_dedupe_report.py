@@ -1,3 +1,5 @@
+"""Generate a cosine-similarity deduplication report across all SKILL.md files."""
+
 from __future__ import annotations
 
 import argparse

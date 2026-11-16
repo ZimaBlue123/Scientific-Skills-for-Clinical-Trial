@@ -83,9 +83,7 @@ def _is_silent_handler(node: ast.ExceptHandler) -> bool:
     body = [n for n in node.body if not isinstance(n, ast.Pass)]
     if not body:
         return True
-    if len(body) == 1 and isinstance(body[0], ast.Continue):
-        return True
-    return False
+    return bool(len(body) == 1 and isinstance(body[0], ast.Continue))
 
 
 def _is_builtin_open(node: ast.Call) -> bool:
@@ -186,18 +184,17 @@ def audit_file(path: Path) -> list[dict[str, object]]:
                             "detail": "os.system()",
                         }
                     )
-            elif fname in {"run", "Popen", "call", "check_output", "check_call"}:
-                if any(
-                    kw.arg == "shell" and getattr(kw.value, "value", False) for kw in node.keywords
-                ):
-                    findings.append(
-                        {
-                            "file": str(path),
-                            "line": node.lineno,
-                            "kind": "subprocess-shell",
-                            "detail": "shell=True",
-                        }
-                    )
+            elif fname in {"run", "Popen", "call", "check_output", "check_call"} and any(
+                kw.arg == "shell" and getattr(kw.value, "value", False) for kw in node.keywords
+            ):
+                findings.append(
+                    {
+                        "file": str(path),
+                        "line": node.lineno,
+                        "kind": "subprocess-shell",
+                        "detail": "shell=True",
+                    }
+                )
 
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             for default in list(node.args.defaults) + [

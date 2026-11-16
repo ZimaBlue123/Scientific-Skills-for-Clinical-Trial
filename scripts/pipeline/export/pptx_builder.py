@@ -37,4 +37,23 @@ def inject_pptx_data(output_path: Path | str, data: dict[str, str]) -> None:
     logger.info(f"Created PPTX at {out}")
 
 
-__all__ = ["inject_pptx_data", "create_slide"]
+def strip_pptx_highlights(prs) -> int:
+    """Remove all ``a:highlight`` elements from slide shapes and masters while keeping text."""
+    hl_tag = "{http://schemas.openxmlformats.org/drawingml/2006/main}highlight"
+    removed = 0
+    for slide in prs.slides:
+        for hi in list(slide.shapes._spTree.iter(hl_tag)):
+            parent = hi.getparent()
+            if parent is not None:
+                parent.remove(hi)
+                removed += 1
+    for master in prs.slide_masters:
+        for hi in list(master.shapes._spTree.iter(hl_tag)):
+            parent = hi.getparent()
+            if parent is not None:
+                parent.remove(hi)
+                removed += 1
+    return removed
+
+
+__all__ = ["inject_pptx_data", "create_slide", "strip_pptx_highlights"]

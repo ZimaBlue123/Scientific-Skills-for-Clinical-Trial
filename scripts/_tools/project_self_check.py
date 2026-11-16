@@ -113,9 +113,13 @@ def check_python_module(name: str) -> CmdCheck:
 
 
 def iter_python_scripts() -> list[Path]:
-    scripts = []
-    for p in (ROOT / "scripts").glob("*.py"):
-        if p.name == Path(__file__).name:
+    scripts: list[Path] = []
+    for p in (ROOT / "scripts" / "pipeline").rglob("*.py"):
+        if "__pycache__" in p.parts or p.name == "__init__.py":
+            continue
+        scripts.append(p)
+    for p in (ROOT / "scripts" / "_tools").glob("*.py"):
+        if p.name in {"__init__.py", Path(__file__).name}:
             continue
         scripts.append(p)
     for p in (ROOT / "skills").glob("*/scripts/*.py"):
