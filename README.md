@@ -198,8 +198,8 @@ python scripts/_tools/fix_unused_imports.py
 | `perplexity-search` | AI 实时网络搜索 | `python skills/perplexity-search/scripts/perplexity_search.py "query"` |
 | `github-proxy-push` | GitHub 代理推送 | 见 SKILL.md |
 | `pyhealth` | 医疗 AI（EHR 任务/模型） | 见 `references/datasets.md` |
-| `csr-stage-docx-workflow` | CSR 阶段性小结 Word 生成 | `python scripts/generate_csr_docx.py` |
-| `word-audit-report-format` | Word 审核报告字体规范 | `python scripts/generate_audit_report_docx.py` |
+| `csr-stage-docx-workflow` | CSR 阶段性小结 Word 生成 | `python -c "from scripts.pipeline.export.docx_builder import create_clinical_docx"` |
+| `word-audit-report-format` | Word 审核报告字体规范 | `python scripts/pipeline/export/apply_audit_fonts.py` |
 | `pptx-gmc-sync-from-word` | Word GMC/例数/P 值同步到 PPT 指定页表格 | `python skills/pptx-gmc-sync-from-word/scripts/sync_pptx_from_word.py --word <docx> --ppt <pptx>` |
 | `docx-to-markdown` | DOCX 文本/表格抽取为 Markdown | `python skills/docx-to-markdown/scripts/extract_docx_text.py` |
 

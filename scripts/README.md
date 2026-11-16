@@ -45,8 +45,8 @@ scripts/
 | `transform/quantile_definitions.py` | 样本分位数定义库（精确复现 SAS PCTLDEF 1~5、Tukey hinges 与线性插值） | stdlib |
 | `convert/convert_doc_to_docx.py` | 旧版二进制 `.doc` 转 `.docx` | pywin32 |
 | `convert/convert_to_md.py` | 多格式 → Markdown 转换（支持段落/表格锚点编号） | markitdown, striprtf |
-| `export/docx_builder.py` | 程序化生成 Word 文档、中英文字体规范化与 OOXML 批注无损清除 (`strip_docx_comments`) | python-docx |
-| `export/pptx_builder.py` | 程序化生成 PPT 文档 | python-pptx |
+| `export/docx_builder.py` | 程序化生成 Word 文档、中英文字体规范化、OOXML 批注无损清除 (`strip_docx_comments`)、保格式段落/单元格文本替换 (`set_para_text_preserving_rpr`, `set_cell_single_text`) 与表格防跨页断行 (`enable_table_row_cant_split`) | python-docx |
+| `export/pptx_builder.py` | 程序化生成 PPT 文档与高亮批量移除 (`strip_pptx_highlights`) | python-pptx |
 | `export/update_docx_toc_fields.py` | 通过 Word COM 自动更新 `.docx` 目录域与页码 | pywin32 |
 | `review/audit_protocol_crossrefs.py` | 核查方案 `.docx` 内部章节号与图表交叉引用 | python-docx |
 | `review/audit_protocol_numeric_consistency.py` | 核查编号版方案 Markdown 占位符、单位与关键数值一致性 | stdlib |

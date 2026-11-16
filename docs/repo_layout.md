@@ -9,12 +9,13 @@ Scientific-Skills-for-Clinical_Trial/
 ├── skills/                    # 每个 skill 一个目录（核心内容）
 ├── docs/                      # 长文档（面向使用者/维护者）
 ├── scripts/                   # 仓库级可执行脚本入口（不属于某个 skill）
+│   ├── SCRIPTS_INDEX.md       # 全局脚本能力与快速复用索引（自动生成）
 │   ├── pipeline/              # 核心业务流：ingest → extract → transform → validate → export/convert/literature/review
 │   ├── _tools/                # 内部运维与审计工具（自检、索引生成、清理、编码修复）
-│   ├── _archive/              # 一次性业务代码封存区（只读，不再维护）
 │   └── clinical-automation/   # 外部迁入的 vendored 能力库（只读，见 AGENTS.md 3.1）
 ├── reports/                   # 生成产物（默认不入库；见 .gitignore）
 ├── tests/                     # 测试（至少保证 CI 能跑通）
+├── SKILLS_INDEX.md            # 全局技能索引（自动生成）
 ├── requirements.txt           # 运行时依赖（CI 与本地对齐）
 ├── requirements-dev.txt       # 开发依赖（lint/test）
 └── README.md                  # 入口文档（短、稳定、指向 docs）

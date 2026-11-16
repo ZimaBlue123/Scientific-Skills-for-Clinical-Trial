@@ -100,6 +100,7 @@ Scientific-Skills-for-Clinical_Trial/
 ├── pyproject.toml         # Project metadata + ruff/mypy/pytest config
 ├── requirements.txt
 ├── requirements-dev.txt
+├── SKILLS_INDEX.md        # Global skills index (auto-generated)
 └── CONTRIBUTING.md
 ```
 
@@ -109,7 +110,7 @@ For maintenance conventions and details, see `docs/repo_layout.md`.
 
 ## Skills List and Usage
 
-This repository currently includes **30 skills**, grouped as follows.
+This repository currently includes **179 skills**, grouped as follows.
 
 ### Core Data Analysis Skills
 
