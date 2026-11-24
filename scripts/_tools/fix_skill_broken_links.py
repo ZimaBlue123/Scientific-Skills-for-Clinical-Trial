@@ -22,6 +22,7 @@ Without ``--write`` it reports the edits it *would* make (dry run, the default).
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -53,8 +54,8 @@ REDIRECTS: tuple[Redirect, ...] = (
     ),
     Redirect(
         old="scripts/pubmed_search_tool.py",
-        new="scripts/literature_tools/pubmed_search_tool.py",
-        reason="moved into the repo-level literature_tools package",
+        new="scripts/pipeline/literature/pubmed_search_tool.py",
+        reason="moved into the pipeline literature stage",
     ),
     Redirect(
         old="scripts/generate_audit_report_docx.py",
@@ -73,6 +74,16 @@ def _resolves(skill_dir: Path, ref: str) -> bool:
     return (skill_dir / ref).exists() or (REPO_ROOT / ref).exists()
 
 
+def _bare_ref_pattern(old: str) -> re.Pattern[str]:
+    """Match *old* only as a standalone path, not as the tail of a longer path.
+
+    Without this boundary an already-repointed reference such as
+    ``../scientific-schematics/scripts/generate_schematic.py`` would match again
+    and be double-prefixed, i.e. the rewrite would not be idempotent.
+    """
+    return re.compile(r"(?<![\w./\\-])" + re.escape(old))
+
+
 def plan_edits() -> list[tuple[Path, Redirect, int]]:
     """Return ``(skill_md_path, redirect, occurrences)`` for every pending edit."""
     planned: list[tuple[Path, Redirect, int]] = []
@@ -86,12 +97,13 @@ def plan_edits() -> list[tuple[Path, Redirect, int]]:
             print(f"  ! skipping {skill_md.name}: not valid UTF-8")
             continue
         for redirect in REDIRECTS:
-            if redirect.old not in text:
+            count = len(_bare_ref_pattern(redirect.old).findall(text))
+            if not count:
                 continue
             # Skip when the reference already resolves (e.g. the skill has its own copy).
             if _resolves(skill_dir, redirect.old):
                 continue
-            planned.append((skill_md, redirect, text.count(redirect.old)))
+            planned.append((skill_md, redirect, count))
     return planned
 
 
@@ -116,7 +128,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.write:
             text = skill_md.read_text(encoding="utf-8")
             skill_md.write_text(
-                text.replace(redirect.old, redirect.new), encoding="utf-8", newline=""
+                _bare_ref_pattern(redirect.old).sub(lambda _m, new=redirect.new: new, text),
+                encoding="utf-8",
+                newline="",
             )
 
     print(

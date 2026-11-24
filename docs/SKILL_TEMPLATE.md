@@ -59,7 +59,7 @@ Before executing, the agent MUST:
 
 After execution, the agent MUST:
 1. Verify output file was created successfully
-2. Run applicable validator (e.g., `check_pptx_overflow.py`)
+2. Run applicable validator (e.g., `scripts/pipeline/validate/pptx_overflow_checker.py`)
 3. Report results in standardized Markdown table format
 
 ## Output Format

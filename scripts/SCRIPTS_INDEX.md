@@ -24,6 +24,7 @@ Legend: **CLI** = `Yes` (runnable, `__main__` guard) / `Lib` (import only); **CL
 | `pipeline/export` | [`pptx_builder.py`](pipeline/export/pptx_builder.py) | Lib | — | `inject_pptx_data`, `create_slide`, `strip_pptx_highlights` | PPTX export utilities. |
 | `pipeline/export` | [`render_pptx_slides.py`](pipeline/export/render_pptx_slides.py) | Yes | `pptx`, `slides`, `--outdir`, `--width` | `render` | Render selected slides of a PPTX to PNG via PowerPoint COM. |
 | `pipeline/export` | [`update_docx_toc_fields.py`](pipeline/export/update_docx_toc_fields.py) | Yes | `docx_path` | `update_docx_toc_fields` | Update Word (.docx) Table of Contents (TOC) and page number fields via Word COM. |
+| `pipeline/extract` | [`batch_extract_materials.py`](pipeline/extract/batch_extract_materials.py) | Yes | — | — | Batch-extract text from a review-materials tree into a parallel .txt tree. |
 | `pipeline/extract` | [`extract_docx_review_comments.py`](pipeline/extract/extract_docx_review_comments.py) | Yes | — | `para_text`, `comment_body`, `load`, `extract_comments` | Extract Word comments (with anchoring text) and body paragraphs from a .docx. |
 | `pipeline/extract` | [`extract_docx_tracked_text.py`](pipeline/extract/extract_docx_tracked_text.py) | Yes | `docx_path`, `--output`, `--mode` | `extract_tracked_docx`, `para_text` | Extract text and tables from .docx using stdlib only (honoring tracked changes). |
 | `pipeline/extract` | [`extract_legacy_doc_text.py`](pipeline/extract/extract_legacy_doc_text.py) | Yes | `src`, `out_dir` | `extract_one_doc`, `extract_legacy_docs` | Extract plain text and table text from legacy binary .doc files via Word COM. |
@@ -55,6 +56,7 @@ Legend: **CLI** = `Yes` (runnable, `__main__` guard) / `Lib` (import only); **CL
 | `pipeline/validate` | [`docx_clean_validator.py`](pipeline/validate/docx_clean_validator.py) | Yes | `target`, `--json` | `Issue`, `FileResult`, `check_docx` | Check Word (.docx) files for "clean version" compliance. |
 | `pipeline/validate` | [`docx_toc_validator.py`](pipeline/validate/docx_toc_validator.py) | Yes | `docx`, `--out-dir`, `--pages` | `verify` | 用本机 Microsoft Word (COM) 实际打开 .docx，**在临时副本上**更新域后导出 PDF / |
 | `pipeline/validate` | [`encoding_validator.py`](pipeline/validate/encoding_validator.py) | Lib | — | `check_bom`, `diagnose_encoding` | Encoding validation utilities. |
+| `pipeline/validate` | [`pptx_overflow_checker.py`](pipeline/validate/pptx_overflow_checker.py) | Yes | `pptx`, `--max-bottom` | `TableReport`, `check_pptx_overflow` | PPTX table layout QA via PowerPoint COM (Windows only). |
 | `pipeline/validate` | [`pptx_validator.py`](pipeline/validate/pptx_validator.py) | Lib | — | `check_overflow`, `find_overflow_slides` | PPTX validation utilities. |
 
 ## 2. Repository Governance & Automation Tools (`scripts/_tools/`)

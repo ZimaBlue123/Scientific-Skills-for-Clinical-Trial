@@ -86,5 +86,18 @@
 - **核心原则**：严禁直接覆盖用户的交付成果（Excel 报表、Word 文档、分析清单等）的历史版本。
 - **备份机制**：每次在对已生成的交付文件进行修改或生成新版本之前，**必须先将原文件另存为备份文件（如 `_backup.xlsx`、`_v1.xlsx` 等）**，新版本使用递增版本号（如 `_v2.xlsx`）或在确保旧版本已有独立备份的前提下保存，保证历史版本完整可回溯、永不丢失。
 
+## 9. GraphPad（Prism）图表入 PPT 的 OLE 嵌入规范 (GraphPad Prism OLE Embedding in PPT - Strict)
 
+- **核心原则**：凡是将 GraphPad（Prism）绘制的图表放入 PPT（`.pptx`），**一律直接「复制 → 粘贴」为 OLE 嵌入对象**（如通过 PowerPoint COM / 剪贴板粘贴或保留原 PPT 中的 OLE 嵌入对象及 `ppt/embeddings/` 构件），完整保留源文件内嵌的原始数据，确保在 PowerPoint 中**双击即可在 GraphPad Prism 中打开并编辑数据**。
+- **严格禁止**：**严禁**将 GraphPad（Prism）图表转换为 PNG/JPG 等静态图片、截图，或另用 `matplotlib` / 其他绘图库重绘替代。
+- **交付核验**：生成或修改含 GraphPad（Prism）图表的 PPT 后，应确认 `ppt/embeddings/` 中的嵌入对象完好未丢失（可复用 `scripts/pipeline/review/compare_pptx_package.py` 做包完整性校验）。
+- **长期效力**：本规范作为默认操作准则长期自动生效，后续所有同类任务均默认按此执行，无需用户逐次提醒。
 
+## 10. Word 交付文档 Clean 校验与零跨页表格排版规范 (DOCX Clean Validation & Zero-Split Table Layout - Strict)
+
+- **Clean 校验（Mandatory Clean Validation）**：凡是新建或修改交付类 Word 文档（`.docx`），交付前**必须**运行 `scripts/pipeline/validate/docx_clean_validator.py` 进行校验，确保输出结果通过（`✅ CLEAN`：正文及标题无红/蓝字体、无黄色高亮填充、无残留审阅批注）。
+- **零跨页表格排版（Zero-Split Table Layout）**：
+  - 保持文档版面精简、紧凑、专业，**严禁**大型表格在页边界出现尴尬跨页折断；应将超长清单/方案摘要拆分为逻辑清晰、**单页可完整容纳的模块化表格**，合理设置页面边距、字体字号与单元格内边距，并通过战略性分页符保证各表格独立成页或完整呈现于单页之内。
+  - 所有表格均应启用行防跨页断行（`w:cantSplit`，复用 `scripts/pipeline/export/docx_builder.py` 的 `enable_table_row_cant_split`）与跨页表头重复（`w:tblHeader`）作为兜底保障，同时注意中英文表头无生硬断词。
+- **渲染视觉核验（Visual QA）**：交付前应调用 `scripts/_tools/preview_docx.py` 经 Word COM 导出渲染页图并逐页检查，确认无任何跨页表格折断、文字溢出或版式错位后再清理临时预览目录。
+- **长期效力**：本规范作为项目级默认操作准则长期自动生效，后续所有 Word 文档生成与修改任务均默认按此执行，无需用户逐次提醒。

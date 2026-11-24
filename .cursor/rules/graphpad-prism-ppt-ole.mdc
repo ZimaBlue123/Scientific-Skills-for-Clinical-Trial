@@ -1,0 +1,11 @@
+---
+description: Always embed GraphPad Prism charts in PowerPoint as OLE objects rather than static images or matplotlib redraws
+alwaysApply: true
+---
+
+# GraphPad Prism Chart Embedding in PowerPoint (Strict)
+
+- **Mandatory OLE Embedding**: Whenever placing GraphPad (Prism) charts into PowerPoint (`.pptx`), always directly **Copy -> Paste** as an **OLE embedded object** (e.g., via PowerPoint COM clipboard paste or preserving existing OLE shapes and `ppt/embeddings/` parts), retaining the embedded source data so double-clicking opens and edits the data in GraphPad Prism.
+- **Strictly Prohibited**: Never convert GraphPad (Prism) charts into static PNG/JPG images or screenshots, and never redraw/replace them with `matplotlib` or other plotting libraries.
+- **Verification**: After generating or modifying a deck containing GraphPad (Prism) charts, confirm that embedded OLE objects under `ppt/embeddings/` remain intact (e.g., with `scripts/pipeline/review/compare_pptx_package.py`).
+- **Standing Default**: This rule applies permanently by default to all future PPT tasks without requiring per-task reminders.

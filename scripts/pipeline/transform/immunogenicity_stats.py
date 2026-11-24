@@ -316,6 +316,75 @@ def power_gmc_ni(
     return float(_st.norm.cdf(z))
 
 
+def simulate_gmc_ni_pass_rate(
+    n_eval_per_arm: int,
+    ratio_expected: float,
+    sigma_ln: float,
+    margins: Sequence[float] = (2.0 / 3.0,),
+    n_sim: int = 100_000,
+    alpha_two_sided: float = 0.05,
+    seed: int | None = None,
+    rng=None,
+) -> dict:
+    """Monte-Carlo pass rate of a GMC-ratio non-inferiority test (equal arms).
+
+    Draws the sufficient statistics (sample mean ~ Normal, sample variance ~
+    scaled chi-square) on the natural-log scale for both arms, builds the
+    pooled-variance Student-t two-sided CI of the log GMC ratio and checks the
+    lower bound against each margin in ``margins``.
+
+    Pass an explicit ``rng`` (``numpy.random.Generator``) to share one draw
+    sequence across several scenarios (reproducible multi-scenario runs);
+    otherwise a fresh generator is created from ``seed``.
+
+    Returns a dict with ``pass_rate`` (``{margin: rate}``), lower-bound ratio
+    median / 5th percentile, theoretical vs simulated SE and the expected CI.
+    """
+    import numpy as np
+
+    if n_eval_per_arm < 2:
+        raise ValueError("n_eval_per_arm must be >= 2")
+    if ratio_expected <= 0 or sigma_ln <= 0:
+        raise ValueError("ratio_expected and sigma_ln must be > 0")
+    if n_sim < 1:
+        raise ValueError("n_sim must be >= 1")
+    if any(m <= 0 for m in margins):
+        raise ValueError("all margins must be > 0")
+
+    gen = rng if rng is not None else np.random.default_rng(seed)
+    n = n_eval_per_arm
+    df = 2 * n - 2
+    t_crit = float(_st.t.ppf(1.0 - alpha_two_sided / 2.0, df))
+    mu = math.log(ratio_expected)
+
+    z1 = gen.standard_normal(n_sim)
+    z2 = gen.standard_normal(n_sim)
+    chi1 = gen.chisquare(n - 1, n_sim)
+    chi2 = gen.chisquare(n - 1, n_sim)
+    y1 = mu + sigma_ln / math.sqrt(n) * z1
+    y2 = sigma_ln / math.sqrt(n) * z2
+    s1sq = sigma_ln**2 * chi1 / (n - 1)
+    s2sq = sigma_ln**2 * chi2 / (n - 1)
+    sp = np.sqrt(((n - 1) * s1sq + (n - 1) * s2sq) / df)
+    se = sp * math.sqrt(2.0 / n)
+    lower_ln = (y1 - y2) - t_crit * se
+    lower_ratio = np.exp(lower_ln)
+    se_theory = sigma_ln * math.sqrt(2.0 / n)
+
+    return {
+        "pass_rate": {float(m): float((lower_ln >= math.log(m)).mean()) for m in margins},
+        "lower_ratio_median": float(np.median(lower_ratio)),
+        "lower_ratio_p05": float(np.percentile(lower_ratio, 5)),
+        "se_theory": se_theory,
+        "se_sim_mean": float(se.mean()),
+        "t_crit": t_crit,
+        "expected_ci": (
+            math.exp(mu - t_crit * se_theory),
+            math.exp(mu + t_crit * se_theory),
+        ),
+    }
+
+
 __all__ = [
     "ProportionResult",
     "GeoMeanResult",
@@ -333,4 +402,5 @@ __all__ = [
     "sample_size_rate_ni_fm",
     "sample_size_gmc_ni",
     "power_gmc_ni",
+    "simulate_gmc_ni_pass_rate",
 ]

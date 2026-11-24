@@ -31,3 +31,10 @@
 
 - **核心原则**：严禁直接覆盖用户的交付成果（Excel 报表、Word 文档、分析清单等）的历史版本。
 - **备份机制**：每次在对已生成的交付文件进行修改或生成新版本之前，**必须先将原文件另存为备份文件（如 `_backup.xlsx`、`_v1.xlsx` 等）**，新版本使用递增版本号（如 `_v2.xlsx`）或在确保旧版本已有独立备份的前提下保存，保证历史版本完整可回溯、永不丢失。
+
+## 6. GraphPad（Prism）图表入 PPT 的 OLE 嵌入规范 (GraphPad Prism OLE Embedding in PPT - Strict)
+
+- **核心原则**：凡是将 GraphPad（Prism）绘制的图表放入 PPT（`.pptx`），**一律直接「复制 → 粘贴」为 OLE 嵌入对象**（如通过 PowerPoint COM / 剪贴板粘贴或保留原 PPT 中的 OLE 嵌入对象及 `ppt/embeddings/` 构件），完整保留源文件内嵌的原始数据，确保在 PowerPoint 中**双击即可在 GraphPad Prism 中打开并编辑数据**。
+- **严格禁止**：**严禁**将 GraphPad（Prism）图表转换为 PNG/JPG 等静态图片、截图，或另用 `matplotlib` / 其他绘图库重绘替代。
+- **交付核验**：生成或修改含 GraphPad（Prism）图表的 PPT 后，应确认 `ppt/embeddings/` 中的嵌入对象完好未丢失（可复用 `scripts/pipeline/review/compare_pptx_package.py` 做包完整性校验）。
+- **长期效力**：本规范作为默认操作准则长期自动生效，后续所有同类任务均默认按此执行，无需用户逐次提醒。
