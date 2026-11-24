@@ -443,12 +443,15 @@ print(result.text_content)
 |------|------|------|
 | `scripts/pipeline/convert/convert_to_md.py` | 文档转 Markdown（支持 `--mode numbered` 锚点编号） | ✅ 推荐 |
 | `scripts/pipeline/ingest/rtf_reader.py` | SAS / 临床 TFL RTF 文本与二维表格提取 | ✅ 推荐 |
+| `scripts/pipeline/extract/batch_extract_materials.py` | 批量将资料目录（docx/pptx/xlsx/pdf）抽取为平行 `.txt` 文本树与清单 | ✅ 推荐 |
 | `scripts/pipeline/extract/extract_docx_tracked_text.py` | 零依赖提取含修订痕迹 (`w:ins`/`w:del`) 的 `.docx` 文本与表格 | ✅ 推荐 |
+| `scripts/pipeline/transform/immunogenicity_stats.py` | 疫苗临床 TFL 免疫原性统计、样本量/把握度及 GMC 非劣蒙特卡洛模拟 | ✅ 推荐 |
 | `scripts/pipeline/export/docx_builder.py` | DOCX 导出与中英文字体规范（Word/审核报告生成基础模块） | ✅ 推荐 |
 | `scripts/pipeline/export/update_docx_toc_fields.py` | 通过 Word COM 自动更新 `.docx` 目录域与页码 | ✅ 推荐 |
 | `scripts/pipeline/review/audit_protocol_crossrefs.py` | 核查临床方案 `.docx` 内部章节号与图表交叉引用 | ✅ 推荐 |
 | `scripts/pipeline/review/compare_docx_content.py` | 逐包、逐块、逐样式比对两份 `.docx` 文档 | ✅ 推荐 |
 | `scripts/pipeline/validate/docx_clean_validator.py` | 校验 `.docx` 清洁版合规性（红蓝字、高亮、批注） | ✅ 推荐 |
+| `scripts/pipeline/validate/pptx_overflow_checker.py` | 通过 PowerPoint COM 实测 PPTX 表格单元格文字溢出与底边越界 | ✅ 推荐 |
 | `scripts/pipeline/literature/pubmed_search_tool.py` | PubMed 文献检索 CLI | ✅ 推荐 |
 | `scripts/_tools/generate_scripts_index.py` | 生成脚本复用索引与 `--search` 关键词检索 | ✅ 推荐 |
 | `scripts/_tools/project_self_check.py` | 项目自检 | ✅ 推荐 |

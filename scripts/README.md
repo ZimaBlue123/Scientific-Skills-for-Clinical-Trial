@@ -34,13 +34,14 @@ scripts/
 | `ingest/pptx_reader.py` | 读取 PowerPoint 演示文稿与备注 | python-pptx |
 | `ingest/rtf_reader.py` | 解析 SAS/临床 TFL RTF 文本与二维表格 | stdlib |
 | `ingest/xlsx_reader.py` | 读取 Excel 工作簿 | openpyxl |
+| `extract/batch_extract_materials.py` | 将资料目录（docx/pptx/xlsx/pdf）批量抽取为平行 .txt 树并输出清单 | python-docx, python-pptx, openpyxl, PyMuPDF |
 | `extract/extract_docx_tracked_text.py` | 零依赖提取含修订痕迹 (`w:ins`/`w:del`) 的 `.docx` 文本与表格 | stdlib |
 | `extract/extract_legacy_doc_text.py` | 通过 Word COM 批量提取旧版 `.doc` 文本与表格 | pywin32 |
 | `extract/table_extractor.py` | 从文档中按表头关键词提取结构化表格 | stdlib |
 | `extract/stream_docx_tables.py` | 基于 lxml iterparse 流式提取超大 .docx 表格与段落为 TSV | lxml |
 | `extract/text_normalizer.py` | 编码检测、乱码诊断与空白字符规范化 | stdlib |
 | `transform/clinical_rag.py` | 临床文档本地 TF-IDF 检索索引 | scikit-learn, numpy |
-| `transform/immunogenicity_stats.py` | 疫苗临床 TFL 免疫原性统计与桥接样本量/把握度计算（Clopper-Pearson、Newcombe-Wilson、Farrington-Manning 评分检验、GMC 对数均值差非劣效） | scipy |
+| `transform/immunogenicity_stats.py` | 疫苗临床 TFL 免疫原性统计与桥接样本量/把握度计算（Clopper-Pearson、Newcombe-Wilson、Farrington-Manning 评分检验、GMC 对数均值差非劣效、GMC 非劣蒙特卡洛通过率模拟 `simulate_gmc_ni_pass_rate`） | scipy, numpy |
 | `transform/rate_ci_methods.py` | 二项率与率差 95% 置信区间方法库（对齐 SAS PROC FREQ / RISKDIFF） | stdlib |
 | `transform/quantile_definitions.py` | 样本分位数定义库（精确复现 SAS PCTLDEF 1~5、Tukey hinges 与线性插值） | stdlib |
 | `convert/convert_doc_to_docx.py` | 旧版二进制 `.doc` 转 `.docx` | pywin32 |
@@ -57,6 +58,7 @@ scripts/
 | `validate/docx_clean_validator.py` | 校验 `.docx` 清洁版合规性（红蓝字、高亮、批注） | python-docx, lxml |
 | `validate/docx_toc_validator.py` | 无损副本渲染核验 `.docx` 目录域与首页截图 | pywin32, PyMuPDF |
 | `validate/encoding_validator.py` | 文件 UTF-8 BOM 与乱码验证 | stdlib |
+| `validate/pptx_overflow_checker.py` | PowerPoint COM 实测表格单元格文字溢出与表格底边越界（防结论框遮挡） | pywin32 |
 | `validate/pptx_validator.py` | PPTX 文本框越界检测 | python-pptx |
 
 ## 内部工具 (`_tools/`)
@@ -81,6 +83,7 @@ scripts/
 | `preview_xlsx.py` | 通过 Excel COM + PyMuPDF 渲染 `.xlsx` 打印版式为 PDF 与分页 PNG |
 | `sync_toc_page_numbers.py` | 通过 Word COM 分页探测并无损回写 `.docx` 静态目录缓存页码 |
 | `cleanup_generated_artifacts.py` | 清理可重建产物与 IDE 历史缓存 |
+| `ocr_winrt.ps1` | 调用 Windows 内置 OCR（Windows.Media.Ocr / WinRT）识别扫描图片文本，零第三方依赖 |
 
 ## 常用命令
 

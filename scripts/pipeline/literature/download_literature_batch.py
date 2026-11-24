@@ -43,7 +43,7 @@ DEFAULT_TIMEOUT = 30.0
 RATE_LIMIT_DELAY = 0.5  # seconds between API requests
 
 # Base path for the literature library
-LIB_ROOT = Path(__file__).resolve().parent.parent / "review_materials" / "文献库-F2F Meeting"
+LIB_ROOT = Path(__file__).resolve().parents[3] / "review_materials" / "文献库-F2F Meeting"
 
 # ---------------------------------------------------------------------------
 # Data Model

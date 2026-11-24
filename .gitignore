@@ -289,3 +289,11 @@ _preview/
 
 # Dedupe reports
 docs/skill_dedupe_report.md
+frontmatter_fix_report.md
+
+# Script probe / OCR scratch output written next to scripts (local-only)
+scripts/_*_probe.txt
+scripts/_*_log.txt
+scripts/_tools/ocr_*/
+scripts/_tools/_*_render/
+scripts/_tools/*.txt

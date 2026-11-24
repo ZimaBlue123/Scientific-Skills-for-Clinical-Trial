@@ -374,7 +374,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     elif args.folder:
         input_path = Path(args.folder)
     else:
-        input_path = Path(__file__).resolve().parents[1] / "review_materials"
+        input_path = Path(__file__).resolve().parents[3] / "review_materials"
 
     if not input_path.exists():
         logger.error("input path does not exist: %s", input_path)

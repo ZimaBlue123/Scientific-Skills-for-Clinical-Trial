@@ -122,7 +122,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--src",
         type=Path,
-        default=Path(__file__).resolve().parents[1] / "review_materials" / "_md",
+        default=Path(__file__).resolve().parents[2] / "review_materials" / "_md",
         help="Source directory containing the .md files.",
     )
     parser.add_argument(

@@ -358,14 +358,17 @@ python scripts/_tools/generate_scripts_index.py --search <keyword>
 | Convert | `scripts/pipeline/convert/convert_doc_to_docx.py` | Legacy binary .doc to .docx | ✅ Recommended |
 | Ingest | `scripts/pipeline/ingest/docx_reader.py` | Extract Word headings and text | ✅ Recommended |
 | Ingest | `scripts/pipeline/ingest/rtf_reader.py` | Parse SAS/clinical TFL RTF tables | ✅ Recommended |
+| Extract | `scripts/pipeline/extract/batch_extract_materials.py` | Batch extract docx/pptx/xlsx/pdf folder tree to .txt | ✅ Recommended |
 | Extract | `scripts/pipeline/extract/stream_docx_tables.py` | Stream large .docx tables to TSV | ✅ Recommended |
 | Extract | `scripts/pipeline/extract/extract_docx_tracked_text.py` | Extract tracked changes (w:ins / w:del) | ✅ Recommended |
+| Transform | `scripts/pipeline/transform/immunogenicity_stats.py` | Vaccine TFL stats, NI power/sample size & GMC Monte-Carlo simulation | ✅ Recommended |
 | Transform | `scripts/pipeline/transform/rate_ci_methods.py` | Clopper-Pearson / Wilson / Newcombe / MN rate CI | ✅ Recommended |
 | Transform | `scripts/pipeline/transform/quantile_definitions.py` | SAS PCTLDEF 1~5 & Tukey hinges quantile reconciliation | ✅ Recommended |
 | Export | `scripts/pipeline/export/docx_builder.py` | Standardized clinical Word output (SimSun + TNR) | ✅ Recommended |
 | Export | `scripts/pipeline/export/apply_audit_fonts.py` | Batch enforce SimSun / TNR font styling | ✅ Recommended |
 | Review | `scripts/pipeline/review/audit_protocol_crossrefs.py` | Protocol internal cross-reference audit | ✅ Recommended |
 | Validate | `scripts/pipeline/validate/docx_clean_validator.py` | Clean-version compliance validation | ✅ Recommended |
+| Validate | `scripts/pipeline/validate/pptx_overflow_checker.py` | PowerPoint COM table cell overflow & bottom-bound QA | ✅ Recommended |
 | Governance | `scripts/_tools/generate_scripts_index.py` | Regenerate reuse index & CLI search | ✅ Recommended |
 | Governance | `scripts/_tools/cleanup_generated_artifacts.py` | Cleanup cache & build artifacts | ✅ Recommended |
 
