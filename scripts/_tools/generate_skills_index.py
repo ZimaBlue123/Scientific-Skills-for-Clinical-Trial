@@ -143,6 +143,7 @@ CATEGORY_RULES: list[tuple[str, list[str]]] = [
             "clinpgx",
             "clinvar",
             "csr-stage",
+            "dsur-",
             "fda-database",
             "iso-standards",
             "treatment-plans",
