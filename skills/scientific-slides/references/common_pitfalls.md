@@ -83,3 +83,20 @@ Content, design, and timing mistakes, with the corrections for each.
 **Skipping Conclusions**:
 - Problem: Running out of time, rush through or skip ending
 - Solution: Never skip conclusions, cut earlier content instead
+
+### Anti-AI-Slop Visual Restraint (Floor / Reflex / Finish)
+
+Adapted from Hallmark and Impeccable deterministic design gates to prevent generic AI-generated slide bloat:
+
+- **Floor (Hard Block — P0)**:
+  - Never ship unreplaced placeholders (`TODO`, `TBD`, `FIXME`, `Lorem ipsum`, `[待补充]`).
+  - Never allow body/table text `< 9 pt` or text-to-background contrast `< 3.0:1` (aim for `>= 4.5:1`).
+  - Never flatten editable scientific charts (e.g., GraphPad Prism OLE objects) into static screenshots when native editability is required.
+- **Reflex (AI Template Tell — P1/P2)**:
+  - **No purple-to-blue / neon gradient defaults**: Stick to clean white/off-white surfaces + 1 restrained brand color + 1 semantic accent.
+  - **No uppercase eyebrow pills on every slide**: Avoid repeating `RESEARCH OVERVIEW` / `KEY FINDINGS` badges above titles; use assertion-based slide titles directly.
+  - **No single-word colored headline gimmicks**: Keep slide titles in one consistent high-contrast color.
+  - **No cards-nested-in-cards**: Replace multi-layered rounded boxes and icon tiles with structured comparison tables or clean whitespace/hairline dividers.
+  - **Font discipline**: Keep `<= 3` font families per slide (ideally 1–2).
+- **Finish (Craft — P3)**:
+  - Remove empty decorative AutoShape frames and run `scripts/pipeline/validate/pptx_slop_detector.py` before delivery.

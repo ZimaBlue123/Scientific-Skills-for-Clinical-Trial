@@ -367,8 +367,10 @@ python scripts/_tools/generate_scripts_index.py --search <keyword>
 | Export | `scripts/pipeline/export/docx_builder.py` | Standardized clinical Word output (SimSun + TNR) | ✅ Recommended |
 | Export | `scripts/pipeline/export/apply_audit_fonts.py` | Batch enforce SimSun / TNR font styling | ✅ Recommended |
 | Review | `scripts/pipeline/review/audit_protocol_crossrefs.py` | Protocol internal cross-reference audit | ✅ Recommended |
+| Review | `scripts/pipeline/review/audit_ledger_and_findings.py` | Audit coverage ledger & three-state findings schema validator | ✅ Recommended |
 | Validate | `scripts/pipeline/validate/docx_clean_validator.py` | Clean-version compliance validation | ✅ Recommended |
 | Validate | `scripts/pipeline/validate/pptx_overflow_checker.py` | PowerPoint COM table cell overflow & bottom-bound QA | ✅ Recommended |
+| Validate | `scripts/pipeline/validate/pptx_slop_detector.py` | Deterministic anti-AI-slop PPTX visual & layout linter | ✅ Recommended |
 | Governance | `scripts/_tools/generate_scripts_index.py` | Regenerate reuse index & CLI search | ✅ Recommended |
 | Governance | `scripts/_tools/cleanup_generated_artifacts.py` | Cleanup cache & build artifacts | ✅ Recommended |
 

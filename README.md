@@ -449,9 +449,11 @@ print(result.text_content)
 | `scripts/pipeline/export/docx_builder.py` | DOCX 导出与中英文字体规范（Word/审核报告生成基础模块） | ✅ 推荐 |
 | `scripts/pipeline/export/update_docx_toc_fields.py` | 通过 Word COM 自动更新 `.docx` 目录域与页码 | ✅ 推荐 |
 | `scripts/pipeline/review/audit_protocol_crossrefs.py` | 核查临床方案 `.docx` 内部章节号与图表交叉引用 | ✅ 推荐 |
+| `scripts/pipeline/review/audit_ledger_and_findings.py` | 临床审核覆盖率台账与三态裁定（confirmed/needs_validation/rejected）Schema 校验 | ✅ 推荐 |
 | `scripts/pipeline/review/compare_docx_content.py` | 逐包、逐块、逐样式比对两份 `.docx` 文档 | ✅ 推荐 |
 | `scripts/pipeline/validate/docx_clean_validator.py` | 校验 `.docx` 清洁版合规性（红蓝字、高亮、批注） | ✅ 推荐 |
 | `scripts/pipeline/validate/pptx_overflow_checker.py` | 通过 PowerPoint COM 实测 PPTX 表格单元格文字溢出与底边越界 | ✅ 推荐 |
+| `scripts/pipeline/validate/pptx_slop_detector.py` | PPTX 防“AI 模板味”确定性视觉与版式门控扫描（Floor/Reflex/Finish） | ✅ 推荐 |
 | `scripts/pipeline/literature/pubmed_search_tool.py` | PubMed 文献检索 CLI | ✅ 推荐 |
 | `scripts/_tools/generate_scripts_index.py` | 生成脚本复用索引与 `--search` 关键词检索 | ✅ 推荐 |
 | `scripts/_tools/project_self_check.py` | 项目自检 | ✅ 推荐 |

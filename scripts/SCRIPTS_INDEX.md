@@ -42,6 +42,7 @@ Legend: **CLI** = `Yes` (runnable, `__main__` guard) / `Lib` (import only); **CL
 | `pipeline/literature` | [`pubmed_search_tool.py`](pipeline/literature/pubmed_search_tool.py) | Yes | `--query`, `--mindate`, `--maxdate`, `--out`, `--retmax` | `esearch`, `esummary` | Unified PubMed Literature Search Tool |
 | `pipeline/literature` | [`try_direct_pdf_patterns.py`](pipeline/literature/try_direct_pdf_patterns.py) | Yes | — | `log`, `looks_like_pdf` | Try the magtech '/cn/article/pdf/preview/<doi>.pdf' pattern for the journals |
 | `pipeline/core` | [`memory_distiller.py`](pipeline/memory_distiller.py) | Yes | — | `distill_experiences` | Memory Distiller (Inspired by vectorize-io/hindsight). |
+| `pipeline/review` | [`audit_ledger_and_findings.py`](pipeline/review/audit_ledger_and_findings.py) | Yes | `--study-id`, `--document`, `--units-json`, `--output`, `ledger`, `--require-complete` | `init_coverage_ledger`, `validate_coverage_ledger`, `summarize_coverage`, `validate_findings`, `render_audit_markdown` | Clinical audit coverage ledger, three-state findings schema, and report renderer. |
 | `pipeline/review` | [`audit_protocol_crossrefs.py`](pipeline/review/audit_protocol_crossrefs.py) | Yes | — | — | Verify internal cross-references (chapter/section numbers) of a protocol .docx. |
 | `pipeline/review` | [`audit_protocol_numeric_consistency.py`](pipeline/review/audit_protocol_numeric_consistency.py) | Yes | `markdown`, `--keys` | `iter_blocks` | Cross-check numeric / placeholder consistency inside a converted protocol markdown. |
 | `pipeline/review` | [`compare_docx_content.py`](pipeline/review/compare_docx_content.py) | Yes | `old`, `new`, `--out`, `--align-body`, `--capture-styles` | `para_sig`, `table_sig`, `body_flow`, `body_flow_nostyle`, `anchor_key`, `canonical_xml_children_sorted` | 逐部件、逐块比对两个 .docx，用于**证明「新增目录」等改动未影响正文内容**。 |
@@ -57,6 +58,7 @@ Legend: **CLI** = `Yes` (runnable, `__main__` guard) / `Lib` (import only); **CL
 | `pipeline/validate` | [`docx_toc_validator.py`](pipeline/validate/docx_toc_validator.py) | Yes | `docx`, `--out-dir`, `--pages` | `verify` | 用本机 Microsoft Word (COM) 实际打开 .docx，**在临时副本上**更新域后导出 PDF / |
 | `pipeline/validate` | [`encoding_validator.py`](pipeline/validate/encoding_validator.py) | Lib | — | `check_bom`, `diagnose_encoding` | Encoding validation utilities. |
 | `pipeline/validate` | [`pptx_overflow_checker.py`](pipeline/validate/pptx_overflow_checker.py) | Yes | `pptx`, `--max-bottom` | `TableReport`, `check_pptx_overflow` | PPTX table layout QA via PowerPoint COM (Windows only). |
+| `pipeline/validate` | [`pptx_slop_detector.py`](pipeline/validate/pptx_slop_detector.py) | Yes | `pptx`, `--json`, `--strict` | `SlopFinding`, `scan_pptx_slop`, `summarize_slop` | Deterministic anti-AI-slop visual & layout linter for PowerPoint (.pptx) decks. |
 | `pipeline/validate` | [`pptx_validator.py`](pipeline/validate/pptx_validator.py) | Lib | — | `check_overflow`, `find_overflow_slides` | PPTX validation utilities. |
 
 ## 2. Repository Governance & Automation Tools (`scripts/_tools/`)

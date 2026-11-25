@@ -402,5 +402,5 @@ Before executing, the agent MUST:
 
 After execution, the agent MUST:
 1. Verify output file was created successfully
-2. Run applicable validator (if available)
+2. Run applicable validator (for `.pptx` decks, run `scripts/pipeline/validate/pptx_slop_detector.py` to verify 0 Floor slop issues; for PDF decks, run `scripts/validate_presentation.py`)
 3. Report results in standardized Markdown table format

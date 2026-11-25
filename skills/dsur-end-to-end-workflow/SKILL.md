@@ -32,6 +32,7 @@ metadata:
   - `clinical-strict-extractor`：结构化、无废话、确定性数据提取
   - `pubmed-database`：报告周期内新增安全性文献检索与 PMID/DOI 实测核验
 - **核心脚本与工具**：
+  - `scripts/pipeline/review/audit_ledger_and_findings.py`：覆盖率台账与三态裁定（`confirmed` / `needs_validation` / `rejected`）Schema 校验及报告派生
   - `scripts/pipeline/validate/docx_clean_validator.py`：Word Clean 合规校验
   - `scripts/pipeline/export/docx_builder.py`：`enable_table_row_cant_split` 等 OOXML 排版工具
   - `scripts/pipeline/export/update_docx_toc_fields.py`：Word COM 目录域刷新
@@ -67,7 +68,12 @@ metadata:
    - **ICH E2F**：DLP（报告周期结束日）起 **60 个自然日**内；
    - **中国 CDE《研发期间安全性更新报告管理规范（试行）》**：报告周期结束后 **2 个自然月**内；
    - 取二者较早日期作为从严合规最晚递交日提示用户。
-4. **输出阶段 A 报告**：以结构化 Markdown 输出「缺漏资料清单（若有）」「差距清单与优化计划」「待裁定差异清单（含根因归因）」，**等待用户确认后再进入第二步**。
+4. **输出阶段 A 报告（覆盖率台账 + 三态裁定门控）**：
+   - 使用 `scripts/pipeline/review/audit_ledger_and_findings.py` 维护各章/附录/EDC/IB 核对台账（`coverage-ledger.json`）与问题裁定（`findings.json`）：
+     - `confirmed`：已取得源文件直接证据的确定性问题（标注 `P0–P3`）；
+     - `needs_validation`：信息缺失或待申办方/CRO 确认的事项（仅列明待确认事实，严禁虚标严重度）；
+     - `rejected`：经交叉核对已证伪的误报候选（仅留审计轨迹，不写入客户待办）。
+   - 以结构化 Markdown 输出「缺漏资料清单（若有）」「差距清单与优化计划」「待裁定差异清单（含根因归因）」，**等待用户确认后再进入第二步**。
 
 ---
 

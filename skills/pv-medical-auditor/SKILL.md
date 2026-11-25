@@ -166,6 +166,14 @@ Step 5 ─ 记忆归档
      将本次 Query 追加至 memory/query_archive.md
 ```
 
+### 4.5 对抗式证伪复核与三态裁定门控 (Candidate Disproof & Three-State Gate)
+
+在输出模式 A 或模式 B 前，所有候选质疑必须经过独立证伪复核，并按三态裁定严格分流（复杂整案/多份报告审核可调用 `scripts/pipeline/review/audit_ledger_and_findings.py` 维护覆盖率台账与 Schema 校验）：
+
+1. **`confirmed`（已证实质疑）**：已核实原文页码/段落与客观数值冲突（排除 FAS/PPS 切换、单位换算、已豁免项等合理差异），方可进入正式 DCF/Query 并标注 `P0–P3` 优先级。
+2. **`needs_validation`（待澄清事实）**：源数据信息缺失或需研究者补充病历确认时，仅列明待核实事实并请求协助确认，**严禁**预判违规或虚标严重度。
+3. **`rejected`（已证伪候选项）**：核对后证实原文逻辑自洽或受方案例外条款覆盖的，立即剔除，**严禁**写入交付给研究者/申办方的 Query 清单。
+
 ---
 
 ## 5. 输出模式 (Output Modes)

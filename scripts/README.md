@@ -50,6 +50,7 @@ scripts/
 | `export/pptx_builder.py` | 程序化生成 PPT 文档与高亮批量移除 (`strip_pptx_highlights`) | python-pptx |
 | `export/update_docx_toc_fields.py` | 通过 Word COM 自动更新 `.docx` 目录域与页码 | pywin32 |
 | `review/audit_protocol_crossrefs.py` | 核查方案 `.docx` 内部章节号与图表交叉引用 | python-docx |
+| `review/audit_ledger_and_findings.py` | 临床审核覆盖率台账、三态裁定 Schema 校验与中性报告派生 | stdlib |
 | `review/audit_protocol_numeric_consistency.py` | 核查编号版方案 Markdown 占位符、单位与关键数值一致性 | stdlib |
 | `review/scan_protocol_text_quality.py` | 扫描方案 Markdown 标点混用、笔误与排版质量缺陷 | stdlib |
 | `review/compare_docx_content.py` | 逐包、逐块、逐样式比对两份 `.docx` 文档 | lxml |
@@ -59,6 +60,7 @@ scripts/
 | `validate/docx_toc_validator.py` | 无损副本渲染核验 `.docx` 目录域与首页截图 | pywin32, PyMuPDF |
 | `validate/encoding_validator.py` | 文件 UTF-8 BOM 与乱码验证 | stdlib |
 | `validate/pptx_overflow_checker.py` | PowerPoint COM 实测表格单元格文字溢出与表格底边越界（防结论框遮挡） | pywin32 |
+| `validate/pptx_slop_detector.py` | PPTX 防“AI 模板味”确定性视觉与版式门控扫描（Floor / Reflex / Finish） | python-pptx |
 | `validate/pptx_validator.py` | PPTX 文本框越界检测 | python-pptx |
 
 ## 内部工具 (`_tools/`)

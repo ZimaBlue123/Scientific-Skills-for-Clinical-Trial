@@ -23,6 +23,12 @@ metadata:
 - 使用脚本：`scripts/pipeline/export/docx_builder.py`
 - 关键函数：`apply_cn_en_fonts(doc)`
 
+## 结构化审计数据源与三态分离规范（Schema Gate）
+当基于结构化审核发现生成 Word 审核报告或 DCF 意见表时，**必须先通过 `scripts/pipeline/review/audit_ledger_and_findings.py` 的 Schema 校验**：
+1. **`confirmed`（已确认问题）**：按 `P0 → P3` 严重度排序写入正式审核意见表，每条必须含 `source_ref` 原文溯源与客观证据。
+2. **`needs_validation`（待确认/澄清事项）**：独立成节渲染为「待申办方/研究者澄清清单」，**禁止**为其分配严重度标签。
+3. **`rejected`（已证伪候选项）**：仅在 `findings.json` 留存证伪理由，**严禁**输出到交付客户/研究者的 Word 质疑表中。
+
 ## Pre-flight Check
 
 Before executing, the agent MUST:

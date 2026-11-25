@@ -51,6 +51,17 @@ python pptx_corner_logo_patch.py "input/your.pptx" -o "output/your_clean.pptx"
 - 叙事编排依赖 `SLIDE_BLUEPRINT` 配置，换项目时需要按新 CSR 结构调整
 - 若需要处理 PPT 里的图表配色或导出 PDF，见 `document-format-convert`
 
+## 三、防“AI 模板味”视觉规范与确定性质检（Anti-AI-Slop Gate）
+
+生成、美化或审核竞品分析、临床进展汇报与 CSR 摘要 PPT 时，必须遵循 [`references/anti_ai_slop_visual_guide.md`](references/anti_ai_slop_visual_guide.md) 的 **Floor（P0 阻断）/ Reflex（P1–P2 惯性预警）/ Finish（P3 打磨）** 三层门控：
+- 严禁紫蓝渐变、全页大写英文眉标、标题单字变色、卡片套卡片及大段散文墙；优先采用浅底高对比、克制主色与高信息密度对比矩阵表。
+- GraphPad Prism 图表必须保留 `ppt/embeddings/` OLE 原生嵌入（严禁栅格化截图）。
+- 交付前必须运行双引擎确定性质检：
+  ```bash
+  python scripts/pipeline/validate/pptx_slop_detector.py <output.pptx>
+  python scripts/pipeline/validate/pptx_overflow_checker.py <output.pptx>
+  ```
+
 ## Pre-flight Check
 
 Before executing, the agent MUST:
@@ -62,5 +73,5 @@ Before executing, the agent MUST:
 
 After execution, the agent MUST:
 1. Verify output file was created successfully
-2. Run applicable validator (if available)
+2. Run `scripts/pipeline/validate/pptx_slop_detector.py` (0 Floor errors) and `scripts/pipeline/validate/pptx_overflow_checker.py` (on Windows)
 3. Report results in standardized Markdown table format
